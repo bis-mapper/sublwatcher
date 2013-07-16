@@ -1,0 +1,152 @@
+.FILESELECT
+.
+.
+.
+*
+*
+*==========================================================.====================
+:INCLUDE,ECAB$,B,1 .                                       |¬INCLUDE
+@.
+@. ------------------------------- Test Setup ----------------------------------
+@.
+@.ew  CALL,EDRW$,0047 0001('INT') .
+@.ew  CALL,EDRW$,0041 0001() .
+@.
+@     LDV <ACT>h4=OPEN .
+@.    LDV <ACT>h4=SAVE .
+@.    LDV <ACT>h4=DIR  .
+@     LDV <TYP>h1 .
+@     CALL 0001(<ACT>,<PTH>s256,<FIL>s64,<SPT>s64,<SFL>h12,<TYP>,<STS>h3) .
+@     DSP,-0 .
+/<PTH>/
+/<FIL>/
+/<SPT>/
+/<SFL>/
+/<STS>/
+@     GTO END .
+@.
+@. ---------------------------- Call Entry Point -------------------------------
+@.
+@0001:(<ACT>,<PTH>,<FIL>,<SPT>,<SFL>,<TYP>,<STS>) .
+@.
+@     RSR,SUBLCOMMON_ configVars_ .
+@     RER,EDRW$,0099 0001  RAR 0196 .
+@.
+@     LDV,p <PTH>=<APPDIR> .
+@     LDV   <FLX>s24=USER$STNUM$LRRSD$ LCV t$ <FLX> ' '/  LDV,p <FLX> .
+@.
+@. ------------------------------ Load Program ---------------------------------
+@.
+@     CALL,EDRW$,0006 0001('MFXFILE',<PTX>s64,<PRG>h12,<STS>h3) .
+@     IF <STS> ne 'OK',(0199) ; .
+@.
+@. ---------------------------- Get File/Directory -----------------------------
+@.
+@     LDV,pw <CAP>s52=SITE$' '(STNUM$) .
+@     IF <TYP> eq ''  LDV <TYP>h5='*.*' ; .
+@     BRK,0,A .
+[ACTION]
+<ACT>
+
+[CAPTION]
+"<CAP>"
+
+[PATH]
+<PTH>
+
+[FILE]
+<FIL>
+
+[SHORTPATH]
+<SPT>
+
+[SHORTFILE]
+<SFL>
+
+[TYPE]
+<TYP>
+
+[STATUS]
+
+
+[ERROR]
+
+
+@     BRK  RNM -1 .
+@.
+@     IF DWCAP$(12-1) eq 0  PCW,-1,2,0199 <PTX><FLX>'FIL.INF' ; .
+@     IF DWCAP$(12-1) ne 0  PCW,-1,2,0199,t <PTX><FLX>'FIL.INF' ; .
+@.
+@     PC,w "<PTX><PRG> <PTX><FLX>FIL.INF" .
+@.
+@     IF DWCAP$(12-1) eq 0  PCR,0,A,-0,,,0199 <PTX><FLX>'FIL.INF' ; .
+@     IF DWCAP$(12-1) ne 0  PCR,0,A,-0,,,0199,t <PTX><FLX>'FIL.INF' ; .
+@     RNM -1 .
+@     PC,bn "DEL <PTX><FLX>FIL.INF" .
+@.
+@     FND,-1,,0199 'a' 2-6 [,STATUS ,<LIN>i4  INC <LIN> .
+@     RDL,-1,<LIN> 1-3 <STS>h  IF <STS> ne 'OK',(0199) ; .
+@     LDV <N>i2=64 .
+@     FND,-1,,0004 'a' 2-4 [,PATH ,<LIN>i4  INC <LIN> .
+@     RDL,-1,<LIN>,0004 1-<N> <VAL>s .
+@0002:.
+@     IF SYSNAM$(1-1) ne 'M'  RER 0003 ; .
+@     LDV <PTH>s<N>=<VAL> .
+@     IF SYSNAM$(1-1) ne 'M'  RER,EDRW$,0099 0001 ; .
+@     GTO 0004 .
+@0003:.
+@     CHG <ERR>i4 CERR$  LSM,<ERR> <V1>s88 .
+@     IF <V1>(82-6) eq 'MGRX39'  DEC <N>  IF <N> gt 0,(0002) ; .
+@     RER,EDRW$,0099 0001 .
+@0004:.
+@     LDV <N>i2=64 .
+@     FND,-1,,0007 'a' 2-4 [,FILE ,<LIN>i4  INC <LIN> .
+@     RDL,-1,<LIN>,0007 1-<N> <VAL>s .
+@0005:.
+@     IF SYSNAM$(1-1) ne 'M'  RER 0006 ; .
+@     LDV <FIL>s<N>=<VAL> .
+@     IF SYSNAM$(1-1) ne 'M'  RER,EDRW$,0099 0001 ; .
+@     GTO 0007 .
+@0006:.
+@     CHG <ERR>i4 CERR$  LSM,<ERR> <V1>s88 .
+@     IF <V1>(82-6) eq 'MGRX39'  DEC <N>  IF <N> gt 0,(0005) ; .
+@     RER,EDRW$,0099 0001 .
+@0007:.
+@     LDV <N>i2=64 .
+@     FND,-1,,0010 'a' 2-9 [,SHORTPATH ,<LIN>i4  INC <LIN> .
+@     RDL,-1,<LIN>,0010 1-<N> <VAL>s .
+@0008:.
+@     IF SYSNAM$(1-1) ne 'M'  RER 0009 ; .
+@     LDV <SPT>s<N>=<VAL> .
+@     IF SYSNAM$(1-1) ne 'M'  RER,EDRW$,0099 0001 ; .
+@     GTO 0010 .
+@0009:.
+@     CHG <ERR>i4 CERR$  LSM,<ERR> <V1>s88 .
+@     IF <V1>(82-6) eq 'MGRX39'  DEC <N>  IF <N> gt 0,(0008) ; .
+@     RER,EDRW$,0099 0001 .
+@0010:.
+@     LDV <N>i2=12 .
+@     FND,-1,,0011 'a' 2-9 [,SHORTFILE ,<LIN>i4  INC <LIN> .
+@     RDL,-1,<LIN>,0011 1-<N> <VAL>h .
+@     LDV <SFL>h<N>=<VAL> .
+@0011:.
+@     GTO 0199 .
+@.
+@. --------------------------------- Errors ------------------------------------
+@.
+@0180:.
+@     CALL,EDRW$,0010 0001*('16BITWS','','') .
+@     GTO 0199 .
+@.
+@. ------------------------------- Termination ---------------------------------
+@.
+@0196:. Abort routine
+@.
+@     CHG <CERR>i4 CERR$ .
+@     LDV <STS>h3=CAN .
+@     GTO 0199 .
+@.
+@0199:. Return
+@.
+@     IF DRW1$ ne 0  RNM,-1 -0 ; .
+@     RETURN .

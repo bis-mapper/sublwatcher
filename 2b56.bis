@@ -1,0 +1,80 @@
+.SUBL
+.
+.
+.
+*
+*
+*===============================================================================
+:INCLUDE,ECAB$,B,1 .                                                            INCLUDE
+@.
+@     LDV <CALL>h1=n .                                                          Manual entrance
+@.
+@.    #  Call entry point
+@0001:(<RUN>) .                                                                 Call from BisCmd?
+@     RER,0,E,2 0001  RAR,0,E,2 0001 .                                          sets-run-error
+@.
+@     IF <RUN> eq '<RUN>',(0005) .                                              Normal or Call?
+@     LDV <CALL>h1=y .
+@     IF <RUN> eq 'SETUP',(0007) .
+@     CALL,SUBLCOMMON_ getCabDrwRpt_ (<RUN>,<CAB>i4,<DRW>h1,<RPT>i4) .
+@     GTO 0007 .
+@.
+@.    #  Otherwise we get report on display
+@.    #  This happens when user enters SUBL on a given report
+@0005:LDV <CAB>i4=CAB$,<DRW>h1=ADRW$,<RPT>i4=RPT$ .                             Get RPT on display
+@.
+@.    #  Load the application configuration variables from table
+@0007:RSR,SUBLCOMMON_ configVars_ .
+@     LDV,p <ACAB>h4=<CAB>,<ADRW>h1=<DRW>,<ARPT>i4=<RPT> .
+@     IF <RPT> eq 0  REL . ; .                                                  No report on display?
+@     CALL,SUBLCOMMON_ chkIceSvc_ (<CAB>,<DRW>,<RPT>,<SRVS>s30) .               Ice Service?
+@     LDV,p <SRVS> .
+@.
+@.    #  Get computer name
+@     CALL,SUBLCOMMON_ getCompName_ (<BTEMP>,<COMPUTER>s30) .
+@.
+@.    #  First time running program...Enable setup
+@     FDR,SUBLPATH_,,,lin+2 ' ' 'User ID','Computer Name' \                     Get Application Path
+        ¬,<USER>,<COMPUTER> .
+@     RLN 'apppath' <APPPATH>s  GTO 0010 .                                      Sublime.Exe
+@     CALL,SUBLSETUP_ 0001 (<USER>,<COMPUTER>,<APPPATH>s256) .                  Setup
+@     IF <APPPATH> eq ' ',(0199) .                                              Exit
+@.    #  Create folder for current site if it doesnt exist
+@0010:LDV,p <DIR>s256=<APPDIR>'\' .
+@     LDV,p <FLDR>s256=<SITE> .
+@     LDV,p <FLDRPATH>s256=<DATADIR> .
+@     CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
+@.
+@.    #  Check if file exists already in folder
+@     PCR,0,A,-0,n,n,lin+2 <DATADIR>'\' .
+@     LDV <FND>h1=N .
+@     SRH,-0 'dn' 2-1 [,'.'/[,'-' .
+@     LOC,-0,2,0020 'AFO' 1-1 '[' .
+@     RNM -1  LDV <LN>i3=1 .
+@0015:INC <LN>  RDL,-1,<LN>,0020 1-80 <FOLDER>s .
+@     LCV '' <FOLDER> '['/''  LCV '' <FOLDER> ']'/''  LDV,p <FOLDER> .
+@     PCR,0,A,-0,n,n,lin+2 <DATADIR>'\'<FOLDER>'\' .
+@     LOC,-0,2,lin1 'AFO' 1-50 <SRVS><ARPT><ADRW><ACAB><EXT>  <FND>=y  .
+@     IF <FND> eq y . ; LDV <FND>=N  gto 0015 .
+@.
+@.    #  Put in existing folder . ; Otherwise default path
+@0020:IF <FND> eq y  \
+        LDV,po <FILE>s256=<DATADIR>'\'<FOLDER>'\'<SRVS><ARPT><ADRW><ACAB><EXT> . ; \
+        LDV,po <FILE>s256=<FLDRPATH>'\'<SRVS><ARPT><ADRW><ACAB><EXT> .          Default path
+@.
+@     RSL,<CAB>,<DRW>,<RPT> .                                                   Get result
+@     CHG <NS>h1 CHR$254 .                                                      Load ¬ char
+@     LZR,-0 ,<CC>i4  LCH,-0,,lin+1 'af' 1-<CC> ¬/<NS> .                        Chg ¬ to ¬
+@     PCW,-0,2 <FILE> .                                                         Write file
+@.
+@.    #  Start text editor
+@     PC,r '"'<APPPATH>(p)'" --add' '"'<FILE>':'<DLN>(p)'"' .      :<DLN> opens to line #
+@     SYS .                                                                     system
+@     PC 'cmd /C '"<BATFILE>" .
+@     FDR,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,USER$,<SUBLWATCHER>  GTO 0199 .    currently running?
+@     WAT 1000 .
+@     RUN <SUBLWATCHER> .                                                       start file watcher utility
+@.
+@.    #  Return if called otherwise display current report
+@0199:IF <CALL> eq y  RETURN . ; DSP,<CAB>,<DRW>,<RPT> .
+@.
