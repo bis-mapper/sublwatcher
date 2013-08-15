@@ -1,0 +1,104 @@
+.BisCmd
+.
+.      ______             _____           ___
+.     |_____|            |               |   \
+*     |______ •    __    |       /\  /\  |    |
+*     |_____| | __|      |_____ /  \/  \ |___/
+*===================================================================================================
+:INCLUDE,ECAB$,B,1 .                                                            INCLUDE
+@.
+@.    #---------------------------------------------------------------------------------------------
+@.    #  BIS_CMD
+@.    #  Written: 08/14/2013
+@.    #---------------------------------------------------------------------------------------------
+@.
+@.    #TEST SETUP#
+@     LDV <STATUS>h1=0 .
+@ rdb CALL 0001 (<STATUS>) .
+@     GTO END .
+@.
+@0001:(<STATUS>) .
+@     LDV <STATUS>=0 .                                                          set flag to ok
+@     RER,0,E,2 0001  RAR,0,E,2 0001 .                                          sets-run-error
+@.
+@     RSR,SUBLCOMMON_ configVars_ .
+@.
+@     LDV,p <BISCMD>s256=<APPDIR>'\BisCmd.bis' .                                Get cmd from SUBL
+@.
+@.    # Find File
+@     PCR,0,I,-0,n,n,lin+1 <BISCMD>  GTO 0002 .                                 File Exist?
+@     LDV <STATUS>=9 .
+@     MBX,ok,E,'BisCmd' \
+      "Could not find the BisCmd.Bis file."  O,(0199) .
+@0002:RNM -2 .
+@.ew  PC,bcw "del <BISCMD>" .                                                   Clean up file
+@.
+@     RDL,-2,2 1-256 <FILEOUTPUT>s .                                            Read Sublime input
+@     LDV,p <FILEOUTPUT> .
+@.
+@.    #  File contains  "User entered input|c:\temp\example\file.bis"
+@     LCV 'b1' <FILEOUTPUT> '|' <VPOS>i3  DEC <VPOS> .
+@     LDV <CTL>s80=<FILEOUTPUT>(1-<VPOS>)  INC,2 <VPOS> .
+@     LDV <FILE>s256=<FILEOUTPUT>(<VPOS>-0) .
+@.
+@.    # Read file name
+@     CALL,SUBLCOMMON_ getFileName_ (<FILE>,<RUN>s60) .                         Extracts File Name from path
+@     LCV,0199 'b99' <RUN> '.bis'/'' .                                          Remove file type
+@.
+@     IF <CTL> eq ''  LDV <STATUS>=9  GTO 0199 .                                Nothing entered?
+@.
+@.    # ICE UTILITIES
+@     DVS,SUBLUTILS_ 'Util' <RUNNAME>s .
+@     DEF <TY>i2,<CTL>(1-1)  IF <TY> eq 1 . ; gto lin+2                         Check numeric
+@     LDV <RUNNAME>='SUBLCTL'  gto 0020 .
+@     LCV 't@' <CTL> ' ' <VPOS>  dec <VPOS> .
+@     LDV <RUNNAME>=<CTL>(1-<VPOS>) .                                           Get run name from user input
+@.
+@.    #  Find program in lookup table and execute it
+@0020:FDR,SUBLUTILS_ '' 'Util' 	,<RUNNAME>  RLN 'Rid' <rrid>i .
+@     CALL,EDRW$,<RRID> 0001 (<CTL>,<FILE>,<RUNNAME>,<STATUS>h1) .
+@.
+@     GTO 0199 .
+@.
+@.    # Call Sublime Import / Export Routine
+@0050:.
+@     IF <CTL>(1-6) eq IMPORT  LDV <RUNNAME>=SUBLIMPORT .
+@     IF <CTL>(1-6) eq EXPORT  LDV <RUNNAME>=SUBLEXPORT .
+@     LCV,lin+1 'b1t@' <CTL> ' ' <POS>i3,<OCC>i3  GTO lin+3 .
+@     MBX,ok,E,'Cool ICE Admin - '<RUNNAME> \
+      "Please include space between import/export and category name."  O,(0199) .
+@     DEF,s <SZ>i3,<CTL>  CHG <LN>i3 <SZ> - 7 .
+@     LDV <category>s20=<CTL>(8-<LN>) . ; .
+@     LDV <TMP>s256=<PATH>(p)<category>(p)'\',<PATH>s256=<TMP> .
+@.
+@     CALL,"<RUNNAME>" 0001 (<category>,<PATH>) .
+@     SYS .
+@     SRH,-0,,,lin+1 'd' 'USERID','RUNNAME' '	',USER$,'SUBLWATCHER'  GTO lin+2 .
+@     RUN SUBLWATCHER .
+@     GTO 0199 .
+@.
+@.    # Call ICEBUILD routine to generate new application
+@0060:.
+@     GTO 0199 .
+@.
+@.    # Call SBS routine to standardize BIS script
+@0070:.
+@     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
+@     PCR,0,I,-0,n,n,0199 <FILE>  RNM -1  RSL,-1 .
+@.
+@.    #  Standerdize run
+@     CALL,"SBS" 0002* (<RUN>h8,<STS>h3) .
+@.
+@     PCW,-0,2 <FILE> .                                                         Write file
+@     PC,r '"'<APPPATH>(p)'" -a' '"'<FILE>'"' .                                 start editor with options
+@     GTO 0199 .
+@.
+@.    #  Ca
+@0080:.
+
+
+
+
+
+@.    # Close window
+@0199:RETURN .

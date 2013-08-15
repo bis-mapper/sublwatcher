@@ -1,0 +1,402 @@
+.Table_Message
+*            .   .I.                        .
+*ErrorID     .Typ.c.Caption                 .
+*============.===.=.========================.
+	16BITWS      OK  S Restriction
+*This function is not available with 16-bit workstation software.
+*
+*Your workstation software (MPC or PCE) must be upgraded
+*to the 32-bit version to enable this functionality.
+	ABOUT        OK  I About RADS
+*RADS - Rapid Application Development Studio
+*%2 Edition
+*
+*  Version: %3 | Date: %4
+*  Serial Number: %5
+*
+*Copyright (c) 2012 IT Resource Solutions
+	APIREQUIRED  OK  S Invalid Access Request
+*RADS services may only be accessed using an
+*Application Program Interface (API) call.
+	APPCONFIG    OK  S Configuration Problem
+*The location of your %1 program has not
+*been set up yet, or it is not configured properly.
+*
+*Use the Options services to configure it.
+	APPCONFIGNOW YN  S Configuration Problem
+*The location of your %1 program has not
+*been set up yet, or it is not configured properly.
+*
+*Do you want to set it up now?
+	APPPTH       OK  S Invalid Entry
+*Invalid application path entered.
+	BLTBADLABEL  OK  S Invalid Label
+*Invalid or duplicate label number detected.
+*
+*Unable to perform the requested operation.
+	BLTNOLABELS  OK  I Unable To Proceed
+*The Run Control Report does not contain any labels.
+	BROWSERINVAL OK  S Unable To Proceed
+*Unable to execute this service due to an
+*unsupported Web browser type or version.
+*
+*One of the following is required:
+*
+*  o Internet Explorer version 4 or higher
+*  o Netscape version 6 or higher
+	CALCERROR    OK  S Calculation Error
+*%1
+	DATAEXPIRED  OK  I Data Has Expired
+*The data associated with this screen has expired.
+*
+*Use your browser Refresh or Reload button to restore it.
+	DATEFORMAT   OK  S Invalid Selection
+*Report field contains no valid dates in that format.
+	DATESEQUENCE OK  S Invalid Entry
+*Second date must be later than the first date.
+	DELETEBINARY YN  Q Confirmation
+*You are not the last user to update this report (%1).
+*
+*Are you sure you want to delete it?
+	DELETEWARN1  YN  Q Confirmation
+*Do you want to delete this report (%1)?
+	DELETEWARN2  YN  I Reconfirmation
+*Please reconfirm that you wish to delete report (%1).
+*
+*If you answer Yes, the report will be permanently deleted.
+	DOSREADERR   OK  S File Read Error
+*Transfer failed for one of the following reasons:
+*
+*     1) Invalid drive, directory or path specified.
+*     2) File does not exist.
+*     3) File is read protected.
+*     4) Diskette not inserted.
+	DOSWRITEERR  OK  S File Write Error
+*Transfer failed for one of the following reasons:
+*
+*     1) Invalid drive, directory or path specified.
+*     2) File is write protected.
+*     3) Diskette not inserted.
+	DRVERR       OK  S File Name Error
+*First character of the file name is not a valid drive letter.
+	DUPRPTBINWID OK  S Restriction
+*Report contains binary data.
+*
+*Binary reports may only be copied to a drawer
+*having the same line width (%1 characters).
+	DUPRPTNOTREP OK  S Unauthorized Access
+*You are not authorized to replace report %1.
+	FILECOPIED   OK  I Export Complete
+*The report has been copied to file:
+*
+*   %1
+	FILERESTRICT OK  S Restriction
+*You are not allowed to write to the file specified.
+	FILLBLANK    OC  Q Confirmation
+*Fill String was not specified.
+*
+*Do you wish to proceed and fill the field with spaces?
+	FONTERROR    OK  S Print Error
+*Font select failed with the following error:
+*[%1]
+	GRAPHCONFIG  OK  S Configuration Error
+*Unable to display the requested graph.
+*
+*The ICE configuration, Web server image directory
+*or Graph engine are not properly configured.
+	GRAPHDEFINE  OK  S Graph Definition Error
+*Unable to display the requested graph.
+*
+*The parameters for the graph are in error.
+	GRAPHFIELD   OK  S Graph Data Error
+*Unable to display the requested graph.
+*
+*Field [%1] was not found in the input data.
+	GRAPHLABVAL  OK  S Invalid Selection
+*Label field cannot be a Value field.
+	GRAPHNODATA  OK  S Invalid Selection
+*Insufficient data to display a graph.
+	GRAPHNOVAL   OK  S Incomplete Selection
+*No value field(s) have been selected to graph.
+	GRAPHOVER1   OK  S Invalid Selection
+*You may only select one value field for a Pie graph.
+	GRAPHOVER6   OK  S Invalid Selection
+*More than six value fields have been selected to graph.
+	GRAPHPRINT   YN  Q Print Error
+*You either cancelled your Print request, or the
+*Printer is not set up properly for screen printing.
+*
+*Do you want to set up your Printer now?
+	HTMLMAXWIDTH OC  E Import Restriction
+*The length of line %1 exceeds the drawer width (%2 columns).
+*
+*Reformat this line and try again.
+	INVALHEADER  OK  S Invalid Report Headers
+*The requested operation cannot be performed.
+*
+*The report headers are not in the format required for this
+*operation.  The header must include both a header-divider (*=)
+*line and at least one asterisk (*) type line preceding it.
+	INVALIDCAB   OK  S Invalid Entry
+*Cabinet is invalid or does not exist.
+	INVALIDDATE  OK  S Invalid Entry
+*Date is invalid for the format selected.
+	INVALIDDATE2 OK  S Invalid Entry
+*Date is blank or invalid.
+*
+*Enter a valid date in the YYYYMMDD Format.
+	INVALIDDPN   OK  S Invalid Entry
+*Invalid department number.
+	INVALIDDRW   OK  S Invalid Entry
+*Drawer is invalid or does not exist.
+	INVALIDFMT   OK  S Invalid Value
+*The value entered is not an acceptable Date Format.
+*
+*Enter a Date in a valid format.
+	INVALIDINT   OK  S Invalid Entry
+*Number must be an integer value greater than zero.
+	INVALIDPSW   OK  S Invalid Entry
+*Invalid password.
+	INVALIDRANGE OK  S Invalid Entry
+*Second value must be greater than the first value for a range.
+	INVALIDRPT   OK  S Invalid Entry
+*Report is invalid or does not exist.
+	INVALIDUSR   OK  S Invalid Entry
+*Invalid User-ID.
+	INVDATEKEY   OK  S Invalid Entry
+*Date format is only allowed for Key items 1 through 9.
+	INVSCALEQTY  OK  S Invalid Entry
+*Invalid quantity for scaling.  The following are valid:
+*
+*              1 - 365 Days
+*              1 - 104 Weeks
+*              1 - 24  Months
+*              1 - 10  Years
+	LOCKITNOW    YN  Q Update Lock Required
+*You must have update control of the report for this operation.
+*
+*Do you want to lock the report now and continue?
+	LOCKREQUIRED OK  S Update Lock Required
+*You must have update control of the report for this operation.
+*
+*Press the [Lock] button to obtain an exclusive update lock.
+*When finished updating, press the [Unlock] button.
+	MESSAGECONF1 OK  I Operation Complete
+*Message has been queued to user-id %1 department %2.
+	MESSAGECONF2 OK  I Operation Complete
+*Message has been queued to user-id %1 department %2 on site %3.
+	MESSAGECONF3 OK  I Operation Complete
+*Message has been queued to station %1.
+	MESSAGECONF4 OK  I Operation Complete
+*Message has been queued to station %1 on site %2.
+	MESSAGEDEPN  OK  S Invalid Entry
+*Invalid department number entered.
+	MESSAGEDEPT  OK  S Invalid Entry
+*This user-id is not valid for that department.
+	MESSAGEDISP  OK  S Invalid Request
+*A message must be displayed to perform that task.
+	MESSAGEERROR OK  S Send Error
+*Send failed with the following error:
+*[%1]
+	MESSAGENEXT  YN  Q Message Pending
+*Another message is waiting in the queue.
+*
+*Do you wish to close the current message and display the next one?
+	MESSAGENONE  OK  I No Messages Pending
+*No messages are currently queued.
+	MESSAGEPEND  YN  Q Message Pending
+*A message is waiting to be delivered to you.
+*
+*Do you wish to receive it now?
+	MESSAGESTAN  OK  S Invalid Entry
+*Invalid station number entered.
+	MESSAGETEXT  OK  S Incomplete Entry
+*Please enter the text of the message to send.
+	MESSAGEUSER  OK  S Invalid Entry
+*Invalid user-id entered.
+	MOVESIZE     OC  Q Confirmation
+*Report fields are not the same size.
+*
+*Do you want to proceed and copy the field anyway?
+	MUSTPICKFLD  OK  S Select Fields
+*You must select at least one field to assign labels.
+	NOEQUATION   OK  S Equation Required
+*You must enter an equation for the Calculation to perform.
+	NOFINDSMADE  OK  S Find Error
+*No finds made of " %1 "
+	NOMOREFINDS  OK  E Locate
+*No (more) finds of: " %1 "
+	NOMOVEITSELF OK  S Field Error
+*You cannot move a field to itself.
+	NOPREVFINDS  OK  E Locate
+*No (previous) finds of " %1 "
+	NOREMOTESITE OK  S Operation Unavailable
+*No remote system(s) are currently configured.
+	NOREPORTS    OK  S No Reports
+*No reports found in that drawer.
+	NOTARGET     OK  S Locate Error
+*The target string must be entered.
+	NOTAUTHACC   OK  S Security Violation
+*You are not authorized to access that report.
+	NOTAUTHREP   OK  S Unauthorized Access
+*The report you specified (%1) already exists and was
+*last updated by another user (%2).  You cannot
+*replace this report unless you are the last user to update it.
+	NOTAUTHRMT   OK  S Security Restriction
+*You are not authorized, or the the remote system is
+*not set up properly, to let you browse the database.
+	NOTAUTHRPT   OK  S Unauthorized Access
+*You are not authorized to update that report.
+	NOTAUTHTASK  OK  I Restriction
+*You are not authorized to perform that task.
+*
+*Contact the System Administrator to
+*request authorization for your user-id.
+	NOTAUTHUPD   OK  S Unauthorized Access
+*You are not authorized to update reports in that drawer.
+	NOTDATEFLD   OK  S Invalid Selection
+*This field is not a valid date field.
+	NUMBERERROR  OK  S Invalid Entry
+*Not a valid number.
+	NUMFIELDS    OK  S Fields Error
+*You must select between 1 and 32 fields.
+	NUMLNS       OK  S Invalid Entry
+*Invalid quantity of lines.
+	OBJECTLOAD   OK  S System Error
+*Unable to download object [%1] to your workstation.
+	OVERWARN1    YN  Q Confirmation
+*The report you specified (%1) already exists.
+*If you proceed it will be overwritten.
+*
+*Are you sure you want to proceed?
+	OVERWARN2    YN  I Reconfirmation
+*Please reconfirm that you wish to overwrite report (%1).
+*
+*If you answer Yes, the report will be permanently replaced.
+	PARTIALVIEW  YN  Q Confirmation
+*All columns of the report are not displayed.
+*
+*Do you want to use the current view only?
+	PATHSAVED    OK  I Operation Complete
+*Your %1 path has been saved.
+	PRINTERNONE  OK  S Print Error
+*No printers are configured on your system.
+	PRINTERROR   OK  S Print Error
+*Print failed with the following error:
+*[%1]
+	PRINTQTY     OK  S Invalid Entry
+*The number of copies to print must be 1-64.
+	PROGERRORWEB OK  S Program Error
+*A program error has occurred and diagnostic information has been saved.
+	REFORMFLDNAM OK  S Invalid Entry
+*Field name is required.
+	REFORMFLDSIZ OK  S Invalid Entry
+*Invalid or missing field size.
+	REFORMMAXCOL OK  S Maximum Limit Exceeded
+*The total quantity of columns in the report fields
+*selected (%1) exceed the maximum allowed (%2).
+	REFORMNOFLD  OK  S Invalid Operation
+*No field is selected to resize or move.
+	REFORMONEFLD OK  S Invalid Operation
+*Only one field at a time may be resized or moved.
+	RELABELFLDS  YNC Q Re-label Fields
+*There are already fields that have previously been labeled.
+*
+*Do you want to re-label all of the fields?
+*
+*Yes to re-label, or No to add new labels for selected fields.
+	RELRESULT    YN  Q Confirmation
+*Discard the current result without saving it?
+	REMOTEACCESS OK  S Connection Failure
+*Unable to connect to the selected remote system.
+*
+*The site is currently offline, or is not accessible
+*by your user-id, or the alternate logon specified.
+	REPORTLOCKED YN  Q Operation Unsuccessful
+*Unable to obtain update lock on report %1.
+*Report is currently locked by %2 on station %3.
+*
+*Try again?
+	REPORTNONDSP OK  S Invalid Report
+*Report contains binary data and cannot be displayed.
+	REPORTNOTAVL OK  S Invalid Report
+*Requested report does not exist.
+	REPORTSAVED  OK  I Operation Complete
+*Report %1 has been saved.
+	REPORTTITLE  OK  S Incomplete Entry
+*Report title is required.
+	REPORTUPDATE OK  E Update Conflict
+*Unable to obtain update lock on report %1.
+*
+*Report is currently being updated by %2 on station %3.
+	REPOSDELCONF YN  Q Confirmation
+*%2 temporary file(s) were detected that can be
+*safely removed from the %1 repository.
+*
+*Do you want to delete those file(s) now?
+*
+*Caution:
+*   You should close any other active %1
+*   sessions before proceeding with this operation.
+	REPOSINITIAL OK  S System Error
+*Unable to initialize the RADS Repository on this workstation.
+	REPOSNOFILES OK  I Nothing Found
+*No temporary files currently reside
+*in your %1 workstation repository.
+	ROUNDERROR   OK  S Invalid Entry
+*The rounding value is invalid.
+*Select a value using the drop-down arrow.
+	ROUNDGTSIZE  OK  S Invalid Entry
+*The width of the field is less than the rounding value specified.
+	RPTZEROFUN   OK  S Restriction
+*You cannot perform that function on report zero.
+	RPTZEROUPD   OK  S Restriction
+*That update operation cannot be performed on report zero.
+	SEARCHBLANK  YN  Q Confirmation
+*Search string was left blank.
+*
+*Do you wish to search for blanks in this field?
+	SEARCHLIMIT  OK  S Search Limit
+*A limit of 10 fields may be searched a one time.
+	SECDRW       OK  S Unauthorized Access
+*You are not authorized to access that drawer.
+	SELECTLINE   OK  S Invalid Selection
+*You must select a line before requesting that operation.
+	SERVICNOTAVL OK  E Request Terminated
+*The service you requested (%1) is currently not available.
+	STRINGSZDIFF YN  S Confirmation
+*Replacement string not specified.
+*
+*Do you want to proceed and change occurances
+*of target string to nothing?
+	SYNTAXERROR  OK  S Filename Syntax Error
+*Correct syntax is - drive:\filename.ext
+*
+*     Example: C:\MYFILE.TXT
+	TOMANYKEYS   OK  S Invalid Key
+*You already have 9 key fields.  This is the limit for count.
+	TRUNCATE     YN  S Confirmation
+*String size is larger than the field selected.
+*
+*Do you want to proceed and truncate it?
+	UNDOREPORT0  OK  E Restriction
+*Unable to Undo updates made to report zero.
+	USERMODIFIED OK  E Update Conflict
+*Unable to perform the requested update.
+*The report has been modified by another user.
+*
+*The report display must be refreshed to show the changes.
+*Following that, you may request your update again.
+	VALUEOVER18  OK  S Invalid Selection
+*You selected a value field that is too wide.
+*Value fields must not exceed 18 characters.
+	VERSINCOMPAT OK  S Restriction
+*The requested service cannot be performed.
+*
+*The version level [%3] of application [%1]
+*is incompatible with the current version of the
+*Report Tools [%2].
+	WIDTHDIFFOK  YN  Q Confirmation
+*The width from the source drawer does not match
+*the width of the destination drawer.  Do you want
+*to continue?

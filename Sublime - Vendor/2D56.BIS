@@ -1,0 +1,448 @@
+.SBS                  Standardize BIS Script Main Menu
+.REV: 2.2    DATE: 20120218
+*===============================================================================
+*  Copyright (c) 2012 IT Resource Solutions (ITRS)                             *
+*  --------------------------------------------------------------------------  *
+*  The SBS utility is a free software package, provided for the benefit        *
+*  of all BIS users.  It contains no warranty of any kind, and ITRS will       *
+*  assume no liability for defects or problems resulting from its use.         *
+*  This software may be used and distributed freely in its entire form;        *
+*  however, no portion of this program code may be reused without the          *
+*  expressed consent of ITRS.                                                  *
+*===============================================================================
+:L1=40,5=69,10=88,15=90,20=97,25=113,30=126,35=128,40=139,45=146,50=204,55=206,60=215,65=228,70=237,100=320,101=330,102=335,170=341
+:L171=346,180=353,181=359,182=365,183=371,184=377,185=383,186=389,187=395,188=401,189=407,190=413,196=427,197=433,198=439,199=444
+@.
+@     CALL 0002(<REP>h17,<STS>h3) .
+@     IF CDRW$ ne 0  ESR ; IF LINK$ ne 0,(END) ; .
+@     IF DRW$ eq 0  REL ; .
+@     LDV,pw <CAB>i4=CAB$,<DRW>h1=ADRW$ .
+@     DSP,-0,,,,Y .
+@     IF <STS> eq 'OK'  IF <REP> ne '-0' . ; GTO lin+5 .
+@     MBX,OK,I,'Operation Complete' "/\
+ Run script has been standardized and the result is displayed.//\
+ Note:  The original report (<REP>) has not been replaced." \
+      O,(lin+1) .
+@     IF <STS> eq 'DRW'  IF <REP> ne '-0' . ; GTO lin+7 .
+@     MBX,OK,E,'Operation Complete' "/\
+ Run script has been standardized and the result is displayed.//\
+ Note:  The original report (<REP>) has not been replaced.//\
+ Result has been moved to drawer <DRW><CAB> because one/\
+ or more lines now exceed the original drawer width." \
+      O,(lin+1) .
+@     IF <STS> ne 'XXX'  IF <REP> eq '-0' . ; GTO lin+4 .
+@     MBX,OK,I,'Operation Complete' "/\
+ Run script has been standardized and the result is displayed." \
+      O,(lin+1) .
+@     DSX,-0 .
+@.
+@0002:(<REP>,<STS>) . ------------ Entry Point ---------------------------------
+@.
+@     IF DRW$ ne 0  RNM -1 ; .
+@.
+@     LDV <WIN1>i6=0,<REP>h17,<RTN>h1=Y .
+@     RER,EDRW$,0003 0001  RAR 0196 .
+@.
+@     LDV <3D>h1=b  IF DWCAP$(13-1) eq 1  LDV <3D>=3 ; .
+@     LDV,p <T>h1  IF DWCAP$(13-1) eq 1  LDV <T>h1=T ; .
+@.
+@     MNU,t MENUBAR,"",,'' .
+@.
+@     DVS,EDRW$,0099 'LL','ST','IF','GT','VS','DS','UL','VN' \
+      <LL>a,<ST>h,<IF>h,<GT>h,<VS>h,<DS>h,<UL>h,<VN>h .
+@     LDV <LL>=4,<ST>=Y,<IF>=Y,<GT>=Y,<VS>=N,<DS>=Y,<UL>=Y,<VN>=Y .
+@     FDR,EDRW$,0099,,,lin+3 '' 'User-ID' 	,USER$ .
+@     RLN 'LL','ST','IF','GT','VS','DS','UL','VN' \
+      <LL>,<ST>,<IF>,<GT>,<VS>,<DS>,<UL>,<VN> .
+@.
+@     IF DRW1$ eq 0,(0006) ; RNM,-1 -0 .
+@     LDV,pw <CAB>a4=CAB$,<DRW>h1=ADRW$,<RPT>a4=RPT$ .
+@     LDV,w <CPL>i3=CHAR$ .
+@     IF SYSNAM$(1-1) ne 'M',(lin+2) ; .
+@     IF <CAB> eq ECAB$  IF <DRW> eq AEDRW$  IF <RPT> eq ERPT$,(0006) ; .
+@     LDV,l <REP>=<RPT><DRW><CAB> .
+@     IF <RPT>(1-1) eq '-'  LDV <RPT>a2=-1,<REP>='-0' ; .
+@     BRK,0,A  RDL,-1,1,0006 1-1 .
+@     CAL,-1,,,0190 o 2-1 @,'' exit:1  GTO 0035 .
+@.
+@0005:. ------------------------- Select Report --------------------------------
+@.
+@     LDV <RTN>h1=N  LDV,p <REP> .
+@.
+@     LDV <ROW>i2=02,<HGT>i2=10,<WID>i3=30 .
+@     CHG <CLM>i3 SCNH$ + 1 - <WID> // 2 .
+@     WIN,,<ROW>,<CLM>,<HGT>,<WID>,lgra,bc \
+      'Enter Report To Process' <WIN1>i6 .
+@     TXT,"",<WIN1>,02,03,05,25,lgra,<3D> .
+@     FON,t,Arial,09,pdb .
+@     TXT," Report",<WIN1>,04,04,01,07,bla/lgra,r .
+@     FON,t .
+@     EDT,"<REP>",<WIN1>,04,10,01,16,bla/whi,<3D> <EDT1>i6 .
+@     FON,t,Arial,09,pdb .
+@     BTN,<WIN1>,08,03,02,08 'OK'   <BTN1>i6 .
+@     BTN,<WIN1>,08,12,02,08 'Help' <BTN2>i6 .
+@     BTN,<WIN1>,08,21,02,08 'Exit' <BTN3>i6 .
+@     FON,t .
+@     LDV <FOC>i6=<EDT1> .
+@0010:.
+@     INP,<FOC> .
+@0015:.
+@     IF ACTINP$ eq <BTN1>,(0020) ; . OK
+@     IF ACTINP$ eq <EDT1>,(0020) ; .
+@     IF ACTINP$ eq <BTN2>,(0170) ; . Help
+@     IF ACTINP$ eq <BTN3>,(0199) ; . Exit
+@     IF ACTINP$ eq 0,(0170) ; IF FKEY$ eq 1,(0170) ; .
+@     GTO 0010 .
+@0020:.
+@     INP,<EDT1>,Y .
+@     CHG INPUT$ <REP>h17 .
+@.
+@     IF <REP> eq '',(0180),'-','-0' . ; GTO lin+3 .
+@     IF DRW8$ eq 0,(0183) ; .
+@     DEF,m <CAB>a4,DRW8$  DEF,a <DRW>h1,DRW8$  GTO 0025 .
+@     LDV,l <REP>  IF <REP>(1-1) ge 'A' & le 'Z' . ; GTO lin+3 .
+@     DIR,0183 <REP> <CAB>a4,<DRW>h1,<RPT>a4 .
+@     IF <RPT> ne '',(0025) ; GTO 0183 .
+@     LDV <N>i2=0  LDV,w <CAB>a4=CAB1$,<DRW>h1,<RPT>a4 .
+@     INC <N>  IF <N> gt 16,(0181) ; IF <REP>(<N>-1) ge 0 & le 9,(lin-0) ; .
+@     IF <N> eq 1,(0180) ; IF <REP>(<N>-1) ge 'A' & le 'I' . ; GTO 0181 .
+@     LDV,u <DRW>=<REP>(<N>-1)  DEC <N>  CHG <RPT> <REP>(1-<N>) .
+@     INC,2 <N>  IF <REP>(<N>-0) ne ''  CHG <CAB> <REP>(<N>-0) ; .
+@     DEF <CAX>i1,<CAB>  IF <CAX> ne 1,(0182) ; .
+@0025:.
+@     IF <CAB> ge 0 & le MAXCAB$ . ; GTO 0182 .
+@     IF SYSNAM$(1-1) eq 'M'  IF <DRW> eq 'A'  LDV,w <CAB>=CAB1$ ; .
+@     DRW,<CAB>,<DRW>,0184 <CPL>i3 .
+@     IF <RPT> ge 0 & le MAXRPT$,(lin+2) ; .
+@     IF <RPT> eq -8  IF DRW8$ ne 0 . ; GTO 0180 .
+@     IF SYSNAM$(1-1) ne 'M',(lin+2) ; .
+@     IF <CAB> eq ECAB$  IF <DRW> eq AEDRW$  IF <RPT> eq ERPT$,(0180) ; .
+@     LZR,<CAB>,<DRW>,<RPT>,0187 ,,,,,,,,,,<ACC>i1  IF <ACC> ne 0,(0188) ; .
+@     RDL,<CAB>,<DRW>,<RPT>,1,0188 1-1 .
+@     IF SYSNAM$(1-1) ne 'M',(0030) ; .
+@     LZR,<CAB>,<DRW>,0 ,,,,,<DPN>i4,<USR>h11,<PSW>h6 .
+@     IF <PSW> eq ''  IF <USR> eq '',USER$  IF <DPN> eq 0,DEPN$ . ; GTO 0186 .
+@0030:.
+@     RSL,<CAB>,<DRW>,<RPT>  RNM -1 .
+@0035:.
+@     LDV,r <EVN>a4=<CAB>  IF <EVN>(0-1) eq 1,3,5,7,9  DEC <EVN> ; .
+@     CHG <ODD>a4 <EVN> + 1 .
+@     IF SYSNAM$(1-1) eq 'M'  IF CAB1$ eq <EVN>,<ODD>,(0040) ; .
+@     LDV <CAX>a4=<CAB>  IF <DRW> eq 'A'  LDV <CAX>=0 ; .
+@     IF 0 eq SECDRW$,SECRPT$,SECGRP$,(0185) ; CHG <CLM>i3 56 + SECGRP$ .
+@     RDL,SECDRW$,SECRPT$,6,0185 1-1 .
+@     RLN,,0185 1-1,29-9,<CLM>-1 <LT>h,<DC>a,<PER>h  IF <LT> ne '	',(lin-0) ; .
+@     LDV,l <DC>  IF <DC>(2-0) eq <CAX>  IF <DC>(1-1) eq <DRW> . ; GTO lin-1 .
+@     IF <PER> ne 'W'  IF <PER> ne 'R',(0185) ; .
+@     IF <CAB> eq <ODD>  LDV <PER>=R ; .
+@0040:.
+@     SRH,-1,2 dn 2-1 :,D/:,I  BLT,-0,0189 .
+@     CAL,-1,,,0190 o 2-1 @,'' exit:1 .
+@.
+@     IF <WIN1> ne 0  CLS,<WIN1>  LDV <WIN1>=0 ; .
+@     LDV <RTN>h1=Y  LDV,p <REP> .
+@.
+@0045:. ----------------------- Display Actions --------------------------------
+@.
+@     LDV <ROW>i2=03,<HGT>i2=28,<WID>i3=44 .
+@     CHG <CLM>i3 SCNH$ + 1 - <WID> // 2 .
+@     GTO 0070 .
+@     WIN,,<ROW>,<CLM>,<HGT>,<WID>,lgra,bc \
+      'Standardize BIS Script: '<REP> <WIN1>i6 .
+@     TXT,"",<WIN1>,03,03,22,40,lgra,<3D> .
+@     FON,t,'Arial',08,pd .
+@     TXT,"Actions",<WIN1>,02,04,01,08,bla/lgra,c .
+@     FON,t,'Arial',07,pd .
+@     BRK,0,A .
+Note: The outcome of this utility will be a result.
+Original run script is not automatically replaced.
+@     BRK  TXT,-0,2,2,<WIN1>,01,18,02,50,gra/lgra,<T> .
+@     FON,t,'Arial',08,pdb .
+@     LDV <R1>i1=1,<R2>i1=0  IF <LL> eq 3  LDV <R1>=0,<R2>=1 ; .
+@     BTN,<WIN1>,04,06,02,36,bla/lgra,c(1) \
+      'Standardize Label Length & Indent Logic'   <CHK1>i6 .
+@     BTN,<WIN1>,04,06,02,02,bla/lgra,c(1)g '' .
+      <WIN1>,04,05,01,50,bla/lgra .
+@     BTN,<WIN1>,06,08,01,30,bla/lgra,ar(<R1>) \
+      '4 Digit Labels | 5 Character Indent' <RAD1>i6 .
+@     BTN,<WIN1>,07,08,02,30,bla/lgra,ar(<R2>) \
+      '3 Digit Labels | 4 Character Indent' <RAD2>i6 .
+@     LDV <S2>i1=1  IF <ST> eq 'N'  LDV <S2>=0 ; .
+@     BTN,<WIN1>,09,06,02,36,bla/lgra,ac(<S2>) \
+      'Check Proper Statement Termination'        <CHK2>i6 .
+@     LDV <S3>i1=1  IF <IF> eq 'N'  LDV <S3>=0 ; .
+@     BTN,<WIN1>,11,06,02,36,bla/lgra,ac(<S3>) \
+      'Standardize @IF Operands (eq, ne, gt, lt)' <CHK3>i6 .
+@     LDV <S4>i1=1  IF <GT> eq 'N'  LDV <S4>=0 ; .
+@     BTN,<WIN1>,13,06,02,36,bla/lgra,ac(<S4>) \
+      'Standardize @GTO lin+ & lin- Syntax'       <CHK4>i6 .
+@     LDV <S5>i1=1  IF <VS> eq 'N'  LDV <S5>=0 ; .
+@     BTN,<WIN1>,15,06,02,36,bla/lgra,ac(<S5>) \
+      'Remove @RDL, @RLN, @RDC Variable Size'     <CHK5>i6 .
+@     LDV <S6>i1=1  IF <DS> eq 'N'  LDV <S6>=0 ; .
+@     BTN,<WIN1>,17,06,02,36,bla/lgra,ac(<S6>) \
+      'Double Spacing Between Commands'           <CHK6>i6 .
+@     LDV <S7>i1=1  IF <UL> eq 'N'  LDV <S7>=0 ; .
+@     BTN,<WIN1>,19,06,02,36,bla/lgra,ac(<S7>) \
+      'Uppercase Commands, Lowercase Options'     <CHK7>i6 .
+@     LDV <S8>i1=1  IF <VN> eq 'N'  LDV <S8>=0 ; .
+@     BTN,<WIN1>,21,06,02,36,bla/lgra,ac(<S8>) \
+      'Uppercase Named Variables & Reserved Words' <CHK8>i6 .
+@     LDV <S9>i1=1,<S10>i1=1 .
+@     IF 0 eq <S2>,<S3>,<S4>,<S5>,<S6>,<S7>,<S8>  LDV <S9>=0 ; .
+@     IF 1 eq <S2>,<S3>,<S4>,<S5>,<S6>,<S7>,<S8>  LDV <S10>=0 ; .
+@     BTN,<WIN1>,23,13,02,11,bla/lgra,ac(<S9>)  'Select All'   <CHK9>i6 .
+@     BTN,<WIN1>,23,24,02,12,bla/lgra,ac(<S10>) 'Deselect All' <CHK10>i6 .
+@     FON,t,'Arial',09,pdb .
+@     BTN,<WIN1>,26,10,02,08 'OK '    <BTN1>i6 .
+@     BTN,<WIN1>,26,19,02,08 'Help'   <BTN2>i6 .
+@     BTN,<WIN1>,26,28,02,08 'Cancel' <BTN3>i6 .
+@     FON,t .
+@.
+@     LDV <FOC>i6=<BTN1> .
+@0050:.
+@.ew  INP,<FOC>,,<WIN1> .
+@0055:.
+@     GTO 0070 .
+@     IF ACTINP$ eq <BTN1>,(0070) ; . OK
+@     IF ACTINP$ eq <CHK2>,<CHK3>,<CHK4>,<CHK5>,<CHK6>,<CHK7>,<CHK8>,(0065) ; .
+@     IF ACTINP$ eq <CHK9>,<CHK10>,(0060) ; .
+@     IF ACTINP$ eq <BTN2>,(0171) ; . Help
+@     IF ACTINP$ eq <BTN3>,(0199) ; . Cancel
+@     IF ACTINP$ eq 0,(0171) ; IF FKEY$ eq 1,(0171) ; .
+@     GTO 0050 .
+@0060:.
+@     IF INPUT$ eq 0,(0065) ; .
+@     LDV <S9>i1=1,<S10>i1=0  IF ACTINP$ eq <CHK10>  LDV <S9>=0,<S10>=1 ; .
+@     BTN,<CHK2>,,,,,,ac(<S9>) '' .
+@     BTN,<CHK3>,,,,,,ac(<S9>) '' .
+@     BTN,<CHK4>,,,,,,ac(<S9>) '' .
+@     BTN,<CHK5>,,,,,,ac(<S9>) '' .
+@     BTN,<CHK6>,,,,,,ac(<S9>) '' .
+@     BTN,<CHK7>,,,,,,ac(<S9>) '' .
+@     BTN,<CHK8>,,,,,,ac(<S9>) '' .
+@     BTN,<CHK9>,,,,,,ac(<S9>) '' .
+@     BTN,<CHK10>,,,,,,ac(<S10>) '' .
+@     GTO 0050 .
+@0065:.
+@     INP,<CHK2>,<CHK3>,<CHK4>,<CHK5>,<CHK6>,<CHK7>,<CHK8> .
+@     CHG INPUT$ <S2>i1,<S3>i1,<S4>i1,<S5>i1,<S6>i1,<S7>i1,<S8>i1 .
+@     LDV <S9>i1=1,<S10>i1=1 .
+@     IF 0 eq <S2>,<S3>,<S4>,<S5>,<S6>,<S7>,<S8>  LDV <S9>=0 ; .
+@     IF 1 eq <S2>,<S3>,<S4>,<S5>,<S6>,<S7>,<S8>  LDV <S10>=0 ; .
+@     BTN,<CHK9>,,,,,,ac(<S9>) '' .
+@     BTN,<CHK10>,,,,,,ac(<S10>) '' .
+@     GTO 0050 .
+@0070:.
+@.ew  INP,<RAD1>,<CHK2>,<CHK3>,<CHK4>,<CHK5>,<CHK6>,<CHK7>,<CHK8> .
+@.ew  CHG INPUT$ <R1>i1,<S2>i1,<S3>i1,<S4>i1,<S5>i1,<S6>i1,<S7>i1,<S8>i1 .
+@     LDV <R1>i1=1,<S2>i1=1,<S3>i1=1,<S4>i1=1,<S5>i1=1,<S6>i1=1,\
+        <S7>i1=1,<S8>i1=1 .
+@     IF <R1> eq 1  LDV <LL>=4 . ; LDV <LL>=3 .
+@     IF <S2> eq 1  LDV <ST>=Y . ; LDV <ST>=N .
+@     IF <S3> eq 1  LDV <IF>=Y . ; LDV <IF>=N .
+@     IF <S4> eq 1  LDV <GT>=Y . ; LDV <GT>=N .
+@     IF <S5> eq 1  LDV <VS>=Y . ; LDV <VS>=N .
+@     IF <S6> eq 1  LDV <DS>=Y . ; LDV <DS>=N .
+@     IF <S7> eq 1  LDV <UL>=Y . ; LDV <UL>=N .
+@     IF <S8> eq 1  LDV <VN>=Y . ; LDV <VN>=N .
+@.
+@     LOK,EDRW$,0099 .
+@     FND,EDRW$,0099,,lin+1 '' 'User-ID' 	,USER$ ,<LIN>i6  GTO lin+6 .
+@     LN+,EDRW$,0099,5,1 .
+@     WRL,EDRW$,0099,6 'User-ID(1-11)' 	,USER$ .
+@     SRR,EDRW$,0099 '' 'User-ID' 	,1 .
+@     LOK,EDRW$,0099 .
+@     FND,EDRW$,0099,,lin+3 '' 'User-ID' 	,USER$ ,<LIN>i6 .
+@     WRL,EDRW$,0099,<LIN> 'LL','ST','IF','GT','VS','DS','UL','VN' \
+      	,<LL>,<ST>,<IF>,<GT>,<VS>,<DS>,<UL>,<VN> .
+@     ULK .
+@.
+@     CLS,<WIN1>  LDV <WIN1>=0 .
+@     RNM,-1 -2 .
+@.
+@. --------------------------- Pre-Conversion Checks ---------------------------
+@.
+@     IF <ST> eq 'Y' . ; GTO lin+5 .
+@     RNM,-1 -0 .
+@     CALL,EDRW$,0019 0001* (<STX>h3) .
+@     IF <STX> eq 'OK','XIT',(lin+1) ; GTO 0198 .
+@     RNM -1 .
+@.
+@. ---------------------------- Conversion Routines ----------------------------
+@.
+@     BRK,0,F .
+@     LZR,-1 ,<CPL>i3  LNY,-1,2,99999 .
+@     RDC,-1,2 1-<CPL> <V1>s .
+<V1>
+@     BRK  RNM -1 .
+@.
+@     CLT,-1,lin+1 .
+@.
+@     CALL,EDRW$,0010 0001* (<STX>h3) .
+@     IF <STX> ne 'OK',(0198) ; .
+@.
+@     CALL,EDRW$,0017 0001* (<STX>h3) .
+@     IF <STX> ne 'OK',(0198) ; .
+@.
+@     IF <IF> eq 'Y' . ; GTO lin+3 .
+@     CALL,EDRW$,0011 0001* (<STX>h3) .
+@     IF <STX> ne 'OK',(0198) ; .
+@.
+@     IF <GT> eq 'Y' . ; GTO lin+3 .
+@     CALL,EDRW$,0012 0001* (<STX>h3) .
+@     IF <STX> ne 'OK',(0198) ; .
+@.
+@     IF <VS> eq 'Y' . ; GTO lin+3 .
+@     CALL,EDRW$,0013 0001* (<STX>h3) .
+@     IF <STX> ne 'OK',(0198) ; .
+@.
+@     IF <DS> eq 'Y' . ; GTO lin+3 .
+@     CALL,EDRW$,0015 0001* (<STX>h3) .
+@     IF <STX> ne 'OK',(0198) ; .
+@.
+@     IF <UL> eq 'Y' . ; GTO lin+5 .
+@     CALL,EDRW$,0014 0001* (<STX>h3) .
+@     IF <STX> ne 'OK',(0198) ; .
+@     CALL,EDRW$,0016 0001* (<STX>h3) .
+@     IF <STX> ne 'OK',(0198) ; .
+@.
+@     IF <VN> eq 'Y' . ; GTO lin+3 .
+@     CALL,EDRW$,0018 0001* (<STX>h3) .
+@     IF <STX> ne 'OK',(0198) ; .
+@.
+@     CALL,EDRW$,0020 0001* (<REP>,<CAB>,<DRW>,<RPT>,<STX>h3) .
+@     IF <STX> eq 'OK',(lin+1),'XXX',(0197) ; GTO 0198 .
+@     RNM -1 .
+@     GTO 0100 .
+@.
+@0100:. ------------------------ Return Result ---------------------------------
+@.
+@     LDV <STS>h3=DRW .
+@     LDV,pw <CAX>a4=CAB$,<DRX>h1=ADRW$  LDV,w <CPX>i3=CHAR$ .
+@     IF <CAX> eq <CAB>  IF <DRX> eq <DRW>,(0102) ; .
+@     IF <CPX> le <CPL>,(0101) ; .
+@     CHG <V2>i3 <CPL> + 1  CHG <V3>i3 <CPX> - <CPL> .
+@     LDV <LIN>i6=1,<V1>s<V3> .
+@     INC <LIN>  RDL,-1,<LIN>,0101 <V2>-<V3> <V1>  IF <V1> eq '',(lin-0) ; .
+@     GTO 0199 .
+@0101:.
+@     BRK,<CAB>,<DRW> .
+@     RDC,-1,2 1-<CPX> <V1>s .
+<V1>
+@     BRK  RNM -1 .
+@0102:.
+@     LDV <STS>h3=OK .
+@     GTO 0199 .
+@.
+@. ---------------------------------- Help -------------------------------------
+@.
+@0170:.
+@     CALL,EDRW$,0004 0001* ('REPORT',<STS>h3) .
+@     RER,EDRW$,0003 0001  RAR 0196 .
+@     IF <STS> eq 'OK',(0010) ; GTO 0015 .
+@.
+@0171:.
+@     CALL,EDRW$,0004 0001* ('ACTION',<STS>h3) .
+@     RER,EDRW$,0003 0001  RAR 0196 .
+@     IF <STS> eq 'OK',(0050) ; GTO 0055 .
+@.
+@. --------------------------------- Errors ------------------------------------
+@.
+@0180:.
+@     IF <RTN> ne 'N',(0006) ; .
+@     LDV <FOC>i6=<EDT1> .
+@     MBX,OK,S,'Invalid Report' "/\
+ Invalid or missing report number" \
+      O,(0010) .
+@0181:.
+@     IF <RTN> ne 'N',(0006) ; .
+@     LDV <FOC>i6=<EDT1> .
+@     MBX,OK,S,'Invalid Drawer' "/\
+ Invalid or missing drawer letter" \
+      O,(0010) .
+@0182:.
+@     IF <RTN> ne 'N',(0006) ; .
+@     LDV <FOC>i6=<EDT1> .
+@     MBX,OK,S,'Invalid Cabinet' "/\
+ Invalid cabinet number" \
+      O,(0010) .
+@0183:.
+@     IF <RTN> ne 'N',(0006) ; .
+@     LDV <FOC>i6=<EDT1> .
+@     MBX,OK,S,'Invalid Report' "/\
+ Invalid Report Name" \
+      O,(0010) .
+@0184:.
+@     IF <RTN> ne 'N',(0006) ; .
+@     LDV <FOC>i6=<EDT1> .
+@     MBX,OK,S,'Invalid Drawer' "/\
+ Drawer does not exist" \
+      O,(0010) .
+@0185:.
+@     IF <RTN> ne 'N',(0006) ; .
+@     LDV <FOC>i6=<EDT1> .
+@     MBX,OK,S,'Invalid Drawer' "/\
+ You are not authorized to access this drawer" \
+      O,(0010) .
+@0186:.
+@     IF <RTN> ne 'N',(0006) ; .
+@     LDV <FOC>i6=<EDT1> .
+@     MBX,OK,S,'Invalid Drawer' "/\
+ Drawer is locked with password and cannot be accessed" \
+      O,(0010) .
+@0187:.
+@     IF <RTN> ne 'N',(0006) ; .
+@     LDV <FOC>i6=<EDT1> .
+@     MBX,OK,S,'Invalid Report' "/\
+ Report does not exist" \
+      O,(0010) .
+@0188:.
+@     IF <RTN> ne 'N',(0006) ; .
+@     LDV <FOC>i6=<EDT1> .
+@     MBX,OK,S,'Invalid Report' "/\
+ Unable to access report - may contain a read password" \
+      O,(0010) .
+@0189:.
+@     IF <RTN> ne 'N',(0006) ; .
+@     LDV <FOC>i6=<EDT1> .
+@     MBX,OK,S,'Invalid Run Control Report' "/\
+ Report contains invalid or duplicate label number(s)" \
+      O,(0010) .
+@0190:.
+@     IF <RTN> ne 'N',(lin+4) ; .
+@     MBX,OK,S,'Invalid Run Control Report' "/\
+ This report does not appear to contain BIS run script." \
+      O,(0010) .
+@.
+@     MBX,YN,S,'Invalid Run Control Report' "/\
+ This report does not appear to contain BIS run script.//\
+ Do you want to specify a different report to process?" \
+      N,(0199),Y,(lin+1) .
+@     LDV <REP>h17  GTO 0006 .
+@.
+@. ------------------------------- Termination ---------------------------------
+@.
+@0196:. Abort
+@.
+@     IF SYSNAM$(1-1) ne 'M'  CHG <ERR>i4 CERR$ ; .
+@     IF SYSNAM$(1-1) eq 'M'  SC x EEL';'rsm ; .
+@     GTO 0198 .
+@.
+@0197:. No Change
+@.
+@     RNM,-2 -1 .
+@     LDV <STS>h3=XXX .
+@     GTO 0199 .
+@.
+@0198:. Error
+@.
+@     LDV <STS>h3=ERR .
+@     GTO 0199 .
+@.
+@0199:. Terminate
+@.
+@     BRK  DLR,-0  IF DRW1$ ne 0  RNM,-1 -0 ; .
+@     IF <RTN> ne 'Y'  BRK  DLR,-0 ; .
+@     IF <WIN1> ne 0  CLS,<WIN1> ; .
+@     RETURN .

@@ -1,0 +1,16 @@
+.Table_IF_Operands    @IF Operands
+*     .       .
+*Find .Replace.
+*=====.=======.
+	NOT =	ne     	
+	NE   	ne     	
+	NOT <	ge     	
+	GE   	ge     	
+	NOT >	le     	
+	LE   	le     	
+	EQ   	eq     	
+	=    	eq     	
+	LT   	lt     	
+	<    	lt     	
+	GT   	gt     	
+	>    	gt     	

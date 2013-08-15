@@ -1,0 +1,51 @@
+.Display_WaitMsg      Display In-Progress Message
+.REV: 4.6.0  DATE: 20121212
+*===============================================================================
+*  RADS - Rapid Application Development Studio                                 *
+*  Copyright (c) 2012 IT Resource Solutions (ITRS)                             *
+*  Execution of this program without a valid software license, or reuse        *
+*  of this program code without expressed consent of ITRS, is prohibited.      *
+*==============================================================================*
+:L1=22,196=44,199=50
+@.
+@. ------------------------------- Test Setup ----------------------------------
+@.
+@     CALL 0001('0',<WIN1>i6,<TXT1>i6,'Processing Data') .
+@     WAT 02000 .
+@     CLS,<WIN1> .
+@     WAT 01000 .
+@     REL .
+@.
+@. ---------------------------- Call Entry Point -------------------------------
+@.
+@0001:(<WIN0>,<WIN1>,<TXT>,<MSG>) .
+@.
+@. -------------------------- Module Initialization ----------------------------
+@.
+@     RER,EDRW$,0099 0001  RAR 0196 .
+@.
+@. ---------------------------- Display Message --------------------------------
+@.
+@     IF <WIN1> ne 0  CLS,<WIN1>  LDV <WIN1>=0 ; .
+@     LDV <ROW>i2=08,<HGT>i2=06,<WID>i3=40 .
+@     CHG <COL>i3 SCNH$ - <WID> // 2 + 1 .
+@     WIN,<WIN0>,<ROW>,<COL>,<HGT>,<WID>,lgra,bc \
+      'Operation In Progress' <WIN1>i6 .
+@     FON,t,'Arial',09,pdb .
+@     TXT,"... Please Wait ...",<WIN1>,02,01,01,52,bla/lgra,c .
+@     TXT,"<MSG>",<WIN1>,04,01,01,52,dblu/lgra,cs <TXT>i6 .
+@     FON,t .
+@.
+@     GTO 0199 .
+@.
+@. ------------------------------- Termination ---------------------------------
+@.
+@0196:. Abort routine
+@.
+@     CHG <CERR>i4 CERR$ .
+@     FON,t .
+@     GTO 0199 .
+@.
+@0199:. Return
+@.
+@     RETURN .

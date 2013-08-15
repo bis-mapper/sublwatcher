@@ -1,0 +1,30 @@
+.Object Name: RJUST
+*
+*===================================================================================================
+:INCLUDE,ECAB$,B,1 .                                                            INCLUDE
+@.
+@.    #---------------------------------------------------------------------------------------------
+@.    #  RJUST Wrapper
+@.    #  Written: 08/15/2013
+@.    #---------------------------------------------------------------------------------------------
+@.
+@.    # Test Setup
+@.
+@.
+@0001:(<CTL>,<FILE>,<RUNNAME>,<STATUS>) .
+@.
+@     RSR,SUBLCOMMON_ configVars_ .
+@.    #  TODO Look this up in an index so it's not hardcoded...
+@. @     FDR,SUBLUTILS_ '' 'Util' 	,<RUNNAME>  RLN 'Cab','Dr','Rid' <CAB>i,<DRW>h,<RID>i .
+@     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
+@.
+@.    #  Standerdize run
+@     CALL,498,B,26 0001 ('s') .
+@.
+@.    #  Write file back out to same path
+@     PCW,-0,2 <FILE> .
+@     PC,r '"'<APPPATH>(p)'" -a' '"'<FILE>'"' .                                 Re-start editor
+@     GTO 0199 .
+@.
+@.    # Exit
+@0199:RETURN .

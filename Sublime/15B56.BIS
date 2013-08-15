@@ -1,0 +1,54 @@
+.BisBug
+.
+.      ______             ______       _____
+.     |_____|            |_____|      |
+*     |______ •    __    |______      |  ___
+*     |_____| | __|      |_____| |__| |_____|
+*==========================================================.====================
+:DEFINE WATCHING_            "498,c,71"                    |	MAPPER PROG EMAILS
+@     RER,498,I,2 0001  RAR,498,I,2 0001 .                 |	
+@     LDV <USER>h11=USER$,<CLR>s998,<READ>s998,<CNT>i3=0 . |	Get User
+@     LZR,WATCHING_ ,,<HLN>i7 .                            |	
+@     SRH,WATCHING_,,,0026 'd' 'UserId','Enabled' 	,\      |	
+        <USER>,'true' <ENB>i3 .                            |	
+@     RNM -1 .                                             |	Directories watched
+@0002:INC <HLN>,<CNT> .                                    |	
+@     RDL,-1,<HLN>,0010 'File Path' <FILEPATH>s .          |	Get path(s)
+@     LDV <BISBUG>s256=<FILEPATH>(p)'BisBug.Bis' .         |	
+@.                                                         |	
+@.    # Find File                                          |	
+@     RET,0,f,n,n,0002 <BISBUG>(p) .                       |	
+@     RNM -2 .
+@     OS '-d -f' 'del '<BISBUG>(p) .                       |	
+@.                                                         |	
+@     RDL,-2,2 1-100 <FILE>s .                             |	
+@     LDV,p <RUN>s60=<FILE>(<POS>-0),<FILE> .              |	
+@     LCV,0003 'b1' <RUN> '(' <LPOS>i3 .                   |	
+@     LCV 'b1' <RUN> ')' <RPOS>i3 .                        |	
+@     LDV <RUN>(<LPOS>-<RPOS>)='' .                        |	
+@0003:LCV 'b99' <RUN> '.bis'/'' .                          |	
+@     LCV 'b99' <RUN> '.txt'/'' .                          |	
+@     LDV,p <RUN> .                                        |	
+@     LDV <DRW>h1,<CAB>i4,<RPT>i4 .                        |	
+@     LCV,lin+1 b1 <RUN> 'a' <ALPHA>a1  GTO 0005 .         |	
+@     LCV,lin+1 b1 <RUN> 'b' <ALPHA>a1  GTO 0005 .         |	
+@     LCV,lin+1 b1 <RUN> 'c' <ALPHA>a1  GTO 0005 .         |	
+@     LCV,lin+1 b1 <RUN> 'd' <ALPHA>a1  GTO 0005 .         |	
+@     LCV,lin+1 b1 <RUN> 'e' <ALPHA>a1  GTO 0005 .         |	
+@     LCV,lin+1 b1 <RUN> 'f' <ALPHA>a1  GTO 0005 .         |	
+@     LCV,lin+1 b1 <RUN> 'g' <ALPHA>a1  GTO 0005 .         |	
+@     LCV,lin+1 b1 <RUN> 'h' <ALPHA>a1  GTO 0005 .         |	
+@     LCV,lin+1 b1 <RUN> 'i' <ALPHA>a1 .                   |	
+@0005:LDV <DRW>=<RUN>(<ALPHA>-1)  DEC <ALPHA> .            |	
+@     LDV,r <RPT>=<RUN>(1-<ALPHA>)  INC,2 <ALPHA> .        |	
+@     LDV,l <CAB>=<RUN>(<ALPHA>-0) .                       |	
+@.                                                         |	
+@     SRH,3950,d,1,,,0008 'ad' 'SvcCab','sd' 	,<CAB>,<DRW> .
+@     LZR,-0 ,,<HLN>i7  INC <HLN> .
+@     RDL,-0,<HLN>,lin+1 'cab','dw','rpt' <ICAB>h,<IDW>h,<IRPT>h .
+@     FDR,<ICAB>,<IDW>,<IRPT>,,,0008 '' 'cab','dw','rpt' 	,<CAB>,<DRW>,<RPT> .
+@     RLN,,0008 'service' <SRVS>s .
+@     RSL,<CAB>,G,<RPT> .                                  |	
+@0008:CALL,<CAB>,<DRW>,<RPT> 0001 () .                     |	
+@     DSP,-0 .                                             |	
+@0010:XUN .                                                |	

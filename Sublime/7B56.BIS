@@ -1,0 +1,147 @@
+.SUBL_Common
+.
+.
+.
+*
+*
+*===============================================================================
+:INCLUDE,ECAB$,B,1 .
+@.
+@.    #  Break apart <run> into useable <cab>,<drw>,<rpt>
+@0001:(<run>,<cab>,<drw>,<rpt>).
+@     lcv,lin+1 b1 <run> 'a' <alpha>a1  gto 0002 .
+@     lcv,lin+1 b1 <run> 'b' <alpha>a1  gto 0002 .
+@     lcv,lin+1 b1 <run> 'c' <alpha>a1  gto 0002 .
+@     lcv,lin+1 b1 <run> 'd' <alpha>a1  gto 0002 .
+@     lcv,lin+1 b1 <run> 'e' <alpha>a1  gto 0002 .
+@     lcv,lin+1 b1 <run> 'f' <alpha>a1  gto 0002 .
+@     lcv,lin+1 b1 <run> 'g' <alpha>a1  gto 0002 .
+@     lcv,lin+1 b1 <run> 'h' <alpha>a1  gto 0002 .
+@     lcv,lin+1 b1 <run> 'i' <alpha>a1 .
+@0002:ldv <drw>=<run>(<alpha>-1)  dec <alpha> .
+@     ldv <rpt>=<run>(1-<alpha>)  inc,2 <alpha> .
+@     ldv <cab>=<run>(<alpha>-0) .
+@     return .
+@.
+@.    #  Load the paramaters from the config table
+@0005:SRH,SUBLCONFIG_ 'dn@' 'Parameter' 	,@  RNM -1 .
+@     LZR,-0 ,,<HLN>i7  .
+@     DVS,-0 'Value' <T>s  DEF,s <LEN>i3,<T> .
+@0006:INC <HLN> .
+@     RDL,-1,<HLN>,0008 'Parameter','Value','Ty','Siz',\
+        'Opt' <PARAM>s,<VALUE>s,<TY>h,<SIZ>i,<OPT>h .
+@     LDV <'>h1=TIC$ .
+@     LCV,lin+1 '' <VALUE> '$'  LDV <'>h0 .                                     Is Reserve Word?
+@     LCV,lin+1 '' <VALUE> '<'  LDV <'>h0 .                                     Is Variable
+@     XQT '@ ldv'<OPT>(p)' <'<PARAM>(p)'>'<TY><SIZ>(p)'='<'><VALUE><'> .
+@     GTO 0006 .
+@0008:esr .
+@.
+@.    #  Check for ICE Service return Service Title if ICE Enabled site
+@0010:(<CAB>,<DRW>,<RPT>,<SRVS>) .
+@     LDV,l <CAB>  LDV,r <RPT>  LDV <SVC>s20 .
+@     LZR,3950,d,1,0013 .
+@     SRH,3950,d,1,,,0013 'ad' 'SvcCab','sd' 	,\
+        <CAB>,<DRW> .
+@     LZR,-0 ,,<HLN>i7  INC <HLN> .
+@     RDL,-0,<HLN>,0013 'cab','dw','rpt' \
+        <ICAB>h,<IDW>h,<IRPT>h .
+@     FDR,<ICAB>,<IDW>,<IRPT>,,,lin+2 '' \
+        'cab','dw','rpt' 	,<CAB>,<DRW>,<RPT> .
+@     RLN 'service' <SVC>s .
+@     LDV,p <SRVS>='('<SVC>(p)')' .
+@0013:return .
+@.
+@.    #  Check if folder exists.  If not create it.
+@0015:(<DIR>,<FLDR>,<FLDRPATH>) .
+@     PCR,0,A,-0,n,n,lin+2 <DIR> .
+@     LOC,-0,2,lin+1 afm 2-63 '['<FLDR>']'  GTO lin+2 .
+@     PC,bcw 'MD '"<FLDRPATH>" .
+@     RETURN .
+@.
+@.    #  Get computer name
+@0020:(<COMPUTER>) .
+@     FDR,SUBLCONFIG_ '' 'Parameter' 	,'BTEMP' .
+@     RLN 'Parameter','Value','Ty','Siz','Opt' \
+        <PARAM>s,<VALUE>s,<TY>h,<SIZ>i,<OPT>h .
+@     LDV <'>h1=TIC$ .
+@     XQT '@ ldv'<OPT>(p)' <'<PARAM>(p)'>'<TY><SIZ>(p)'='<'><VALUE><'> .
+@.
+@     PCR,0,A,-0,,,lin1,t <BTEMP>'\hostname.txt'  gto 0022 .                    File exist
+@     PC,bcw 'HOSTNAME >'<BTEMP>'\hostname.txt' .                               Create and pipe output
+@     PCR,0,A,-0,,,0199,t <BTEMP>'\hostname.txt' .                              Read file
+@0022:RDL,-0,2 1-30 <computer>s .                                               Get name
+@     RETURN .
+@.
+@.    #  Check if program exists already in folder.
+@.    #  If it doesn't exist load <FILE> to default site location
+@.    #  If it does exist load <FILE> to current location
+@.    #  If multiple are found it makes reference to the last one as the one in
+@.    #  sub folder has higher precedence over one in the default folder.
+@.
+@.    @. #  Find program in folder(s) and return filepath
+@.    @  CALL,SUBLCOMMON_ searchFolders_ (<FOLDER>,<PROGRAM>,<FILE>s256) .
+@.
+@0025:(<FLDRPATH>,<PROGRAM>,<FILE>) .
+@     LDV <LN>i3=1,<FNDS>i2=0,<STATUS>h1 .                                      Init
+@     LDA <FNDPATHS>s100[5] .                                                   Init
+@     LDV <DEFPATH>s256=<FLDRPATH> .                                            Store Default
+@     CALL 0030 (<FLDRPATH>,<PROGRAM>,<FNDPATHS>,<FNDS>,<STATUS>) .
+@     RNM -1 .                                                                  Folder listing
+@.
+@.    #  Will recursively look at subfolders for program
+@0026:INC <LN>  RDL,-1,<LN>,0027 1-80 <FOLDER>s .                               Loop through sub-folders
+@     LCV '' <FOLDER> '['/''  LCV '' <FOLDER> ']'/''  LDV,p <FOLDER> .
+@     LDV <TMPPTH>s256=<FLDRPATH>(p)<FOLDER>'\' .
+@     CALL 0030 (<TMPPTH>,<PROGRAM>,<FNDPATHS>,<FNDS>,<STATUS>) .
+@     IF <STATUS> eq 0  RNM -2 .
+@     gto 0026 .
+@.
+@.    #  Check for another level below this one
+@0027:IF <STATUS> eq 9,(0028) .
+@     RNM,-2 -1
+@     LDV <FLDRPATH>s256=<TMPPTH>,<LN>=1 .
+@     GTO 0026 .
+@.
+@.    #  Put in existing folder . ; Otherwise default path
+@0028:IF <FNDS> gt 0 \
+        LDV,po <FILE>s256=<FNDPATHS>[<FNDS>](p)<PROGRAM> . ; \
+        LDV,po <FILE>s256=<DEFPATH>(p)<PROGRAM> .
+@0029:RETURN .
+@.
+@.    #  Private method to find sub folders...
+@0030:(<FLDRPATH>,<PROGRAM>,<FNDPATHS>,<FNDS>,<STATUS>) .
+@     LDV <STATUS>=9 .                                                          No find sub folders default
+@     PCR,0,A,-0,n,n,lin+2 <FLDRPATH> .                                         Check default path
+@     SRH,-0 'dn' 2-1 [,'.'/[,'-' .                                             Remove excess
+@     RNM -1 .
+@     LOC,-0,2,lin2 'AFO' 1-50 <PROGRAM> .                                      File in root folder?
+@     INC <FNDS>  LDA <FNDPATHS>[<FNDS>(z)]=<FLDRPATH> .                        Save reference
+@     LOC,-1,2,0031 'AFO' 1-1 '[' .                                             Any folders?
+@     LDV <STATUS>=0 .                                                          Sub folders found
+@.
+@0031:.
+@     RETURN .
+@.
+@.    #  Get file name from output file
+@.    #  getFileName_
+@0035:(<FILE>,<RUN>) .
+@     LCV 'b99' <FILE> '\' ,<OCC>i3 .                                           Find last occurance
+@     LCV 'b<occ>' <FILE> '\' <POS>i3  INC <POS> .                              Last \ pos
+@     LDV,p <RUN>=<FILE>(<POS>-0),<FILE> .                                      Load BIS run
+@     LCV,0039 'b1' <RUN> '(' <LPOS>i3 .                                        Find pos
+@     LCV 'b1' <RUN> ')' <RPOS>i3 .                                             Find pos
+@     LDV <RUN>(<LPOS>-<RPOS>)='' .                                             Remove name
+@0039:.
+@     RETURN .
+@.
+@.    #  Get APPPATH if it exists
+@.    #  appPath_
+@0040:(<USER>,<APPPATH>) .
+@.
+@.    #  Get computer name
+@     CALL,SUBLCOMMON_ getCompName_ (<COMPUTER>s30) .
+@     FDR,SUBLPATH_,,,lin+2 ' ' 'User ID','Computer Name' 	,<USER>,<COMPUTER> . Get Application Path
+@     RLN 'apppath' <APPPATH>s  GTO 0041 .                                      Sublime.Exe
+@     CALL,SUBLSETUP_ 0001 (<USER>,<APPPATH>s256) .                             Setup
+@0041:RETURN .

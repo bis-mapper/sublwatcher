@@ -1,0 +1,25 @@
+.Table_Define
+.
+.
+.
+*      .                    .                       .
+*DEFINE.NAME                .VALUE                  .DETAILED DESCRIPTION
+*======.====================.====================.==.===========================
+:DEFINE SUBLCONFIG_          "ECAB$,C,2"            |	SUBL CONFIG VARS
+:DEFINE SUBLPATH_            "ECAB$,C,3"            |	SUBL EXE PATH
+:DEFINE SUBLDEP_             "ECAB$,C,4"            |	SUBL DEPENDENCIES
+:DEFINE BATCHTEMP_           "ECAB$,C,5"            |	BATCH FILE TEMPLATE
+:DEFINE SUBLUTILS_           "ECAB$,C,9"            |	SUBLIME UTILITY TABLE
+:DEFINE SUBLCOMMON_          "ECAB$,B,7"            |	SUBL EXE PATH
+:DEFINE SUBLSETUP_           "ECAB$,B,8"            |	SUBL INITIAL SETUP ROUTINE
+:DEFINE SUBLOG_              "ECAB$,C,8"            |	SUBL LOGGING
+:DEFINE BISCMD_              "ECAB$,B,14"           |	BIS CMD
+:DEFINE SBS_                 "ECAB$,D,2"            |	STANDARDIZE BIS SCRIPT
+:DEFINE getCabDrwRpt_        "0001"                 |	Gets Cab Drw Rpt from Var
+:DEFINE configVars_          "0005"                 |	Loads config vars
+:DEFINE chkIceSvc_           "0010"                 |	Check if ICE service
+:DEFINE chkMkDir_            "0015"                 |	Check for fldr make if new
+:DEFINE getCompName_         "0020"                 |	Get computer name
+:DEFINE searchFolders_       "0025"                 |	Find file in folders
+:DEFINE getFileName_         "0035"                 |	Get file name from path
+:DEFINE appPath_             "0040"                 |	Get application path

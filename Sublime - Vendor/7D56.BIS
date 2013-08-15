@@ -1,0 +1,233 @@
+.Table_RUN_Commands   Run Statements and characteristics
+*        .La.L.R.O.S.S.    .
+*Command .bl.F.D.T.C.U.Not .
+*========.==.=.=.=.=.=.====.
+	ADD,    	  	 	 	 	 	 	    	
+	ADR,    	4 	1	 	 	 	 	    	
+	ART     	  	 	 	 	S	X	    	
+	AUX,    	  	 	 	 	 	 	    	
+	BFN,    	5 	1	 	2	 	 	    	
+	BLT,    	4 	1	 	 	 	 	    	
+	BR      	  	 	 	 	S	 	    	
+	BRG,    	  	 	 	 	 	 	    	
+	BRK     	  	 	 	 	B	 	    	
+	BTN,    	8 	1	 	 	 	 	    	
+	BVT,    	  	 	 	 	 	 	    	
+	CAB,    	  	 	 	 	 	 	    	
+	CAH,    	  	 	 	 	 	 	    	
+	CAL,    	6 	1	 	2	 	 	    	
+	CALL    	1 	2	 	 	B	X	    	
+	CAR,    	  	 	 	 	 	 	    	
+	CAU,    	6 	1	 	2	 	 	    	
+	CBX,    	  	 	 	 	 	 	    	
+	CCC,    	1 	1	 	 	 	 	    	
+	CCG,    	1 	1	 	 	 	 	    	
+	CCI,    	1 	1	 	 	 	 	    	
+	CCP,    	1 	1	 	 	 	 	    	
+	CCR     	  	 	 	 	S	 	    	
+	CER     	  	 	 	 	S	 	    	
+	CHD     	1 	2	 	 	B	 	    	
+	CHG     	  	 	 	 	S	 	    	
+	CLK     	  	 	 	 	S	 	    	
+	CLS     	  	 	 	 	B	 	    	
+	CLT,    	  	 	 	 	 	 	    	
+	CLV,    	  	 	 	 	 	 	    	
+	CMP,    	10	1	 	 	 	 	    	
+	CMU     	  	 	 	 	S	 	    	
+	CNT,    	  	 	 	2	 	 	    	
+	CSR     	  	 	 	 	S	 	    	
+	DAT,    	  	 	 	2	 	 	    	
+	DC      	  	 	 	 	S	 	    	
+	DCPY    	  	 	 	 	 	 	    	
+	DCR,    	  	 	 	 	 	 	    	
+	DCU     	  	 	 	 	S	 	    	
+	DDE,    	11	1	 	 	 	 	    	
+	DDI,    	3 	1	 	 	 	 	    	
+	DEC     	  	 	 	 	B	 	    	
+	DEFINE  	* 	1	 	 	 	X	    	
+	DEF     	2 	1	 	 	B	 	    	
+	DEL     	  	 	 	 	S	 	    	
+	DEV,    	4 	1	 	 	 	 	    	
+	DFC,    	  	 	 	 	 	 	    	
+	DFU,    	1 	1	 	 	 	 	    	
+	DIF,    	  	 	 	 	 	 	    	
+	DIR,    	1 	1	 	 	 	 	    	
+	DLR,    	4 	1	 	 	 	 	    	
+	DRW,    	3 	1	 	 	 	 	    	
+	DSF,    	  	 	 	2	 	 	    	
+	DSG,    	  	 	 	 	 	 	    	
+	DSM,    	  	 	 	 	 	 	    	
+	DSP,    	  	 	 	 	 	 	    	
+	DSX,    	  	 	 	 	 	 	    	
+	DUP,    	  	 	 	 	 	 	    	
+	DVS,    	4 	1	 	 	 	 	    	
+	ECR,    	  	 	 	 	 	 	    	
+	EDT,    	  	 	 	 	 	 	    	
+	EL-     	  	 	 	 	B	 	    	
+	ELT,    	  	 	 	 	 	 	    	
+	ESR     	  	 	 	 	B	 	    	
+	EXT     	  	 	 	 	S	 	    	
+	FCH,    	3 	1	 	 	 	 	    	
+	FDR,    	6 	1	 	2	 	 	    	
+	FIL,    	6 	1	 	 	 	 	    	
+	FKY,    	  	 	 	 	 	 	    	
+	FMT,    	  	 	 	 	 	 	    	
+	FND,    	5 	1	 	2	 	 	    	
+	FON     	  	 	 	 	B	 	    	
+	GEN,    	7 	1	 	 	 	 	    	
+	GOC,    	4 	1	 	 	 	 	    	
+	GS,     	4 	1	 	 	 	 	    	
+	GTO     	1 	2	 	 	S	 	    	
+	HID     	  	 	 	 	B	X	    	
+	HSH     	  	 	 	 	S	 	    	
+	IDU,    	  	 	 	 	 	 	    	
+	IF      	M 	1	 	1	B	X	DIF,	
+	INC     	  	 	 	 	B	 	    	
+	INCLUDE 	  	 	 	 	 	X	    	
+	IND,    	4 	1	 	 	 	 	    	
+	INP     	M 	1	 	 	B	 	    	
+	JUV,    	  	 	 	1	 	 	    	
+	KEY     	  	 	 	 	S	X	    	
+	KLL,    	  	 	 	 	 	 	    	
+	LCH,    	5 	1	 	2	 	 	    	
+	LCV     	1 	1	 	2	B	 	    	
+	LDA     	  	 	 	 	B	 	    	
+	LDV     	  	 	 	1	B	 	    	
+	LFC     	  	 	 	 	S	 	    	
+	LFN,    	5 	1	 	 	 	 	    	
+	LGF,    	1 	1	 	 	 	 	    	
+	LGL,    	16	1	 	 	 	 	    	
+	LGN,    	1 	1	 	 	 	 	    	
+	LGS,    	16	1	 	 	 	 	    	
+	LLN,    	4 	1	 	 	 	 	    	
+	LMG,    	7 	1	 	 	 	 	    	
+	LN+,    	  	 	 	 	 	 	    	
+	LN-,    	  	 	 	 	 	 	    	
+	LNA,    	  	 	 	 	 	 	    	
+	LND,    	  	 	 	 	 	 	    	
+	LNG,    	  	 	 	 	 	 	    	
+	LNI,    	  	 	 	 	 	 	    	
+	LNK     	1 	1	 	 	 	 	    	
+	LNM,    	  	 	 	 	 	 	    	
+	LNP,    	  	 	 	 	 	 	    	
+	LNX,    	  	 	 	 	 	 	    	
+	LNY,    	  	 	 	 	 	 	    	
+	LOC,    	5 	1	 	2	 	 	    	
+	LOG     	  	 	 	 	S	X	    	
+	LOK,    	4 	1	 	 	 	 	    	
+	LSM,    	2 	1	 	 	 	 	    	
+	LST,    	  	 	 	 	 	 	    	
+	LZR,    	4 	1	 	 	 	 	    	
+	MAU,    	7 	1	 	2	 	 	    	
+	MBX,    	M 	1	 	 	 	 	    	
+	MCH,    	7 	1	 	2	 	 	    	
+	MNU     	  	 	 	 	B	 	    	
+	MQL,    	3 	1	 	 	 	 	    	
+	MSG     	  	 	 	 	B	 	SC  	
+	NET,    	5 	1	 	 	 	 	    	
+	NOF     	  	 	 	 	S	 	    	
+	NRD,    	7 	1	 	 	 	 	    	
+	NRM     	  	 	 	 	B	 	    	
+	NRN     	  	 	 	 	B	 	    	
+	NRT     	  	 	 	 	B	 	    	
+	NWR,    	7 	1	 	 	 	 	    	
+	OK      	1 	1	 	 	B	X	LOK 	
+	OS      	5 	1	 	 	S	X	    	
+	OTV     	  	 	 	 	B	 	    	
+	OUM,    	  	 	 	 	 	 	    	
+	OUT,    	  	 	 	 	 	 	    	
+	PC      	2 	1	 	 	B	 	SC  	
+	PCF,    	  	 	 	 	 	 	    	
+	PCR,    	6 	1	 	 	 	 	    	
+	PCW,    	5 	1	 	 	 	 	    	
+	PEK     	  	 	 	 	B	 	    	
+	PIC,    	  	 	 	 	 	 	    	
+	PNT     	  	 	 	 	S	 	    	
+	POK     	  	 	 	 	B	 	    	
+	POP     	  	 	 	 	B	 	    	
+	PRT,    	  	 	 	 	 	 	    	
+	PSH     	  	 	 	 	B	 	    	
+	PSW,    	  	 	 	 	 	 	    	
+	QCLS,   	1 	1	 	 	 	 	    	
+	QGET,   	4 	1	 	 	 	 	    	
+	QCTL    	  	 	 	 	 	 	    	
+	QINQ,   	3 	1	 	 	 	 	    	
+	QOPN,   	1 	1	 	 	 	 	    	
+	QPUT,   	7 	1	 	 	 	 	    	
+	QREL    	  	 	 	 	 	 	    	
+	QRSP    	  	 	 	 	 	 	    	
+	QSND    	  	 	 	 	 	 	    	
+	QSNR    	  	 	 	 	 	 	    	
+	RAM,    	4 	1	 	 	 	 	    	
+	RAR     	1 	2	 	 	B	 	    	
+	RDB     	  	 	 	 	S	 	    	
+	RDC,    	7 	1	R	 	 	 	    	
+	RDL,    	5 	1	R	 	 	 	    	
+	REH,    	  	 	 	 	 	 	    	
+	REL     	  	 	 	 	S	 	    	
+	REP,    	  	 	 	 	 	 	    	
+	RER     	1 	2	 	 	B	 	    	
+	RET,    	5 	1	 	 	 	 	    	
+	RETURN  	1 	1	 	 	 	X	    	
+	RFM,    	  	 	 	2	 	 	    	
+	RGN,    	6 	1	 	 	 	 	    	
+	RLN     	2 	1	R	 	B	 	    	
+	RMV     	  	 	 	 	B	 	    	
+	RNM     	  	 	 	 	B	 	    	
+	RPW,    	  	 	 	 	 	 	    	
+	RRN     	  	 	 	 	B	 	    	
+	RS      	  	 	 	 	B	 	sc  	
+	RSI     	  	 	 	 	B	 	    	
+	RSL,    	  	 	 	 	 	 	    	
+	RSR     	1 	2	 	 	B	 	    	
+	RTN,    	  	 	 	 	 	 	    	
+	RUN     	  	 	 	 	S	X	    	
+	SC      	8 	1	 	 	B	 	    	
+	SCH     	  	 	 	 	B	 	    	
+	SCN,    	1 	1	 	 	 	 	    	
+	SEN,    	7 	1	 	 	 	 	    	
+	SFC,    	  	 	 	 	 	 	    	
+	SHW     	  	 	 	 	B	 	    	
+	SIZ,    	2 	1	 	 	 	 	    	
+	SNU,    	8 	1	 	 	 	 	    	
+	SOR,    	  	 	 	2	 	 	    	
+	SPI,    	3 	1	 	 	 	 	    	
+	SQL,    	1 	1	 	 	 	 	    	
+	SRH,    	6 	1	 	2	 	 	    	
+	SRR,    	  	 	 	2	 	 	    	
+	SRU,    	6 	1	 	2	 	 	    	
+	STN,    	2 	1	 	 	 	 	    	
+	STR,    	  	 	 	 	 	 	    	
+	SUB,    	4 	1	 	2	 	 	    	
+	SYS     	  	 	 	 	B	 	    	
+	TIP,    	  	 	 	 	 	 	    	
+	TOT,    	4 	1	 	2	 	 	    	
+	TPC,    	3 	1	 	 	 	 	    	
+	TPS,    	3 	1	 	 	 	 	    	
+	TRC,    	  	 	 	 	 	 	    	
+	TXT,    	  	 	 	 	 	 	    	
+	TYP,    	3 	1	 	 	 	 	    	
+	ULK     	  	 	 	 	S	 	    	
+	UNX,    	5 	1	 	2	 	 	    	
+	UPD     	  	 	 	 	S	 	    	
+	USE     	  	 	 	 	S	X	    	
+	VER,    	2 	1	 	 	 	 	    	
+	WAT     	2 	1	 	 	B	 	    	
+	WDC,    	9 	1	 	 	 	 	    	
+	WDL,    	9 	1	 	 	 	 	    	
+	WIN,    	  	 	 	 	 	 	    	
+	WPR,    	5 	1	 	 	 	 	    	
+	WRL,    	  	 	 	 	 	 	    	
+	WRZ,    	  	 	 	 	 	 	    	
+	XIT     	  	 	 	 	S	 	    	
+	XQT     	1 	1	 	 	B	 	    	
+	XUN     	  	 	 	 	S	 	    	
+.
+*Command: BIS Script Command
+*LABL:    Label Subfield Position     S=Second field
+*L F:     Label Field    1=First 2=Second
+*R D:     Read Commands - Commands that read lines
+*O T:     Option Type - 1=Opt in 1st field, 2=Opt in 2nd field
+*S C:     Space/Comma - Blank=Comma after command S=Space after command B=Both
+*S U:     Space/Upper - X=This statement requires special logic for Upper Case
+*NOT:     Command Uppercase NOT

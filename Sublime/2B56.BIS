@@ -7,7 +7,7 @@
 *===============================================================================
 :INCLUDE,ECAB$,B,1 .                                                            INCLUDE
 @.
-@     LDV <CALL>h1=n .                                                          Manual entrance
+@     ldv <CALL>h1=n .                                                          Manual entrance
 @.
 @.    #  Call entry point
 @0001:(<RUN>) .                                                                 Call from BisCmd?
@@ -22,57 +22,52 @@
 @.    #  Otherwise we get report on display
 @.    #  This happens when user enters SUBL on a given report
 @0005:LDV <CAB>i4=CAB$,<DRW>h1=ADRW$,<RPT>i4=RPT$ .                             Get RPT on display
+@     CHG INPUT$ <CMD>s100 .
 @.
 @.    #  Load the application configuration variables from table
 @0007:RSR,SUBLCOMMON_ configVars_ .
-@     LDV,p <ACAB>h4=<CAB>,<ADRW>h1=<DRW>,<ARPT>i4=<RPT> .
 @     IF <RPT> eq 0  REL . ; .                                                  No report on display?
 @     CALL,SUBLCOMMON_ chkIceSvc_ (<CAB>,<DRW>,<RPT>,<SRVS>s30) .               Ice Service?
 @     LDV,p <SRVS> .
 @.
-@.    #  Get computer name
-@     CALL,SUBLCOMMON_ getCompName_ (<BTEMP>,<COMPUTER>s30) .
 @.
 @.    #  First time running program...Enable setup
-@     FDR,SUBLPATH_,,,lin+2 ' ' 'User ID','Computer Name' \                     Get Application Path
-        ¬,<USER>,<COMPUTER> .
-@     RLN 'apppath' <APPPATH>s  GTO 0010 .                                      Sublime.Exe
-@     CALL,SUBLSETUP_ 0001 (<USER>,<COMPUTER>,<APPPATH>s256) .                  Setup
+@     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
 @     IF <APPPATH> eq ' ',(0199) .                                              Exit
+@.
 @.    #  Create folder for current site if it doesnt exist
 @0010:LDV,p <DIR>s256=<APPDIR>'\' .
 @     LDV,p <FLDR>s256=<SITE> .
 @     LDV,p <FLDRPATH>s256=<DATADIR> .
-@     CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
+@ rdb CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
 @.
-@.    #  Check if file exists already in folder
-@     PCR,0,A,-0,n,n,lin+2 <DATADIR>'\' .
-@     LDV <FND>h1=N .
-@     SRH,-0 'dn' 2-1 [,'.'/[,'-' .
-@     LOC,-0,2,0020 'AFO' 1-1 '[' .
-@     RNM -1  LDV <LN>i3=1 .
-@0015:INC <LN>  RDL,-1,<LN>,0020 1-80 <FOLDER>s .
-@     LCV '' <FOLDER> '['/''  LCV '' <FOLDER> ']'/''  LDV,p <FOLDER> .
-@     PCR,0,A,-0,n,n,lin+2 <DATADIR>'\'<FOLDER>'\' .
-@     LOC,-0,2,lin1 'AFO' 1-50 <SRVS><ARPT><ADRW><ACAB><EXT>  <FND>=y  .
-@     IF <FND> eq y . ; LDV <FND>=N  gto 0015 .
-@.
-@.    #  Put in existing folder . ; Otherwise default path
-@0020:IF <FND> eq y  \
-        LDV,po <FILE>s256=<DATADIR>'\'<FOLDER>'\'<SRVS><ARPT><ADRW><ACAB><EXT> . ; \
-        LDV,po <FILE>s256=<FLDRPATH>'\'<SRVS><ARPT><ADRW><ACAB><EXT> .          Default path
+@.    #  Check if program exists already in folder.
+@.    #  If it doesn't exist load <FILE> to default site location
+@.    #  If it does exist load <FILE> to current location
+@     LDV <FOLDER>s256=<DATADIR>(p)'\' .
+@     LDV <PROGRAM>s40=<SRVS><RPT>(p)<DRW>(p)<CAB>(p)<EXT> .
+@     CALL,SUBLCOMMON_ searchFolders_ (<FOLDER>,<PROGRAM>,<FILE>s256) .
 @.
 @     RSL,<CAB>,<DRW>,<RPT> .                                                   Get result
-@     CHG <NS>h1 CHR$254 .                                                      Load ¬ char
-@     LZR,-0 ,<CC>i4  LCH,-0,,lin+1 'af' 1-<CC> ¬/<NS> .                        Chg ¬ to ¬
-@     PCW,-0,2 <FILE> .                                                         Write file
+@     RNM -1 .
+@.
+@.    #  Standerdize BIS Script
+@.ew  CALL,SBS_ 0002* (<RUN>h17,<STS>h3) .
+@.ew  RNM -1 .
+@.
+@.    CHG <NS>h1 CHR$254 .                                                      Load  	 char
+@.    LZR,-1 ,<CC>i4 .
+@.    LCH,-1,,lin+1 'af' 1-<CC> ' '/'' .                                        Remove   char
+@.    LCH,-1,,lin+1 'af' 1-<CC> TAB$/<NS> .                                     Chg  	 to tab
+@     PCW,-1,2 <FILE> .                                                         Write file
 @.
 @.    #  Start text editor
-@     PC,r '"'<APPPATH>(p)'" --add' '"'<FILE>':'<DLN>(p)'"' .      :<DLN> opens to line #
+@.    #  Refer to "http://www.sublimetext.com/docs/2/osx_command_line.html" for all options
+@     PC,r '"'<APPPATH>(p)'" -a' '"'<FILE>':'<DLN>(p)'"' .                      start editor with options
 @     SYS .                                                                     system
-@     PC 'cmd /C '"<BATFILE>" .
-@     FDR,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,USER$,<SUBLWATCHER>  GTO 0199 .    currently running?
-@     WAT 1000 .
+@     IF <CALL> ne Y  PC 'cmd /C '"<BATFILE>" . ; .                             start / check if running
+@     FDR,-0,,,lin+1 '' 'USERID','RUNNAME'   	,USER$,<SUBLWATCHER>  GTO 0199 .   currently running?
+@     WAT 1000 .                                                                pause for first time
 @     RUN <SUBLWATCHER> .                                                       start file watcher utility
 @.
 @.    #  Return if called otherwise display current report

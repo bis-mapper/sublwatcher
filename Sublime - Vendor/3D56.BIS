@@ -1,0 +1,131 @@
+.Error_Routine        SBS Error Routine
+.REV: 2.2    DATE: 20120218
+*===============================================================================
+*  Copyright (c) 2012 IT Resource Solutions (ITRS)                             *
+*  --------------------------------------------------------------------------  *
+*  The SBS utility is a free software package, provided for the benefit        *
+*  of all BIS users.  It contains no warranty of any kind, and ITRS will       *
+*  assume no liability for defects or problems resulting from its use.         *
+*  This software may be used and distributed freely in its entire form;        *
+*  however, no portion of this program code may be reused without the          *
+*  expressed consent of ITRS.                                                  *
+*===============================================================================
+@.
+@0001:. -------------------------- Entry Point ---------------------------------
+@.
+@     CLS  MNU RESET .
+@     CHG v193i6 OLINE$ -1  IF DRW$ eq 0,(0002) ; .
+@     LDV,w v194i3=CHAR$  RDC,-0,,50 1-v194 v195s .
+v195
+@0002:.
+@     BRK,0,F .
+@     LDV,w v196a9=DATE2$,v197a8=TIME$ .
+.SBS Utility - Run Error Dump
+.REV: 2.2    DATE: 20120218
+*===============================================================================
+@     LSM,XERR$ V195s80 .
+--------------------------------------------------------------------------------
+v195
+--------------------------------------------------------------------------------
+@     LDV,w v196h12=RUN$ .
+ Run Name ...... v196
+@     DEF,m v197a4,XDRW$  DEF,a v198h1,XDRW$ .
+@     LDV,pw v197,v198,v196a9=XRPT$v198v197 .
+ Report ........ v196
+@     LDV,lw v196a6=XLINE$ .
+ Line Number ... v196
+@     LDV,w v196h4=XFUN$ .
+ Function ...... v196
+@     LDV,w v196h12=USER$ .
+ User-ID ....... v196
+@     LDV,lw v196a4=DEPN$ .
+ Department .... v196
+@     LDV,lw v196a5=STNUM$ .
+ Station ....... v196
+@     LDV,lw v196h5=SYSNAM$ .
+ System Type ... v196
+@     LDV,lw v196a12=MAPER$ .
+ BIS Level .. v196
+--------------------------------------------------------------------------------
+ Erroring section of run
+--------------------------------------------------------------------------------
+@     CHG v196a6 XLINE$ - 6  CHG v197a6 XLINE$ + 5 .
+@     IF v196 lt 0  LDV v196=0 ; DRW,XDRW$ v194i3 .
+@0003:INC v196  IF v196 gt v197,(0004) ; .
+@     RDL,XDRW$,XRID$,v196,0004 1-v194 v195s .
+@     LDV,r v198a6=V196  IF v196 eq XLINE$  LDV,r v198=ERROR ; .
+V198 > V195
+@     GTO 0003 .
+@0004:.
+@     LDV v194i3=0,v196h6=afsiho .
+--------------------------------------------------------------------------------
+ Variable Dump
+--------------------------------------------------------------------------------
+@0005:INC v194  IF v194 gt 189,(0008) ; .
+@     IF SYSNAM$(1-1) ne 'M'  DEF,v,0005 v197h12,v194 ; .
+@     IF SYSNAM$(1-1) eq 'M'  DEF,v,0005 v197h12,vv194 ; .
+@     IF SYSNAM$(1-1) eq 'M'  IF v197 eq '',(0005) ; .
+@     LDV,pu v197  XQT '@DEF,s v198a3,<'v197'>  DEF,i v199i1,<'v197'>' .
+@     LDV,p v198  XQT '@DEF,q v190i3,<'v197'>  IF v190 gt 0,(0006) ; .' .
+@     XQT <TIC$''v197''TIC$>v196(v199-1)v198=/'<'v197'>'/ .
+@     GTO 0005 .
+@0006:.
+@     LDV v191a3=0 .
+@0007:INC v191  IF v191 gt v190,(0005) ; LDV,p v192a3=v191 .
+@     XQT <TIC$''v197''TIC$>v196(v199-1)v198'['v192']'=/'<'v197'>[v192]'/ .
+@     GTO 0007 .
+@0008:.
+@     LDV v194i3=0,v196h6=afsiho .
+@0009:INC v194  IF v194 gt 189,(0012) ; .
+@     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+2 .
+@     DEF,v,0009 v197h12,vv194  IF v197 ne '',(0009) ; .
+@     IF SYSNAM$(1-1) ne 'M' . ; GTO lin+2 .
+@     DEF,i,0009 v199i1,vv194 ; .
+@     DEF,s,0009 v198a3,vv194  LDV,p v198  DEF,i v199i1,vv194  LDV,z V194 .
+@     LDV,z V194  DEF,q v190i3,vv194  IF v190 gt 0,(0010) ; .
+'v'v194v196(v199-1)v198=/vv194/
+@     GTO 0009 .
+@0010:.
+@     LDV v191a3=0 .
+@0011:INC v191  IF v191 gt v190,(0009) ; LDV,p v192a3=v191 .
+'v'v194v196(v199-1)v198'['v192']'=/vv194[v192]/
+@     GTO 0011 .
+@0012:.
+@     LDV v196i6=v193  IF v196 gt 50  LDV v196=50 ; .
+--------------------------------------------------------------------------------
+ First 50 Lines: Output Area
+--------------------------------------------------------------------------------
+@     LDV,w v194i3=CHAR$  RDC,-0,1,V196 1-v194 v195s .
+v195
+@     LZR,-0 v196i6  IF v196 eq v193,(0013) ; .
+@     DEC,v193 v196  INC v193  IF v196 gt 50  LDV v196=50 ; .
+--------------------------------------------------------------------------------
+ First 50 Lines: -0
+--------------------------------------------------------------------------------
+@     LDV,w v194i3=CHAR$  RDC,-0,v193,V196 1-v194 v195s .
+v195
+@0013:.
+@     LDV v196i1=0 .
+@0014:INC v196  IF v196 gt 8,(0015) ; .
+@     XQT '@IF DRW'v196'$ eq 0,(0014) ; DRW,DRW'v196'$ v194i3 ' .
+--------------------------------------------------------------------------------
+ First 50 Lines: -v196
+--------------------------------------------------------------------------------
+@     XQT '@RDC,-'v196',1,50 1-v194 v195s ' .
+v195
+@     GTO 0014 .
+@0015:.
+@     BRK  DUP,-0  LDV,pw v193=RPT$,v194h12=RUN$ .
+@.
+@     MBX,RC,Q,'The Improbable Has Happened' "\
+ An unexpected error has occurred.//\
+ Diagnostic information about the/\
+ error was saved in report v193F0.//\
+ Would you like to try again?" \
+      R,(0198),C,(0199) .
+@0198:.
+@     IF SYSNAM$(1-1) ne 'M'  CHG v196i4 CERR$ ; .
+@     IF SYSNAM$(1-1) eq 'M'  SC x EEL';'rsm ; .
+@     BRK  DLR,-0  RUN v194 .
+@0199:.
+@     DSX,0,F,v193 .

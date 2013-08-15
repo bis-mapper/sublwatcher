@@ -1,0 +1,193 @@
+.Service_Help         SBS Help
+.REV: 2.2    DATE: 20120218
+*===============================================================================
+*  Copyright (c) 2012 IT Resource Solutions (ITRS)                             *
+*  --------------------------------------------------------------------------  *
+*  The SBS utility is a free software package, provided for the benefit        *
+*  of all BIS users.  It contains no warranty of any kind, and ITRS will       *
+*  assume no liability for defects or problems resulting from its use.         *
+*  This software may be used and distributed freely in its entire form;        *
+*  however, no portion of this program code may be reused without the          *
+*  expressed consent of ITRS.                                                  *
+*===============================================================================
+@.
+@     CALL 0001('ACTION',<STS>h3) .
+@     DSX,EDRW$,ERPT$,,,,,,<STS> .
+@.
+@0001:(<HLP>,<STS>) .
+@.
+@     RAR 0198 .
+@     LDV <WIN1>i6=0 .
+@     LDV <3D>h1=b  IF DWCAP$(13-1) eq 1  LDV <3D>=3 ; .
+@.
+@     IF <HLP> eq 'ACTION',(0002) ; .
+@     IF <HLP> eq 'WRAP',(0003) ; .
+@.
+@. ----------------------- Select Report Help ------------------------------
+@.
+@     BRK,0,A .
+.Enter Report To Process
+
+ Input Fields
+ ------------
+ Report - Use one of the following formats:
+           1. Report number and drawer letter (4e)
+           2. Report number, drawer letter, and cabinet number (4e0)
+           3. Report name (DemoRun)
+           4. Optionally, SBS can be started with a script on display
+
+ Note: The selected report will NOT be updated by this action.
+       The output of this operation will be a result copy of the
+       original script.
+
+ Button Actions
+ --------------
+ OK   - Verify the run control report and proceed to the
+        Standardize BIS Script Action screen .
+ Exit - Exit SBS
+@     BRK  RNM -1 .
+@     GTO 0010 .
+@.
+@0002:. -------------------- Action Help -----------------------------------
+@.
+@     BRK,0,A .
+.Actions
+
+ This menu allows you to specify which standardization actions are
+ to be perfomed on the run script.  Make selections and press OK.
+
+ Actions
+ -------
+
+  [x] Standardize Label Length & Indent Logic  (required)
+       All label numbers will be converted to a uniform length and
+       all run statement lines will be indented based on that size:
+
+        o 4 Digit Labels | 5 Character Indent
+
+        o 3 Digit Labels | 4 Character Indent
+
+  [x] Check Proper Statement Termination
+       Look for missing termination (period) on run script lines.
+
+  [x] Standardize @IF Operands (eq, ne, gt, lt)
+       @IF test operands (<,>,=) will be converted to alpha codes.
+
+  [x] Standardize @GTO lin+ and lin- Syntax
+       All line plus and line minus GTO statments will be standardized
+       to lowercase lin+n and lin-n. (n=number of lines)
+
+  [x] Remove @RDL, @RLN, @RDC Variable Size
+       Explicit variable size on these statements will be removed.
+       Exception: F-type variable size will not be changed.
+
+  [x] Double Spacing Between Commands
+       All BIS script commands will be separated by two spaces.
+
+  [x] Uppercase Commands, Lowercase Options
+       BIS script command names will be converted to uppercase,
+       and option letters will be converted to lowercase.
+
+  [x] Uppercase Named Variables & Reserved Words
+       Named Variables and Reserved Words detected anywhere within
+       the run script will be converted to uppercase.
+
+@     BRK  RNM -1 .
+@     GTO 0010 .
+@.
+@0003:. -------------------- Wrap Wizard --------------------------------
+@.
+@     BRK,0,A .
+.Wrap Wizard
+
+ As a result of standardization, it is common for script logic to be
+ shifted to the right, possibly beyond the original report width.
+
+ The Wrap Wizard helps you adjust the logic.  Primary functions include:
+
+    - F1 [ Next ] : Find the next line exceeding the report width.
+    - F2 [ Prev ] : Find the previous line exceeding the report width.
+
+    - F3 [ Wrap ] : Insert line continuation character
+      Place cursor at the point where you would like to wrap to the
+      next line and press F3.  Remainder of the line will be moved
+      to the next line and indented.
+
+    - F4 [ Break ] : Insert line termination
+      Place cursor at the point where you would like to terminate a
+      line and press F4.  Remainder of the the line will be moved to
+      the next line, preceeded by an @ sign and indented.
+
+    - F5 [ Unwrap ] : Remove line continuation or termination
+      Place cursor at the point where you would like to remove a line
+      continuation or line termination and press F5.  That character
+      is removed, and the following line is placed after the cursor.
+
+    - F10 [ Done ] : Exit the Wrap Wizard
+      Press to indicate you are finished wrapping and adjusting lines.
+
+ Other useful functions are available as well:
+@     IF <SYSNAM$>(1-1) ne 'M' . ; GTO lin+3 .
+
+    - F6 [ DifLst ] : Show all changes made to the run script.
+
+    - F7 [ Locate ] : Find a character string in the run script.
+
+    - F9 [ Undo ] : Remove either the last or all Wrap updates.
+
+@     BRK  RNM -1 .
+@     GTO 0010 .
+@0010:.
+@     LZR,-1 <LNS>i6  DEC <LNS> .
+@     CHG <HGT>i2 SCNV$ - 16  IF <HGT> gt <LNS>  CHG <HGT> <LNS> + 2 ; .
+@     CHG <ROW>i2 SCNV$ - <HGT> - 1 .
+@     LDV <WID>i3=77  CHG <CLM>i3 SCNH$ - <WID> - 1 .
+@     RDL,-1,2 2-40 <TOP>s  LDV,p <TOP> .
+@     WIN,,<ROW>,<CLM>,<HGT>,<WID>,lgra,fx \
+      'SBS - Standardize BIS Script | '<TOP> <WIN1>i6 .
+@     FON,t,'Arial',08,pd .
+@     TXT,"SBS Version: 2.2  ",<WIN1>,01,64,01,20,bla/lgra .
+@     FON,t,'Arial',09,pdb .
+@     BTN,<WIN1>,01,01,02,08 'Close'  <BTN1>i6 .
+@     BTN,<WIN1>,01,09,02,08 'Result' <BTN2>i6 .
+@     FON,t .
+@     LST,-1,3,Y,sbs.txt,<WIN1>,03,01,00,00,dblu/whi,m '' .
+@0011:.
+@     INP,<BTN1> .
+@0012:.
+@     IF ACTINP$ eq <BTN1>,(0013) ; .
+@     IF ACTINP$ eq <BTN2>,(0014) ; .
+@     GTO 0199 .
+@0013:.
+@     LDV <STS>h3=OK .
+@     GTO 0199 .
+@0014:.
+@     BRK,0,A .
+fkey,01,''      '',KEY
+fkey,02,''Paint '',pnt
+fkey,03,''SOE   '',soe
+fkey,04,''Return'',KEY
+fkey,09,''Undo  '',undo
+@     BRK  FKY,-0 .
+@     MNU,t MENUBAR,"&File"
+                    "&Return",,rsm
+@     HID .
+@     RSL,-1  LN-,-0,2,1  DSP,-0 .
+@     SHW .
+@     MNU,t MENUBAR,"",,'' .
+@     SC q prep .
+@     FKY .
+@     GTO 0011 .
+@.
+@. ------------------------------- Termination ---------------------------------
+@.
+@0198:. Abort
+@.
+@     IF SYSNAM$(1-1) ne 'M'  CHG <ERR>i4 CERR$ ; .
+@     IF SYSNAM$(1-1) eq 'M'  SC x EEL';'rsm ; .
+@     LDV <STS>h3=OK .
+@.
+@0199:. Terminate
+@.
+@     CLS,<WIN1> .
+@     RETURN .

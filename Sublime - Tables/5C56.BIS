@@ -1,0 +1,34 @@
+.BATCHTEMP - BatchFile Template
+.
+*           .       .                                                                                            .
+*OS         .version.                                                                                            .
+*===========.=======.============================================================================================.
+	Windows    	  0.5.0	                                                                                            	
+ECHO off
+REM   SETLOCAL EnableExtensions
+ECHO "Check if watchmedo is running"
+SET WATCHPATH="<APPDIR>\"
+SET PROGRAM=watchmedo.exe
+tasklist /FI "IMAGENAME eq %PROGRAM%" | FIND /I "%PROGRAM%" > nul
+IF %ERRORLEVEL% equ 0 ECHO Watchmedo is already running...exiting
+IF %ERRORLEVEL% equ 0 GOTO END
+IF %ERRORLEVEL% equ 1 ECHO "Watchmedo is not running...starting"
+ECHO     /               \
+ECHO    /  ~~~~     ~~~~  \    SUBL WATCHER
+ECHO   /  ______   ______  \   Version: <VER>
+ECHO   \    (-)  ^  (-)     /
+ECHO    \       /^\        /
+ECHO     \     /_^_\      /
+ECHO      \             /
+ECHO       \ ========= /
+ECHO        \    =    /
+ECHO          \ \ / /
+ECHO          \ \ / /
+ECHO Monitoring files in %WATCHPATH%
+ECHO Now watching files... Hit ctrl + c to quit
+CD /D %WATCHPATH%
+watchmedo.exe shell-command --recursive --patterns="*.bis" --ignore-directories --command="echo ${watch_event_type},${watch_src_path},${watch_object} > <CHGSFILE>"
+PAUSE
+:END
+CLS
+EXIT
