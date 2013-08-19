@@ -46,7 +46,12 @@
 @     LDV <FOLDER>s256=<DATADIR>(p)'\' .
 @     LDV <PROGRAM>s40=<SRVS><RPT>(p)<DRW>(p)<CAB>(p)<EXT> .
 @     CALL,SUBLCOMMON_ searchFolders_ (<FOLDER>,<PROGRAM>,<FILE>s256) .
-@     ldv,p <file> .
+@     if <file> eq ' ' . ; gto 0015 .
+@     LDV <ACT>h4=DIR,<PTH>s256 .
+@     CALL,EDRW$,0004 0001 (<ACT>,<PTH>s256,<FIL>s256,'','',<TYP>h1,<STS>h3) .
+@     if <sts> eq OK . ; gto 0199 .
+@     ldv <file>s256=<pth>(p)'\'<program> .
+@0015:ldv,p <file> .
 @.
 @     RSL,<CAB>,<DRW>,<RPT> .                                                   Get result
 @     RNM -1 .

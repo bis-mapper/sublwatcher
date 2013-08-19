@@ -32,7 +32,6 @@
 @     LDV,p <GALERTICON>s256='/i:'<APPDIR>'\'<ALERTICON>(p) .
 @     LDV,p <GTITLE>s256='/t:'<TITLE> .
 @     PC,r "<APPEXE>(p)"' '"<MSG>"' '"<GTITLE>"' '"<GALERTICON>" .
-@. @     PC,r "<APPEXE>(p)"' '"<MSG>"' '"<GALERTICON>" .
 @.
 @.    # Exit
 @0199:RETURN .

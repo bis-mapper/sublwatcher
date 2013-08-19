@@ -15,11 +15,14 @@
 @.    #  Call Entry Point
 @0001:(<USER>,<APPPATH>) .
 @.
+@.    #  Load config vars
+@     RSR,SUBLCOMMON_ configVars_ .
+@.
 @.    #  Get computer name
 @     CALL,SUBLCOMMON_ getCompName_ (<COMPUTER>s30) .
 @.    #  Get OS level (XP=5,W7=6,...)
 @     CALL,SUBLCOMMON_ getOsVer_ (<OSVER>i1) .
-@ rdb CALL,SUBLCOMMON_ getChgsFile_ (<APPDIR>,<CHGSFILE>s256) .
+@     CALL,SUBLCOMMON_ getChgsFile_ (<APPDIR>,<CHGSFILE>s256) .
 @.
 @.    #  Prompt user to find Editor
 @     MBX,OC,I,'SUBL' \
@@ -27,9 +30,6 @@
  In order to continue you need to set up your application path. //\
  Click ok and browse to sublime_text.exe (usually in program files)//"\
  O,(lin+1),C,(0199) .
-@.
-@.    #  Load config vars
-@     RSR,SUBLCOMMON_ configVars_ .
 @.
 @. @.    #  Create temp folder
 @. @     LDV,p <DIR>s256=<BTEMP>'\' .
@@ -50,9 +50,9 @@
 @     CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
 @.
 @.    #  Create batch file
-@     IF <VER> eq 5  \
-        SRH,BATCHTEMP_ 'dp' 'OS' 	,'WINDOWS XP' .
-        SRH,BATCHTEMP_ 'dp' 'OS' 	,'WINDOWS' .
+@ rdb IF <OSVER> eq 5  \
+        SRH,BATCHTEMP_,,,0000 'dp' 'OS' 	,'WINDOWS XP' . ; \
+        SRH,BATCHTEMP_,,,0000 'dp' 'OS' 	,'WINDOWS' .
 @     LZR,-0 ,<CC>I3,<SLN>I7  LOK,-0  LN-,-0,2,<SLN>  ULK .
 @     RNM -1  LZR,-1 ,<CC>I3,<SLN>I7  BRK,0,I .
 @     RDL,-1,<SLN>,lin+3 1-<CC> <BATPRGM>s  INC <SLN> .
