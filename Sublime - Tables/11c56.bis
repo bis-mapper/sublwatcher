@@ -1,0 +1,7 @@
+.GROWL-Alerts
+*            .
+*Type        .Icon
+*============.===============================================================================================================.
+	SUCCESS     	success.png
+	PENDING     	pending.png
+	FAILED      	failed.png

@@ -15,6 +15,8 @@
 :DEFINE SUBLOG_              "ECAB$,C,8"            |	SUBL LOGGING
 :DEFINE BISCMD_              "ECAB$,B,14"           |	BIS CMD
 :DEFINE SBS_                 "ECAB$,D,2"            |	STANDARDIZE BIS SCRIPT
+:DEFINE GROWLAPPS_           "ECAB$,C,10"           |	Registered Growl Applications
+:DEFINE GROWLALERTS_         "ECAB$,C,11"           |	Growl alert types
 :DEFINE getCabDrwRpt_        "0001"                 |	Gets Cab Drw Rpt from Var
 :DEFINE configVars_          "0005"                 |	Loads config vars
 :DEFINE chkIceSvc_           "0010"                 |	Check if ICE service

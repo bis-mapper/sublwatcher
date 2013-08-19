@@ -11,6 +11,11 @@
 @.    #---------------------------------------------------------------------------------------------
 @.
 @.    # Test Setup
+@ RDB LDV <APP>h4='subl' .
+@     LDV <TYPE>h8='success' .
+@     LDV <MSG>s80='this is a test' .
+@     CALL 0001 (<APP>,<TYPE>,<MSG>) .
+@     GTO END .
 @.
 @0001:(<APP>,<TYPE>,<MSG>) .
 @.
@@ -18,8 +23,16 @@
 @     RER,0,E,2 0001 .                                                          sets-run-error
 @     RSR,SUBLCOMMON_ configVars_ .
 @.
-@.    #  Open windows explorer using MFXFILE.EXE
-@
+@.    #  Display GROWL notification
+@.     FDR,GROWLAPPS_ '' 'APP' 	,<APP>  RLN 'APPICON' <APPICON>s .
+@.     FDR,GROWLALERTS_ '' 'Alert Type' 	,<TYPE>  RLN 'ALERTICON' <ALERTICON>s .
+@.
+@.    #  Load APP exe and paramaters
+@     LDV <APPEXE>s256=<appdir>'\growlnotify.exe' .
+@.
+@.    #  Load GROWL.exe
+@.ew     CALL,EDRW$,0006 0001('GROWL',<PTX>s64,<PRG>s30,<STS>h3) .
+@     PC,r '"'<APPEXE>(p)'"' '"'<MSG>'"' '"'/i:D:\Users\winne\sublwatcher\success.png'"' .
 @.
 @.    # Exit
 @0199:RETURN .
