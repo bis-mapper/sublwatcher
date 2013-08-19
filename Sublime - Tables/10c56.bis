@@ -1,8 +1,7 @@
 .GROWL-Applications
 *            .
-*APP         .Icon
+*App         .AppIcon
 *============.===============================================================================================================.
-	SUBL        	Iconleak-Atrous-Console.ico
-	SUBLWATCHER 	Iconleak-Atrous-Console.ico
+	SUBL        	sublime_text_icon.png
+	SUBLWATCHER 	sublime_text_icon.png
 	SBS
-	...

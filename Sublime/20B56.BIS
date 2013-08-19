@@ -48,6 +48,8 @@
 @     LDV <DRAWERS>h8='BCDEFGHI',<DRWREF>i1=0,<DRW>h1,<CAB>i4=<CTLOPT> .
 @0002:INC <DRWREF>  IF <DRWREF> eq 9,(0199) .                                   Loop through drawers
 @     LDV <DRW>=<DRAWERS>(<DRWREF>-1) .
+@     ldv <drawer>h11='0'<drw><cab>  call 0110 (<drawer>,<exist>h1) .
+@     if <exist> eq 0 . ; gto 0002 .
 @     DRW,<CAB>,<DRW>,0002 ,,,,<VHIRPTD>i4,,<VRPTSD>i4,,,,,<FOLDER>s26 .        Drawer exist?
 @     LDV <RPT>i4=0 .
 @0003:INC <RPT>  IF <RPT> eq <VHIRPTD>,(0002) .
@@ -77,7 +79,9 @@
 @     gto lin+3 .
 @     DEC <APOS>    LDV <CAB>i4=<CTLOPT>(1-<APOS>) .
 @     INC,2 <APOS>  LDV <DRW>h1=<CTLOPT>(<APOS>-1) .
-@     DRW,<CAB>,<DRW>,0002 ,,,,<VHIRPTD>i4,,<VRPTSD>i4,,,,,<FOLDER>s26 .        Drawer exist?
+@     ldv <drawer>h11='0'<drw><cab>  call 0110 (<drawer>,<exist>h1) .
+@     if <exist> eq 0 . ; gto 0012 .
+@     DRW,<CAB>,<DRW>,0012 ,,,,<VHIRPTD>i4,,<VRPTSD>i4,,,,,<FOLDER>s26 .        Drawer exist?
 @     LDV <RPT>i4=0 .
 @0013:INC <RPT>  IF <RPT> eq <VHIRPTD>,(0199) .
 @     RSR 0100 .                                                                Export file
@@ -111,6 +115,12 @@
 @     LDV,p <EXPFILE>s256=<EXPATH>(p)<PROGRAM> .
 @     PCW,<CAB>,<DRW>,<RPT>,2 <EXPFILE> .                                       Write file
 @     ESR .
+@.
+@.    # Check if drawer exists... This should work with @drw but for some reason it's not
+@0110:(<rpt>,<exist>)
+@     ldv <exist>h1=0 .
+@     dir <rpt> ,,,,,<acc>h1 if <acc> eq ''  ldv <exist>=9 .                    If no error routine
+@     return .
 @.
 @.    # Exit
 @0199:RETURN .

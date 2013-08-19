@@ -46,6 +46,7 @@
 @     LDV <FOLDER>s256=<DATADIR>(p)'\' .
 @     LDV <PROGRAM>s40=<SRVS><RPT>(p)<DRW>(p)<CAB>(p)<EXT> .
 @     CALL,SUBLCOMMON_ searchFolders_ (<FOLDER>,<PROGRAM>,<FILE>s256) .
+@     ldv,p <file> .
 @.
 @     RSL,<CAB>,<DRW>,<RPT> .                                                   Get result
 @     RNM -1 .

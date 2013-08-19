@@ -19,7 +19,8 @@
 @.
 @0001:(<STATUS>) .
 @     LDV <STATUS>=0 .                                                          set flag to ok
-@     RER,0,E,2 0001  RAR,0,E,2 0001 .                                          sets-run-error
+@     RER 0198 .
+@     RAR 0199 .                                                                sets-run-abort
 @.
 @     RSR,SUBLCOMMON_ configVars_ .
 @.
@@ -60,8 +61,8 @@
 @     IF <STATUS> eq 0,' ',(0199) .
 @.
 @.    #  Output Growl error message
-@0198:LDV <ERRMSG>s80='That request cannot be processed.'
-@.ew     CALL,GROWL_ (<APP>,<TYPE>,<MSG>) .
+@0198:LDV <MSG>s80='That request cannot be processed.'
+@     CALL,GROWL_ 0001 ('BISCMD Failed','FAILED',<MSG>) .
 @.
 @.    # Close window
 @0199:RETURN .
