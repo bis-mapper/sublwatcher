@@ -7,7 +7,7 @@
 *===============================================================================
 :INCLUDE,ECAB$,B,1 .                                                            INCLUDE
 @.
-@     ldv <CALL>h1=n .                                                          Manual entrance
+@     LDV <CALL>h1=n .                                                          Manual entrance
 @.
 @.    #  Call entry point
 @0001:(<RUN>) .                                                                 Call from BisCmd?
@@ -30,7 +30,6 @@
 @     CALL,SUBLCOMMON_ chkIceSvc_ (<CAB>,<DRW>,<RPT>,<SRVS>s30) .               Ice Service?
 @     LDV,p <SRVS> .
 @.
-@.
 @.    #  First time running program...Enable setup
 @     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
 @     IF <APPPATH> eq ' ',(0199) .                                              Exit
@@ -39,7 +38,7 @@
 @0010:LDV,p <DIR>s256=<APPDIR>'\' .
 @     LDV,p <FLDR>s256=<SITE> .
 @     LDV,p <FLDRPATH>s256=<DATADIR> .
-@ rdb CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
+@     CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
 @.
 @.    #  Check if program exists already in folder.
 @.    #  If it doesn't exist load <FILE> to default site location

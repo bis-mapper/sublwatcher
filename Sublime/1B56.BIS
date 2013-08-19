@@ -23,3 +23,5 @@
 :DEFINE searchFolders_       "0025"                 |	Find file in folders
 :DEFINE getFileName_         "0035"                 |	Get file name from path
 :DEFINE appPath_             "0040"                 |	Get application path
+:DEFINE getOsVer_            "0045"                 |	Get OS Version
+:DEFINE getChgsFile_         "0050"                 |	Get OS Version

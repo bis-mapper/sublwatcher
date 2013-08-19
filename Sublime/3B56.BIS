@@ -23,14 +23,9 @@
 @     DEF,s <fsz>i3,<fxx> .
 @     DEF,s <osz>i3,<oxx> .
 @.
-@.    #  First time running program...Enable setup
+@.    #  Get application path... If first time run setup
 @     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
-@.
-@.    #  Create temp folder
-@     LDV,p <DIR>s256=<BTEMP>'\' .
-@     LDV,p <FLDR>s256=<APP> .
-@     LDV,p <FLDRPATH>s256=TMPPTH> .
-@     CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
+@     CALL,SUBLCOMMON_ getChgsFile_ (<APPDIR>,<CHGSFILE>s256) .
 @.
 @.    #  Start watchmedo.exe to watch directories
 @0005:PC,bc 'cmd /C '"<BATFILE>" .

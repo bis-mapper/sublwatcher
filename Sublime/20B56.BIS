@@ -11,24 +11,35 @@
 @.    #---------------------------------------------------------------------------------------------
 @.
 @.    # Test Setup
-@.
+@ rdb ldv <CTL>s80='export 56 -fsublwatcher' .
+@     ldv <file>s42='D\Users\winne\sublwatcher\site-e\2b56.bis' .
+@     ldv <runname>s12='export' .
+@     call 0001 (<CTL>,<FILE>,<RUNNAME>,<STATUS>h1) .
+@     gto end .
 @.
 @0001:(<CTL>,<FILE>,<RUNNAME>,<STATUS>) .
 @.
-@     RER,0,E,2 0001  RAR,0,E,2 0001 .                                          sets-run-error
+@     RAR,0,E,2 0199 .                                                          sets-run-abort
+@     RER,0,E,2 0001 .                                                          sets-run-error
 @     RSR,SUBLCOMMON_ configVars_ .
 @     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
 @.
 @.    #  Open windows explorer using MFXFILE.EXE
 @.    #  <PTH> contains users selected path to export the application
-@     LDV <ACT>h4=DIR .
-@     CALL,EDRW$,0004 0001 (<ACT>,<PTH>s256,<FIL>s64,<SPT>s64,<SFL>h12,<TYP>h1,<STS>h3) .
-@     IF <STS> ne 'OK ',(0199) .
-@     LDV <PTH>s256='D:\Users\winne\sublwatcher\site-e\sublwatcher' .
+@.    LDV <ACT>h4=OPEN .
+@.    CALL,EDRW$,0004 0001 (<ACT>,<PTH>s256,<FIL>s64,<SPT>s64,<SFL>h12,<TYP>h1,<STS>h3) .
+@.    IF <STS> ne 'OK ',(0199) .
+@     LDV <PTH>s256=<DATADIR>'\' .
 @.
 @.    #  Read in <CTL> Control Line Input for what to Export
 @     LCV,0199 't@' <CTL> ' ' <VPOS>i3  INC <VPOS> .
 @     LDV,p <CTLOPT>s40=<CTL>(<VPOS>-0) .
+@.
+@.    #  Check for folder flag
+@     LCV,lin4 '' <CTLOPT> '-f' <fpos>i3 .
+@     inc,2 <fpos>  ldv <ifolder>s40=<CTLOPT>(<fpos>-0) .
+@     ldv <pth>=<pth>(p)<ifolder>(lp)'\' .                                      Add folder to base path
+@     dec,3 <fpos>  ldv,p <t>s40=<CTLOPT>(1-<fpos>),<CTLOPT>s40=<T> .           Exclude folder option
 @.
 @.    #
 @.    #  Export by cabinet number... EXPORT 56
@@ -89,18 +100,16 @@
 @.    #  Subroutine: Export File
 @.    ##############################################################################################
 @0100:LZR,<CAB>,<DRW>,<RPT> ,,,,,,,,,,<RTYPE>h1 .
+@     LDV,p <FOLDER> .
 @     IF <RTYPE> eq 1 . ; GTO lin+3 .                                           Binary report?
 @     RDL,<CAB>,<DRW>,<RPT>,2 2-20 <SRVS>s .                                    Get name from report
 @     LDV,p <PROGRAM>s20=<SRVS>  GTO lin+3 .
 @     CALL,SUBLCOMMON_ chkIceSvc_ (<CAB>,<DRW>,<RPT>,<SRVS>s30) .               Ice Service?
 @     LDV,p <PROGRAM>s40=<SRVS>(p)<RPT>(p)<DRW>(p)<CAB>(p)<EXT> .
-@     LDV,p <EXPATH>s256=<PTH>(p)'\'<FOLDER>(p)'\' .
-@     LDV,p <PATH>s256=<PTH>(p)'\'<FOLDER>(p) .
-@     CALL,SUBLCOMMON_ chkMkDir_ (<PATH>,<FOLDER>,<EXPATH>) .
+@     LDV,p <EXPATH>s256=<PTH>(p)<FOLDER>(p)'\' .
+@     CALL,SUBLCOMMON_ chkMkDir_ (<PTH>,<FOLDER>,<EXPATH>) .
 @     LDV,p <EXPFILE>s256=<EXPATH>(p)<PROGRAM> .
-@     RSL,<CAB>,<DRW>,<RPT> .                                                   Get result
-@     RNM -1 .
-@     PCW,-1,2 <EXPFILE> .                                                      Write file
+@     PCW,<CAB>,<DRW>,<RPT>,2 <EXPFILE> .                                       Write file
 @     ESR .
 @.
 @.    # Exit

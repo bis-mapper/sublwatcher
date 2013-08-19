@@ -8,11 +8,8 @@
 :INCLUDE,ECAB$,B,1 .
 @.
 @.    #  Test Setup
-@     LDV <USER>h11=USER$ .
-@     PC,bcw 'HOSTNAME >'<BTEMP>'hostname.txt' .
-@     PCR,0,A,-0,,,0199,t <BTEMP>'hostname.txt' .
-@     RDL,-0,2 1-30 <computer>s .
-@     CALL 0001(<USER>,<COMPUTER>,<APPPATH>s256) .
+@ rdb LDV <USER>h11=USER$ .
+@     CALL 0001(<USER>,<APPPATH>s256) .
 @     GTO END .
 @.
 @.    #  Call Entry Point
@@ -20,6 +17,9 @@
 @.
 @.    #  Get computer name
 @     CALL,SUBLCOMMON_ getCompName_ (<COMPUTER>s30) .
+@.    #  Get OS level (XP=5,W7=6,...)
+@     CALL,SUBLCOMMON_ getOsVer_ (<OSVER>i1) .
+@ rdb CALL,SUBLCOMMON_ getChgsFile_ (<APPDIR>,<CHGSFILE>s256) .
 @.
 @.    #  Prompt user to find Editor
 @     MBX,OC,I,'SUBL' \
@@ -50,7 +50,9 @@
 @     CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
 @.
 @.    #  Create batch file
-@     SRH,BATCHTEMP_ 'dp' 'OS' 	,'WINDOWS' .
+@     IF <VER> eq 5  \
+        SRH,BATCHTEMP_ 'dp' 'OS' 	,'WINDOWS XP' .
+        SRH,BATCHTEMP_ 'dp' 'OS' 	,'WINDOWS' .
 @     LZR,-0 ,<CC>I3,<SLN>I7  LOK,-0  LN-,-0,2,<SLN>  ULK .
 @     RNM -1  LZR,-1 ,<CC>I3,<SLN>I7  BRK,0,I .
 @     RDL,-1,<SLN>,lin+3 1-<CC> <BATPRGM>s  INC <SLN> .

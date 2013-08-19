@@ -145,3 +145,37 @@
 @     RLN 'apppath' <APPPATH>s  GTO 0041 .                                      Sublime.Exe
 @     CALL,SUBLSETUP_ 0001 (<USER>,<APPPATH>s256) .                             Setup
 @0041:RETURN .
+@.
+@.    #  Get Windows Version
+@0045:(<VER>) .
+@     FDR,SUBLCONFIG_ '' 'Parameter' 	,'BTEMP' .
+@     RLN 'Parameter','Value','Ty','Siz','Opt' \
+        <PARAM>s,<VALUE>s,<TY>h,<SIZ>i,<OPT>h .
+@     LDV <'>h1=TIC$ .
+@     XQT '@ ldv'<OPT>(p)' <'<PARAM>(p)'>'<TY><SIZ>(p)'='<'><VALUE><'> .
+@     PCR,0,A,-0,,,lin1,t <BTEMP>'\ver.txt'  gto 0047 .                         File exist
+@     PC,bcw 'VER >'<BTEMP>'\ver.txt' .                                         Create and pipe output
+@     PCR,0,A,-0,,,0199,t <BTEMP>'\ver.txt' .                                   Read file
+@0047:RDL,-0,3 1-80 <over>s .                                                   Read output
+@     LCV,lin2  'b1' <over> '[Version' <vpos>i3 .                               Locate version
+@     inc,9 <vpos>  ldv <ver>=<over>(<vpos>-1) .                                Get ver
+@     RETURN .
+@.
+@.    #  Get CHGSFILE path
+@0050:(<APPDIR>,<CHGSFILE>) .
+@     CALL 0045 (<OSVER>i1) .
+@     LDV <'>h1=TIC$ .
+@     IF <OSVER> eq 5 . ; gto 0051 .                                            Windows XP
+@     FDR,SUBLCONFIG_ '' 'Parameter' 	,'BTEMP' .
+@     RLN 'Parameter','Value','Ty','Siz','Opt' \
+        <PARAM>s,<VALUE>s,<TY>h,<SIZ>i,<OPT>h .
+@     XQT '@ ldv'<OPT>(p)' <'<PARAM>(p)'>'<TY><SIZ>(p)'='<'><VALUE><'> .
+@     LDV,p <CHGSFILE>=<BTEMP>\changes.txt .
+@     GTO 0054 .
+@0051:FDR,SUBLCONFIG_ '' 'Parameter' 	,'CHGSFILE' .
+@     RLN 'Parameter','Value','Ty','Siz','Opt' \
+        <PARAM>s,<VALUE>s,<TY>h,<SIZ>i,<OPT>h .
+@     LCV,lin+1 '' <VALUE> '$'  LDV <'>h0 .                                     Is Reserve Word?
+@     LCV,lin+1 '' <VALUE> '<'  LDV <'>h0 .                                     Is Variable
+@     XQT '@ ldv'<OPT>(p)' <'<PARAM>(p)'>'<TY><SIZ>(p)'='<'><VALUE><'> .
+@0054:RETURN .
