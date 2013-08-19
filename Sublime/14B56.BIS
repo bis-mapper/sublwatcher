@@ -55,8 +55,13 @@
 @     LDV <RUNNAME>=<CTL>(1-<VPOS>) .                                           Get run name from user input
 @.
 @.    #  Find program in lookup table and execute it
-@0020:FDR,SUBLUTILS_ '' 'Util' 	,<RUNNAME>  RLN 'Rid' <rrid>i .
+@0020:FDR,SUBLUTILS_,,,0198 '' 'Util' 	,<RUNNAME>  RLN 'Rid' <rrid>i .
 @     CALL,EDRW$,<RRID> 0001 (<CTL>,<FILE>,<RUNNAME>,<STATUS>h1) .
+@     IF <STATUS> eq 0,' ',(0199) .
+@.
+@.    #  Output Growl error message
+@0198:LDV <ERRMSG>s80='That request cannot be processed.'
+@.ew     CALL,GROWL_ (<APP>,<TYPE>,<MSG>) .
 @.
 @.    # Close window
 @0199:RETURN .
