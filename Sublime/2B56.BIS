@@ -49,15 +49,6 @@
 @.
 @     RSL,<CAB>,<DRW>,<RPT> .                                                   Get result
 @     RNM -1 .
-@.
-@.    #  Standerdize BIS Script
-@.ew  CALL,SBS_ 0002* (<RUN>h17,<STS>h3) .
-@.ew  RNM -1 .
-@.
-@.    CHG <NS>h1 CHR$254 .                                                      Load  	 char
-@.    LZR,-1 ,<CC>i4 .
-@.    LCH,-1,,lin+1 'af' 1-<CC> ' '/'' .                                        Remove   char
-@.    LCH,-1,,lin+1 'af' 1-<CC> TAB$/<NS> .                                     Chg  	 to tab
 @     PCW,-1,2 <FILE> .                                                         Write file
 @.
 @.    #  Start text editor
