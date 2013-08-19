@@ -46,12 +46,12 @@
 @     LDV <FOLDER>s256=<DATADIR>(p)'\' .
 @     LDV <PROGRAM>s40=<SRVS><RPT>(p)<DRW>(p)<CAB>(p)<EXT> .
 @     CALL,SUBLCOMMON_ searchFolders_ (<FOLDER>,<PROGRAM>,<FILE>s256) .
-@     if <file> eq ' ' . ; gto 0015 .
+@     IF <FILE> eq ' ' . ; GTO 0015 .
 @     LDV <ACT>h4=DIR,<PTH>s256 .
 @     CALL,EDRW$,0004 0001 (<ACT>,<PTH>s256,<FIL>s256,'','',<TYP>h1,<STS>h3) .
-@     if <sts> eq OK . ; gto 0199 .
-@     ldv <file>s256=<pth>(p)'\'<program> .
-@0015:ldv,p <file> .
+@     IF <STS> eq OK . ; GTO 0199 .
+@     LDV <FILE>s256=<PTH>(p)'\'<PROGRAM> .
+@0015:LDV,p <FILE> .
 @.
 @     RSL,<CAB>,<DRW>,<RPT> .                                                   Get result
 @     RNM -1 .
@@ -62,8 +62,8 @@
 @     PC,r '"'<APPPATH>(p)'" -a' '"'<FILE>':'<DLN>(p)'"' .                      start editor with options
 @     SYS .                                                                     system
 @     IF <CALL> ne Y  PC 'cmd /C '"<BATFILE>" . ; .                             start / check if running
-@     FDR,-0,,,lin+1 '' 'USERID','RUNNAME'   	,USER$,<SUBLWATCHER>  GTO 0199 .   currently running?
-@     WAT 1000 .                                                                pause for first time
+@     FDR,-0,,,lin+1 '' 'USERID','RUNNAME' 	,USER$,<SUBLWATCHER>  GTO 0199 .    currently running?
+@     wat 1000 .                                                                pause for first time
 @     RUN <SUBLWATCHER> .                                                       start file watcher utility
 @.
 @.    #  Return if called otherwise display current report
