@@ -61,7 +61,9 @@
 @     IF <STATUS> eq 0,' ',(0199) .
 @.
 @.    #  Output Growl error message
-@0198:LDV <MSG>s80='That request cannot be processed.'
+@0198:.
+@     CHG <ERR>i4 CERR$  LSM,<ERR> <MSG>s88 .
+@     IF <MSG> eq ' '  LDV <MSG>='That request cannot be processed' .
 @     CALL,GROWL_ 0001 ('BISCMD Failed','FAILED',<MSG>) .
 @.
 @.    # Close window
