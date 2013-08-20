@@ -7,10 +7,10 @@
 	SBS         	    	 	 18	Standardize your run
 	RJUST       	    	 	 19	Right justify comments - Can pass in width if drawer is wider
 	EXPORT      	    	 	 20	Export files from mapper application
-	IMPORT      	    	 	 17	Import files from location on machine
+	IMPORT      	    	 	 21	Import files from location on machine
+	HELP        	    	 	 23	Similar to help@, from control line
 	GEN         	    	 	 17	Generate new reports, applications, scaffolding
 	BUILD       	    	 	 17	Build your application for production use
 	UPDATEVER   	    	 	 17	Update application version info
 	BDT         	    	 	 17	Build your define table
-	HELP@       	    	 	 17	Build your define table
 

@@ -46,7 +46,7 @@
 @     CALL,SUBLCOMMON_ getFileName_ (<FILE>,<RUN>s60) .                         Extracts File Name from path
 @     LCV,0199 'b99' <RUN> '.bis'/'' .                                          Remove file type
 @.
-@     IF <CTL> eq ''  LDV <STATUS>=9  GTO 0199 .                                Nothing entered?
+@     IF <CTL> eq ''  GTO 0199 .                                                Nothing entered?
 @.
 @.    # ICE UTILITIES
 @     DVS,SUBLUTILS_ 'Util' <RUNNAME>s .

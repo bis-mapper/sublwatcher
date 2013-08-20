@@ -21,7 +21,6 @@
       "Category (<category>(p)) does not exist."  O,(0199) ; .
 @     rnm -1 .
 @.
-@.
 @.   **********  Initialize  **************************************************
 @     srh,3950,D,1,,,0091 'dp' 2-20 '	',<category>  rnm -1 .    Category details
 @     ldv,p <file>s256=<path>(p)'CTGTBL.BIS' .            Verify Category Table

@@ -11,27 +11,24 @@
 @.    #---------------------------------------------------------------------------------------------
 @.
 @.    # Test Setup
-@     LDV <TITLE>s20='subl msg' .
-@     LDV <TYPE>h8='PENDING' .
-@     LDV <MSG>s80='this is a test' .
-@     CALL 0001 (<TITLE>,<TYPE>,<MSG>) .
+@     LDV <CTL>s20='help @ldv' .
+@     LDV <FILE>s0,<RUNAME>s0 .
+@     CALL 0001 (<TITLE>,<TYPE>,<MSG>,<STATUS>h1) .
 @     GTO END .
 @.
-@0001:(<TITLE>,<TYPE>,<MSG>) .
+@0001:(<CTL>,<FILE>,<RUNNAME>,<STATUS>) .
 @.
 @     RAR,0,E,2 0199 .                                                          sets-run-abort
 @     RER,0,E,2 0001 .                                                          sets-run-error
 @     RSR,SUBLCOMMON_ configVars_ .
 @.
-@.    #  Display GROWL notification
-@     FDR,GROWLALERTS_ '' 'Type' 	,<TYPE> .
-@     RLN 'AlertIcon' <ALERTICON>s .
-@.
-@.    #  Load APP exe and paramaters
-@     LDV,p <APPEXE>s256=<APPDIR>'\growlnotify.exe' .
-@     LDV,p <GALERTICON>s256='/i:'<APPDIR>'\'<ALERTICON>(p) .
-@     LDV,p <GTITLE>s256='/t:'<TITLE> .
-@     PC,r "<APPEXE>(p)"' '"<MSG>"' '"<GTITLE>"' '"<GALERTICON>" .
+@     <msg>s80='Invalid Function Call Entered - Retry' .
+@     DEF,p <SIZ>i1,<CTL>  IF <SIZ> eq 0,(0199) .
+@     LCV 't@' <CTL> ' ' <VPOS>  dec <VPOS> .
+@     SRH,LCAB$,E,0007,,,0004 dpb 2-<SIZ> @,<CTL>(P) .
+@     LZR,-0 ,,<LIN>i4 .
+@     INC <LIN>  RDL,-0,<LIN>,0021 2-80 <SYNTAX>s .
+@0004:DSX,-1,<DLN>,,,,,<SYNTAX>(C) .
 @.
 @.    # Exit
 @0199:RETURN .
