@@ -7,15 +7,14 @@
 *===============================================================================
 :INCLUDE,ECAB$,B,1 .                                                            INCLUDE
 @.
-@     LDV <CALL>h1=n .                                                          Manual entrance
+@     LDV <CALL>h1=n,<DLN>i7=DLINE$ .                                           Manual entrance
 @.
 @.    #  Call entry point
 @0001:(<RUN>) .                                                                 Call from BisCmd?
 @     RER,0,E,2 0001  RAR,0,E,2 0001 .                                          sets-run-error
 @.
 @     IF <RUN> eq '<RUN>',(0005) .                                              Normal or Call?
-@     LDV <CALL>h1=y .
-@     IF <RUN> eq 'SETUP',(0007) .
+@     LDV <CALL>h1=y,<DLN>s0 .
 @     CALL,SUBLCOMMON_ getCabDrwRpt_ (<RUN>,<CAB>i4,<DRW>h1,<RPT>i4) .
 @     GTO 0007 .
 @.
@@ -39,7 +38,6 @@
 @     LDV,p <FLDR>s256=<SITE> .
 @     LDV,p <FLDRPATH>s256=<datadir> .
 @     CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
-@.    tst
 @.
 @.    #  Check if program exists already in folder.
 @.    #  If it doesn't exist load <FILE> to default site location
@@ -56,7 +54,10 @@
 @.
 @     RSL,<CAB>,<DRW>,<RPT> .                                                   Get result
 @     RNM -1 .
-@     PCW,-1,2 <FILE> .                                                         Write file
+@     PCW,-1,2,lin1 <FILE>  gto 0020 .                                          Write file
+@     ldv <MSG>s80='Could not write out '<file> .
+@     CALL,GROWL_ 0001 ('SUBL Failed','FAILED',<MSG>) .
+@     gto 0199 .
 @.
 @.    #  Start text editor
 @.    #  Refer to "http://www.sublimetext.com/docs/2/osx_command_line.html" for all options
