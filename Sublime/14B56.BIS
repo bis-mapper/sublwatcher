@@ -32,7 +32,7 @@
 @     MBX,ok,E,'BisCmd' \
       "Could not find the BisCmd.Bis file."  O,(0199) .
 @0002:RNM -2 .
-@.ew  PC,bcw "del <BISCMD>" .                                                   Clean up file
+@     PC,bcw "del <BISCMD>" .                                                   Clean up file
 @.
 @     RDL,-2,2 1-256 <FILEOUTPUT>s .                                            Read Sublime input
 @     LDV,p <FILEOUTPUT> .
@@ -56,7 +56,7 @@
 @     LDV <RUNNAME>=<CTL>(1-<VPOS>) .                                           Get run name from user input
 @.
 @.    #  Find program in lookup table and execute it
-@0020:FDR,SUBLUTILS_,,,0198 '' 'Util' 	,<RUNNAME>  RLN 'Rid' <rrid>i .
+@0020:FDR,SUBLUTILS_,,,0198 '' 'Util' ¬,<RUNNAME>  RLN 'Rid' <rrid>i .
 @     CALL,EDRW$,<RRID> 0001 (<CTL>,<FILE>,<RUNNAME>,<STATUS>h1) .
 @     IF <STATUS> eq 0,' ',(0199) .
 @.

@@ -2,15 +2,15 @@
 *     .       .
 *Find .Replace.
 *=====.=======.
-	NOT =	ne     	
-	NE   	ne     	
-	NOT <	ge     	
-	GE   	ge     	
-	NOT >	le     	
-	LE   	le     	
-	EQ   	eq     	
-	=    	eq     	
-	LT   	lt     	
-	<    	lt     	
-	GT   	gt     	
-	>    	gt     	
+¬NOT =¬ne     ¬
+¬NE   ¬ne     ¬
+¬NOT <¬ge     ¬
+¬GE   ¬ge     ¬
+¬NOT >¬le     ¬
+¬LE   ¬le     ¬
+¬EQ   ¬eq     ¬
+¬=    ¬eq     ¬
+¬LT   ¬lt     ¬
+¬<    ¬lt     ¬
+¬GT   ¬gt     ¬
+¬>    ¬gt     ¬

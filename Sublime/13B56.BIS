@@ -7,12 +7,12 @@
 @0001:(<category>,<path>) .
 @     ldv <format>h2=11,<status>h1 .
 @     chg <ns>h1 CHR$254 .
-@     srh,3950,d,1,,,lin+1 'd' 'category' 	,<category>  gto lin+3 .
+@     srh,3950,d,1,,,lin+1 'd' 'category' ¬,<category>  gto lin+3 .
 @     mbx,ok,E,'Cool ICE Admin - Export Category' \
       "Category (<category>(p)) does not exist."  O,(0199) ; .
 @     rnm -5 .                                           Category details in -5
 @     rar 0091 .                                         Register Abort Routine
-@     fdr,-5 'a' 2-20 '	',<category> .                    From Category details
+@     fdr,-5 'a' 2-20 '¬',<category> .                    From Category details
 @     rln 'Cab','Dw','Rpt','SvcCab','Sd','StyCab','St','StyRpt','CtgLoc','RW' \
       <toidxcab>a,<toidxdw>a,<toidxrpt>i,<toscab>a,<tosdw>a,\
       <tocstycab>a,<tocstydw>a,<tocstyrpt>i,<ctgloc>a,<rw>a .
@@ -29,7 +29,7 @@
         ldv,p <c>a4=<toidxcab>,<d>a1=<toidxdw>,<r>a4=<toidxrpt>,\
            <fileid>a9=<r><d><c>,<file>s85=<path>(p)SVCTBL<fileid>'.BIS' .
 @     pcr,3950,D,-0,n,n,0092 <file>  rnm -1 .             Import Services Table
-@     lzr,-1 ,<cc>i4  lch,-1,,lin+1 'af' 1-<cc> <ns>/	  rnm -1 .
+@     lzr,-1 ,<cc>i4  lch,-1,,lin+1 'af' 1-<cc> <ns>/¬  rnm -1 .
 @     LFN,-1 2-20  <fld1>h18  LFN,-1 84-1  <fld2>h18 .
 @     LFN,-1 86-1  <fld3>h18  LFN,-1 88-12 <fld4>h18 .
 @     ldv,p <JS>h18=JS .
@@ -47,13 +47,13 @@
 @     inc   <hdr>  wrl,-1,<hdr> 83-18 *,'.=.=.============.'
 @0030:rsr 0265 .                                              verify format 3.0
 @     ldv <trpt>i6=0,<nrpt>i6=0 .
-@     srh,-1 'dn@l(*)' 'StyCab' '	',@@@@ <vlines>i6 .       Nbr of Style Guides
+@     srh,-1 'dn@l(*)' 'StyCab' '¬',@@@@ <vlines>i6 .       Nbr of Style Guides
 @     inc,<vlines> <trpt> .
-@     srh,-1 'dn@l(*)' 'Cab' '	',@@@@ <vlines>i6 .       Nbr of Service Reports
+@     srh,-1 'dn@l(*)' 'Cab' '¬',@@@@ <vlines>i6 .       Nbr of Service Reports
 @     inc,<vlines> <trpt> .
 @     wrl,-1,2,y 29-20 '.',<tocat> .                      Update Services Table
 @.   **********  Import Services  *********************************************
-@0016:srh,-1,,,0018 'dn@l(*)' 'Cab' '	',@@@@  rnm -2 .       Get Service Reports
+@0016:srh,-1,,,0018 'dn@l(*)' 'Cab' '¬',@@@@  rnm -2 .       Get Service Reports
 @     ldv <first>a3=Yes,<useaspals>a3=Yes,<keepaspals>s40 .
 @     ldv <aspals>s40,<aspnam>s30,<asppath>s132 .
 @     fnd,-2 '' 2-1 '*',= ,<ln>i6 .
@@ -66,7 +66,7 @@
 @     ldv,p <srvs>s20='('<service>(p)')' .
 @     ldv,p <file>s256=<path>(p)<srvs>(p)<imsrpt><imsdw><imscab>'.'<ext> .
 @     ldv <binary>a1=n .
-@     fdr,3950,E,44,,,0089 '' 'Obj' '	',<svctyp> .
+@     fdr,3950,E,44,,,0089 '' 'Obj' '¬',<svctyp> .
 @     rln 'Bn' <binary> .
 @     ldv <impcab>a4=<toscab>,<impdw>a1=<tosdw> .
 @     if <ctgloc> eq Rmt  ldv <impcab>a4=<xcab>,<impdw>a1=<xdrw> ; . Rmt Object?
@@ -78,7 +78,7 @@
         ldv <objtitle>s40='Object Name: '<service> \
         wrl,-0,2,y 2-40 '.',<objtitle> ; .                   Insert Object name
 @     rnm -3 .                                                    Service in -3
-@     lzr,-3 ,<cc>i4  lch,-3,,lin+1 'af' 1-<cc> <ns>/	  rnm -3 .
+@     lzr,-3 ,<cc>i4  lch,-3,,lin+1 'af' 1-<cc> <ns>/¬  rnm -3 .
 @     if <binary> eq y \
        if <svctyp> ne RPT \
          ldv <objtitle>s40='Object Name: '<service> \
@@ -95,12 +95,12 @@
 @     gto 0023 .
 @0022:.
 @     rep,-3,<toscab>,<tosdw>,<srpt> .        Replace in original report number
-@0023:fnd,-1 '' 'Service' '	',<service> ,<lno>i6 .
-@     wrl,-1,<lno>,y 'Cab','Dw','Rpt' '	',<toscab>,<tosdw>,<srpt> .
+@0023:fnd,-1 '' 'Service' '¬',<service> ,<lno>i6 .
+@     wrl,-1,<lno>,y 'Cab','Dw','Rpt' '¬',<toscab>,<tosdw>,<srpt> .
 @     gto 0017 .
 @.   **********  Update Repository  *******************************************
 @0018:dfu 3950,D,1,<toidxcab>,<toidxdw>,<toidxrpt> .            Lok repository
-@     fnd,3950,D,1,,0091 '' 2-20 '	',<category> ,<lno>i6 .
+@     fnd,3950,D,1,,0091 '' 2-20 '¬',<category> ,<lno>i6 .
 @     rep,-1,<toidxcab>,<toidxdw>,<toidxrpt> .
 @     cmu .
 @.   *******************  NORMAL RETURN  **************************************
@@ -123,9 +123,9 @@
 @     if <first> eq Yes  ldv <first>=No  gto 0162 ; .
 @     if <useaspals> eq Yes  ldv <aspals>=<keepaspals> ; .
 @     fnd,3950,E,57,,lin+1 '' 'ASP Dir Alias','ASP File Name' \
-       '	',<aspals>,<aspnam>  gto 0162 .                      Does Object exist?
+       '¬',<aspals>,<aspnam>  gto 0162 .                      Does Object exist?
 @.   *******************  Check ASP File  *************************************
-@     fdr,3950,E,55,,,0162 '' 'Alias' '	',<aspals> \
+@     fdr,3950,E,55,,,0162 '' 'Alias' '¬',<aspals> \
       rln 'Directory' <aspdir>s .
 @     ldv,p <aspdir>,<taspnam>s30=<aspnam>,<asppath>s132=<aspdir><taspnam> .
 @     ret,0,F,b,n,0164 <asppath>,,,1 .                     Does ASP File exist?
@@ -145,11 +145,11 @@
 @     wrl,-1,<lno> 30-30 '*',<aspnam> .                           ASP File Name
 @     lok,3950,E,57 .                                 Update ASP Object Table
 @     fnd,3950,E,57,,lin+1 '' 'Category','Service' \
-                             '	',<tocat>,<service> ,<lno>i6  gto lin+2 .
+                             '¬',<tocat>,<service> ,<lno>i6  gto lin+2 .
 @     lzr,3950,E,57 <lno>i6  ln+,3950,E,57,<lno>,1  inc <lno> .
 @     wrl,3950,E,57,<lno> \
          'ASP Dir Alias','ASP File Name','Category','Service' \
-         '	',<aspals>,<aspnam>,<tocat>,<service> .
+         '¬',<aspals>,<aspnam>,<tocat>,<service> .
 @     ulk .
 @     gto 0021 .
 @.   *******************  Error Messages  *************************************
@@ -160,13 +160,13 @@ storage.//\
 Allocate a drawer with a width of at least <t1> using the <t2>Allocate \
 Work Drawer<t2> function." O,(0091) .
 @0088:ldv,pu <t1>s20=<service>,<t2>a6=<towidth> .
-@     srh,-1 'dpn' 'Service' '	',<service>  rnm -1 .   Remove from Service Table
+@     srh,-1 'dpn' 'Service' '¬',<service>  rnm -1 .   Remove from Service Table
 @     MBX,ok,E,'Cool ICE Admin - Import Category' \
 "Cannot import object <t1> to remote system.//A work drawer with a width of \
 <t2> characters is required to transfer binary objects to this remote \
 category.//Importing this object will be skipped." O,(027) .
 @0089:ldv,pu <t1>s20=<service> .
-@     srh,-1 'dpn' 'Service' '	',<service>  rnm -1 .   Remove from Service Table
+@     srh,-1 'dpn' 'Service' '¬',<service>  rnm -1 .   Remove from Service Table
 @     MBX,ok,E,'Cool ICE Admin - Import Category' \
      "Object type <svctyp> is not defined in the object table.//\
 Importing object <t1> will be skipped." O,(027) .
@@ -198,7 +198,7 @@ The erroring path is:/\
      "File <t1> could not be read.//\
 Make sure the directory contain Cool ICE exported objects." O,(0091) .
 @0097:ldv,pu <t1>s85=<file> .
-@     srh,-1 'dpn' 'Service' '	',<service>  rnm -1 .   Remove from Service Table
+@     srh,-1 'dpn' 'Service' '¬',<service>  rnm -1 .   Remove from Service Table
 @     MBX,ok,E,'Cool ICE Admin - Import Category' \
      "File <t1> could not be read.//\
 Importing this object will be skipped." O,(027) .
@@ -226,7 +226,7 @@ columns 84-16. These fields will be overwritten. Import Services?\
 <data>
 @     ldv <ln>i5=5 .
 @0267:inc <ln>  rdl,-1,<ln>,0269 1-132 <data>s .
-@     if <data>(1-1) eq '	'  gto 0268 .
+@     if <data>(1-1) eq '¬'  gto 0268 .
 <data>
 @     gto 0267 .
 @0268:.
@@ -243,7 +243,7 @@ columns 84-16. These fields will be overwritten. Import Services?\
 @     rdl,-0,<lno>,0277 'Keyword','Value','Description' <t1>s,<t2>s,<t3>s .
 @     ldv <t4>s117=<t2> .
 @     ldv <t5>s131=<t1>' Descr ='<t3> .
-@     wrl,-0,<lno>,y 15-117 '	',<t4> .
+@     wrl,-0,<lno>,y 15-117 '¬',<t4> .
 @     ln+,-0,<lno>,1  inc <lno> .
 @     wrl,-0,<lno>,y 2-132 '*',<t5> .
 @     gto 0276 .

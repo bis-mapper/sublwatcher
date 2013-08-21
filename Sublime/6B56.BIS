@@ -27,7 +27,7 @@
 @.
 @. ---------------------- Get Program Location & Version -----------------------
 @.
-@     FDR,SUBLDEP_,,,0199 '' 'Name' 	,<NAM> .
+@     FDR,SUBLDEP_,,,0199 '' 'Name' ¬,<NAM> .
 @     RLN 'Rpt','File','Ext','Rep','Rev','Description' \
       <RPT>i,<FIL>s,<EXT>h,<REP>h,<REV>a,<DES>s .
 @     LDV,p <NAM>,<FIL>,<EXT>,<PRG>=<FIL>'.'<EXT>,<DES> .

@@ -8,7 +8,7 @@
 :INCLUDE,ECAB$,B,1 .                                                            INCLUDE
 @0001:.
 @     RAR 0198 .                                                                Abort label
-@     RER,0,E,2  0001
+@     RER,0,E,2  0001 .
 @     BRK  BRK,0,I  RNM -2 .                                                    Clear Attrib Result
 @     BRK  BRK,0,I  RNM -3 .                                                    Read Attrib Result
 @.
@@ -17,11 +17,11 @@
 @.
 @.    #  Get field sizes for logging
 @     DVS,SUBLOG_ 'Event','Report','File','Object' \
-        <exx>h,<rxx>h,<fxx>s,<oxx>h .
-@     DEF,s <esz>i3,<exx> .
-@     DEF,s <rsz>i3,<rxx> .
-@     DEF,s <fsz>i3,<fxx> .
-@     DEF,s <osz>i3,<oxx> .
+        <EXX>h,<RXX>h,<FXX>s,<OXX>h .
+@     DEF,s <ESZ>i3,<EXX> .
+@     DEF,s <RSZ>i3,<RXX> .
+@     DEF,s <FSZ>i3,<FXX> .
+@     DEF,s <OSZ>i3,<OXX> .
 @.
 @.    #  Get application path... If first time run setup
 @     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
@@ -33,9 +33,9 @@
 @.    #  Set up animation
 @0010:INC <CNT> .
 @     LDV <PRUN>s0 .
-@     IF <CNT> gt 9 LDV <CNT>i2=1  .
+@     IF <CNT> gt 9  LDV <CNT>i2=1  .
 @     LDV <DSP>h11='          /' .
-@     LCV,LIN1 '' <DSP>(1-<CNT>) ' '/'=' .
+@     LCV,lin+1 '' <DSP>(1-<CNT>) ' '/'=' .
 @     BRK .
 
     /               \
@@ -61,14 +61,14 @@
 @0034:dbg,,w,<DELAY>(p) .
 @     PCR,0,I,-0,n,n,0010 <CHGSFILE> .                                          File Exist?
 @     RNM -5  LZR,-5 <LNS>i7,,<LNH>i7 .
-@     IF <LNS> > <LNH> . ; gto 0010 .                                           Look for changes
+@     IF <LNS> gt <LNH> . ; GTO 0010 .                                          Look for changes
 @0036:INC <LNH>  RDL,-5,<LNH>,0070 1-256 <DATA>s .                              Get files
-@     LDV,QL <event>s<esz>=<data>,0(,),\
-             <file>s<fsz>=<data>,1(,),\
-             <obj>s<osz>=<data>,2(,) .
+@     LDV,ql <EVENT>s<ESZ>=<DATA>,0(,),\
+             <FILE>s<FSZ>=<DATA>,1(,),\
+             <OBJ>s<OSZ>=<DATA>,2(,) .
 @.
 @.    #  Start BisBug Debugging Session
-@     LCV,lin2 '' <FILE> 'BisBug' ,<OCC>i3 .                                    Check for BisBug
+@     LCV,lin+2 '' <FILE> 'BisBug' ,<OCC>i3 .                                   Check for BisBug
 @.    BR <BISBUG> .
 @.
 @.    #  Start BisCmd
@@ -79,15 +79,18 @@
 @.
 @.    #  Make sure were on the correct site for this file...
 @0037:LCV,0038 'b1' <FILE> 'site-' <POS>i3 .                                    Find string
-@     INC,5 <POS> LDV <SL>h1=<FILE>(<POS>-1) .                                  Read Site Letter from file
-@     IF <SL> ne NETSIT$,(0036) .                                               Compare
+@     INC,5 <POS>  LDV <SL>h1=<FILE>(<POS>-1) .                                 Read Site Letter from file
+@     IF <SL> ne NETSIT$ . ; gto 0038 .                                         Compare
+@     LDV <MSG>s256='Site letters differ... Cannot save file.' .
+@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0036 .
 @.
 @0038:.
 @     CALL,SUBLCOMMON_ getFileName_ (<FILE>,<RUN>s60) .                         Extracts File Name from path
 @.
 @.    #  Only .bis files are allowed past this point
 @     LCV,0036 'b99' <RUN> '.bis'/'' .                                          Remove file type
-@     LCV,LIN1 'b99' <RUN> '.html'/'' .                                         Remove file type
+@     LCV,lin+1 'b99' <RUN> '.html'/'' .                                        Remove file type
 @     IF <PRUN> ne '<PRUN>'  IF <RUN> eq <PRUN>,(0036) .                        Catch duplicates
 @     DEF,s <PSZ>i3,<RUN>  LDV <PRUN>s<PSZ>=<RUN> .
 @     LDV,p <RUN> .
@@ -99,23 +102,23 @@
 @     DFU SUBLOG_ .
 @     LN+,SUBLOG_,,1  LDV <WLN>i7=STAT1$ .
 @     WRL,SUBLOG_,<WLN>,Y 'Event','Report','User','Date','Time','File','Object' \
-        	,<event>,<run>,USER$,DATE11$,TIME$,<file>,<obj> .
+        ¬,<EVENT>,<RUN>,USER$,DATE11$,TIME$,<FILE>,<OBJ> .
 @     CMU .
 @.
-@     IF <event> eq 'deleted',(0036) .                                          File deleted?
-@     IF <biscmd> eq 'y',(0036) .                                               File deleted?
+@     IF <EVENT> eq 'deleted',(0036) .                                          File deleted?
+@     IF <BISCMD> eq 'y',(0036) .                                               File deleted?
 @.
 @.    #  Make sure its a valid MAPPER report
 @     LDV <VM>i1=0 .
 @     DEF <T>i2,<CAB>  IF <T> eq 1  INC <VM> .                                  Numeric
 @     DEF <T>i2,<RPT>  IF <T> eq 1  INC <VM> .                                  Numeric
 @     DEF <T>i2,<DRW>  IF <T> eq 2  INC <VM> .                                  Alpha
-@     IF <VM> EQ 3,(0047) .                                                     Valid
+@     IF <VM> eq 3,(0047) .                                                     Valid
 @     PC,bcw "del <CHGSFILE>(p)" .                                              Clean up file
-@     LDV <MSG>s998=<FILE>(p)//\ .
-@     MBX,OK,S,'Sublwatcher: Warning!' \
-"<FILE>(P) //\
-Is not a valid MAPPER report" O,(0036) .
+@.
+@     LDV <MSG>s80=<FILE>': Is not a valid MAPPER report' .
+@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0036 .
 @.
 @.    #  Retrieve the file and clear attribute again
 @0047:PCR,0,I,-0,n,n,0034 <FILE>  GTO 0048 .
@@ -124,7 +127,10 @@ Is not a valid MAPPER report" O,(0036) .
 @     IF STAT1$ eq 2 \
         LDV <MSG>s80='Binary files are not supported' .
 @     PC,bcw "del <CHGSFILE>(p)" .                                              Clean up file
-@     MBX,OK,S,'Sublwatcher: Warning!' "<MSG>(p)" O,(0036) .
+@.ew  MBX,OK,S,'Sublwatcher: Warning!' "<MSG>(p)" O,(0036) .
+@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0036 .
+@.
 @0048:RNM -4 .
 @     PC,bcw "del <CHGSFILE>(p)" .                                              Clean up file
 @.
@@ -132,38 +138,37 @@ Is not a valid MAPPER report" O,(0036) .
 @     IF <CAB> eq ECAB$  IF <DRW> eq AEDRW$  IF <RPT> eq ERPT$,(0036) . ; .     Cannot modify itself
 @.
 @.    #  Check if brand new report
-@     LZR,<CAB>,<DRW>,<RPT>,lin1  LDV <EXISTS>h1='Y'  GTO 0050 .
-@     LDV <EXISTS>h1='N',<MSG>s256='Can not create brand new file. //' .
+@     LZR,<CAB>,<DRW>,<RPT>,lin+1  LDV <EXISTS>h1='Y'  GTO 0050 .
+@     LDV <EXISTS>h1='N',<MSG>s256='Can not create brand new file.' .
 @     LDV <MSG>=<MSG>'This feature isn't available yet.' .
-@     MBX,OK,S,'Sublwatcher: Warning!' "<MSG>(p)" O,(0036) .
+@.ew  MBX,OK,S,'Sublwatcher: Warning!' "<MSG>(p)" O,(0036) .
+@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0036 .
 @.
 @.    #  Check if user matches control line
 @0050:RDL,<CAB>,<DRW>,<RPT>,1 53-11 <CONTROLUSER>s .
-@     IF USER$ ne <CONTROLUSER> \
-        MBX,YN,Q,'Sublwatcher: Whoa there!' \
+@     IF USER$ ne <CONTROLUSER> . ; gto 0056 .
+@     LDV <MSG>s256='You do not have update control of this report.',\
+          <MSG>=<MSG>(p)'Waiting for input...' .
+@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
+@     MBX,YN,Q,'Sublwatcher: Whoa there!' \
 "You do not have update control of this report. //\
  Run:   <RPT>(p)<DRW>(p)<CAB>(p)    Name:   <CONTROLUSER>(p) //\
- Would you like to take control of this report?//" Y,(lin1),N,(0036) .
+ Would you like to take control of this report?//" Y,(lin+1),N,(0036) .
 @0056:LZR,3950,d,1,0061 .                                                       ICE Enabled Site?
-@     SRH,3950,d,1,,,0061 'ad' 'SvcCab','sd' 	,<CAB>,<DRW> .
+@     SRH,3950,d,1,,,0061 'ad' 'SvcCab','sd' ¬,<CAB>,<DRW> .
 @     LZR,-0 ,,<HLN>i7  INC <HLN> .
 @     RDL,-0,<HLN>,lin+1 'cab','dw','rpt' <ICAB>h,<IDW>h,<IRPT>h .
-@     FDR,<ICAB>,<IDW>,<IRPT>,,,0061 '' 'cab','dw','rpt' 	,<CAB>,<DRW>,<RPT> .
+@     FDR,<ICAB>,<IDW>,<IRPT>,,,0061 '' 'cab','dw','rpt' ¬,<CAB>,<DRW>,<RPT> .
 @     RLN,,lin+1 'service' <SRVS>s  GTO 0061 .
+@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED','Check input message') .
 @     MBX,YN,Q,'What are we doing?' \
 "Do you want to add this as an ice service//" Y,(0019),N,(0061) .
 @.
 @.    #  Load the ¬ character and handle the conversion
-@0061:.ew  CHG <NS>h1 CHR$254 .
-@.ew  LZR,-4 ,<CCC>i4 .
-@.ew  LCH,-4,,lin+1 'af' 1-<CCC> Â/''  RNM -4 .
-@.ew  LCH,-4,,lin+1 'af' 1-<CCC> <NS>/	  RNM -4 .
-@.
-@.ew  RSL,-4 .
-@.ew  CALL,SBS_ 0002* (<RUN>h17,<STS>h3) .
-@.ew  RNM -4 .
-@.ew  PCW,-4,2 <FILE> .                                                         Write file
-@.ew  PC,r '"'<APPPATH>(p)'" -a' '"'<FILE>'"' .                                 start editor with options
+@0061:.
+@     RSL,-4 .
+@     CALL,SUBLCOMMON_ charReplace_ ('import') .                                Replace tab character
 @.
 @     DFU <CAB>,<DRW>,<RPT> .
 @     REP,-4,<CAB>,<DRW>,<RPT> .
@@ -176,7 +181,7 @@ Is not a valid MAPPER report" O,(0036) .
 @     GTO END .
 @.
 @.    #  Start over and keep re-checking
-@0070:PCR,0,I,-0,n,n,lin2 <CHGSFILE>(p) .                                       File Exist
+@0070:PCR,0,I,-0,n,n,lin+2 <CHGSFILE>(p) .                                      File Exist
 @     PC,bcw "del <CHGSFILE>(p)" .                                              Clean it up
 @     GTO 0010 .
 @.

@@ -3,7 +3,7 @@
 *           .       .                                                                                            .
 *OS         .version.                                                                                            .
 *===========.=======.============================================================================================.
-	Windows    	  0.5.0	                                                                                            	
+¬Windows    ¬  0.5.0¬                                                                                            ¬
 ECHO off
 REM   SETLOCAL EnableExtensions
 ECHO "Check if watchmedo is running"
@@ -32,7 +32,7 @@ PAUSE
 :END
 CLS
 EXIT
-	Windows XP 	  0.5.0	                                                                                            	
+¬Windows XP ¬  0.5.0¬                                                                                            ¬
 ECHO off
 REM   SETLOCAL EnableExtensions
 ECHO "Check if watchmedo is running"

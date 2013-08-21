@@ -15,7 +15,7 @@
 @.
 @     RSR,SUBLCOMMON_ configVars_ .
 @.    #  TODO Look this up in an index so it's not hardcoded...
-@. @     FDR,SUBLUTILS_ '' 'Util' 	,<RUNNAME>  RLN 'Cab','Dr','Rid' <CAB>i,<DRW>h,<RID>i .
+@. @     FDR,SUBLUTILS_ '' 'Util' ¬,<RUNNAME>  RLN 'Cab','Dr','Rid' <CAB>i,<DRW>h,<RID>i .
 @     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
 @.
 @.    #  Standerdize run

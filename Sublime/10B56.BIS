@@ -28,11 +28,11 @@
 @.
 @     LDV <PT>h1=S  LDV,p <PX>s80=<P> .
 @     DEF,q <PQ>i2,<P>  IF <PQ> gt 0  LDV <PT>=A  GTO lin+3 ; .
-@     IF <P> ne ''  LCV,lin+1 n <P> '	' ; GTO lin+2 .
-@     LCV b99 <P> '	' ,<PQ>  LDV <PT>=T .
+@     IF <P> ne ''  LCV,lin+1 n <P> '¬' ; GTO lin+2 .
+@     LCV b99 <P> '¬' ,<PQ>  LDV <PT>=T .
 @.
 @     LDV <TYP>h3=OK,<ICN>h1,<CAX>s24=<ERR> .
-@     SRH,ECAB$,C,6,,,lin+2 dq 'ErrorID' 	,<ERR>  RNM -2 .
+@     SRH,ECAB$,C,6,,,lin+2 dq 'ErrorID' ¬,<ERR>  RNM -2 .
 @     RDL,-2,6 'Typ','Ic','Caption' <TYP>h,<ICN>h,<CAX>s .
 @     LDV <CAP>s80=<CAX> .
 @     LCV,lin+8 '' <CAP> '%'  IF <PT> eq 'A',(lin+2),'T',(lin+5) ; .

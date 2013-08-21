@@ -11,10 +11,9 @@
 @.    #---------------------------------------------------------------------------------------------
 @.
 @.    # Test Setup
-@ rdb ldv <CTL>s80='export 56 -fsublwatcher' .
+@ rdb ldv <CTL>s80='import 56 -fsublwatcher' .
 @     ldv <file>s42='D\Users\winne\sublwatcher\site-e\2b56.bis' .
-@     ldv <runname>s12='export' .
-@     call 0001 (<CTL>,<FILE>,<RUNNAME>,<STATUS>h1) .
+@     call 0001 (<CTL>,<FILE>,'',<STATUS>h1) .
 @     gto end .
 @.
 @0001:(<CTL>,<FILE>,<RUNNAME>,<STATUS>) .

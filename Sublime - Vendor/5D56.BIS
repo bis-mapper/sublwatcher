@@ -2,300 +2,300 @@
 *        .C.
 *Res Word.D.
 *========.=.
-	ACDRW$  	Y	
-	ACTINP$ 	 	
-	ACTWIN$ 	 	
-	ACTYPE$ 	Y	
-	ADRW$   	 	
-	ADRW1$  	 	
-	ADRW10$ 	 	
-	ADRW11$ 	 	
-	ADRW12$ 	 	
-	ADRW13$ 	 	
-	ADRW14$ 	 	
-	ADRW15$ 	 	
-	ADRW16$ 	 	
-	ADRW2$  	 	
-	ADRW3$  	 	
-	ADRW4$  	 	
-	ADRW5$  	 	
-	ADRW6$  	 	
-	ADRW7$  	 	
-	ADRW8$  	 	
-	ADRW9$  	 	
-	AEDRW$  	 	
-	AETYPE$ 	 	
-	AKEY$   	 	
-	ALERT$  	 	
-	ALRTYP$ 	Y	
-	APILVL$ 	 	
-	AREA$   	 	
-	ASPECT$ 	 	
-	ATCTYP$ 	Y	
-	ATYPE$  	 	
-	ATYPE1$ 	 	
-	ATYPE2$ 	 	
-	ATYPE3$ 	 	
-	ATYPE4$ 	 	
-	ATYPE5$ 	 	
-	ATYPE6$ 	 	
-	ATYPE7$ 	 	
-	ATYPE8$ 	 	
-	AUXTYP$ 	Y	
-	AXDRW$  	Y	
-	AXTYPE$ 	Y	
-	BPORT$  	 	
-	CAB$    	 	
-	CAB1$   	 	
-	CALL$   	 	
-	CDRW$   	Y	
-	CELTYP$ 	Y	
-	CERR$   	 	
-	CESTYP$ 	Y	
-	CFGDRW$ 	Y	
-	CFGTYP$ 	Y	
-	CHAR$   	 	
-	CHKPSW$ 	 	
-	CHR$    	 	
-	COLOR$  	 	
-	COMPLV$ 	 	
-	COORD$  	 	
-	CPRIV$  	 	
-	CRPT$   	 	
-	CSTTYP$ 	Y	
-	CTYPE$  	Y	
-	CURH$   	 	
-	CURSEC$ 	 	
-	CURV$   	 	
-	DASH$   	 	
-	DATE0$  	 	
-	DATE1$  	 	
-	DATE10$ 	 	
-	DATE11$ 	 	
-	DATE12$ 	 	
-	DATE13$ 	 	
-	DATE14$ 	 	
-	DATE15$ 	 	
-	DATE16$ 	 	
-	DATE17$ 	 	
-	DATE18$ 	 	
-	DATE19$ 	 	
-	DATE2$  	 	
-	DATE20$ 	 	
-	DATE3$  	 	
-	DATE4$  	 	
-	DATE5$  	 	
-	DATE6$  	 	
-	DATE7$  	 	
-	DATE8$  	 	
-	DATE9$  	 	
-	DAY$    	 	
-	DBASE$  	 	
-	DBTHRS$ 	 	
-	DBUSG$  	 	
-	DEPN$   	 	
-	DEPT$   	 	
-	DFUMAX$ 	 	
-	DIRDRW$ 	Y	
-	DIRRID$ 	 	
-	DIRTYP$ 	Y	
-	DLINE$  	 	
-	DLP$    	 	
-	DRW$    	Y	
-	DRW1$   	Y	
-	DRW10$  	Y	
-	DRW11$  	Y	
-	DRW12$  	Y	
-	DRW13$  	Y	
-	DRW14$  	Y	
-	DRW15$  	Y	
-	DRW16$  	Y	
-	DRW2$   	Y	
-	DRW3$   	Y	
-	DRW4$   	Y	
-	DRW5$   	Y	
-	DRW6$   	Y	
-	DRW7$   	Y	
-	DRW8$   	Y	
-	DRW9$   	Y	
-	DSHRUN$ 	 	
-	DTCTYP$ 	Y	
-	DTM$    	 	
-	DTNAM$  	 	
-	DWCAP$  	 	
-	ECAB$   	 	
-	EDRW$   	Y	
-	ELINE$  	 	
-	EMODE$  	 	
-	ENVSTR$ 	 	
-	ERID$   	 	
-	ERPT$   	 	
-	ESC$    	 	
-	ETYPE$  	Y	
-	F1$     	 	
-	F10$    	 	
-	F2$     	 	
-	F3$     	 	
-	F4$     	 	
-	F5$     	 	
-	F6$     	 	
-	F7$     	 	
-	F8$     	 	
-	F9$     	 	
-	FCAB$   	 	
-	FCC$    	 	
-	FDRW$   	Y	
-	FFTYPE$ 	Y	
-	FIELD$  	 	
-	FKEY$   	 	
-	FMT$    	 	
-	FPAGE$  	 	
-	FRESTR$ 	 	
-	FRPT$   	 	
-	GLBSTR$ 	 	
-	GRAPH$  	 	
-	HLINES$ 	 	
-	ICVAR$  	 	
-	INMSV$  	 	
-	INPUT$  	 	
-	INSTR$  	 	
-	INVAR$  	 	
-	INVR1$  	 	
-	IO$     	 	
-	IP$     	 	
-	LANG$   	 	
-	LCAB$   	 	
-	LDDMP$  	 	
-	LEVEL$  	 	
-	LGLDRW$ 	Y	
-	LGLTYP$ 	Y	
-	LGSDRW$ 	Y	
-	LGSTYP$ 	Y	
-	LIBDRW$ 	Y	
-	LINE$   	 	
-	LINK$   	 	
-	LITEM$  	 	
-	LLP$    	 	
-	LNKDRW$ 	Y	
-	LNKRPT$ 	 	
-	LNKTYP$ 	Y	
-	LOGO$   	 	
-	LOOK$   	 	
-	LRRSD$  	 	
-	MAPER$  	 	
-	MAPNAM$ 	 	
-	MAXCAB$ 	 	
-	MAXCHR$ 	 	
-	MAXDRW$ 	Y	
-	MAXEVR$ 	 	
-	MAXFIL$ 	 	
-	MAXGVR$ 	 	
-	MAXLAB$ 	 	
-	MAXLIN$ 	 	
-	MAXLNS$ 	 	
-	MAXRID$ 	 	
-	MAXRNM$ 	 	
-	MAXRPT$ 	 	
-	MAXRW$  	 	
-	MAXTYP$ 	Y	
-	MAXVAR$ 	 	
-	MESTYP$ 	Y	
-	MODE$   	 	
-	MODE1$  	 	
-	MSEC$   	 	
-	MSGDRW$ 	Y	
-	MSGQ$   	 	
-	MSGRD$  	 	
-	MSGTYP$ 	Y	
-	MSQTYP$ 	Y	
-	MSTRD$  	 	
-	MXDEPN$ 	 	
-	MXRPT$  	 	
-	NET$    	 	
-	NETDRW$ 	Y	
-	NETOUT$ 	 	
-	NETRPT$ 	 	
-	NETSIT$ 	 	
-	NETTYP$ 	Y	
-	ODEPN$  	 	
-	OLINE$  	 	
-	OPRIV$  	 	
-	ORSTAN$ 	 	
-	ORUN$   	 	
-	OSFILS$ 	 	
-	OSITE$  	 	
-	OSPLEN$ 	 	
-	OSTNUM$ 	 	
-	OSUIDS$ 	 	
-	OSUSER$ 	 	
-	OSYSNAM$	 	
-	OUSER$  	 	
-	PLNG$   	 	
-	PRGDRW$ 	Y	
-	PRGM$   	 	
-	PRGTYP$ 	Y	
-	PRTTYP$ 	Y	
-	RID$    	 	
-	RPRIV$  	 	
-	RPT$    	 	
-	RRSID$  	 	
-	RSLANT$ 	 	
-	RUN$    	 	
-	RUNDRW$ 	Y	
-	RUNTYP$ 	Y	
-	SCHRID$ 	 	
-	SCHRPT$ 	 	
-	SCHTYP$ 	Y	
-	SCNH$   	 	
-	SCNV$   	 	
-	SCREEN$ 	 	
-	SECDRW$ 	Y	
-	SECGRP$ 	 	
-	SECRPT$ 	 	
-	SECURE$ 	 	
-	SITE$   	 	
-	SOE$    	 	
-	SOEH$   	 	
-	SOEV$   	 	
-	SPRIV$  	 	
-	STAT1$  	 	
-	STAT2$  	 	
-	STAT3$  	 	
-	STAT4$  	 	
-	STERR$  	 	
-	STNUM$  	 	
-	STSIZE$ 	 	
-	SYSNAM$ 	 	
-	TAB$    	 	
-	TCCS$   	 	
-	TIC$    	 	
-	TIME$   	 	
-	TTYPE$  	 	
-	TYPDRW$ 	Y	
-	TYPE$   	Y	
-	TYPE1$  	Y	
-	TYPE2$  	Y	
-	TYPE3$  	Y	
-	TYPE4$  	Y	
-	TYPE5$  	Y	
-	TYPE6$  	Y	
-	TYPE7$  	Y	
-	TYPE8$  	Y	
-	TYPRD$  	 	
-	TYPTYP$ 	Y	
-	USER$   	 	
-	USRDRW$ 	Y	
-	USRTYP$ 	Y	
-	WND$    	 	
-	WS$     	 	
-	WSIPA$  	 	
-	WSITE$  	 	
-	XDRW$   	Y	
-	XERR$   	 	
-	XFUN$   	 	
-	XKEY$   	 	
-	XLINE$  	 	
-	XRID$   	 	
-	XRPT$   	 	
-	XTYPE$  	Y	
-	YEAR$   	 	
+¬ACDRW$  ¬Y¬
+¬ACTINP$ ¬ ¬
+¬ACTWIN$ ¬ ¬
+¬ACTYPE$ ¬Y¬
+¬ADRW$   ¬ ¬
+¬ADRW1$  ¬ ¬
+¬ADRW10$ ¬ ¬
+¬ADRW11$ ¬ ¬
+¬ADRW12$ ¬ ¬
+¬ADRW13$ ¬ ¬
+¬ADRW14$ ¬ ¬
+¬ADRW15$ ¬ ¬
+¬ADRW16$ ¬ ¬
+¬ADRW2$  ¬ ¬
+¬ADRW3$  ¬ ¬
+¬ADRW4$  ¬ ¬
+¬ADRW5$  ¬ ¬
+¬ADRW6$  ¬ ¬
+¬ADRW7$  ¬ ¬
+¬ADRW8$  ¬ ¬
+¬ADRW9$  ¬ ¬
+¬AEDRW$  ¬ ¬
+¬AETYPE$ ¬ ¬
+¬AKEY$   ¬ ¬
+¬ALERT$  ¬ ¬
+¬ALRTYP$ ¬Y¬
+¬APILVL$ ¬ ¬
+¬AREA$   ¬ ¬
+¬ASPECT$ ¬ ¬
+¬ATCTYP$ ¬Y¬
+¬ATYPE$  ¬ ¬
+¬ATYPE1$ ¬ ¬
+¬ATYPE2$ ¬ ¬
+¬ATYPE3$ ¬ ¬
+¬ATYPE4$ ¬ ¬
+¬ATYPE5$ ¬ ¬
+¬ATYPE6$ ¬ ¬
+¬ATYPE7$ ¬ ¬
+¬ATYPE8$ ¬ ¬
+¬AUXTYP$ ¬Y¬
+¬AXDRW$  ¬Y¬
+¬AXTYPE$ ¬Y¬
+¬BPORT$  ¬ ¬
+¬CAB$    ¬ ¬
+¬CAB1$   ¬ ¬
+¬CALL$   ¬ ¬
+¬CDRW$   ¬Y¬
+¬CELTYP$ ¬Y¬
+¬CERR$   ¬ ¬
+¬CESTYP$ ¬Y¬
+¬CFGDRW$ ¬Y¬
+¬CFGTYP$ ¬Y¬
+¬CHAR$   ¬ ¬
+¬CHKPSW$ ¬ ¬
+¬CHR$    ¬ ¬
+¬COLOR$  ¬ ¬
+¬COMPLV$ ¬ ¬
+¬COORD$  ¬ ¬
+¬CPRIV$  ¬ ¬
+¬CRPT$   ¬ ¬
+¬CSTTYP$ ¬Y¬
+¬CTYPE$  ¬Y¬
+¬CURH$   ¬ ¬
+¬CURSEC$ ¬ ¬
+¬CURV$   ¬ ¬
+¬DASH$   ¬ ¬
+¬DATE0$  ¬ ¬
+¬DATE1$  ¬ ¬
+¬DATE10$ ¬ ¬
+¬DATE11$ ¬ ¬
+¬DATE12$ ¬ ¬
+¬DATE13$ ¬ ¬
+¬DATE14$ ¬ ¬
+¬DATE15$ ¬ ¬
+¬DATE16$ ¬ ¬
+¬DATE17$ ¬ ¬
+¬DATE18$ ¬ ¬
+¬DATE19$ ¬ ¬
+¬DATE2$  ¬ ¬
+¬DATE20$ ¬ ¬
+¬DATE3$  ¬ ¬
+¬DATE4$  ¬ ¬
+¬DATE5$  ¬ ¬
+¬DATE6$  ¬ ¬
+¬DATE7$  ¬ ¬
+¬DATE8$  ¬ ¬
+¬DATE9$  ¬ ¬
+¬DAY$    ¬ ¬
+¬DBASE$  ¬ ¬
+¬DBTHRS$ ¬ ¬
+¬DBUSG$  ¬ ¬
+¬DEPN$   ¬ ¬
+¬DEPT$   ¬ ¬
+¬DFUMAX$ ¬ ¬
+¬DIRDRW$ ¬Y¬
+¬DIRRID$ ¬ ¬
+¬DIRTYP$ ¬Y¬
+¬DLINE$  ¬ ¬
+¬DLP$    ¬ ¬
+¬DRW$    ¬Y¬
+¬DRW1$   ¬Y¬
+¬DRW10$  ¬Y¬
+¬DRW11$  ¬Y¬
+¬DRW12$  ¬Y¬
+¬DRW13$  ¬Y¬
+¬DRW14$  ¬Y¬
+¬DRW15$  ¬Y¬
+¬DRW16$  ¬Y¬
+¬DRW2$   ¬Y¬
+¬DRW3$   ¬Y¬
+¬DRW4$   ¬Y¬
+¬DRW5$   ¬Y¬
+¬DRW6$   ¬Y¬
+¬DRW7$   ¬Y¬
+¬DRW8$   ¬Y¬
+¬DRW9$   ¬Y¬
+¬DSHRUN$ ¬ ¬
+¬DTCTYP$ ¬Y¬
+¬DTM$    ¬ ¬
+¬DTNAM$  ¬ ¬
+¬DWCAP$  ¬ ¬
+¬ECAB$   ¬ ¬
+¬EDRW$   ¬Y¬
+¬ELINE$  ¬ ¬
+¬EMODE$  ¬ ¬
+¬ENVSTR$ ¬ ¬
+¬ERID$   ¬ ¬
+¬ERPT$   ¬ ¬
+¬ESC$    ¬ ¬
+¬ETYPE$  ¬Y¬
+¬F1$     ¬ ¬
+¬F10$    ¬ ¬
+¬F2$     ¬ ¬
+¬F3$     ¬ ¬
+¬F4$     ¬ ¬
+¬F5$     ¬ ¬
+¬F6$     ¬ ¬
+¬F7$     ¬ ¬
+¬F8$     ¬ ¬
+¬F9$     ¬ ¬
+¬FCAB$   ¬ ¬
+¬FCC$    ¬ ¬
+¬FDRW$   ¬Y¬
+¬FFTYPE$ ¬Y¬
+¬FIELD$  ¬ ¬
+¬FKEY$   ¬ ¬
+¬FMT$    ¬ ¬
+¬FPAGE$  ¬ ¬
+¬FRESTR$ ¬ ¬
+¬FRPT$   ¬ ¬
+¬GLBSTR$ ¬ ¬
+¬GRAPH$  ¬ ¬
+¬HLINES$ ¬ ¬
+¬ICVAR$  ¬ ¬
+¬INMSV$  ¬ ¬
+¬INPUT$  ¬ ¬
+¬INSTR$  ¬ ¬
+¬INVAR$  ¬ ¬
+¬INVR1$  ¬ ¬
+¬IO$     ¬ ¬
+¬IP$     ¬ ¬
+¬LANG$   ¬ ¬
+¬LCAB$   ¬ ¬
+¬LDDMP$  ¬ ¬
+¬LEVEL$  ¬ ¬
+¬LGLDRW$ ¬Y¬
+¬LGLTYP$ ¬Y¬
+¬LGSDRW$ ¬Y¬
+¬LGSTYP$ ¬Y¬
+¬LIBDRW$ ¬Y¬
+¬LINE$   ¬ ¬
+¬LINK$   ¬ ¬
+¬LITEM$  ¬ ¬
+¬LLP$    ¬ ¬
+¬LNKDRW$ ¬Y¬
+¬LNKRPT$ ¬ ¬
+¬LNKTYP$ ¬Y¬
+¬LOGO$   ¬ ¬
+¬LOOK$   ¬ ¬
+¬LRRSD$  ¬ ¬
+¬MAPER$  ¬ ¬
+¬MAPNAM$ ¬ ¬
+¬MAXCAB$ ¬ ¬
+¬MAXCHR$ ¬ ¬
+¬MAXDRW$ ¬Y¬
+¬MAXEVR$ ¬ ¬
+¬MAXFIL$ ¬ ¬
+¬MAXGVR$ ¬ ¬
+¬MAXLAB$ ¬ ¬
+¬MAXLIN$ ¬ ¬
+¬MAXLNS$ ¬ ¬
+¬MAXRID$ ¬ ¬
+¬MAXRNM$ ¬ ¬
+¬MAXRPT$ ¬ ¬
+¬MAXRW$  ¬ ¬
+¬MAXTYP$ ¬Y¬
+¬MAXVAR$ ¬ ¬
+¬MESTYP$ ¬Y¬
+¬MODE$   ¬ ¬
+¬MODE1$  ¬ ¬
+¬MSEC$   ¬ ¬
+¬MSGDRW$ ¬Y¬
+¬MSGQ$   ¬ ¬
+¬MSGRD$  ¬ ¬
+¬MSGTYP$ ¬Y¬
+¬MSQTYP$ ¬Y¬
+¬MSTRD$  ¬ ¬
+¬MXDEPN$ ¬ ¬
+¬MXRPT$  ¬ ¬
+¬NET$    ¬ ¬
+¬NETDRW$ ¬Y¬
+¬NETOUT$ ¬ ¬
+¬NETRPT$ ¬ ¬
+¬NETSIT$ ¬ ¬
+¬NETTYP$ ¬Y¬
+¬ODEPN$  ¬ ¬
+¬OLINE$  ¬ ¬
+¬OPRIV$  ¬ ¬
+¬ORSTAN$ ¬ ¬
+¬ORUN$   ¬ ¬
+¬OSFILS$ ¬ ¬
+¬OSITE$  ¬ ¬
+¬OSPLEN$ ¬ ¬
+¬OSTNUM$ ¬ ¬
+¬OSUIDS$ ¬ ¬
+¬OSUSER$ ¬ ¬
+¬OSYSNAM$¬ ¬
+¬OUSER$  ¬ ¬
+¬PLNG$   ¬ ¬
+¬PRGDRW$ ¬Y¬
+¬PRGM$   ¬ ¬
+¬PRGTYP$ ¬Y¬
+¬PRTTYP$ ¬Y¬
+¬RID$    ¬ ¬
+¬RPRIV$  ¬ ¬
+¬RPT$    ¬ ¬
+¬RRSID$  ¬ ¬
+¬RSLANT$ ¬ ¬
+¬RUN$    ¬ ¬
+¬RUNDRW$ ¬Y¬
+¬RUNTYP$ ¬Y¬
+¬SCHRID$ ¬ ¬
+¬SCHRPT$ ¬ ¬
+¬SCHTYP$ ¬Y¬
+¬SCNH$   ¬ ¬
+¬SCNV$   ¬ ¬
+¬SCREEN$ ¬ ¬
+¬SECDRW$ ¬Y¬
+¬SECGRP$ ¬ ¬
+¬SECRPT$ ¬ ¬
+¬SECURE$ ¬ ¬
+¬SITE$   ¬ ¬
+¬SOE$    ¬ ¬
+¬SOEH$   ¬ ¬
+¬SOEV$   ¬ ¬
+¬SPRIV$  ¬ ¬
+¬STAT1$  ¬ ¬
+¬STAT2$  ¬ ¬
+¬STAT3$  ¬ ¬
+¬STAT4$  ¬ ¬
+¬STERR$  ¬ ¬
+¬STNUM$  ¬ ¬
+¬STSIZE$ ¬ ¬
+¬SYSNAM$ ¬ ¬
+¬TAB$    ¬ ¬
+¬TCCS$   ¬ ¬
+¬TIC$    ¬ ¬
+¬TIME$   ¬ ¬
+¬TTYPE$  ¬ ¬
+¬TYPDRW$ ¬Y¬
+¬TYPE$   ¬Y¬
+¬TYPE1$  ¬Y¬
+¬TYPE2$  ¬Y¬
+¬TYPE3$  ¬Y¬
+¬TYPE4$  ¬Y¬
+¬TYPE5$  ¬Y¬
+¬TYPE6$  ¬Y¬
+¬TYPE7$  ¬Y¬
+¬TYPE8$  ¬Y¬
+¬TYPRD$  ¬ ¬
+¬TYPTYP$ ¬Y¬
+¬USER$   ¬ ¬
+¬USRDRW$ ¬Y¬
+¬USRTYP$ ¬Y¬
+¬WND$    ¬ ¬
+¬WS$     ¬ ¬
+¬WSIPA$  ¬ ¬
+¬WSITE$  ¬ ¬
+¬XDRW$   ¬Y¬
+¬XERR$   ¬ ¬
+¬XFUN$   ¬ ¬
+¬XKEY$   ¬ ¬
+¬XLINE$  ¬ ¬
+¬XRID$   ¬ ¬
+¬XRPT$   ¬ ¬
+¬XTYPE$  ¬Y¬
+¬YEAR$   ¬ ¬

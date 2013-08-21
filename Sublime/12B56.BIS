@@ -16,17 +16,17 @@
 @0001:(<category>,<status>) .
 @     ldv <status>h1 .
 @     chg <ns>h1 CHR$254 .
-@     srh,3950,d,1,,,lin+1 'd' 'category' 	,<category>  gto lin+4 .
+@     srh,3950,d,1,,,lin+1 'd' 'category' ¬,<category>  gto lin+4 .
 @     mbx,ok,E,'Cool ICE Admin - Export Category' \
       "Category (<category>(p)) does not exist."  O,(0199) ; .
 @     rnm -1 .
 @.
 @.   **********  Initialize  **************************************************
-@     srh,3950,D,1,,,0091 'dp' 2-20 '	',<category>  rnm -1 .    Category details
+@     srh,3950,D,1,,,0091 'dp' 2-20 '¬',<category>  rnm -1 .    Category details
 @     ldv,p <file>s256=<path>(p)'CTGTBL.BIS' .            Verify Category Table
-@     lzr,-1 ,<cc>i4  lch,-1,,lin+1 'af' 1-<cc> '	'/<ns>  rnm -1 .
+@     lzr,-1 ,<cc>i4  lch,-1,,lin+1 'af' 1-<cc> '¬'/<ns>  rnm -1 .
 @     pcw,-1,2,0091 <file> .                                 Export CTGTBL file
-@     fdr,-1 'a' 2-20 '	',<category> .
+@     fdr,-1 'a' 2-20 '¬',<category> .
 @     rln 'Cab','Dw','Rpt','SvcCab','Sd','StyCab','St','StyRpt','CtgLoc' \
       <idxcab>a,<idxdw>a,<idxrpt>i,<svccab>a,<svcdrw>a,\
       <stycab>a,<stydw>a,<styrpt>a,<ctgloc>a .
@@ -43,7 +43,7 @@
       <user>,<dept>,<pwd>,<status>) .           Net Open to Remote Mapper Server
 @     if <status> eq 9  gto 0091 ; .
 @0012:if <ctgloc> eq Rmt . ; drw,<svccab>,<svcdrw>,0096 <width> .
-@     fdr,3950,E,63,,,0095 '' 'Width' '	',<width>/r,999999 .  Get Working Drawer
+@     fdr,3950,E,63,,,0095 '' 'Width' '¬',<width>/r,999999 .  Get Working Drawer
 @     rln 'Cab','Dw' <xcab>,<xdrw> .
 @     if <xcab> eq ecab  ldv,w <xcab>=3950 ; .
 @     if <ctgloc> eq Rmt  drw,<xcab>,<xdrw>,0098 ; .
@@ -60,19 +60,19 @@
 @.   TXT,"",<CMP1>,04,05,03,<boxsiz>,bla/whi,lbs <T41>i6 .
 @.   TXT,"0 % completed ",<CMP1>,05,13,01,17,blu/whi,rs <T42>i6 .
 @     ldv <trpt>i6=0,<nrpt>i6=0 .
-@     srh,-1 'dn@l(*)' 'StyCab' '	',@@@@ <vlines>i6 .       Nbr of Style Guides
+@     srh,-1 'dn@l(*)' 'StyCab' '¬',@@@@ <vlines>i6 .       Nbr of Style Guides
 @     inc,<vlines> <trpt> .
-@     srh,-1 'dn@l(*)' 'Cab' '	',@@@@ <vlines>i6 .       Nbr of Service Reports
+@     srh,-1 'dn@l(*)' 'Cab' '¬',@@@@ <vlines>i6 .       Nbr of Service Reports
 @     inc,<vlines> <trpt> .
 @.   **********  Export Services Style Guides  ********************************
-@0013:srh,-1,,,0016 'dn@l(*)' 'StyCab' '	',@@@@  rnm -2 . Get Service Style Guid
+@0013:srh,-1,,,0016 'dn@l(*)' 'StyCab' '¬',@@@@  rnm -2 . Get Service Style Guid
 @     fnd,-2 '' 2-1 '*',= ,<ln>i6 .
 @0014:inc <ln> .
 @     rdl,-2,<ln>,0016 'StyCab','St','StyRpt' <stycab>a,<stydw>a,<styrpt>a .
 @     ldv,p <c>a4=<stycab>,<d>a1=<stydw>,<r>a4=<styrpt>,<fileid>a9=<r><d><c> .
 @     ldv,p <file>s85=<path>(p)SSTY<fileid>'.BIS' .
 @     lzr,<stycab>,<stydw>,<styrpt> ,<cc>i4 .
-@     lch,<stycab>,<stydw>,<styrpt>,,lin+1 'af' 1-<cc> '	'/<ns> .
+@     lch,<stycab>,<stydw>,<styrpt>,,lin+1 'af' 1-<cc> '¬'/<ns> .
 @.ew pcw,-0,2,091 <file> .    Export Service Style Guide
 @.   **********  Update Completion Message  ***********************************
 @.   inc <nrpt> chg <pct>i3 <nrpt> *100 /<trpt> .     Update Completion Message
@@ -82,7 +82,7 @@
 @.   SHW,<CMP1> .
 @     gto 0014 .
 @.   **********  Export Services  *********************************************
-@0016:srh,-1,,,0018 'dn@l(*)' 'Cab' '	',@@@@  rnm -2 .       Get Service Reports
+@0016:srh,-1,,,0018 'dn@l(*)' 'Cab' '¬',@@@@  rnm -2 .       Get Service Reports
 @     fnd,-2 '' 2-1 '*',= ,<ln>i6 .
 @0017:inc <ln> .
 @     rdl,-2,<ln>,0018 'Service','Cab','Dw','Rpt','SvcTyp' \
@@ -113,19 +113,19 @@
 @     ldv,p <srvs>s40='('<service>(p)')' .
 @     ldv,p <file>s256=<path>(p)<srvs>(p)<srpt><sdw><scab>'.'<ext> .
 @     ldv <startln>i1=2,<binary>a1=n .
-@     fdr,3950,E,44,,,0089 '' 'Obj' '	',<svctyp> .
+@     fdr,3950,E,44,,,0089 '' 'Obj' '¬',<svctyp> .
 @     rln 'Bn' <binary> .
 @     if <binary> eq Y  if <frrtyp> eq 1 . ;\                Type does not match
      if <binary> eq N  if <frrtyp> eq 0 . ; gto 0088 .       Type does not match
 @     if <binary> eq y  ldv <startln>=3 ; .
-@     lzr,-3 ,<cc>i4  lch,-3,,lin+1 'af' 1-<cc> '	'/<ns>  rnm -3 .
+@     lzr,-3 ,<cc>i4  lch,-3,,lin+1 'af' 1-<cc> '¬'/<ns>  rnm -3 .
 @     pcw,-3,<startln>,0091 <file> .                      Export Service Report
 @.   **********  Update Completion Message  ***********************************
 @0207:gto 0017 .
 @.   **********  Export Services Table  ***************************************
 @0018:ldv,p <c>a4=<idxcab>,<d>a1=<idxdw>,<r>a4=<idxrpt>,<fileid>a9=<r><d><c> .
 @     ldv,p <file>s85=<path>(p)'SVCTBL.BIS' .
-@     lzr,-1 ,<cc>i4  lch,-1,,lin+1 'af' 1-<cc> '	'/<ns>  rnm -1 .
+@     lzr,-1 ,<cc>i4  lch,-1,,lin+1 'af' 1-<cc> '¬'/<ns>  rnm -1 .
 @     pcw,-1,2,0091 <file> .                              Export Services Table
 @.   *******************  NORMAL RETURN  **************************************
 @0019:ldv <status>=0 .
@@ -143,7 +143,7 @@
 of the object.//If you continue the object <t1> will be skipped.//\
 Do you want to continue?" N,(0091),Y,(0207) .
 @0089:ldv,pu <t1>s20=<service> .
-@     srh,-1 'dpn' 'Service' '	',<service>  rnm -1 .   Remove from Service Table
+@     srh,-1 'dpn' 'Service' '¬',<service>  rnm -1 .   Remove from Service Table
 @     MBX,YN,E,'Cool ICE Admin - Export Category' \
      "Object type <svctyp> is not defined in the object table.//\
 If you continue the object <t1> will be skipped.//\
@@ -169,7 +169,7 @@ Work Drawer<t2> function." O,(0091) .
 @     MBX,ok,E,'Cool ICE Admin - Export Category' \
 "Drawer <tdc> containing objects for category <t1> does not exist." O,(0091) .
 @0097:ldv,puw <t1>s20=<service>,<t2>a6=<frwidth> .
-@     srh,-1 'dpn' 'Service' '	',<service>  rnm -1 .   Remove from Service Table
+@     srh,-1 'dpn' 'Service' '¬',<service>  rnm -1 .   Remove from Service Table
 @     MBX,YN,E,'Cool ICE Admin - Export Category' \
 "Cannot open object <t1> from remote system.//A work drawer with a width of \
 <t2> characters is required to transfer binary objects from this remote \
@@ -191,7 +191,7 @@ Allocate a work drawer using <t2>Allocate Work Drawer<t2> function." O,(0091) .
 @     rln 30-40 <aspals> .                                  ASP Directory Alias
 @     fdr,-1,,,lin+2 '' 'Service',23-6 '*',<service>,AspNam .      ASP File Name
 @     rln 30-30 <aspnam> .                                         ASP File Name
-@     fdr,3950,E,55,,,lin+1 '' 'Alias' '	',<aspals> \
+@     fdr,3950,E,55,,,lin+1 '' 'Alias' '¬',<aspals> \
       rln 'Directory' <aspdir>s  gto 0161 .
 @     ldv,pu <t1>s40=<aspals>,<t2>s20=<service> .
 @     MBX,YN,Q,'Cool ICE Admin - Open ASP Script Object' \

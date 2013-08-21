@@ -51,7 +51,7 @@
 @     DVS,EDRW$,0099 'LL','ST','IF','GT','VS','DS','UL','VN' \
       <LL>a,<ST>h,<IF>h,<GT>h,<VS>h,<DS>h,<UL>h,<VN>h .
 @     LDV <LL>=4,<ST>=Y,<IF>=Y,<GT>=Y,<VS>=N,<DS>=Y,<UL>=Y,<VN>=Y .
-@     FDR,EDRW$,0099,,,lin+3 '' 'User-ID' 	,USER$ .
+@     FDR,EDRW$,0099,,,lin+3 '' 'User-ID' ¬,USER$ .
 @     RLN 'LL','ST','IF','GT','VS','DS','UL','VN' \
       <LL>,<ST>,<IF>,<GT>,<VS>,<DS>,<UL>,<VN> .
 @.
@@ -131,7 +131,7 @@
 @     LDV <CAX>a4=<CAB>  IF <DRW> eq 'A'  LDV <CAX>=0 ; .
 @     IF 0 eq SECDRW$,SECRPT$,SECGRP$,(0185) ; CHG <CLM>i3 56 + SECGRP$ .
 @     RDL,SECDRW$,SECRPT$,6,0185 1-1 .
-@     RLN,,0185 1-1,29-9,<CLM>-1 <LT>h,<DC>a,<PER>h  IF <LT> ne '	',(lin-0) ; .
+@     RLN,,0185 1-1,29-9,<CLM>-1 <LT>h,<DC>a,<PER>h  IF <LT> ne '¬',(lin-0) ; .
 @     LDV,l <DC>  IF <DC>(2-0) eq <CAX>  IF <DC>(1-1) eq <DRW> . ; GTO lin-1 .
 @     IF <PER> ne 'W'  IF <PER> ne 'R',(0185) ; .
 @     IF <CAB> eq <ODD>  LDV <PER>=R ; .
@@ -248,14 +248,14 @@ Original run script is not automatically replaced.
 @     IF <S8> eq 1  LDV <VN>=Y . ; LDV <VN>=N .
 @.
 @     LOK,EDRW$,0099 .
-@     FND,EDRW$,0099,,lin+1 '' 'User-ID' 	,USER$ ,<LIN>i6  GTO lin+6 .
+@     FND,EDRW$,0099,,lin+1 '' 'User-ID' ¬,USER$ ,<LIN>i6  GTO lin+6 .
 @     LN+,EDRW$,0099,5,1 .
-@     WRL,EDRW$,0099,6 'User-ID(1-11)' 	,USER$ .
-@     SRR,EDRW$,0099 '' 'User-ID' 	,1 .
+@     WRL,EDRW$,0099,6 'User-ID(1-11)' ¬,USER$ .
+@     SRR,EDRW$,0099 '' 'User-ID' ¬,1 .
 @     LOK,EDRW$,0099 .
-@     FND,EDRW$,0099,,lin+3 '' 'User-ID' 	,USER$ ,<LIN>i6 .
+@     FND,EDRW$,0099,,lin+3 '' 'User-ID' ¬,USER$ ,<LIN>i6 .
 @     WRL,EDRW$,0099,<LIN> 'LL','ST','IF','GT','VS','DS','UL','VN' \
-      	,<LL>,<ST>,<IF>,<GT>,<VS>,<DS>,<UL>,<VN> .
+      ¬,<LL>,<ST>,<IF>,<GT>,<VS>,<DS>,<UL>,<VN> .
 @     ULK .
 @.
 @     CLS,<WIN1>  LDV <WIN1>=0 .

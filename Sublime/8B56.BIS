@@ -50,9 +50,9 @@
 @     CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
 @.
 @.    #  Create batch file
-@ rdb IF <OSVER> eq 5  \
-        SRH,BATCHTEMP_,,,0000 'dp' 'OS' 	,'WINDOWS XP' . ; \
-        SRH,BATCHTEMP_,,,0000 'dp' 'OS' 	,'WINDOWS' .
+@     IF <OSVER> eq 5  \
+        SRH,BATCHTEMP_,,,0000 'dp' 'OS' ¬,'WINDOWS XP' . ; \
+        SRH,BATCHTEMP_,,,0000 'dp' 'OS' ¬,'WINDOWS' .
 @     LZR,-0 ,<CC>I3,<SLN>I7  LOK,-0  LN-,-0,2,<SLN>  ULK .
 @     RNM -1  LZR,-1 ,<CC>I3,<SLN>I7  BRK,0,I .
 @     RDL,-1,<SLN>,lin+3 1-<CC> <BATPRGM>s  INC <SLN> .
@@ -72,10 +72,10 @@
 @.
 @.    #  Save programe .exe path to SUBLPATH table
 @     LDV,p <APPPATH>=<PTH>(p)'\'<FIL>(p) .
-@     FDR,SUBLPATH_ '' 'User ID','Computer Name' 	,<USER>,<COMPUTER> ,<LNS>i3 .
+@     FDR,SUBLPATH_ '' 'User ID','Computer Name' ¬,<USER>,<COMPUTER> ,<LNS>i3 .
 @     LOK,SUBLPATH_ .
 @     IF <LNS> gt 0 . ; LN+,SUBLPATH_,,1  LDV <LNS>i7=STAT1$ .
-@     WRL,SUBLPATH_,<LNS>,y 'User ID','Computer Name','App Path' 	,\
+@     WRL,SUBLPATH_,<LNS>,y 'User ID','Computer Name','App Path' ¬,\
         <USER>,<COMPUTER>,<APPPATH> .
 @     ULK .
 @.

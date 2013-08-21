@@ -113,7 +113,10 @@
 @     LDV,p <EXPATH>s256=<PTH>(p)<FOLDER>(p)'\' .
 @     CALL,SUBLCOMMON_ chkMkDir_ (<PTH>,<FOLDER>,<EXPATH>) .
 @     LDV,p <EXPFILE>s256=<EXPATH>(p)<PROGRAM> .
-@     PCW,<CAB>,<DRW>,<RPT>,2 <EXPFILE> .                                       Write file
+@     RSL,<CAB>,<DRW>,<RPT> .
+@     if <RTYPE> eq 1,(lin2) .                                                  Skip binary
+@     CALL,SUBLCOMMON_ charReplace_ ('export') .                                Replace tab character
+@     PCW,-0,2 <EXPFILE> .                                                      Write file
 @     ESR .
 @.
 @.    # Check if drawer exists... This should work with @drw but for some reason it's not

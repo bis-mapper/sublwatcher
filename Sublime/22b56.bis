@@ -24,7 +24,7 @@
 @     RSR,SUBLCOMMON_ configVars_ .
 @.
 @.    #  Display GROWL notification
-@     FDR,GROWLALERTS_ '' 'Type' 	,<TYPE> .
+@     FDR,GROWLALERTS_ '' 'Type' ¬,<TYPE> .
 @     RLN 'AlertIcon' <ALERTICON>s .
 @.
 @.    #  Load APP exe and paramaters

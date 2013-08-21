@@ -14,7 +14,7 @@
 @0001:(<CTL>,<FILE>,<RUNNAME>,<STATUS>) .
 @.
 @     RSR,SUBLCOMMON_ configVars_ .
-@     FDR,SUBLUTILS_ '' 'Util' 	,<RUNNAME>  RLN 'Rid' <RRID>i .
+@     FDR,SUBLUTILS_ '' 'Util' ¬,<RUNNAME>  RLN 'Rid' <RRID>i .
 @     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
 @     PCR,0,I,-0,n,n,0199 <FILE>  RNM -1  RSL,-1 .
 @.

@@ -11,9 +11,10 @@
 @.    #---------------------------------------------------------------------------------------------
 @.
 @.    # Test Setup
-@     LDV <CTL>s20='help @ldv' .
-@     LDV <FILE>s0,<RUNAME>s0 .
-@     CALL 0001 (<TITLE>,<TYPE>,<MSG>,<STATUS>h1) .
+@     LDV <TITLE>s20='subl msg' .
+@     LDV <TYPE>h8='success' .
+@     LDV <MSG>s80='this is a test' .
+@     CALL 0001 (<TITLE>,<TYPE>,<MSG>) .
 @     GTO END .
 @.
 @0001:(<CTL>,<FILE>,<RUNNAME>,<STATUS>) .

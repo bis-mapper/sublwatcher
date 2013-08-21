@@ -24,7 +24,7 @@
 @     return .
 @.
 @.    #  Load the paramaters from the config table
-@0005:SRH,SUBLCONFIG_ 'dn@' 'Parameter' 	,@  RNM -1 .
+@0005:SRH,SUBLCONFIG_ 'dn@' 'Parameter' ¬,@  RNM -1 .
 @     LZR,-0 ,,<HLN>i7  .
 @     DVS,-0 'Value' <T>s  DEF,s <LEN>i3,<T> .
 @0006:INC <HLN> .
@@ -41,13 +41,13 @@
 @0010:(<CAB>,<DRW>,<RPT>,<SRVS>) .
 @     LDV,l <CAB>  LDV,r <RPT>  LDV <SVC>s20 .
 @     LZR,3950,d,1,0013 .
-@     SRH,3950,d,1,,,0013 'ad' 'SvcCab','sd' 	,\
+@     SRH,3950,d,1,,,0013 'ad' 'SvcCab','sd' ¬,\
         <CAB>,<DRW> .
 @     LZR,-0 ,,<HLN>i7  INC <HLN> .
 @     RDL,-0,<HLN>,0013 'cab','dw','rpt' \
         <ICAB>h,<IDW>h,<IRPT>h .
 @     FDR,<ICAB>,<IDW>,<IRPT>,,,lin+2 '' \
-        'cab','dw','rpt' 	,<CAB>,<DRW>,<RPT> .
+        'cab','dw','rpt' ¬,<CAB>,<DRW>,<RPT> .
 @     RLN 'service' <SVC>s .
 @     LDV,p <SRVS>='('<SVC>(p)')' .
 @0013:return .
@@ -61,7 +61,7 @@
 @.
 @.    #  Get computer name
 @0020:(<COMPUTER>) .
-@     FDR,SUBLCONFIG_ '' 'Parameter' 	,'BTEMP' .
+@     FDR,SUBLCONFIG_ '' 'Parameter' ¬,'BTEMP' .
 @     RLN 'Parameter','Value','Ty','Siz','Opt' \
         <PARAM>s,<VALUE>s,<TY>h,<SIZ>i,<OPT>h .
 @     LDV <'>h1=TIC$ .
@@ -82,7 +82,7 @@
 @.    @. #  Find program in folder(s) and return filepath
 @.    @  CALL,SUBLCOMMON_ searchFolders_ (<FOLDER>,<PROGRAM>,<FILE>s256) .
 @0025:(<FLDRPATH>,<PROGRAM>,<FILE>) .
-@     FDR,SUBLCONFIG_ '' 'Parameter' 	,'BTEMP' .
+@     FDR,SUBLCONFIG_ '' 'Parameter' ¬,'BTEMP' .
 @     RLN 'Parameter','Value','Ty','Siz','Opt' \
         <PARAM>s,<VALUE>s,<TY>h,<SIZ>i,<OPT>h .
 @     LDV <'>h1=TIC$ .
@@ -112,14 +112,14 @@
 @.
 @.    #  Get computer name
 @     CALL,SUBLCOMMON_ getCompName_ (<COMPUTER>s30) .
-@     FDR,SUBLPATH_,,,lin+2 ' ' 'User ID','Computer Name' 	,<USER>,<COMPUTER> . Get Application Path
+@     FDR,SUBLPATH_,,,lin+2 ' ' 'User ID','Computer Name' ¬,<USER>,<COMPUTER> . Get Application Path
 @     RLN 'apppath' <APPPATH>s  GTO 0041 .                                      Sublime.Exe
 @     CALL,SUBLSETUP_ 0001 (<USER>,<APPPATH>s256) .                             Setup
 @0041:RETURN .
 @.
 @.    #  Get Windows Version
 @0045:(<VER>) .
-@     FDR,SUBLCONFIG_ '' 'Parameter' 	,'BTEMP' .
+@     FDR,SUBLCONFIG_ '' 'Parameter' ¬,'BTEMP' .
 @     RLN 'Parameter','Value','Ty','Siz','Opt' \
         <PARAM>s,<VALUE>s,<TY>h,<SIZ>i,<OPT>h .
 @     LDV <'>h1=TIC$ .
@@ -137,19 +137,37 @@
 @     CALL 0045 (<OSVER>i1) .
 @     LDV <'>h1=TIC$ .
 @     IF <OSVER> eq 5 . ; GTO 0051 .                                            Windows XP
-@     FDR,SUBLCONFIG_ '' 'Parameter' 	,'BTEMP' .
+@     FDR,SUBLCONFIG_ '' 'Parameter' ¬,'BTEMP' .
 @     RLN 'Parameter','Value','Ty','Siz','Opt' \
         <PARAM>s,<VALUE>s,<TY>h,<SIZ>i,<OPT>h .
 @     XQT '@ ldv'<OPT>(p)' <'<PARAM>(p)'>'<TY><SIZ>(p)'='<'><VALUE><'> .
 @     LDV,p <CHGSFILE>=<BTEMP>\changes.txt .
 @     GTO 0054 .
-@0051:FDR,SUBLCONFIG_ '' 'Parameter' 	,'CHGSFILE' .
+@0051:FDR,SUBLCONFIG_ '' 'Parameter' ¬,'CHGSFILE' .
 @     RLN 'Parameter','Value','Ty','Siz','Opt' \
         <PARAM>s,<VALUE>s,<TY>h,<SIZ>i,<OPT>h .
 @     LCV,lin+1 '' <VALUE> '$'  LDV <'>h0 .                                     Is Reserve Word?
 @     LCV,lin+1 '' <VALUE> '<'  LDV <'>h0 .                                     Is Variable
 @     XQT '@ ldv'<OPT>(p)' <'<PARAM>(p)'>'<TY><SIZ>(p)'='<'><VALUE><'> .
 @0054:RETURN .
+@.
+@.    #  Replace tab character with special character
+@.    #  Pass 'export' to convert tab to special
+@.    #  Pass 'import' to convert special to tab
+@0055:(<direction>) .
+@     rnm -1 .
+@     CHG <NS>h1 CHR$254  LZR,-1 ,<CC>i4 .
+@.
+@     if <direction> eq export . ; gto 0056 .
+@     LCH,-1,,lin+1 'af' 1-<CC>  /''  RNM -1 .
+@     LCH,-1,,lin+1 'af' 1-<CC> TAB$/<NS>  RNM -1 .
+@     gto 0059 .
+@.
+@0056:if <direction> eq import . ; gto 0059 .
+@     LCH,-1,,lin+1 'af' 1-<CC>  /''  RNM -1 .
+@     LCH,-1,,lin+1 'af' 1-<CC> <NS>/TAB$  RNM -1 .
+@.
+@0059:return .
 @.
 @.    #  Errrrrrorrrr
 @0198:.
