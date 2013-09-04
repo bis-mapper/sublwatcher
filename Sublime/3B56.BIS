@@ -140,7 +140,7 @@
 @.    #  Check if brand new report
 @     LZR,<CAB>,<DRW>,<RPT>,lin+1  LDV <EXISTS>h1='Y'  GTO 0050 .
 @     LDV <EXISTS>h1='N',<MSG>s256='Can not create brand new file.' .
-@     LDV <MSG>=<MSG>'This feature isn't available yet.' .
+@     LDV <MSG>=<MSG>'This feature isnTIC$t available yet.' .
 @.ew  MBX,OK,S,'Sublwatcher: Warning!' "<MSG>(p)" O,(0036) .
 @     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
 @     GTO 0036 .
@@ -169,6 +169,7 @@
 @0061:.
 @     RSL,-4 .
 @     CALL,SUBLCOMMON_ charReplace_ ('import') .                                Replace tab character
+@     RNM -4 .
 @.
 @     DFU <CAB>,<DRW>,<RPT> .
 @     REP,-4,<CAB>,<DRW>,<RPT> .

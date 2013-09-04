@@ -157,14 +157,15 @@
 @0055:(<direction>) .
 @     rnm -1 .
 @     CHG <NS>h1 CHR$254  LZR,-1 ,<CC>i4 .
+@     CHG <NS1>h1 CHR$302 .
+@     LDV <CHAR>h0 .
 @.
 @     if <direction> eq export . ; gto 0056 .
-@     LCH,-1,,lin+1 'af' 1-<CC>  /''  RNM -1 .
 @     LCH,-1,,lin+1 'af' 1-<CC> TAB$/<NS>  RNM -1 .
 @     gto 0059 .
 @.
 @0056:if <direction> eq import . ; gto 0059 .
-@     LCH,-1,,lin+1 'af' 1-<CC>  /''  RNM -1 .
+@     LCH,-1,,lin+1 'af' 1-<CC> <NS1><NS>/TAB$  RNM -1 .
 @     LCH,-1,,lin+1 'af' 1-<CC> <NS>/TAB$  RNM -1 .
 @.
 @0059:return .

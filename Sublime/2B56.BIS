@@ -44,13 +44,16 @@
 @.    #  If it does exist load <FILE> to current location
 @     LDV <FOLDER>s256=<DATADIR>(p)'\' .
 @     LDV <PROGRAM>s40=<SRVS><RPT>(p)<DRW>(p)<CAB>(p)<EXT> .
-@.    CALL,SUBLCOMMON_ searchFolders_ (<FOLDER>,<PROGRAM>,<FILE>s256) .
-@.    IF <FILE> eq ' ' . ; GTO 0015 .
-@.    LDV <ACT>h4=DIR,<PTH>s256 .
-@.    CALL,EDRW$,0004 0001 (<ACT>,<PTH>s256,<FIL>s256,'','',<TYP>h1,<STS>h3) .
-@.    IF <STS> eq OK . ; GTO 0199 .
-@.    LDV <FILE>s256=<PTH>(p)'\'<PROGRAM> .
-@     LDV <FILE>s256=<FOLDER>(P)<PROGRAM> .
+@     CALL,SUBLCOMMON_ getOsVer_ (<OSVER>i1) ..
+@     IF <OSVER> gt 5 . ; gto 0014 .
+@     CALL,SUBLCOMMON_ searchFolders_ (<FOLDER>,<PROGRAM>,<FILE>s256) .
+@     IF <FILE> eq ' ' . ; GTO 0015 .
+@     LDV <ACT>h4=DIR,<PTH>s256 .
+@     CALL,EDRW$,0004 0001 (<ACT>,<PTH>s256,<FIL>s256,'','',<TYP>h1,<STS>h3) .
+@     IF <STS> eq OK . ; GTO 0199 .
+@     LDV <FILE>s256=<PTH>(p)'\'<PROGRAM> .
+@     GTO 0015 .
+@0014:LDV <FILE>s256=<FOLDER>(P)<PROGRAM> .
 @0015:LDV,p <FILE> .
 @.
 @     RSL,<CAB>,<DRW>,<RPT> .                                                   Get result
