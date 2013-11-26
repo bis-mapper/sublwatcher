@@ -62,7 +62,10 @@
 @     PCW,-0 <BATFILE> .
 @.
 @.    #  Make sure exploere utility is loaded onto machine
-@     CALL,EDRW$,0006 0001('MFXFILE',<PTX>s64,<PRG>s30,<STS>h3) .
+@     LZR,SUBLDEP_ ,,<HLN>i3 .
+@     INC <HLN>  RDL,SUBLDEP_,<HLN>,lin3 'NAME' <DEPNAME>s .
+@     CALL,EDRW$,0006 0001(<DEPNAME>,<PTX>s64,<PRG>s30,<STS>h3) .
+@     GTO LIN-2 .
 @.
 @.    #  Open windows explorer using MFXFILE.EXE
 @     LDV <ACT>h4=OPEN .

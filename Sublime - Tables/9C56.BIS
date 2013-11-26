@@ -13,4 +13,5 @@
 ¬BUILD       ¬    ¬ ¬ 17¬Build your application for production use
 ¬UPDATEVER   ¬    ¬ ¬ 17¬Update application version info
 ¬BDT         ¬    ¬ ¬ 17¬Build your define table
-
+¬DIF         ¬    ¬ ¬ 24¬Get a diff of the program you have open
+¬DIFF        ¬    ¬ ¬ 24¬Get a diff of the program you have open

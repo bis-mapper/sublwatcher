@@ -105,7 +105,7 @@
         ¬,<EVENT>,<RUN>,USER$,DATE11$,TIME$,<FILE>,<OBJ> .
 @     CMU .
 @.
-@     IF <EVENT> eq 'deleted',(0036) .                                          File deleted?
+@.ew  IF <EVENT> eq 'deleted',(0036) .                                          File deleted?
 @     IF <BISCMD> eq 'y',(0036) .                                               File deleted?
 @.
 @.    #  Make sure its a valid MAPPER report
@@ -140,7 +140,7 @@
 @.    #  Check if brand new report
 @     LZR,<CAB>,<DRW>,<RPT>,lin+1  LDV <EXISTS>h1='Y'  GTO 0050 .
 @     LDV <EXISTS>h1='N',<MSG>s256='Can not create brand new file.' .
-@     LDV <MSG>=<MSG>'This feature isn't available yet.' .
+@     LDV <MSG>=<MSG>'This feature isnTIC$t available yet.' .
 @.ew  MBX,OK,S,'Sublwatcher: Warning!' "<MSG>(p)" O,(0036) .
 @     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
 @     GTO 0036 .
@@ -169,10 +169,14 @@
 @0061:.
 @     RSL,-4 .
 @     CALL,SUBLCOMMON_ charReplace_ ('import') .                                Replace tab character
+@     RNM -4 .
 @.
-@     DFU <CAB>,<DRW>,<RPT> .
-@     REP,-4,<CAB>,<DRW>,<RPT> .
-@     CMU .
+@     LOK,<CAB>,<DRW>,<RPT>,LIN1  GTO 0063 .
+@     LDV <MSG>s80='Updating of report '<RPT>(p)<DRW>(p)<CAB>(p)' is in progress...' .
+@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0036 .
+@0063:REP,-4,<CAB>,<DRW>,<RPT> .
+@     ULK .
 @     GTO 0036 .
 @.
 @.    #  Start over and keep re-checking

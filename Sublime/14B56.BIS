@@ -29,6 +29,7 @@
 @.    # Find File
 @     PCR,0,I,-0,n,n,lin+1 <BISCMD>  GTO 0002 .                                 File Exist?
 @     LDV <STATUS>=9 .
+@     GTO 0199 .
 @     MBX,ok,E,'BisCmd' \
       "Could not find the BisCmd.Bis file."  O,(0199) .
 @0002:RNM -2 .
@@ -38,13 +39,13 @@
 @     LDV,p <FILEOUTPUT> .
 @.
 @.    #  File contains  "User entered input|c:\temp\example\file.bis"
-@     LCV 'b1' <FILEOUTPUT> '|' <VPOS>i3  DEC <VPOS> .
+@     LCV,lin3 'b1' <FILEOUTPUT> '|' <VPOS>i3  DEC <VPOS> .
 @     LDV <CTL>s80=<FILEOUTPUT>(1-<VPOS>)  INC,2 <VPOS> .
 @     LDV <FILE>s256=<FILEOUTPUT>(<VPOS>-0) .
 @.
 @.    # Read file name
 @     CALL,SUBLCOMMON_ getFileName_ (<FILE>,<RUN>s60) .                         Extracts File Name from path
-@     LCV,0199 'b99' <RUN> '.bis'/'' .                                          Remove file type
+@.ew  LCV,0199 'b99' <RUN> '.bis'/'' .                                          Remove file type
 @.
 @     IF <CTL> eq ''  GTO 0199 .                                                Nothing entered?
 @.

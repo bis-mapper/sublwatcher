@@ -9,15 +9,15 @@
 @.
 @.    #  Break apart <RUN> into useable <CAB>,<DRW>,<RPT>
 @0001:(<RUN>,<CAB>,<DRW>,<RPT>) .
-@     LCV,lin+1 b1 <RUN> 'a' <ALPHA>a1  GTO 0002 .
-@     LCV,lin+1 b1 <RUN> 'b' <ALPHA>a1  GTO 0002 .
-@     LCV,lin+1 b1 <RUN> 'c' <ALPHA>a1  GTO 0002 .
-@     LCV,lin+1 b1 <RUN> 'd' <ALPHA>a1  GTO 0002 .
-@     LCV,lin+1 b1 <RUN> 'e' <ALPHA>a1  GTO 0002 .
-@     LCV,lin+1 b1 <RUN> 'f' <ALPHA>a1  GTO 0002 .
-@     LCV,lin+1 b1 <RUN> 'g' <ALPHA>a1  GTO 0002 .
-@     LCV,lin+1 b1 <RUN> 'h' <ALPHA>a1  GTO 0002 .
-@     LCV,lin+1 b1 <RUN> 'i' <ALPHA>a1 .
+@     LCV,lin+1 b1 <RUN> 'a' <ALPHA>i3  GTO 0002 .
+@     LCV,lin+1 b1 <RUN> 'b' <ALPHA>i3  GTO 0002 .
+@     LCV,lin+1 b1 <RUN> 'c' <ALPHA>i3  GTO 0002 .
+@     LCV,lin+1 b1 <RUN> 'd' <ALPHA>i3  GTO 0002 .
+@     LCV,lin+1 b1 <RUN> 'e' <ALPHA>i3  GTO 0002 .
+@     LCV,lin+1 b1 <RUN> 'f' <ALPHA>i3  GTO 0002 .
+@     LCV,lin+1 b1 <RUN> 'g' <ALPHA>i3  GTO 0002 .
+@     LCV,lin+1 b1 <RUN> 'h' <ALPHA>i3  GTO 0002 .
+@     LCV,lin+1 b1 <RUN> 'i' <ALPHA>i3 .
 @0002:LDV <DRW>=<RUN>(<ALPHA>-1)  DEC <ALPHA> .
 @     LDV <RPT>=<RUN>(1-<ALPHA>)  INC,2 <ALPHA> .
 @     LDV <CAB>=<RUN>(<ALPHA>-0) .
@@ -157,14 +157,19 @@
 @0055:(<direction>) .
 @     rnm -1 .
 @     CHG <NS>h1 CHR$254  LZR,-1 ,<CC>i4 .
+@     CHG <NS1>h1 CHR$302 .
+@     LDV <CHAR>h0 .
 @.
 @     if <direction> eq export . ; gto 0056 .
-@     LCH,-1,,lin+1 'af' 1-<CC>  /''  RNM -1 .
+@     LCH,-1,,lin+1 'af' 1-<CC> <NS1>TAB$/<NS>  RNM -1 .
 @     LCH,-1,,lin+1 'af' 1-<CC> TAB$/<NS>  RNM -1 .
+@     LCH,-1,,lin+1 'af' 1-<CC> <NS1><NS>/<NS>  RNM -1 .
+@. @     LCH,-1,,lin+1 'af' 1-<CC> <NS1>/''   RNM -1 .
 @     gto 0059 .
 @.
 @0056:if <direction> eq import . ; gto 0059 .
-@     LCH,-1,,lin+1 'af' 1-<CC>  /''  RNM -1 .
+@     LCH,-1,,lin+1 'af' 1-<CC> <NS1><NS>/TAB$  RNM -1 .
+@     LCH,-1,,lin+1 'af' 1-<CC> <NS1>/''   RNM -1 .
 @     LCH,-1,,lin+1 'af' 1-<CC> <NS>/TAB$  RNM -1 .
 @.
 @0059:return .

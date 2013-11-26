@@ -6,3 +6,9 @@
 ¬MFXFILE             ¬mfxfile             ¬exe¬subl¬VSS-MFX(tm) - MFX-FILE          ¬004¬   3
 ¬WATCHMEDO-SCRIPT    ¬watchmedo-script    ¬py ¬subl¬script to enable watchmedo.exe  ¬001¬   4
 ¬GROWL               ¬growlnotify         ¬exe¬subl¬Notification messages           ¬001¬   5
+¬CMD.JPG             ¬cmd                 ¬jpg¬subl¬Application Image               ¬001¬   6
+¬FAILED.PNG          ¬failed              ¬png¬subl¬Application Image               ¬001¬   7
+¬PENDING.PNG         ¬pending             ¬png¬subl¬Application Image               ¬001¬   8
+¬SUBLIME_TEXT.PNG    ¬sumblime_text       ¬png¬subl¬Application Image               ¬001¬   9
+¬SUCCESS.PNG         ¬success             ¬png¬subl¬Application Image               ¬001¬  10
+¬SUCCESS.PNG         ¬success             ¬png¬subl¬Application Image               ¬001¬  10
