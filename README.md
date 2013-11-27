@@ -29,13 +29,13 @@ Install Growl for Windows
 
 * Follow setup instructions
 * Once installed open up the growl GUI interface (System Icon tray in windows)
-* You can set your defautl Displays and check to start program when computer is booted)
+* You can set your default Displays and check to start program when computer is booted.
 
 ## sublwatcher - install in BIS
 
-* Download the repository to your workstation [Sublwatcher Download](https://github.com/bis-mapper/bis-sublime/archive/master.zip)
+* Download this repository to your workstation [Download Sublwatcher Repository](https://github.com/bis-mapper/bis-sublime/archive/master.zip)
 * Unzip the files
-* APPLOAD the purge file to cabinet of your choosing (I have mine in 56)
+* `APPLOAD` the purge file to cabinet of your choosing (I have mine in 56)
 * REGISTER the following runs in your development dept
     * `SUBL` - `2B56` or substitue your cabinet
     * `SUBLWATCHER` - `3B56` or substitue your cabinet
@@ -51,10 +51,9 @@ Install Growl for Windows
 
 Type `SUBL` on a report that you want to open in BIS.
 
-To start using for the first time go to a BIS report that you want to open in Sublime.
 You will get prompted with a dialog box asking you to find the *sublime_text.exe*.
-This should be stored in your program files where you installed Sublime.  Navigate to that folder
-and select the *sublime_text.exe*
+This should be stored in your program files where you installed Sublime.
+Navigate to that folder and select the *sublime_text.exe*
 
 <img src="https://raw.github.com/bis-mapper/sublwatcher/master/Docs/Images/first_time.png" border="0">
 
