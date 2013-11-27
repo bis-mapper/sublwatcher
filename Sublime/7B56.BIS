@@ -161,10 +161,7 @@
 @     LDV <CHAR>h0 .
 @.
 @     if <direction> eq export . ; gto 0056 .
-<<<<<<< HEAD
 @     LCH,-1,,lin+1 'af' 1-<CC> <NS1>TAB$/<NS>  RNM -1 .
-=======
->>>>>>> 6bfeebe21676463441abd3ae692a454bbf3541c0
 @     LCH,-1,,lin+1 'af' 1-<CC> TAB$/<NS>  RNM -1 .
 @     LCH,-1,,lin+1 'af' 1-<CC> <NS1><NS>/<NS>  RNM -1 .
 @. @     LCH,-1,,lin+1 'af' 1-<CC> <NS1>/''   RNM -1 .
@@ -172,10 +169,7 @@
 @.
 @0056:if <direction> eq import . ; gto 0059 .
 @     LCH,-1,,lin+1 'af' 1-<CC> <NS1><NS>/TAB$  RNM -1 .
-<<<<<<< HEAD
 @     LCH,-1,,lin+1 'af' 1-<CC> <NS1>/''   RNM -1 .
-=======
->>>>>>> 6bfeebe21676463441abd3ae692a454bbf3541c0
 @     LCH,-1,,lin+1 'af' 1-<CC> <NS>/TAB$  RNM -1 .
 @.
 @0059:return .

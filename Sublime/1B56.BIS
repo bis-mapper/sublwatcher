@@ -5,7 +5,6 @@
 *      .                   .                       .                               .                    .
 *DEFINE.CONST              .VALUE                  .DESC                           .PARENT CATEGORY     .
 *======.===================.=======================.===============================.====================.
-:DEFINE WATCHING_
 :DEFINE getCabDrwRpt_       "0001"                  Gets Cab Drw Rpt from Var       SUBLIME
 :DEFINE configVars_         "0005"                  Loads config vars               SUBLIME
 :DEFINE chkIceSvc_          "0010"                  Check if ICE service            SUBLIME
@@ -17,7 +16,7 @@
 :DEFINE getOsVer_           "0045"                  Get OS Version                  SUBLIME
 :DEFINE getChgsFile_        "0050"                  Get OS Version                  SUBLIME
 :DEFINE charReplace_        "0055"                  Tab character replacement       SUBLIME
-:DEFINE GROWL_              "56,b,22"               Growl                           SUBLIME
+:DEFINE GROWL_              "ECAB$,b,22"            Growl                           SUBLIME
 :DEFINE BISCMD_             "ECAB$,B,14"            BIS CMD                         SUBLIME
 :DEFINE SUBLCOMMON_         "ECAB$,B,7"             SUBL EXE PATH                   SUBLIME
 :DEFINE SUBLSETUP_          "ECAB$,B,8"             SUBL INITIAL SETUP ROUTINE      SUBLIME
