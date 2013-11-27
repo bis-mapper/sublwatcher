@@ -33,7 +33,7 @@ Install Growl for Windows
 
 ## sublwatcher - install in BIS
 
-* Download this repository to your workstation [Download Sublwatcher Repository](https://github.com/bis-mapper/bis-sublime/archive/master.zip)
+* Download this repository to your workstation [Download Sublwatcher Repository](https://github.com/bis-mapper/sublwatcher/archive/master.zip)
 * Unzip the files
 * `APPLOAD` the purge file to cabinet of your choosing (I have mine in 56)
 * REGISTER the following runs in your development dept
