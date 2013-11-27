@@ -1,7 +1,7 @@
 
 # sublwatcher - BIS file watching utility / IDE environment
 
-<img src="https://raw.github.com/bis-mapper/sublwatcher/docs/images/master/sublwatcher.png" border="0">
+<img src="https://raw.github.com/bis-mapper/sublwatcher/master/Docs/Images/sublwatcher.png" border="0">
 
 ## Initial Requirements
 
@@ -49,22 +49,25 @@ Install Growl for Windows
 
 # Getting Started
 
+Type `SUBL` on a report that you want to open in BIS.
+
 To start using for the first time go to a BIS report that you want to open in Sublime.
 You will get prompted with a dialog box asking you to find the *sublime_text.exe*.
 This should be stored in your program files where you installed Sublime.  Navigate to that folder
 and select the *sublime_text.exe*
 
-<img src="https://raw.github.com/bis-mapper/sublwatcher/docs/images/master/sublwatcher.png" border="0">
+<img src="https://raw.github.com/bis-mapper/sublwatcher/master/Docs/Images/first_time.png" border="0">
 
 ## Your file watching folder (sublwatcher)
 
-Some files are downloaded to your workstation when you run `SUBL` command.  It also creates a folder in your %USERPROFILE% (usually c:\users\winne\sublwatcher\)
+Some files are downloaded to your workstation when you run the `SUBL` command.  These files are stored in the sublwatcher folder (%USERPROFILE% usually c:\users\winne\sublwatcher\)
 
 A browse utility will pop up asking you where you want to put the file that your opening.
-<img src="https://raw.github.com/bis-mapper/sublwatcher/docs/images/master/browse.png" border="0">
+<img src="https://raw.github.com/bis-mapper/sublwatcher/master/Docs/Images/browse.png" border="0">
 
 Browse to your sublwatcher folder and select the folder for the site that your currently on.
-<img src="https://raw.github.com/bis-mapper/sublwatcher/docs/images/master/select_folder.png" border="0">
+<img src="https://raw.github.com/bis-mapper/sublwatcher/master/Docs/Images/select_folder.png" border="0">
 
-A file will now be stored in that folder and opened up in Sublime.
+The BIS report that you typed `SUBL` on will now be saved in this folder and you should be able to modify this file in Sublime and have the changes saved back to BIS.
 
+## Color Scheme - Syntax Files - Keyboard Shortcuts
