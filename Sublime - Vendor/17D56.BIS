@@ -1,0 +1,203 @@
+.Data_Std_Labels      Standardize Labels
+.REV: 2.2    DATE: 20120218
+*===============================================================================
+*  Copyright (c) 2012 IT Resource Solutions (ITRS)                             *
+*  --------------------------------------------------------------------------  *
+*  The SBS utility is a free software package, provided for the benefit        *
+*  of all BIS users.  It contains no warranty of any kind, and ITRS will       *
+*  assume no liability for defects or problems resulting from its use.         *
+*  This software may be used and distributed freely in its entire form;        *
+*  however, no portion of this program code may be reused without the          *
+*  expressed consent of ITRS.                                                  *
+*===============================================================================
+@.
+@. ------------------------------- Test Setup ----------------------------------
+@.
+@     BRK,0,F .
+@     RDC,EDRW$,51,2 1-256 <V1>s .
+<V1>
+@     BRK .
+@     CALL,EDRW$,0010 0001* (<STX>h3) .
+@     CALL 0001 (<STS>h3) .
+@     DSX,-0 .
+@.
+@. ------------------------------ Entry Point ----------------------------------
+@.
+@0001:(<STS>) .
+@.
+@     RNM -1 .
+@.
+@     LDV <WIN1>i6=0 .
+@     RER,EDRW$,0003 0001  RAR 0196 .
+@.
+@     LZR,-1 ,<WID>i3  CHG <WWD>i3 <WID> - 1 .
+@.
+@     LDV <FOR>h6=000000,<BAC>h6=FFFFCC .
+@     IF DWCAP$(13-1) ne 1 . ; GTO lin+2 .
+@     LDV <FOR>h3=bla,<BAC>h4=yel .
+@.
+@     LDV <LL>i1=4 .
+@     FDR,EDRW$,0099,,,lin+1 '' 'User-ID' ¬,USER$  RLN 'LL' <LL> .
+@     IF <LL> eq 3,4 . ; LDV <LL>=4 .
+@     SRH,-1,3,,lin+1 df 2-<LL> @,1/r,999  RNM -4 .
+@.
+@     LDV <NAMES>h1='N' .
+@     LNK NAMES .
+@     RNM -3 .
+@     LZR,-3 <LNS>i6  IF <LNS> gt 5  LDV <NAMES>='Y' ; .
+@.
+@     LDV <OPT>i1=0 .
+@0002:INC <OPT>  IF <OPT> gt 3,(0199) ; .
+@     IF <OPT> eq 1  SRH,EDRW$,0007 d  'LF' ¬,'2' ; .
+@     IF <OPT> eq 2  SRH,EDRW$,0007 df 'LF' ¬,'1' ; .
+@     IF <OPT> eq 3  WRL,-2,6,Y 'Command' ¬,',('  LN-,-2,7,99 ; .
+@     RNM -2 .
+@     LDV <LN2>i4=5 .
+@0003:INC <LN2>  RDL,-2,<LN2>,0002 'Command','Labl','Not' \
+      <CMD>h,<CMA>i,<NOT>h  LDV,p <CMD> .
+@     LDV <LIN>i4=2 .
+@0004:INC <LIN>  LOC,-1,<LIN>,0003 aft% 1-<WID> <CMD> <COL>i3,<LIN> .
+@     RDL,-1,<LIN> 1-<WID> <DAT>s  IF <OPT> eq 3,(lin+2) ; .
+@     IF <COL> eq 0 . ; IF <DAT>(<COL>-1) eq '@',' ',':',';' . ; GTO 0004 .
+@     IF <NOT> eq '' . ; LCV,lin+1 '' <DAT> <NOT>  GTO 0004 .
+@     IF <DAT>(1-1) ne '@',(lin+4) ; LDV <N>i3=2 .
+@     IF <DAT>(<N>-1) ne ' ',(lin+2) ; .
+@     INC <N>  IF <N> gt <WID>,(0004) ; GTO lin-1 .
+@     IF <DAT>(<N>-1) eq '.',(0004) ; IF <DAT>(1-1) eq '@',(0005) ; .
+@     LDV <LB4>i4=<LIN> .
+@     DEC <LB4>  IF <LB4> lt 3,(0004) ; RDL,-1,<LB4> 1-<WID> <V1>s .
+@     LCV,0004 b1 <V1> '\'  IF <V1>(1-1) eq '@',(0005) ; GTO lin-1 .
+@.
+@. ---------------------------- Process Command --------------------------------
+@.
+@0005:IF <OPT> eq 3,(0013) ; .
+@     DEF,p <SZ>i1,<CMD>  CHG <LOC>i3 <COL> + <SZ> + 1 .
+@     IF <CMD>(0-1) eq ',',(lin+2) ; .
+@     IF <DAT>(<LOC>-1) eq ' ',',' . ; GTO 0004 .
+@     IF <OPT> eq 1,(0006),2,(0008) ; GTO 0004 .
+@.
+@. -------------------------------- Option 1 -----------------------------------
+@.
+@0006:INC,2 <COL> .
+@     IF <DAT>(<COL>-1) eq ' ',(lin+2) ; .
+@     INC <COL>  IF <COL> gt <WID>,(0004) ; GTO lin-1 .
+@     IF <DAT>(<COL>-1) ne ' ',(lin+2) ; .
+@     INC <COL>  IF <COL> gt <WID>,(0004) ; GTO lin-1 .
+@     GTO 0015 .
+@0007:LCV,0004 b1 <DAT>(<COL>-0) <CMD> <COL>  CHG <N>i3 <COL> - 1 .
+@     IF <DAT>(<N>-1) eq '@',' ',':',';',(0006) ; GTO 0004 .
+@.
+@. -------------------------------- Option 2 -----------------------------------
+@.
+@0008:INC <COL>  LDV <CMX>i2=<CMA>  LCV 't'SOE$ <DAT>(<COL>-0) ' ' <END>i3 .
+@     IF <END> le <COL>  LDV <END>=<WID> ; .
+@     CHG <LEN>i3 <END> - <COL>  LDV <SMT>s<LEN>=<DAT>(<COL>-<LEN>) .
+@     LCV b99 <SMT> ',' ,<CNT>i2  IF <CNT> eq 0,(0004) ; .
+@     LCV b1 <SMT> ',' <1>i3  INC <1>  IF <1> gt <LEN>,(0009) ; .
+@     IF <LEN> gt 4  IF <SMT>(<1>-1) eq TIC$  IF <NAMES> eq 'Y',(0011) ; .
+@     IF <LEN> gt 4  IF <SMT>(<1>-1) eq '-' . ; GTO lin+2 .
+@     DEC,2 <CMX>  IF <CMD> eq 'DRW,','TYP,','IND,'  INC <CMX> ; GTO 0009 .
+@     LCV,0009 '' <SMT>(<1>-0) '$' <2>i3  CHG <2> <2> + 1 - <1> .
+@     LCV,0009 n <SMT>(<1>-<2>) ','  LDV,p <RSW>h8=<SMT>(<1>-<2>) .
+@     FND,EDRW$,0005,,0009 '' 'Res Word','CD' ¬,<RSW>,Y  DEC <CMX> .
+@0009:IF <CNT> lt <CMX>,(0010) ; .
+@     LCV 't'SOE$b<CMX> <DAT>(<COL>-0) ',' <COL>  INC <COL> .
+@     GTO 0015 .
+@0010:LCV,0004 b1 <DAT>(<COL>-0) <CMD> <COL>  CHG <N>i3 <COL> - 1 .
+@     IF <DAT>(<N>-1) eq '@',' ',':',';',(0008) ; GTO 0004 .
+@.
+@. ----------------------------- Named Report ----------------------------------
+@.
+@0011:LDV <DEC>i1=2 .
+@     LCV b1 <SMT> TIC$ <BEG>i2  INC <BEG> .
+@     LCV,0009 b2 <SMT> TIC$ <END>i2  CHG <N>i2 <END> - <BEG> .
+@     LDV <NAM>h16=<SMT>(<BEG>-<N>) .
+@     FDR,-3,,,0012 '' 'NAME' ¬,<NAM>  RLN 'D','Report' <DRW>h,<RPT>h .
+@     IF <RPT> eq ''  DEC <DEC> ; IF <DRW> eq ''  DEC <DEC> ; .
+@0012:DEC,<DEC> <CMX>  GTO 0009 .
+@.
+@. ------------------------------ Option 3 -------------------------------------
+@.
+@0013:INC,3 <COL>  LCV,0004 b1 <DAT>(<COL>-0) ')' <END>i3 .
+@     CHG <N>i2 <END> - <COL>  IF <N> eq <LL>,(0014) ; .
+@     LDV <V1>s<N>=<DAT>(<COL>-<N>)  DEF <N>i1,<V1>  IF <N> eq 1,(0015) ; .
+@0014:LCV,0004 b1 <DAT>(<COL>-0) <CMD> <COL>  DEC <COL>  GTO 0013 .
+@.
+@. --------------------------- Expand the Label --------------------------------
+@.
+@0015:IF <DAT>(<COL>-3) eq 'LIN','RPX','***',(0018) ; .
+@     DEC <COL>  IF <DAT>(<COL>-1) eq ',',' ','(' . ; GTO lin-0 .
+@     INC <COL>  CHG <END>i3 <COL> + 1 .
+@     IF <DAT>(<END>-1) eq ' ',',',')','(','*' . ; INC <END>  GTO lin-0 .
+@     CHG <N>i2 <END> - <COL>  IF <N> gt 5,(0018) ; .
+@     LDV <TAR>i<N>=<DAT>(<COL>-<N>)  DEF <N>i1,<TAR>  IF <N> ne 1,(0018) ; .
+@     IF <N> ne <LL>,(0118) ; IF DRW4$ eq 0,(0018) ; .
+@     FND,-4,3,0017 '' 2-<LL> @,<TAR>  GTO 0018 .
+@0118:IF <TAR> eq '0'  IF <CMD> eq 'CHD',(0018) ; .
+@     CHG <LBL>i<LL> <TAR> + 0  LDV,rz <LBL> .
+@     LCV b1 <DAT>(<COL>-0) <TAR>/<LBL> .
+@     IF <CMD> eq 'RSR','CALL','RER','RAR' \
+      IF <DAT>(<LOC>-1) eq ',',(lin+2) ; .
+@     FND,-1,3,0017 '' 2-<LL> @,<LBL> ; .
+@     RDL,-1,<LIN> 1-<WID> <OLN>s  DEF,p <OSZ>i3 <OLN>  DEF,p <NSZ>i3 <DAT> .
+@     IF <NSZ> le <OSZ>,(0016) ; CHG <SZ>i1 <NSZ> - <OSZ> .
+@     LDV <EOC>i3=1 .
+@     LCV,0016 b1t~ <DAT>(<EOC>-0) ' . ' <EOC>i3  INC,3 <EOC> .
+@     LCV,lin+2 b1t~ <DAT>(<EOC>-0) ';' <SEM>i3 .
+@     CHG <EOC> <SEM> + 1  GTO lin-2 .
+@     IF <EOC> lt <WID>  LCV,0016 b<SZ>t~ <DAT>(<EOC>-0) '  '/' ' ; .
+@0016:WRL,-1,<LIN> 2-<WWD> <DAT>(1-1),<DAT>(2-0)  GTO 0018 .
+@.
+@. Non-Existent Label
+@.
+@0017:BRK,0,A  LDV,w <SCH>i3=SCNH$ .
+prep;fld,02,01,01,<SCH>,,(pr,rv,whi/red);
+pc,02,02;''Invalid Label: <LBL>'';
+pc,02,48;''Press F1 to Rescan, F2 to Ignore''
+@     BRK  SC,-0 q .
+FKEY,1,Rescan,KEY
+FKEY,2,Ignore,KEY
+@     BRK  FKY,-0 .
+@     LDV <SBSMSG>s80='Action required by SBS' .
+@     CALL,"GROWL" 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
+@     DSP,-1,<LIN>,,,Q,1 .
+@.
+@     CHG <ROW>i2 SCNV$ - 9 // 2 + 1  CHG <CLM>i3 SCNH$ - 50 // 2 + 1 .
+@     WIN,,<ROW>,<CLM>,09,50,<BAC>,bci ' Non-Existent Label' <WIN1>i6 .
+@     FON,t,'MS Sans Serif',08,pdb .
+@     LDV,p <LNX>i6=<LIN> .
+@     BRK,0,A .
+ Line <LNX> appears to reference a label (<LBL>) that does not exist.
+
+ The report is now displayed at line <LNX>.  Modifications can
+ be made to correct this, or the suspect logic can be ignored.
+
+ Press F1 [ Rescan ] to recheck the label, or F2 [ Ignore ].
+@     BRK  TXT,-0,2,6,<WIN1>,02,02,06,80,<FOR>/<BAC>,s .
+@     FON,t .
+@.
+@     DSP,-1,<LIN>,,,,1 .
+@     CLS,<WIN1>  LDV <WIN1>=0 .
+@     FKY .
+@     IF FKEY$ eq 1  DEC <LIN> ; .
+@     GTO 0018 .
+@.
+@. Return From Label Processing
+@.
+@0018:IF <OPT> eq 1,(0007),2,(0010),3,(0014) ; .
+@.
+@. ------------------------------- Termination ---------------------------------
+@.
+@0196:. Abort routine
+@.
+@     CHG <ERR>i4 CERR$ .
+@     FON,t .
+@     GTO 0199 .
+@.
+@0199:. Return
+@.
+@     IF <WIN1> ne 0  CLS,<WIN1> ; .
+@     FKY .
+@     RNM,-1 -0 .
+@     LDV <STS>h3=OK .
+@     RETURN .

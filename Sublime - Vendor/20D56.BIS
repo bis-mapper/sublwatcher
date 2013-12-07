@@ -1,0 +1,574 @@
+.Data_Line_Wrap       Wrap Wizard
+.REV: 2.2    DATE: 20120218
+*===============================================================================
+*  Copyright (c) 2012 IT Resource Solutions (ITRS)                             *
+*  --------------------------------------------------------------------------  *
+*  The SBS utility is a free software package, provided for the benefit        *
+*  of all BIS users.  It contains no warranty of any kind, and ITRS will       *
+*  assume no liability for defects or problems resulting from its use.         *
+*  This software may be used and distributed freely in its entire form;        *
+*  however, no portion of this program code may be reused without the          *
+*  expressed consent of ITRS.                                                  *
+*===============================================================================
+@.
+@. ------------------------------- Test Setup ----------------------------------
+@.
+@     LDV,pw <CAB>a4=ECAB$,<DRW>h1=AEDRW$,<RPT>i4=50 .
+@     LDV,p <REP>h17=<RPT><DRW><CAB> .
+@     RNM,<CAB>,<DRW>,<RPT> -1 .
+@     BRK,0,F .
+@     LZR,-1 ,<CPL>i3  LNY,-1,2,99999 .
+@     RDC,-1,2 1-<CPL> <V1>s .
+<V1>
+@     BRK  RNM -1 .
+@     CALL 0001 (<REP>,<CAB>,<DRW>,<RPT>,<STS>h3) .
+@     DSX,-0 .
+@.
+@. ------------------------------ Entry Point ----------------------------------
+@.
+@0001:(<REP>,<CAB>,<DRW>,<RPT>,<STS>) .
+@.
+@     RNM -1  RSL,-1  RNM -8 .
+@.
+@     LDV <WIN1>i6=0 .
+@     RER,EDRW$,0003 0001  RAR 0196 .
+@.
+@     BRK,<CAB>,<DRW>  BRK  LNP,-0,1  RNM -2 .
+@.
+@     DRW,DRW1$ <WID>i3  CHG <WWD>i3 <WID> - 1 .
+@     DRW,<CAB>,<DRW> <OWD>i3 .
+@     IF <WID> le <OWD>,(0002) ; .
+@     CHG <V1>i3 <OWD> + 1  CHG <V2>i3 <WID> - <OWD> .
+@     SRH,-1,,,0002 adn@ <V1>-<V2> @,@ <LNQ>i6 .
+@.
+@     LDV <FOR>h6=000000,<BAC>h6=FFFFCC .
+@     IF DWCAP$(13-1) ne 1 . ; GTO lin+2 .
+@     LDV <FOR>h3=bla,<BAC>h4=yel .
+@     LDV <HGT>i2=10  IF SYSNAM$(1-1) ne 'M'  LDV <HGT>=12 ; .
+@     CHG <ROW>i2 SCNV$ - <HGT> // 2 + 1  CHG <CLM>i3 SCNH$ - 50 // 2 + 1 .
+@.ew  WIN,,<ROW>,<CLM>,<HGT>,50,<BAC>,bci \
+      ' Standardization Complete | Wrap Wizard Activated' <WIN1>i6 .
+@     FON,t,'MS Sans Serif',08,pdb .
+@     LDV,p <N>i6=<LXX>,<LNQ> .
+@     BRK,0,A .
+Run script has been standardized; however, due to this process
+<LNQ> line(s) now extend beyond the width of the original report.
+
+The Wrap, Break and Unwrap tools will help you adjust these run
+statements.  Press F8 [ Help ] for more details on their operation.
+
+@     IF SYSNAM$(1-1) ne 'M' . ; GTO lin+2 .
+ Press F6 [ DifLst ] to see changes made to the original run script.
+
+ When finished, press F10 [ Done ] to exit the Wrap Wizard.
+@     BRK  TXT,-0,2,9,<WIN1>,02,02,09,80,<FOR>/<BAC>,s .
+@     FON,t .
+@     GTO 0004 .
+@0002:.
+@     IF SYSNAM$(1-1) eq 'M',(0003) ; .
+@.
+@.ew  DSP,-1,,,,Q .
+@.
+@     RNM,-2 -6  IF <REP> ne '-0'  RNM,<CAB>,<DRW>,<RPT> -6 ; .
+@     IF <OWD> eq <WID>,(lin+4) ; .
+@     BRK,DRW1$  RDC,-6,2 1-<OWD> <V1>s .
+<V1>
+@     BRK  RNM -6 .
+@     CLT,-6  RNM -6 .
+@.
+@     CHG <ROW>i2 SCNV$ - 6 // 2 + 1  CHG <CLM>i3 SCNH$ - 40 // 2 + 1 .
+@.ew  WIN,,<ROW>,<CLM>,06,40,lgra,bc 'Operation In Progress' <WIN1>i6 .
+@.ew  FON,t,'Arial',09,pdb .
+@.ew  TXT,"... Please Wait ...",<WIN1>,02,01,01,52,bla/lgra,c .
+@.ew  TXT,"Examining Script Modifications",<WIN1>,04,01,01,52,dblu/lgra,cs .
+@.ew  FON,t .
+@.
+@     DUP,-1  RNM -5 .
+@     DIF,-6,-5 ''  RNM -6 .
+@     DLR,-5,lin+1 .
+@.
+@     CLS,<WIN1>  LDV <WIN1>=0 .
+@.
+@     RDL,-6,5,lin+1 1-5 <V1>h  IF <V1> eq '.1c1'  LN-,-6,5,5 ; .
+@     LZR,-6 <LNS>i6  IF <LNS> gt 4,(0003) ; .
+@.
+@     LDV <STS>h3=XXX .
+@     GTO 0100 .
+@     MBX,YN,A,'No Change Required' "\
+Your run script is already compliant with all standards specified.//\
+No further action is required; however, the Wrap Wizard may now/\
+be used to refine the position and wrapping of logic statements.//\
+Do you want to activate the Wrap Wizard?" \
+      N,(0199),Y,(lin+1) .
+@.
+@     LDV <FOR>h6=000000,<BAC>h6=CAE0FF .
+@     IF DWCAP$(13-1) ne 1 . ; GTO lin+2 .
+@     LDV <FOR>h3=bla,<BAC>h4=lgra .
+@     CHG <ROW>i2 SCNV$ - 06 // 2 + 1  CHG <CLM>i3 SCNH$ - 48 // 2 + 1 .
+@.ew  WIN,,<ROW>,<CLM>,06,48,<BAC>,bci \
+      ' Standardization Complete | Wrap Wizard Activated' <WIN1>i6 .
+@     FON,t,'MS Sans Serif',08,pdb .
+@     LDV,p <N>i6=<LXX> .
+@     BRK,0,A .
+   Press F8 [ Help ] for directions on using the Wrap tools.
+
+   When finished, press F10 [ Done ] to exit the Wrap Wizard.
+@     BRK  TXT,-0,2,8,<WIN1>,02,02,08,80,<FOR>/<BAC>,s .
+@     FON,t .
+@     GTO 0004 .
+@0003:.
+@     LDV <FOR>h6=000000,<BAC>h6=CAE0FF .
+@     IF DWCAP$(13-1) ne 1 . ; GTO lin+2 .
+@     LDV <FOR>h3=bla,<BAC>h4=lgra .
+@     LDV <HGT>i2=10  IF SYSNAM$(1-1) ne 'M'  LDV <HGT>=12 ; .
+@     CHG <ROW>i2 SCNV$ - <HGT> // 2 + 1  CHG <CLM>i3 SCNH$ - 50 // 2 + 1 .
+@     gto 0100 .
+@.ew  WIN,,<ROW>,<CLM>,<HGT>,50,<BAC>,bci \
+      ' Standardization Complete | Wrap Wizard Activated' <WIN1>i6 .
+@     FON,t,'MS Sans Serif',08,pdb .
+@     LDV,p <N>i6=<LXX> .
+@     BRK,0,A .
+ Run script has been standardized based on the options selected.
+@     IF SYSNAM$(1-1) ne 'M' . ; GTO lin+3 .
+
+ Press F6 [ DifLst ] to see changes made to the original run script.
+
+ No further action is required; however, the Wrap Wizard may now
+ be used to refine the position and wrapping of logic statements.
+ Press F8 [ Help ] for directions on using the Wrap tools.
+
+ When finished, press F10 [ Done ] to exit the Wrap Wizard.
+@     BRK  TXT,-0,2,9,<WIN1>,02,02,09,80,<FOR>/<BAC>,s .
+@     FON,t .
+@0004:.
+@.ew  WIN,WND$,,,,,,u 'SBS Wrap Wizard ('<REP>')' .
+@.
+@     LDV <3D>h1=b  IF DWCAP$(13-1) eq 1  LDV <3D>=3 ; .
+@.
+@     LDV <LIN>i6=1 .
+@     LDV,p <TAR>s32 .
+@.
+@     LDV <LL>i1=4 .
+@     FDR,EDRW$,0099,,,lin+1 '' 'User-ID' ¬,USER$  RLN 'LL' <LL> .
+@     IF <LL> eq 3,4 . ; LDV <LL>=4 .
+@     CHG <N>i1 <LL> + 1  LDV <IND>h<N> .
+@.
+@     BRK,0,F .
+cs;fld,2,1,3,<OWD>,u,(rv,whi/blu),(yel/bla);
+data,2,1,3,132
+@     LDV,p <V1>s50='Original report ('<REP>') width in blue' .
+-------------------- <V1> ------------------------------------------------------
+         1         2         3         4         5         6         7         8
+---------0---------0---------0---------0---------0---------0---------0---------0
+data,2,81,3,52
+-------------------1---------1---------1---------1--
+         9         0         1         2         3
+---------0---------0---------0---------0---------0--
+@     BRK  RNM -3 .
+@.
+@     BRK .
+FKEY,1,Next,KEY
+FKEY,2,Prev,KEY
+FKEY,3,Wrap,KEY
+FKEY,4,Break,KEY
+FKEY,5,Unwrap,KEY
+@     IF SYSNAM$(1-1) ne 'M' . ; GTO lin+2 .
+FKEY,6,DifLst,KEY
+FKEY,7,Locate,KEY
+FKEY,8,Help,KEY
+FKEY,9,Undo,KEY
+FKEY,10,Done,KEY
+@     BRK  RNM -4 .
+@.
+@0010:. ------------------------ Display Report --------------------------------
+@.
+@     SC,-3 q .
+@     FKY,-4 .
+@     DSP,-1,<LIN>,,,,3 .
+@0011:.
+@     LDV,w <HLN>i2=HLINES$,<LIN>i6=DLINE$ .
+@     IF <WIN1> ne 0  CLS,<WIN1>  LDV <WIN1>=0 ; .
+@0012:.
+@     IF FKEY$ eq 1,(0020) ; .   Next
+@     IF FKEY$ eq 2,(0020) ; .   Prev
+@     IF FKEY$ eq 3,(0030) ; .   Wrap
+@     IF FKEY$ eq 4,(0030) ; .   Break
+@     IF FKEY$ eq 5,(0030) ; .   Unwrap
+@     IF SYSNAM$(1-1) ne 'M' . ; GTO lin+2 .
+@     IF FKEY$ eq 6,(0040) ; .   DifLst
+@     IF FKEY$ eq 7,(0050) ; .   Locate
+@     IF FKEY$ eq 8,(0170) ; .   Help
+@     IF FKEY$ eq 9,(0060) ; .   Undo
+@     IF FKEY$ eq 10,(0100) ; .  Done
+@     GTO 0010 .
+@.
+@0020:. -------------------------- Next/Prev -----------------------------------
+@.
+@     IF <WID> le <OWD>,(0186) ; .
+@     CHG <V2>i3 <OWD> + 1  CHG <V3>i3 <WID> - <OWD> .
+@     LDV <LNX>i6=<LIN>,<V1>s<V3> .
+@     IF FKEY$ eq 2,(0021) ; .
+@     INC <LNX>  RDL,-1,<LNX>,lin+2 <V2>-<V3> <V1>  IF <V1> eq '',(lin-0) ; .
+@     LDV <LIN>i6=<LNX>  GTO 0010 .
+@     MBX,OK,S,'Find Next' \
+      "No lines exceeding report width following the current line." O,(lin+1) .
+@     GTO 0010 .
+@0021:.
+@     LDV <LNX>i6=<LIN>,<V1>s<V3> .
+@     DEC <LNX>  IF <LNX> lt 3,(lin+3) ; .
+@     RDL,-1,<LNX>,0010 <V2>-<V3> <V1>  IF <V1> eq '',(lin-1) ; .
+@     LDV <LIN>i6=<LNX>  GTO 0010 .
+@     MBX,OK,S,'Find Previous' \
+      "No lines exceeding report width prior to the current line." O,(lin+1) .
+@     GTO 0010 .
+@.
+@0030:. ----------------------- Wrap or Break Line -----------------------------
+@.
+@     IF FKEY$ eq 3  LDV <ACT>h4=Wrap ; .
+@     IF FKEY$ eq 4  LDV <ACT>h5=Break ; .
+@     IF FKEY$ eq 5  LDV <ACT>h6=Unwrap ; .
+@.
+@     RNM,-1 -0 .
+@     LDV,w <N>i3=SCNH$  LFC <V1>s<N>  LDV,p <V1> .
+@     LCV,0187 'nt'SOE$ <V1> ' ' .
+@.
+@     IF CURV$ lt <HLN>,(0180) ; .
+@     CHG <ULN>i6 <LIN> + CURV$ - <HLN> - 1  IF <ULN> le 2,(0180) ; .
+@     CHG <CHR>i3 CURH$  IF <CHR> le 1,(0180) ; .
+@.
+@     IF SYSNAM$(1-1) ne 'M' . ; GTO lin+3 .
+@     CHG <ROW>i2 CURV$ + 1  CHG <CLM>i3 CURH$ .
+@     SC q fld,<ROW>,<CLM>,01,01,,(rv,whi/red) .
+@.
+@     LDV <TYP>h4='lin+' .
+@     IF <ACT> eq 'Break' . ; GTO lin+3 .
+@     CHG <LNX>i6 <ULN>  RDL,-1,<LNX>,0010 1-<WID> <OLN>s .
+@     LCV,0181 n <OLN>(1-<CHR>) <TYP> .
+@     LDV <LNQ>i4=0 .
+@0031:INC <LNQ>  IF <LNQ> gt 6,(0033) ; .
+@     CHG <LNX>i6 <ULN> - <LNQ>  IF <LNX> lt 3,(0033) ; .
+@     RDL,-1,<LNX>,0033 1-<WID> <OLN>s  LDV <N>i3=0 .
+@0032:INC <N>  IF <N> gt <WID>,(0031) ; LCV,0031 b1 <OLN>(<N>-0) <TYP> <N> .
+@     IF <OLN>(1-1) eq '@'  LCV,lin+1 '' <OLN> '\' ; GTO 0181 .
+@     CHG <C>i3 <N> + 4  IF <C> gt <WID>,(0031) ; .
+@     LDV <S>i1=0 .
+@     CHG <I>i3 <C> + <S>  IF <I> gt <WID>,(lin+2) ; .
+@     IF <OLN>(<I>-1) ge '0' & le '9'  INC <S>  GTO lin-1 ; .
+@     IF <S> eq 0,(0181) ; IF <S> gt 2,(0181) ; CHG <Q>i2 <OLN>(<C>-<S>) .
+@     IF <Q> gt <LNQ>,(0181) ; GTO 0032 .
+@0033:.
+@     LDV <TYP>h4='lin-' .
+@     IF <ACT> eq 'Break','Unwrap' . ; GTO lin+3 .
+@     RDL,-1,<ULN>,0010 1-<WID> <OLN>s .
+@     LCV,0181 n <OLN>(1-<CHR>) <TYP> .
+@     LDV <LNQ>i4=0 .
+@0034:INC <LNQ>  IF <LNQ> gt 6,(0036) ; .
+@     CHG <LNX>i6 <ULN> + <LNQ> .
+@     RDL,-1,<LNX>,0036 1-<WID> <OLN>s  LDV <N>i3=0 .
+@0035:INC <N>  IF <N> gt <WID>,(0034) ; LCV,0034 b1 <OLN>(<N>-0) <TYP> <N> .
+@     IF <OLN>(1-1) eq '@'  LCV,lin+1 '' <OLN> '\' ; GTO 0181 .
+@     CHG <C>i3 <N> + 4  IF <C> gt <WID>,(0034) ; .
+@     LDV <S>i1=0 .
+@     CHG <I>i3 <C> + <S>  IF <I> gt <WID>,(lin+2) ; .
+@     IF <OLN>(<I>-1) ge '0' & le '9'  INC <S>  GTO lin-1 ; .
+@     IF <S> eq 0,(0181) ; IF <S> gt 2,(0181) ; CHG <Q>i2 <OLN>(<C>-<S>) .
+@     IF <Q> gt <LNQ>,(0181) ; GTO 0035 .
+@0036:.
+@     RDL,-1,<ULN>,0010 1-<WID> <OLN>s .
+
+@     IF <ACT> eq 'Wrap','Break' . ; GTO lin+3 .
+@     IF <OLN>(<CHR>-1) eq ' ',TIC$,'¬',(0037) ; .
+@     CHG <B4>i3 <CHR> - 1  IF <OLN>(<B4>-1) eq ' ',',',(0037) ; GTO 0182 .
+@     IF <ACT> eq 'Unwrap' . ; GTO lin+2 .
+@     IF <OLN>(<CHR>-1) eq RSLANT$,'.',(0037) ; GTO 0183 .
+@0037:.
+@     RSL,-1  RNM -7  LDV <UND>h4=Undo .
+@.
+@     IF <ACT> eq 'Wrap' . ; GTO lin+5 .
+@     LDV,l <COD>s<WID>=<OLN>(<CHR>-0) .
+@     LDV <NEW>s<WID>=<IND>' '<COD>,<OLN>(<CHR>-0)='\  ' .
+@     LN+,-1,<ULN>,1 .
+@     WRL,-1,<ULN> 2-<WWD> <OLN>(1-1),<OLN>(2-0)/<NEW>(1-1),<NEW>(2-0) .
+@.
+@     IF <ACT> eq 'Break' . ; GTO lin+6 .
+@     LDV,l <COD>s<WID>=<OLN>(<CHR>-0) .
+@     LDV <NEW>s<WID>=@<IND><COD>,<OLN>(<CHR>-0)='. '  DEC <CHR> .
+@     IF <OLN>(<CHR>-1) ne ''  INC <CHR>  LDV <OLN>(<CHR>-0)=' .' ; .
+@     LN+,-1,<ULN>,1 .
+@     WRL,-1,<ULN> 2-<WWD> <OLN>(1-1),<OLN>(2-0)/<NEW>(1-1),<NEW>(2-0) .
+@.
+@     IF <ACT> eq 'Unwrap' . ; GTO lin+5 .
+@     CHG <LNX>i6 <ULN> + 1  RDL,-1,<LNX> 1-<WID> <NEW>s .
+@     IF <NEW>(1-1) eq '@'  LDV <NEW>(1-1)='' ; LDV,l <NEW> .
+@     LDV <OLN>(<CHR>-0)=<NEW> .
+@     WRL,-1,<ULN> 2-<WWD> <OLN>(1-1),<OLN>(2-0)  LN-,-1,<LNX>,1 .
+@.
+@     GTO 0010 .
+@.
+@0040:. ---------------------- Difference Listing ------------------------------
+@.
+@     RNM,-2 -6  IF <REP> ne '-0'  RNM,<CAB>,<DRW>,<RPT> -6 ; .
+@     IF <OWD> eq <WID>,(lin+4) ; .
+@     BRK,DRW1$  RDC,-6,2 1-<OWD> <V1>s .
+<V1>
+@     BRK  RNM -6 .
+@     CLT,-6  RNM -6 .
+@.
+@     CHG <ROW>i2 SCNV$ - 6 // 2 + 1  CHG <CLM>i3 SCNH$ - 40 // 2 + 1 .
+@     WIN,,<ROW>,<CLM>,06,40,lgra,bc 'Operation In Progress' <WIN1>i6 .
+@     FON,t,'Arial',09,pdb .
+@     TXT,"... Please Wait ...",<WIN1>,02,01,01,52,bla/lgra,c .
+@     TXT,"Generating Difference Listing",<WIN1>,04,01,01,52,dblu/lgra,cs .
+@     FON,t .
+@.
+@     DUP,-1  RNM -5 .
+@     DIF,-6,-5 ''  RNM -6 .
+@     DLR,-5,lin+1 .
+@.
+@     CLS,<WIN1>  LDV <WIN1>=0 .
+@.
+@     RDL,-6,5,lin+1 1-5 <V1>h  IF <V1> eq '.1c1'  LN-,-6,5,5 ; .
+@     LZR,-6 <LNS>i6  IF <LNS> gt 4,(0042) ; .
+
+@     MBX,OK,I,'No Difference' "/\
+ There are no differences between the current and original run script." \
+      O,(0010) .
+@0042:.
+@     CHG <SCV>i2 SCNV$ - 2  CHG <SCH>i3 SCNH$ - 2 .
+@     WIN,,01,01,<SCV>,<SCH>,lgra,cxf 'Difference Listing ('<REP>')' <WIN1>i6 .
+@     FON,t,'Arial',09,pdb .
+@     BTN,<WIN1>,01,01,02,08 'Close'  <BTN1>i6 .
+@     BTN,<WIN1>,01,09,02,08 'Result' <BTN2>i6 .
+@     FON,t .
+@     BRK,DRW1$ .
+@     DEC,3 <SCH>  RDC,-6,2 1-<SCH> <V1>s .
+<V1>
+@     BRK  LST,-0,4,y,sbs.txt,<WIN1>,03,01,00,00,bla/whi,m '' .
+@0043:INP,<BTN1>,,<WIN1> .
+@     IF ACTINP$ eq <BTN2>,(0044) ; .
+@     CLS,<WIN1>  LDV <WIN1>=0 .
+@     GTO 0010 .
+@0044:.
+@     MNU,t MENUBAR,"File"
+                    "Return",,rsm
+@     BRK,0,A .
+fkey,01,''      '',rsm
+fkey,02,''Paint '',pnt
+fkey,03,''SOE   '',soe
+fkey,04,''Return'',rsm
+fkey,09,''Undo  '',undo
+@     BRK  FKY,-0 .
+@     SC q CS .
+@     HID .
+@     RSL,-6  LN-,-0,3,1  DSP,-0 .
+@     SHW .
+@     GTO 0043 .
+@.
+@0050:. ---------------------------- Locate ------------------------------------
+@.
+@     CHG <ROW>i2 SCNV$ - 7 .
+@     WIN,,<ROW>,50,07,30,lgra,bc 'Locate' <WIN1>i6 .
+@     EDT,"<TAR>",<WIN1>,02,08,01,20,bla/whi,<3D>h <EDT1>i6 .
+@     FON,t,'Arial',08,pd .
+@     TXT,"Target:",<WIN1>,02,02,01,09,bla/lgra,r .
+@     FON,t,'Arial',08,pdb .
+@     BTN,<WIN1>,05,03,02,08 'Next'     <BTN1>i6 .
+@     BTN,<WIN1>,05,12,02,08 'Previous' <BTN2>i6 .
+@     BTN,<WIN1>,05,21,02,08 'Close'    <BTN3>i6 .
+@     FON,t .
+@     LDV <LCL>i6=<LIN> .
+@     LDV <FOC>i6=<WIN1>  IF <TAR> eq ''  LDV <FOC>=<EDT1> ; .
+@0051:.
+@     LDV <LIN>i6=<LCL> .
+@     INP,<FOC> .
+@     IF ACTINP$ eq <BTN3>,(0052) ; .
+@     LDV,w <INP>i6=ACTINP$ .
+@     INP,<EDT1>,Y .
+@     CHG INPUT$ <TGX>s32 .
+@     IF <TGX> eq '',(0051) ; .
+@     IF,c <TGX> ne <TAR>  LDV <LCL>=0  LDV,p <TAR>s32=<TGX> ; .
+@     IF <INP> eq <EDT1>,(0053) ; .
+@     IF <INP> eq <BTN1>,(0054) ; .
+@     IF <INP> eq <BTN2>,(0055) ; .
+@0052:.
+@     CLS,<WIN1>  LDV <WIN1>=0 .
+@     GTO 0010 .
+@0053:.
+@     IF <FOC> eq <BTN2>,(0055) ; .
+@0054:.
+@     CHG <LCX>i6 <LCL> + 1 .
+@     LOC,-1,<LCX>,0056 afm 1-<WID> <TAR> ,<LCX>  LDV <LCL>=<LCX> .
+@     SC,-3 q .
+@     DSP,-1,<LCX>,,,q,3 .
+@     LDV <FOC>=<BTN1> .
+@     GTO 0051 .
+@0055:.
+@     LDV <LCX>i6=<LCL>  IF <LCX> eq 0  CHG <LCX> <LIN> + 1 ; .
+@     DEC <LCX>  IF <LCX> le 3,(0057) ; RDL,-1,<LCX> 1-<WID> <OLN>s .
+@     LCV,lin-1 '' <OLN> <TAR>  LDV <LCL>=<LCX> .
+@     SC,-3 q .
+@     DSP,-1,<LCX>,,,q,3 .
+@     LDV <FOC>=<BTN2> .
+@     GTO 0051 .
+@0056:.
+@     MBX,OK,S,'Locate' "No (more) finds of [<TAR>]." O,(lin+1) .
+@     LDV <LCL>=<LIN>,<FOC>=<BTN3> .
+@     GTO 0051 .
+@0057:.
+@     MBX,OK,S,'Locate' "No previous finds of [<TAR>]." O,(lin+1) .
+@     LDV <LCL>=<LIN>,<FOC>=<BTN3> .
+@     GTO 0051 .
+@.
+@0060:. ---------------------------- Undo --------------------------------------
+@.
+@     LDV <CHG>h1=Y  IF SYSNAM$(1-1) eq 'M',(0061) ; .
+@     DIF,-8,-1 '' .
+@     RDL,-0,5,lin+1 1-5 <V1>h  IF <V1> eq '.1c1'  LN-,-0,5,5 ; .
+@     LZR,-0 <LNS>i6  IF <LNS> le 4  LDV <CHG>h1=N ; .
+@     IF <CHG> eq 'N'  IF DRW7$ eq 0 . ; GTO 0061 .
+@.
+@     MBX,OK,I,'Nothing To Undo' "/\
+ No changes have been made since entering the Wrap Wizard." \
+      O,(0010) .
+@0061:.
+@     CHG <ROW>i2 SCNV$ - 12 .
+@     WIN,,<ROW>,54,12,26,lgra,bc 'Undo Selection' <WIN1>i6 .
+@     TXT,"",<WIN1>,02,02,07,23,lgra,<3D> .
+@     FON,t,'Arial',08,pdb .
+@     IF DRW7$ eq 0 . ; GTO lin+2 .
+@     BTN,<WIN1>,03,04,02,20,,g 'Undo Last Action' <BTN1>i6 .
+@     IF DRW7$ ne 0 . ; GTO lin+2 .
+@     BTN,<WIN1>,03,04,02,20 <UND>' Last Action ('<ACT>')' <BTN1>i6 .
+@     IF <CHG> eq 'N' . ; GTO lin+2 .
+@     BTN,<WIN1>,06,04,02,20,,g 'Undo All Changes' <BTN2>i6 .
+@     IF <CHG> eq 'Y' . ; GTO lin+2 .
+@     BTN,<WIN1>,06,04,02,20 'Undo All Changes' <BTN2>i6 .
+@     BTN,<WIN1>,10,10,02,08 'Cancel' <BTN3>i6 .
+@     FON,t .
+@     LDV <FOC>i6=<BTN1>  IF DRW7$ eq 0  LDV <FOC>=<BTN2> ; .
+@     INP,<FOC>,,<WIN1> .
+@     LDV,w <INP>i6=ACTINP$ .
+@     CLS,<WIN1>  LDV <WIN1>=0 .
+@     IF <INP> eq <BTN1>,(0062) ; .
+@     IF <INP> eq <BTN2>,(0063) ; .
+@     GTO 0010 .
+@0062:.
+@     RNM,-1 -6  RNM,-7 -1  RNM,-6 -7  BRK  RNM -6  DLR,-6 .
+@     IF <UND> eq 'Undo'  LDV <UND>h4=Redo . ; LDV <UND>h4=Undo ; .
+@     GTO 0010 .
+@0063:.
+@     MBX,YN,Q,'Confirmation' "/\
+ Are you sure you want to undo all changes/\
+ made so far while in the Wrap Wizard?" \
+      N,(0010),Y,(lin+1) .
+@     RSL,-8  RNM -1  BRK  RNM -7  DLR,-7 .
+@     GTO 0010 .
+@.
+@0100:. ---------------------- Operation Complete ------------------------------
+@.
+@     IF <WID> le <OWD>,(0101) ; .
+@     CHG <V2>i3 <OWD> + 1  CHG <V3>i3 <WID> - <OWD> .
+@     LDV <LNX>i6=1,<V1>s<V3> .
+@     INC <LNX>  RDL,-1,<LNX>,0101 <V2>-<V3> <V1>  IF <V1> eq '',(lin-0) ; .
+@     GTO 0184 .
+@0101:.
+@     LDV <BLT>h1=N .
+@     FND,-2,,lin+2 '' 2-1 :,L  FND,-2,2,lin+1 '' 2-1 :,D/:,I  GTO lin+2 .
+@     LDV <BLT>=Y .
+@.
+@     BRK,<CAB>,<DRW> .
+@     RDC,-1,2 1-<OWD> <V1>s .
+<V1>
+@     BRK  RNM -1  IF <BLT> eq 'Y'  BLT,-1,lin+1  RNM -1 ; .
+@0102:.
+@     LDV <STS>h3=OK .
+@     GTO 0199 .
+@.
+@0170:. ---------------------------- Help --------------------------------------
+@.
+@     CALL,EDRW$,0004 0001* ('WRAP',<STX>h3) .
+@     RER,EDRW$,0003 0001  RAR 0196 .
+@     IF <STX> eq 'OK',(0010) ; GTO 0012 .
+@.
+@. -------------------------------- Errors -------------------------------------
+@.
+@0180:.
+@     MBX,OK,S,'Invalid Cursor Position' "/\
+ Place cursor at position in the run script where <ACT> is to begin." \
+      O,(0010) .
+@0181:.
+@     BRK,0,A .
+@     CHG <ROW>i2 <HLN> + 2  CHG <CLM>i3 SCNH$ - 6  CHG <HGT>i2 SCNV$ .
+@     CHG <DLN>i6 <LIN> .
+pc,<ROW>,<CLM>;''><DLN>''
+@     INC <ROW>,<DLN>  IF <ROW> gt <HGT> . ; GTO lin-1 .
+hc
+@     BRK  SC,-0 q .
+@.
+@     LDV,p <LNX> .
+@     MBX,OC,E,'Caution' "/\
+ There is a <TYP> at line <LNX> that might be affected by this change.//\
+ Please confirm that you wish to proceed with this action." \
+      O,(lin+1),C,(0010) .
+@     IF <TYP> eq 'lin+',(0033) ; GTO 0036 .
+@0182:.
+@     MBX,YN,Q,'Confirmation' "/\
+ Are you sure you want to <ACT> at the location specified?" \
+      Y,(0037),N,(0010) .
+@0183:.
+@     MBX,OK,S,'Invalid Cursor Position' "/\
+ In order to Unwrap, you must place the cursor either/\
+ on a RSLANT$ character or the last period on the line." \
+      O,(0010) .
+@0184:.
+@     SC,-3 q .
+@     DSP,-1,<LNX>,,,q,3 .
+@     LDV,p <LNX> .
+@     MBX,YN,Q,'Warning' "/\
+ Starting at line <LNX> there are characters beyond the/\
+ width of the original report (<OWD> characters).//\
+ Return to the Wrap Wizard to make further changes?" \
+      Y,(lin+1),N,(0185) .
+@     LDV <LIN>i6=<LNX> .
+@     GTO 0010 .
+@0185:.
+@     SRH,-1,,,0102 adn@ <V2>-<V3> @,@ <LNQ>i6 .
+@     IF <LNQ> eq 1,(0102) ; LDV,p <LNQ> .
+@     MBX,OC,E,'Confirmation' "/\
+ A total of <LNQ> lines in the run script currently/\
+ extend beyond the width of its original drawer.//\
+ If you exit now, the extra columns will be truncated if/\
+ the modified run script is placed back into that drawer.//\
+ Please confirm that you wish to make no further changes;/\
+ otherwise, press Cancel to return to the Wrap Wizard." \
+      C,(lin+1),O,(0102) .
+@     LDV <LIN>i6=<LNX> .
+@     GTO 0010 .
+@0186:.
+@     MBX,OK,E,'Nothing Found' "/\
+ No lines found exceeding the width of the original run control report." \
+      O,(0010) .
+@0187:.
+@     MBX,OK,E,'Invalid Display' "/\
+ The selected tool cannot be used when the report is shifted." \
+      O,(lin+1) .
+@     DSP,-1,<LIN>,,0,Q .
+@     GTO 0010 .
+@.
+@. ------------------------------- Termination ---------------------------------
+@.
+@0196:. Abort routine
+@.
+@     CHG <ERR>i4 CERR$ .
+@     FON,t .
+@     IF SYSNAM$(1-1) eq 'M',(0102) ; .
+@     RER,EDRW$,0003 0001  RAR 0196 .
+@     IF <WIN1> ne 0  CLS,<WIN1>  LDV <WIN1>=0 ; .
+@     GTO 0010 .
+@.
+@0199:. Return
+@.
+@     IF <WIN1> ne 0  CLS,<WIN1> ; .
+@     FKY .
+@     RNM,-1 -0 .
+@     RETURN .

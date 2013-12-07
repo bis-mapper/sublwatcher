@@ -1,0 +1,187 @@
+.Data_RDL_Variables   Remove Variable Size on RDL, RLN, and R
+.REV: 2.2    DATE: 20120218
+*===============================================================================
+*  Copyright (c) 2012 IT Resource Solutions (ITRS)                             *
+*  --------------------------------------------------------------------------  *
+*  The SBS utility is a free software package, provided for the benefit        *
+*  of all BIS users.  It contains no warranty of any kind, and ITRS will       *
+*  assume no liability for defects or problems resulting from its use.         *
+*  This software may be used and distributed freely in its entire form;        *
+*  however, no portion of this program code may be reused without the          *
+*  expressed consent of ITRS.                                                  *
+*===============================================================================
+:L1=29,2=44,3=46,4=58,5=61,6=66,7=68,8=69,9=73,10=76,11=79,12=82,13=88,14=92
+:L15=97,16=103,17=117,18=151,19=152,20=156,21=164,196=171,198=177,199=182
+@.
+@. ------------------------------- Test Setup ----------------------------------
+@.
+@     BRK,0,F .
+@     RDC,EDRW$,50,2 1-80 <V1>s .
+<V1>
+@     BRK .
+@.
+@     CALL 0001 (<STS>h3) .
+@     DSX,-0 .
+@.
+@. ------------------------------ Entry Point ----------------------------------
+@.
+@0001:(<STS>) .
+@.
+@     RNM -1 .
+@.
+@     LDV <WIN1>i6=0 .
+@     RER,EDRW$,0003 0001  RAR 0196 .
+@.
+@     LZR,-1 ,<WID>i3  CHG <WWD>i3 <WID> - 1 .
+@.
+@     LDV <FOR>h6=000000,<BAC>h6=FFFFCC .
+@     IF DWCAP$(13-1) ne 1 . ; GTO lin+2 .
+@     LDV <FOR>h3=bla,<BAC>h4=yel .
+@.
+@     SRH,EDRW$,0007 d 'RD' ¬,'R'  RNM -2 .
+@     LDV <LN2>i4=5 .
+@0002:INC <LN2>  RDL,-2,<LN2>,0199 'Command' <CMD>h  LDV,p <CMD> .
+@     LDV <LIN>i4=2 .
+@0003:INC <LIN>  LOC,-1,<LIN>,0002 aft% 1-<WID> <CMD> <COL>i3,<LIN> .
+@     RDL,-1,<LIN> 1-<WID> <DAT>s  LDV <LXX>i6=<LIN>,<CNF>h1 .
+@     IF <DAT>(1-1) ne '@',(lin+4) ; LDV <N>i3=2 .
+@     IF <DAT>(<N>-1) ne ' ',(lin+2) ; .
+@     INC <N>  IF <N> gt <WID>,(0003) ; GTO lin-1 .
+@     IF <DAT>(<N>-1) eq '.',(0003) ; IF <DAT>(1-1) eq '@',(0004) ; .
+@     LDV <LB4>i4=<LIN> .
+@     DEC <LB4>  IF <LB4> lt 3,(0003) ; RDL,-1,<LB4> 1-<WID> <V1>s .
+@     LCV,0003 b1 <V1> '\'  IF <V1>(1-1) eq '@',(0004) ; GTO lin-1 .
+@.
+@. ---------------------------- Command Process --------------------------------
+@.
+@0004:IF <DAT>(<COL>-1) eq ' ',';','@',':' . ; GTO 0003 .
+@     INC,4 <COL>  IF <DAT>(<COL>-1) eq ' ',','  DEC,4 <COL> . ; GTO 0003 .
+@     LDV <LNX>i6=<LIN> .
+@0005:INC <COL>  IF <COL> gt <WID>,(0003) ; .
+@     IF <DAT>(<COL>-1) eq ' ',(0006),'\',(lin+1) ; GTO lin-1 .
+@     INC <LNX>  RDL,-1,<LNX> 1-<WID> <DAT>  LDV <COL>=1 .
+@     IF <DAT>(<COL>-1) ne ' ',(0005) ; .
+@     INC <COL>  IF <COL> gt <WID>,(0003) ; GTO lin-1 .
+@0006:INC <COL>  IF <COL> gt <WID>,(0003) ; .
+@     IF <DAT>(<COL>-1) eq ' ',(0006),'\',(lin+1) ; DEC <COL>  GTO 0008 .
+@0007:INC <LNX>  RDL,-1,<LNX> 1-<WID> <DAT>  LDV <COL>=1  GTO 0006 .
+@0008:INC <COL>  IF <COL> gt <WID>,(0003) ; .
+@     IF <DAT>(<COL>-1) eq ' ',(0009),TIC$,(lin+1),'\',(0007) ; GTO 0008 .
+@     INC <COL>  IF <COL> gt <WID>,(0003) ; .
+@     IF <DAT>(<COL>-1) eq TIC$,(0008) ; GTO lin-1 .
+@0009:INC <COL>  IF <COL> gt <WID>,(0003) ; .
+@     IF <DAT>(<COL>-1) eq ' ',(0009),'\',(lin+1) ; GTO 0010 .
+@     INC <LNX>  RDL,-1,<LNX> 1-<WID> <DAT>  LDV <COL>=1  GTO 0009 .
+@0010:IF <COL> gt <WID>,(0003) ; .
+@     IF <DAT>(<COL>-1) eq 'V',(0012),'<',(0013),'\',(0011),' ',(0014) ; .
+@     IF <DAT>(<COL>-1) eq ','  INC <COL>  GTO 0010 ; .
+@0011:INC <LNX>  RDL,-1,<LNX> 1-<WID> <DAT>  LDV <COL>=0 .
+@     INC <COL>  IF <COL> gt <WID>,(0003) ; .
+@     IF <DAT>(<COL>-1) eq ' ',(lin-1) ; GTO 0010 .
+@0012:INC <COL>  IF <COL> gt <WID>,(0003) ; .
+@     IF <DAT>(<COL>-1) eq '0',1,2,3,4,5,6,7,8,9 . ; GTO 0010 .
+@     INC <COL>  IF <COL> gt <WID>,(0003) ; .
+@     IF <DAT>(<COL>-1) eq '0',1,2,3,4,5,6,7,8,9,(lin-1) ; .
+@     IF <DAT>(<COL>-1) eq A,F,H,I,S,(0015),'\',(0011),' ',(0014) ; .
+@     IF <DAT>(<COL>-1) eq ','  INC <COL>  GTO 0010 ; GTO 0009 .
+@0013:INC <COL>  IF <COL> gt <WID>,(0003) ; .
+@     IF <DAT>(<COL>-1) ne '>',(0013) ; INC <COL>  IF <COL> gt <WID>,(0003) ; .
+@     IF <DAT>(<COL>-1) eq A,F,H,I,S,(0015),'\',(0011),' ',(0014) ; .
+@     IF <DAT>(<COL>-1) eq ','  INC <COL>  GTO 0010 ; GTO 0009 .
+@0014:LCV,0003 b1 <DAT>(<COL>-0) <CMD> <COL> ; .
+@     LDV <LXX>i6=<LIN>,<CNF>h1  DEC <COL>  GTO 0005 .
+@.
+@. ----------------------------- Possible Variable -----------------------------
+@.
+@0015:LDV <LIN>=<LNX> .
+@     LDV,o <DAT>(<COL>-1)  IF <DAT>(<COL>-1) eq 'F',(0021) ; .
+@     INC <COL>  IF <COL> gt <WID>,(0003) ; .
+@     IF <DAT>(<COL>-1) eq ','  INC <COL>  GTO 0010 ; .
+@     IF <DAT>(<COL>-1) eq '\',(0020),' ',(0014) ; .
+@.
+@0016:LDV <BEG>i3=<COL> .
+@     INC <COL>  IF <COL> gt <WID>,(0003) ; .
+@     IF <DAT>(<COL>-1) eq '0',1,2,3,4,5,6,7,8,9,(lin-1) ; .
+@     CHG <N>i3 <COL> - <BEG>  LDV,p <TAR>a5=<DAT>(<BEG>-<N>) .
+@     IF <CNF> ne '',(0018) ; IF <DAT>(<COL>-1) ne '',(0017) ; .
+@     CHG <N>i3 <BEG> - 1 .
+@     DEC <N>  IF <N> lt 1,(0017) ; .
+@     IF <DAT>(<N>-1) eq ',',(0017),'' . ; GTO lin-1 .
+@     LDV <I>i3=<N> .
+@     DEC <I>  IF <I> lt 1,(0017) ; IF <DAT>(<I>-1) eq '',(lin-0) ; .
+@     LDV <N>i3=<I> .
+@     DEC <N>  IF <N> lt 1,(0017) ; IF <DAT>(<N>-1) ne '-',(lin-0) ; .
+@     DEC,<N> <I>  INC <N>  LDV,p <V1>a5=<DAT>(<N>-<I>) .
+@     IF <V1> eq <TAR>,(0019) ; .
+@0017:BRK,0,A  LDV,w <SCH>i3=SCNH$ .
+prep;fld,02,01,01,<SCH>,,(pr,rv,whi/red);
+pc,02,02;''Run Statement: @<CMD>(1-3)'';
+pc,02,34;''Press F1 to Remove, F2 to Skip, F10 to Skip All''
+@     BRK  SC,-0 q .
+FKEY,1,Remove,KEY
+FKEY,2,Skip,KEY
+FKEY,10,SkpAll,KEY
+@     BRK  FKY,-0 .
+@     DSP,-1,<LXX>,,,Q,1 .
+@.
+@     CHG <ROW>i2 SCNV$ - 13 // 2 + 1  CHG <CLM>i3 SCNH$ - 50 // 2 + 1 .
+@     WIN,,<ROW>,<CLM>,13,50,<BAC>,bci ' Confirmation Required' <WIN1>i6 .
+@     FON,t,'MS Sans Serif',08,pdb .
+@     LDV,p <N>i6=<LXX> .
+@     BRK,0,A .
+ Please confirm that you want to remove the explicit size on all
+ Variables associated with the @<CMD>(1-3) statement on line <N>.
+ (Note: the size on F-type Variables will not be removed)
+
+ Caution:
+ If the currently defined Variable size does not match the field
+ length, a program error could potentially occur if you remove it.
+
+ Press F1 [ Remove ] , F2 [ Skip ] , or F10 [ SkpAll ] to skip the
+ remaining @RDL, @RLN and @RDC statements in this run script.
+@     BRK  TXT,-0,2,10,<WIN1>,02,02,10,80,<FOR>/<BAC>,s .
+@     FON,t .
+@.
+@     DSP,-1,<LXX>,,,,1 .
+@     CLS,<WIN1>  LDV <WIN1>=0 .
+@     FKY .
+@     IF FKEY$ eq 10,(0198) ; .
+@     LDV <CNF>h1=N  IF FKEY$ eq 1  LDV <CNF>=Y ; .
+@0018:IF <CNF> eq 'Y',(0019) ; GTO 0014 .
+@0019:LCV b1 <DAT>(<BEG>-0) <TAR>/ .
+@     WRL,-1,<LIN> 2-<WWD> <DAT>(1-1),<DAT>(2-0) .
+@     IF <DAT>(<COL>-1) eq '\',(0020),' ',(0014) ; LDV <COL>=<BEG>  GTO 0010 .
+@.
+@0020:INC <LNX>  RDL,-1,<LNX> 1-<WID> <DAT>  LDV <COL>=0 .
+@     INC <COL>  IF <COL> gt <WID>,(0003) ; .
+@     IF <DAT>(<COL>-1) eq ' ',(lin-1) ; .
+@     IF <DAT>(<COL>-1) eq 'V',(0012),'<',(0013),',',(0010) ; .
+@     IF <DAT>(<COL>-1) eq '0',1,2,3,4,5,6,7,8,9,(0016) ; GTO 0014 .
+@.
+@. ----------------------------- F Type Variable -------------------------------
+@.
+@0021:INC <COL>  IF <COL> gt <WID>,(0003) ; .
+@     IF <DAT>(<COL>-1) eq '\',(0011) ; .
+@     IF <DAT>(<COL>-1) eq ','  INC <COL>  GTO 0010 ; .
+@     IF <DAT>(<COL>-1) eq ' ',(0014) ; GTO 0021 ; .
+@.
+@. ------------------------------- Termination ---------------------------------
+@.
+@0196:. Abort routine
+@.
+@     CHG <ERR>i4 CERR$ .
+@     FON,t .
+@     GTO 0198 .
+@.
+@0198:. Quit
+@.
+@     LDV <STS>h3=XIT .
+@     GTO 0199 .
+@.
+@0199:. Return
+@.
+@     IF <WIN1> ne 0  CLS,<WIN1> ; .
+@     FKY .
+@     RNM,-1 -0 .
+@     LDV <STS>h3=OK .
+@     RETURN .

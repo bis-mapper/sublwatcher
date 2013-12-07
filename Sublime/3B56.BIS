@@ -171,12 +171,9 @@
 @     CALL,SUBLCOMMON_ charReplace_ ('import') .                                Replace tab character
 @     RNM -4 .
 @.
-@     LOK,<CAB>,<DRW>,<RPT>,LIN1  GTO 0063 .
-@     LDV <MSG>s80='Updating of report '<RPT>(p)<DRW>(p)<CAB>(p)' is in progress...' .
-@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
-@     GTO 0036 .
-@0063:REP,-4,<CAB>,<DRW>,<RPT> .
-@     ULK .
+@     DFU <CAB>,<DRW>,<RPT> .
+@     REP,-4,<CAB>,<DRW>,<RPT> .
+@     CMU .
 @     GTO 0036 .
 @.
 @.    #  Start over and keep re-checking

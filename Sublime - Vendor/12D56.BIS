@@ -1,0 +1,77 @@
+.Data_linplusminus    Standardize lin+ and lin- Statements
+.REV: 2.2    DATE: 20120218
+*===============================================================================
+*  Copyright (c) 2012 IT Resource Solutions (ITRS)                             *
+*  --------------------------------------------------------------------------  *
+*  The SBS utility is a free software package, provided for the benefit        *
+*  of all BIS users.  It contains no warranty of any kind, and ITRS will       *
+*  assume no liability for defects or problems resulting from its use.         *
+*  This software may be used and distributed freely in its entire form;        *
+*  however, no portion of this program code may be reused without the          *
+*  expressed consent of ITRS.                                                  *
+*===============================================================================
+:L1=28,2=34,3=46,4=63,5=70,6=71,199=74
+@.
+@. ------------------------------- Test Setup ----------------------------------
+@.
+@     BRK,0,F .
+@     RDC,EDRW$,50,2 1-80 <V1>s .
+<V1>
+@     BRK .
+@.
+@     CALL 0001 (<STS>h3) .
+@     DSX,-0 .
+@.
+@. ------------------------------ Entry Point ----------------------------------
+@.
+@0001:(<STS>) .
+@.
+@     RNM -1 .
+@     LZR,-1 ,<WID>i3  CHG <WWD>i3 <WID> - 1 .
+@.
+@     LDV <LIN>i4=2 .
+@0002:INC <LIN>  LOC,-1,<LIN>,0199 aft% 1-<WID> 'LIN' <COL>i3,<LIN> .
+@     RDL,-1,<LIN> 1-<WID> <DAT>s .
+@     IF <DAT>(1-1) ne '@',(lin+4) ; LDV <N>i3=2 .
+@     IF <DAT>(<N>-1) ne ' ',(lin+2) ; .
+@     INC <N>  IF <N> gt <WID>,(0002) ; GTO lin-1 .
+@     IF <DAT>(<N>-1) eq '.',(0002) ; IF <DAT>(1-1) eq '@',(0003) ; .
+@     LDV <LB4>i4=<LIN> .
+@     DEC <LB4>  IF <LB4> lt 3,(0002) ; RDL,-1,<LB4> 1-<WID> <V1>s .
+@     LCV,0002 b1 <V1> '\'  IF <V1>(1-1) eq '@',(0003) ; GTO lin-1 .
+@.
+@. ----------------------- Locate and Change Target ----------------------------
+@.
+@0003:LDV <CHR>h1=<DAT>(<COL>-1) .
+@     IF <CHR> eq ' ',',','('  INC <COL> . ; GTO 0006 .
+@     LCV,lin+1 t% <DAT>(<COL>-5) 'LIN -' \
+      LCV,lin+1 b1t% <DAT>(<COL>-0) 'LIN -'/'lin-'  GTO 0004 .
+@     LCV,lin+1 t% <DAT>(<COL>-4) 'LIN-' \
+      LCV,lin+1 b1t% <DAT>(<COL>-0) 'LIN-'/'lin-'  GTO 0004 .
+@     LCV,lin+1 t% <DAT>(<COL>-5) 'LIN +' \
+      LCV,lin+1 b1t% <DAT>(<COL>-0) 'LIN +'/'lin+'  GTO 0004 .
+@     LCV,lin+1 t% <DAT>(<COL>-4) 'LIN+' \
+      LCV,lin+1 b1t% <DAT>(<COL>-0) 'LIN+'/'lin+'  GTO 0004 .
+@     INC,3 <COL>  LDV <CHR>=<DAT>(<COL>-1) .
+@     IF <CHR> eq '0',1,2,3,4,5,6,7,8,9 . ; GTO lin+2 .
+@     DEC,4 <COL>  LCV,lin+1 b1t% <DAT>(<COL>-0) 'LIN'/'lin+'  GTO 0004 .
+@     IF <CHR> ne ' ',(0006) ; .
+@     INC <COL>  LDV <CHR>=<DAT>(<COL>-1) .
+@     IF <CHR> eq '0',1,2,3,4,5,6,7,8,9 . ; GTO 0006 .
+@     DEC,5 <COL>  LCV,lin+1 b1t% <DAT>(<COL>-0) 'LIN '/'lin+'  GTO 0004 .
+@0004:RDL,-1,<LIN> 1-<WID> <OLN>s  DEF,p <OSZ>i3 <OLN>  DEF,p <NSZ>i3 <DAT> .
+@     IF <NSZ> le <OSZ>,(0005) ; CHG <SZ>i1 <NSZ> - <OSZ> .
+@     LDV <EOC>I3=1 .
+@     LCV,0005 b1t~ <DAT>(<EOC>-0) ' . ' <EOC>i3  INC,3 <EOC> .
+@     LCV,lin+2 b1t~ <DAT>(<EOC>-0) ';' <SEM>i3 .
+@     CHG <EOC> <SEM> + 1  GTO lin-2 .
+@     IF <EOC> lt <WID>  LCV,0005 b<SZ>t~ <DAT>(<EOC>-0) '  '/' ' ; .
+@0005:WRL,-1,<LIN> 2-<WWD> <DAT>(1-1),<DAT>(2-0) .
+@0006:INC,3 <COL>  LCV,0002 b1t% <DAT>(<COL>-0) 'LIN' <COL> .
+@     DEC <COL>  GTO 0003 .
+@.
+@0199:. --------------------------- Return -------------------------------------
+@.
+@     RNM,-1 -0 .
+@     LDV <STS>h3=OK .
+@     RETURN .

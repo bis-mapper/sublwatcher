@@ -1,0 +1,91 @@
+.Data_Indent          Indent Logic
+.REV: 2.2    DATE: 20120218
+*===============================================================================
+*  Copyright (c) 2012 IT Resource Solutions (ITRS)                             *
+*  --------------------------------------------------------------------------  *
+*  The SBS utility is a free software package, provided for the benefit        *
+*  of all BIS users.  It contains no warranty of any kind, and ITRS will       *
+*  assume no liability for defects or problems resulting from its use.         *
+*  This software may be used and distributed freely in its entire form;        *
+*  however, no portion of this program code may be reused without the          *
+*  expressed consent of ITRS.                                                  *
+*===============================================================================
+:L1=27,2=38,3=50,4=58,5=65,6=69,7=86,199=88
+@.
+@. ------------------------------- Test Setup ----------------------------------
+@.
+@     BRK,0,F .
+@     RDC,EDRW$,50,2 1-80 <V1>s .
+<V1>
+@     BRK .
+@     CALL 0001 (<STS>h3) .
+@     DSX,-0 .
+@.
+@. ------------------------------ Entry Point ----------------------------------
+@.
+@0001:(<STS>) .
+@.
+@     RNM -1 .
+@     LZR,-1 ,<WID>i3  CHG <WWD>i3 <WID> - 1 .
+@.
+@     LDV <LL>i1=4 .
+@     FDR,EDRW$,0099,,,lin+1 '' 'User-ID' ¬,USER$  RLN 'LL' <LL> .
+@     IF <LL> eq 3,4 . ; LDV <LL>=4 .
+@     CHG <N>i1 <LL> + 1  LDV <IND>h<N> .
+@.
+@     LDV <LIN>i6=2 .
+@0002:INC <LIN>  RDL,-1,<LIN>,0199 1-<WID> <DAT>s .
+@     IF <DAT>(1-1) eq '@' . ; GTO 0002 .
+@     IF <DAT>(2-1) eq '0',1,2,3,4,5,6,7,8,9,(0003) ; .
+@     IF <DAT>(2-0) eq '',(0002) ; LDV <COL>i3=2 .
+@     IF <DAT>(<COL>-1) eq ''  INC <COL>  GTO lin-0 ; .
+@     LDV <V1>h2=<DAT>(<COL>-0)  IF <V1> eq '. ',(0002) ; .
+@     IF <V1>(1-1) ge 'A' & le 'Z'  IF <V1>(2-1) ge 'A' & le 'Z' . ; GTO 0002 .
+@     LDV <COD>s<WID>=<DAT>(<COL>-0),<NEW>s<WID>='@'<IND><COD> .
+@     IF <COD>(1-4) eq 'rdb ',(0006) ; GTO 0004 .
+@.
+@. ------------------------------- Label Line ----------------------------------
+@.
+@0003:LDV <COL>i3=2 .
+@     INC <COL>  IF <DAT>(<COL>-1) eq ':',(lin+2) ; .
+@     DEF <N>h1,<DAT>(<COL>-1)  IF <N> eq 1  GTO lin-1 ; .
+@     CHG <N>i2 <COL> - 2  CHG <LBL>i<LL> <DAT>(2-<N>) + 0 .
+@     INC <COL>  IF <COL> eq <WID>  LDV <COD>s<WID>  GTO lin+2 ; .
+@     IF <DAT>(<COL>-1) ne ' ' . ; GTO lin-1 .
+@     LDV <COD>s<WID>=<DAT>(<COL>-0) .
+@     LDV,rz <LBL>  LDV <NEW>s<WID>='@'<LBL>':'<COD> .
+@0004:RDL,-1,<LIN> 1-<WID> <OLN>s  DEF,p <OSZ>i3 <OLN>  DEF,p <NSZ>i3 <NEW> .
+@     IF <NSZ> le <OSZ>,(0005) ; CHG <SZ>i1 <NSZ> - <OSZ> .
+@     LDV <EOC>i3=1 .
+@     LCV,0005 b1t~ <NEW>(<EOC>-0) ' . ' <EOC>i3  INC,3 <EOC> .
+@     LCV,lin+2 b1t~ <NEW>(<EOC>-0) ';' <SEM>i3 .
+@     CHG <EOC> <SEM> + 1  GTO lin-2 .
+@     IF <EOC> lt <WID>  LCV,0005 b1-<SZ>t~ <NEW>(<EOC>-0) '  '/' ' ; .
+@0005:WRL,-1,<LIN> 2-<WWD> <NEW>(1-1),<NEW>(2-0)  GTO 0006 .
+@.
+@. ----------------------- Check for Continuation Line -------------------------
+@.
+@0006:LCV,0002 '' <DAT> '\' <COL>i3  DEC <COL>  IF <COL> lt 1,(0002) ; .
+@     IF <DAT>(<COL>-1) eq ' ',',' . ; GTO 0002 .
+@     LCV,0002 'nt'SOE$ <DAT> 'CAL,' .
+@     LCV,0002 'nt'SOE$ <DAT> 'WRL,' .
+@     LCV,0002 'nt'SOE$ <DAT> 'SC ' .
+@     LCV,0002 'nt'SOE$ <DAT> 'MBX,' .
+@     LCV,0002 'nt'SOE$ <DAT> 'XQT ' .
+@     LCV,0002 'nt'SOE$ <DAT> 'MNU,' .
+@     LCV,0002 'nt'SOE$ <DAT> 'RUN ' .
+@     LCV,0002 'nt'SOE$ <DAT> 'BR ' .
+@     INC <LIN>  RDL,-1,<LIN>,0199 1-<WID> <DAT> .
+@     IF <DAT>(1-1) eq '@',TIC$,(0007) ; IF <DAT> eq '',(0007) ; .
+@     IF <DAT>(2-5) eq '',(0006) ; .
+@     LDV <COL>=1 .
+@     IF <DAT>(<COL>-1) eq ''  INC <COL>  GTO lin-0 ; .
+@     LDV <COD>s<WID>=<DAT>(<COL>-0),<NEW>s<WID>=' '<IND><COD> .
+@     GTO 0004 .
+@0007:DEC <LIN>  GTO 0002 .
+@.
+@0199:. --------------------------- Return -------------------------------------
+@.
+@     RNM,-1 -0 .
+@     LDV <STS>=OK .
+@     RETURN .

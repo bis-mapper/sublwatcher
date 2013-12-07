@@ -1,0 +1,251 @@
+.Data_Check_Term      Check For Missing/Improper Termination
+.REV: 2.2    DATE: 20120218
+*===============================================================================
+*  Copyright (c) 2012 IT Resource Solutions (ITRS)                             *
+*  --------------------------------------------------------------------------  *
+*  The SBS utility is a free software package, provided for the benefit        *
+*  of all BIS users.  It contains no warranty of any kind, and ITRS will       *
+*  assume no liability for defects or problems resulting from its use.         *
+*  This software may be used and distributed freely in its entire form;        *
+*  however, no portion of this program code may be reused without the          *
+*  expressed consent of ITRS.                                                  *
+*===============================================================================
+@.
+@. ------------------------------- Test Setup ----------------------------------
+@.
+@     IF DRW$ eq 0  REL ; .
+@.
+@     CALL 0001 (<STS>h3) .
+@     DSX,-0 .
+@.
+@. ------------------------------ Entry Point ----------------------------------
+@.
+@0001:(<STS>) .
+@.
+@     RNM -1 .
+@.
+@     LDV <WIN1>i6=0 .
+@     RER,EDRW$,0003 0001  RAR 0196 .
+@.
+@     LZR,-1 ,<WID>i3 .
+@.
+@     LDV <FOR>h6=000000,<BAC>h6=FFFFCC .
+@     IF DWCAP$(13-1) ne 1 . ; GTO lin+2 .
+@     LDV <FOR>h3=bla,<BAC>h4=yel .
+@.
+@0010:. ------------------- Comment Line Termination ---------------------------
+@.
+@     CHG <N>i3 <WID> - 2  LDV <V1>s<N> .
+@     LDV <LIN>i6=1 .
+@0011:INC <LIN>  LOC,-1,<LIN>,0020 fmt~ 1-<WID> '@'<V1>'~' ,<LIN> .
+@.
+@     BRK,0,A  LDV,w <SCH>i3=SCNH$ .
+prep;fld,02,01,01,<SCH>,,(pr,rv,whi/red);
+pc,02,02;''Missing Comment Termination'';
+pc,02,41;''F1 to Retry, F2 to Skip, F10 to Skip All''
+@     BRK  SC,-0 q .
+FKEY,1,Retry,KEY
+FKEY,2,Skip,KEY
+FKEY,10,SkpAll,KEY
+@     BRK  FKY,-0 .
+@     DSP,-1,<LIN>,,,Q,1 .
+@.
+@     CHG <ROW>i2 SCNV$ - 11 // 2 + 1  CHG <CLM>i3 SCNH$ - 48 // 2 + 1 .
+@     WIN,,<ROW>,<CLM>,11,48,<BAC>,bci ' Suspected Syntax Error' <WIN1>i6 .
+@     FON,t,'MS Sans Serif',08,pdb .
+@     LDV,p <LNX>i6=<LIN> .
+@     BRK,0,A .
+ Line <LNX> appears to be intended as a comment line.
+ However, it is missing a termination character (period).
+
+ The report is now displayed at line <LNX>.  Modifications can
+ be made to correct this, or the suspect logic can be ignored.
+
+ Press F1 [ Retry ] to recheck the line, or F2 [ Skip ] to skip it.
+ Press F10 [ SkpAll ] to stop checking for termination errors.
+@     BRK  TXT,-0,2,8,<WIN1>,02,02,08,80,<FOR>/<BAC>,s .
+@     FON,t .
+@.
+@     LDV <SBSMSG>s80='Action required by SBS' .
+@     CALL,"GROWL" 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
+@     DSP,-1,<LIN>,,,,1 .
+@     CLS,<WIN1>  LDV <WIN1>=0 .
+@     FKY .
+@     IF FKEY$ eq 10,(0198) ; .
+@     IF FKEY$ eq 1  DEC <LIN> ; .
+@     GTO 0011 .
+@.
+@0020:. ------------------ Label Definition Termination ------------------------
+@.
+@     CHG <N>i3 <WID> - 9  LDV <V1>s<N> .
+@     LDV <LIN>i6=1 .
+@0021:INC <LIN>  LOC,-1,<LIN>,0030 mt~ 1-<WID> '@:'<V1>'~' ,<LIN> .
+@     RDL,-1,<LIN> 2-1 <V2>h  IF <V2> eq '.',(0021) ; .
+@     IF <V2> eq '.',(0021) ; IF <V2> ge 0 & le 9 . ; GTO 0021 .
+@.
+@     BRK,0,A  LDV,w <SCH>i3=SCNH$ .
+prep;fld,02,01,01,<SCH>,,(pr,rv,whi/red);
+pc,02,02;''Missing Label Termination'';
+pc,02,41;''F1 to Retry, F2 to Skip, F10 to Skip All''
+@     BRK  SC,-0 q .
+FKEY,1,Retry,KEY
+FKEY,2,Skip,KEY
+FKEY,10,SkpAll,KEY
+@     BRK  FKY,-0 .
+@     LDV <SBSMSG>s80='Action required by SBS' .
+@     CALL,"GROWL" 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
+@     DSP,-1,<LIN>,,,Q,1 .
+@.
+@     CHG <ROW>i2 SCNV$ - 11 // 2 + 1  CHG <CLM>i3 SCNH$ - 48 // 2 + 1 .
+@     WIN,,<ROW>,<CLM>,11,48,<BAC>,bci ' Suspected Syntax Error' <WIN1>i6 .
+@     FON,t,'MS Sans Serif',08,pdb .
+@     LDV,p <LNX>i6=<LIN> .
+@     BRK,0,A .
+ Line <LNX> appears to be a label definition line.
+ However, it is missing a termination character (period).
+
+ The report is now displayed at line <LNX>.  Modifications can
+ be made to correct this, or the suspect logic can be ignored.
+
+ Press F1 [ Retry ] to recheck the line, or F2 [ Skip ] to skip it.
+ Press F10 [ SkpAll ] to stop checking for termination errors.
+@     BRK  TXT,-0,2,8,<WIN1>,02,02,08,80,<FOR>/<BAC>,s .
+@     FON,t .
+@.
+@     LDV <SBSMSG>s80='Action required by SBS' .
+@     CALL,"GROWL" 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
+@     DSP,-1,<LIN>,,,,1 .
+@     CLS,<WIN1>  LDV <WIN1>=0 .
+@     FKY .
+@     IF FKEY$ eq 10,(0198) ; .
+@     IF FKEY$ eq 1  DEC <LIN> ; .
+@     GTO 0021 .
+@.
+@0030:. ------------------ Missing Termination Character -----------------------
+@.
+@     LDV <LIN>i6=1 .
+@0031:INC <LIN>  RDL,-1,<LIN>,0040 1-<WID> <V1>s  LDV,l <V2>h2=<V1>(2-0) .
+@     IF <V1>(1-1) ne '@',(0031) ; IF <V2> eq '','. ',(0031) ; .
+@     LDV,l <V2>h3=<V1>(2-0)  IF <V2> eq 'MNU',(0031) ; .
+@     LDV <LXX>i6=<LIN>  LCV,0032 '' <V1> '\' .
+@     RLN,,0032 1-1 <LT>h  IF <LT> eq '@',(0032) ; .
+@     LDV,r <V2>s<WID>=<V1>  IF <V2>(0-1) eq '\',(0034) ; LDV <I>i2=1 .
+@     LCV,0032 b<I> <V1> '\' <COL>i3  LCV b99 <V1>(1-<COL>) TIC$ ,<N>i3 .
+@     IF <N>(0-1) eq 1,3,5,7,9  INC <I>  GTO lin-1 ; GTO 0034 .
+@0032:IF <V1>(2-1) ge 0 & le 9  LCV,0031 nt~ <V1> ':. ' ; .
+@     LCV,0031 nt~ <V1> ' . '  LCV,0031 nt~ <V1> ';. ' .
+@     IF <V1>(0-2) eq ' .',(0031) ; GTO 0035 .
+@0034:CHG <LNX>i6 <LIN> + 1 .
+@     RDL,-1,<LNX>,0032 1-1 <V2>h  IF <V2> eq '@',(0032) ; .
+@     INC <LIN>  RDL,-1,<LIN>,0031 1-<WID> <V1>s .
+@     LDV,l <V2>h2=<V1>  IF <V2> eq '. ',(0031) ; .
+@     LCV,0034 n <V1> '\'  GTO 0032 .
+@0035:.
+@     BRK,0,A  LDV,w <SCH>i3=SCNH$ .
+prep;fld,02,01,01,<SCH>,,(pr,rv,whi/red);
+pc,02,02;''Missing Termination Character'';
+pc,02,41;''F1 to Retry, F2 to Skip, F10 to Skip All''
+@     BRK  SC,-0 q .
+FKEY,1,Retry,KEY
+FKEY,2,Skip,KEY
+FKEY,10,SkpAll,KEY
+@     BRK  FKY,-0 .
+@     LDV <SBSMSG>s80='Action required by SBS' .
+@     CALL,"GROWL" 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
+@     DSP,-1,<LIN>,,,Q,1 .
+@.
+@     CHG <ROW>i2 SCNV$ - 10 // 2 + 1  CHG <CLM>i3 SCNH$ - 48 // 2 + 1 .
+@     WIN,,<ROW>,<CLM>,10,48,<BAC>,bci ' Suspected Syntax Error' <WIN1>i6 .
+@     FON,t,'MS Sans Serif',08,pdb .
+@     LDV,p <LNX>i6=<LIN> .
+@     BRK,0,A .
+ Line <LNX> appears to be lacking a termination character (period).
+
+ The report is now displayed at line <LNX>.  Modifications can
+ be made to correct this, or the suspect logic can be ignored.
+
+ Press F1 [ Retry ] to recheck the line, or F2 [ Skip ] to skip it.
+ Press F10 [ SkpAll ] to stop checking for termination errors.
+@     BRK  TXT,-0,2,7,<WIN1>,02,02,07,80,<FOR>/<BAC>,s .
+@     FON,t .
+@.
+@     DSP,-1,<LIN>,,,,1 .
+@     CLS,<WIN1>  LDV <WIN1>=0 .
+@     FKY .
+@     IF FKEY$ eq 10,(0198) ; .
+@     IF FKEY$ eq 1  CHG <LIN> <LXX> - 1 ; .
+@     GTO 0031 .
+@.
+@0040:. ------------------ Termination In Last Column --------------------------
+@.
+@     LDV <LIN>i6=1 .
+@0041:INC <LIN>  FND,-1,<LIN>,0050 a <WID>-1 ¬,'.' ,<LIN> .
+@     RDL,-1,<LIN> 1-<WID> <V1>s  LDV,l <V2>h2=<V1>(2-0) .
+@     IF <V1>(1-1) ne '@',(0041) ; IF <V2> eq '. ',(0041) ; .
+@     CHG <N>i3 <WID> - 1  IF <V1>(<N>-1) ne '',(0041) ; .
+@.
+@     BRK,0,A  LDV,w <SCH>i3=SCNH$ .
+prep;fld,02,01,01,<SCH>,,(pr,rv,whi/red);
+pc,02,02;''Termination In Last Column'';
+pc,02,41;''F1 to Retry, F2 to Skip, F10 to Skip All''
+@     BRK  SC,-0 q .
+FKEY,1,Retry,KEY
+FKEY,2,Skip,KEY
+FKEY,10,SkpAll,KEY
+@     BRK  FKY,-0 .
+@     DSP,-1,<LIN>,,,Q,1 .
+@.
+@     CHG <ROW>i2 SCNV$ - 12 // 2 + 1  CHG <CLM>i3 SCNH$ - 48 // 2 + 1 .
+@     WIN,,<ROW>,<CLM>,12,48,<BAC>,bci ' Suspected Syntax Error' <WIN1>i6 .
+@     FON,t,'MS Sans Serif',08,pdb .
+@     LDV,p <LNX>i6=<LIN>,<WIX>i3=<WID> .
+@     BRK,0,A .
+ Line <LNX> appears to have a termination character (period)
+ placed in the last column of the run control report (<WIX>).
+ This may cause execution errors on certain BIS platforms.
+
+ The report is now displayed at line <LNX>.  Modifications can
+ be made to correct this, or the suspect logic can be ignored.
+
+ Press F1 [ Retry ] to recheck the line, or F2 [ Skip ] to skip it.
+ Press F10 [ SkpAll ] to stop checking for termination errors.
+@     BRK  TXT,-0,2,9,<WIN1>,02,02,09,80,<FOR>/<BAC>,s .
+@     FON,t .
+@.
+@     LDV <SBSMSG>s80='Action required by SBS' .
+@     CALL,"GROWL" 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
+@     DSP,-1,<LIN>,,,,1 .
+@     CLS,<WIN1>  LDV <WIN1>=0 .
+@     FKY .
+@     IF FKEY$ eq 10,(0198) ; .
+@     IF FKEY$ eq 1  DEC <LIN> ; .
+@     GTO 0041 .
+@.
+@0050:. --------------- Missing Else Termination on @IF ------------------------
+@.
+@. (not yet available)
+@.
+@0100:. ------------------------- Complete -------------------------------------
+@.
+@     LDV <STS>h3=OK .
+@     GTO 0199 .
+@.
+@. ------------------------------- Termination ---------------------------------
+@.
+@0196:. Abort routine
+@.
+@     CHG <ERR>i4 CERR$ .
+@     FON,t .
+@     GTO 0198 .
+@.
+@0198:. Quit
+@.
+@     LDV <STS>h3=XIT .
+@     GTO 0199 .
+@.
+@0199:. Return
+@.
+@     IF <WIN1> ne 0  CLS,<WIN1> ; .
+@     FKY .
+@     RNM,-1 -0 .
+@     RETURN .

@@ -1,0 +1,80 @@
+.Data_VariableNames   Uppercase Variable Names
+.REV: 2.2    DATE: 20120218
+*===============================================================================
+*  Copyright (c) 2012 IT Resource Solutions (ITRS)                             *
+*  --------------------------------------------------------------------------  *
+*  The SBS utility is a free software package, provided for the benefit        *
+*  of all BIS users.  It contains no warranty of any kind, and ITRS will       *
+*  assume no liability for defects or problems resulting from its use.         *
+*  This software may be used and distributed freely in its entire form;        *
+*  however, no portion of this program code may be reused without the          *
+*  expressed consent of ITRS.                                                  *
+*===============================================================================
+:L1=24,2=37,3=39,4=45,5=50,6=52,7=54,8=55,9=64,10=66,11=68,12=69,199=77
+@.
+@. ------------------------------- Test Setup ----------------------------------
+@.
+@     RSL,EDRW$,50 .
+@     CALL 0001 (<STS>h3) .
+@     DSX,-0 .
+@.
+@. ------------------------------ Entry Point ----------------------------------
+@.
+@0001:(<STS>) .
+@.
+@     RNM -1  LZR,-1 ,<W>i3  CHG <I>i3 <W> - 1 .
+@.
+@     LOC,-1,3,0005 afm 1-<W> '<html>'  LOC,-1,3,0005 afm 1-<W> '</html>' .
+@     LOC,-1,3 afmo 1-<W> '</'  RNM -2 .
+@.
+@     BRK,0,A .
+.Excluded Variable Names
+*            .
+*Name        .
+*============.
+@     LDV <LIN>i6=2 .
+@0002:INC <LIN>  LOC,-2,<LIN>,0004 afm 1-<W> '</' ,<LIN> .
+@     RDL,-2,<LIN>,0004 1-<W> <D>s  LDV <C>i3=1 .
+@0003:IF <C> ge <I>,(0002) ; LCV,0002 '' <D>(<C>-0) '</' <C> .
+@     IF <C> eq <I>,(0002) ; INC,2 <C>  LCV,0003 '' <D>(<C>-0) '>' <X>i3 .
+@     CHG <X> <X> - <C>  IF <X> ge 1 & le 12 . ; GTO 0003 .
+@     LDV,p <V>h<X>=<D>(<C>-<X>)  DEF <N>i1,<V>  IF <N> eq 1,2,3 . ; GTO 0003 .
+¬<D>(<C>-<X>)
+@     INC <C>  GTO 0003 .
+@0004:.
+¬BR
+¬HR
+¬P
+@     BRK  RNM -2 .
+@0005:.
+@     LDV <LIN>i6=2 .
+@0006:INC <LIN>  LOC,-1,<LIN>,0009 afm 1-<W> '<' ,<LIN> .
+@     RDL,-1,<LIN>,0009 1-<W> <D>s  LDV <C>i3=1  GTO 0008 .
+@0007:WRL,-1,<LIN> 2-<I> <D>(1-1),<D>(2-0)  GTO 0006 .
+@0008:IF <C> ge <W>,(0007) ; LCV,0007 '' <D>(<C>-0) '<' <C> .
+@     IF <C> eq <W>,(0007) ; INC <C>  LCV,0008 '' <D>(<C>-0) '>' <X>i3 .
+@     CHG <X> <X> - <C>  IF <X> ge 1 & le 12 . ; GTO 0008 .
+@     LDV,p <V>h<X>=<D>(<C>-<X>)  DEF <N>i1,<V>  IF <N> eq 1,2,3 . ; GTO 0008 .
+@     IF DRW2$ eq 0 . ; FND,-2,,lin+1 '' 'Name' ¬,<D>(<C>-<X>)  GTO 0008 .
+@     IF <X> ge 4  IF <D>(<C>-1) eq 'C','G','S','T' . ; GTO lin+2 .
+@     FND,EDRW$,0008,,lin+1 '' 'Name' ¬,<D>(<C>-<X>)  GTO 0008 .
+@     LCV b99 <D>(1-<C>) TIC$ ,<N>i3  IF <N>(0-1) eq 1,3,5,7,9,(0008) ; .
+@     LDV,u <D>(<C>-<X>)  INC <C> ; GTO 0008 .
+@0009:.
+@     LDV <LIN>i6=2 .
+@0010:INC <LIN>  LOC,-1,<LIN>,0199 afm 1-<W> '$' ,<LIN> .
+@     RDL,-1,<LIN>,0199 1-<W> <D>s  LDV <C>i3=1  GTO 0012 .
+@0011:WRL,-1,<LIN> 2-<I> <D>(1-1),<D>(2-0)  GTO 0010 .
+@0012:IF <C> ge <W>,(0011) ; LCV,0011 '' <D>(<C>-0) '$' <C> .
+@     LDV <X>i3=<C>,<N>i1=0  INC <C>  IF <C> lt 4,(0012) ; .
+@     IF <X> eq 0,(lin+2) ; DEC <X>  INC <N>  IF <N> gt 8,(0012) ; .
+@     DEF <S>i1,<D>(<X>-1)  IF <S> eq 0,4 . ; GTO lin-1 .
+@     IF <N> lt 3,(0012) ; INC <X> .
+@     BFN,EDRW$,0005,,0012 '' 'Res Word' ¬,<D>(<X>-<N>) .
+@     LDV,u <D>(<X>-<N>)  GTO 0012 .
+@.
+@0199:. --------------------------- Return -------------------------------------
+@.
+@     RNM,-1 -0 .
+@     LDV <STS>h3=OK .
+@     RETURN .

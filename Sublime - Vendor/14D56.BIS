@@ -1,0 +1,92 @@
+.Data_LC_Options      Lowercase Command Options
+.REV: 2.2    DATE: 20120218
+*===============================================================================
+*  Copyright (c) 2012 IT Resource Solutions (ITRS)                             *
+*  --------------------------------------------------------------------------  *
+*  The SBS utility is a free software package, provided for the benefit        *
+*  of all BIS users.  It contains no warranty of any kind, and ITRS will       *
+*  assume no liability for defects or problems resulting from its use.         *
+*  This software may be used and distributed freely in its entire form;        *
+*  however, no portion of this program code may be reused without the          *
+*  expressed consent of ITRS.                                                  *
+*===============================================================================
+:L1=28,2=34,3=37,4=40,5=52,6=60,7=70,8=79,9=80,10=83,11=84,12=85,199=89
+@.
+@. ------------------------------- Test Setup ----------------------------------
+@.
+@     BRK,0,F .
+@     RDC,EDRW$,50,2 1-80 <V1>s .
+<V1>
+@     BRK .
+@.
+@     CALL 0001 (<STS>h3) .
+@     DSX,-0 .
+@.
+@. ------------------------------ Entry Point ----------------------------------
+@.
+@0001:(<STS>) .
+@.
+@     RNM -1 .
+@     LZR,-1 ,<WID>i3  CHG <WWD>i3 <WID> - 1 .
+@.
+@     LDV <OPT>i1=0 .
+@0002:INC <OPT>  IF <OPT> ge 3,(0199) ; .
+@     SRH,EDRW$,0007 d 'OT' ¬,<OPT>  RNM -2 .
+@     LDV <LN2>i4=5 .
+@0003:INC <LN2>  RDL,-2,<LN2>,0002 'Command' <CMD>h .
+@     IF <OPT> eq 1  LCV b1t% <CMD> ' '/',' ; LDV,p <CMD> .
+@     LDV <LIN>i4=2 .
+@0004:INC <LIN>  LOC,-1,<LIN>,0003 aft% 1-<WID> <CMD> <COL>i3,<LIN> .
+@     RDL,-1,<LIN> 1-<WID> <DAT>s .
+@     IF <DAT>(1-1) ne '@',(lin+4) ; LDV <N>i3=2 .
+@     IF <DAT>(<N>-1) ne ' ',(lin+2) ; .
+@     INC <N>  IF <N> gt <WID>,(0004) ; GTO lin-1 .
+@     IF <DAT>(<N>-1) eq '.',(0004) ; IF <DAT>(1-1) eq '@',(0005) ; .
+@     LDV <LB4>i4=<LIN> .
+@     DEC <LB4>  IF <LB4> lt 3,(0004) ; RDL,-1,<LB4> 1-<WID> <V1>s .
+@     LCV,0004 b1 <V1> '\'  IF <V1>(1-1) eq '@',(0005) ; GTO lin-1 .
+@.
+@. ---------------------------- Process Command --------------------------------
+@.
+@0005:IF <DAT>(<COL>-1) eq ' ','@',';',':','¬' . ; GTO 0004 .
+@     DEF,p <SZ>i1,<CMD>  CHG <LOC>i3 <COL> + <SZ> .
+@     IF <CMD>(0-1) ne ','  INC <LOC> ; .
+@     IF <DAT>(<LOC>-1) eq ' ',',' . ; GTO 0004 .
+@     IF <OPT> eq 1,(0006),2,(0007) ; GTO 0004 .
+@.
+@. ------------------------- Opt 1 Subfield Options ----------------------------
+@.
+@0006:INC,2 <COL>  LDV <WRL>h1=N .
+@     IF <DAT>(<COL>-1) eq ',',(lin+1) ; INC <COL>  GTO lin-0 .
+@     INC <COL> .
+@     IF,c <DAT>(<COL>-1) ge A & le Z  LDV,o <DAT>(<COL>-1)  LDV <WRL>=Y ; .
+@     INC <COL>  IF <DAT>(<COL>-1) ne ' ',(lin-1) ; .
+@     IF <WRL> eq 'Y'  WRL,-1,<LIN> 2-<WWD> <DAT>(1-1),<DAT>(2-0) ; .
+@     LCV,0004 b1 <DAT>(<COL>-0) <CMD> <COL>  GTO 0006 .
+@.
+@. ----------------------- Opt 2 Seperate Field Options ------------------------
+@.
+@0007:INC,2 <COL>  LDV <WRL>h1=N .
+@     IF <DAT>(<COL>-1) eq ' ',(lin+2) ; .
+@     INC <COL>  IF <COL> gt <WID>,(0004) ; GTO lin-1 .
+@     IF <DAT>(<COL>-1) ne ' ',(lin+2) ; .
+@     INC <COL>  IF <COL> gt <WID>,(0004) ; GTO lin-1 .
+@     IF <DAT>(<COL>-1) ne '\',(lin+2) ; .
+@     INC <LIN>  LDV <COL>=1  RDL,-1,<LIN>,0003 1-<WID> <DAT>s .
+@     IF <DAT>(<COL>-1) ne ' ',(lin+2) ; .
+@     INC <COL>  IF <COL> gt <WID>,(0004) ; GTO lin-1 .
+@0008:IF <DAT>(<COL>-1) eq '(',(0009),'<',(0010) ; GTO 0011 .
+@0009:CHG <N>i3 <COL> - 1  IF <N> lt 1,(0011) ; .
+@     IF <DAT>(<N>-1) eq 'l','t','u','y' . ; GTO 0011 .
+@     LCV,0011 '' <DAT>(<COL>-0) ')' <N>i3  LDV <COL>=<N>  GTO 0012 .
+@0010:LCV,0011 '' <DAT>(<COL>-0) '>' <N>i3  LDV <COL>=<N>  GTO 0012 .
+@0011:IF,c <DAT>(<COL>-1) ge A & le Z  LDV,o <DAT>(<COL>-1)  LDV <WRL>=Y ; .
+@0012:INC <COL>  IF <COL> le <WID>  IF <DAT>(<COL>-1) ne ' ',(0008) ; .
+@     IF <WRL> eq 'Y'  WRL,-1,<LIN> 2-<WWD> <DAT>(1-1),<DAT>(2-0) ; .
+@     LCV,0004 b1 <DAT>(<COL>-0) <CMD> <COL>  GTO 0007 .
+@.
+@0199:. --------------------------- Return -------------------------------------
+@.
+@     RNM,-1 -0 .
+@     LDV <STS>h3=OK .
+@     RETURN .

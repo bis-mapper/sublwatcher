@@ -1,0 +1,248 @@
+.Error_Routine        Error Routine
+.
+.
+.
+*
+*
+*===============================================================================
+:INCLUDE,ECAB$,B,1 .
+@.
+@0001:. -------------------------- Entry Point ---------------------------------
+@.
+@     CLS  MNU RESET .
+@     CHG v192i3 SCNH$ - 40 // 2 + 1 .
+@     WIN,,08,v192,07,40,whi,cb 'Program Error' v190i6 .
+@     FON,t,'Arial',08,pdb .
+@     TXT,"... Please Wait ...",v190,02,01,01,52,bla/whi,c .
+@     TXT,"Collecting Diagnostic Information",v190,04,01,01,52,dred/whi,cs .
+@     FON,t .
+@     CHG v190i6 OLINE$ - 1  IF DRW$ eq 0,(lin+4) ; .
+@     LZR,-0 v191i6,,,,,,,,,,v192i1  IF v192 eq 0,3 . ; GTO lin+3 .
+@     LDV,w v193i3=CHAR$  RDC,-0,1,50 1-v193 v195s .
+v195
+@     BRK,0,F .
+.RADS Error Dump
+*
+*Parameter   .Value
+*============.==================================================================
+¬Product Name¬
+¬Version     ¬
+¬Subsystem   ¬Report Tools
+¬Application ¬<*RADSAPP>
+@     IF <*RADSACB> eq '','<*RADSACB>',(lin+2) ; LDV,p v196a4=<*RADSACB> .
+¬App Cabinet ¬v196
+@     IF <*RADSAPP> eq '','RADS','<*RADSAPP>',(lin+2) ; .
+¬App Version ¬
+¬Interface   ¬GUI
+@     LDV,w v196a9=DATE2$,v197a8=TIME$ .
+¬Error Date  ¬v196
+¬Error Time  ¬v197
+@     LDV,lw v196a4=XERR$ .
+¬Error Number¬v196
+@     LSM,XERR$ V195s80  LDV,l v195 .
+¬Message     ¬v195
+@     LDV,w v196h12=RUN$ .
+¬Run Name    ¬v196
+@     DEF,m v198a4,XDRW$  DEF,a v197h1,XDRW$  LDV,lw v198,v196a4=XRPT$ .
+¬Cabinet     ¬v198
+¬Drawer      ¬v197
+¬Report      ¬v196
+@     LDV,lw v196a6=XLINE$ .
+¬Line        ¬v196
+@     LDV,lw v196a6=XFUN$ .
+¬Function    ¬v196
+@     LDV,w v196h12=USER$ .
+¬User-ID     ¬v196
+@     LDV,lw v196a4=DEPN$ .
+¬Department  ¬v196
+@     LDV,lw v196a5=STNUM$ .
+¬Station     ¬v196
+@     LDV,lw v196h5=SYSNAM$ .
+¬System Type ¬v196
+@     LDV,lw v196a12=MAPER$ .
+¬BIS Level   ¬v196
+@     LDV,w v196h18=DWCAP$ .
+¬DWCAP Flags ¬v196
+@     LDV,w v196h12=APILVL$ .
+¬API Level   ¬v196
+--------------------------------------------------------------------------------
+ Erroring section of run script
+--------------------------------------------------------------------------------
+@     CHG v196a6 XLINE$ - 6  CHG v197a6 XLINE$ + 5 .
+@     IF v196 lt 0  LDV v196=0 ; DRW,XDRW$ v193i3 .
+@0002:INC v196  IF v196 gt v197,(0003) ; .
+@     RDL,XDRW$,XRID$,v196,0003 1-v193 v195s .
+@     LDV,r v198a6=V196  IF v196 eq XLINE$  LDV,r v198=ERROR ; .
+V198 > V195
+@     GTO 0002 .
+@0003:.
+@     LDV v195h6=afsiho .
+--------------------------------------------------------------------------------
+ Variable Dump
+--------------------------------------------------------------------------------
+@     LDV v193i3=0 .
+@0004:INC v193  IF v193 gt MAXVAR$,(0006) ; .
+@     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+2 .
+@     DEF,v,0004 v197h12,vv193  IF v197 eq '',(0004) ; LDV,pu v197 .
+@     IF SYSNAM$(1-1) ne 'M' . ; GTO lin+2 .
+@     DEF,v,0004 v197h12,v193  LDV,pu v197 .
+@     XQT '@DEF,s v198a3,<'v197'>  LDV,p v198' .
+@     XQT '@DEF,i v199i1,<'v197'>' .
+@     XQT '@DEF,q v196i3,<'v197'>  IF v196 gt 0,(0005) ; .' .
+@     XQT ' '<TIC$''v197''TIC$>v195(v199-1)v198=/'<'v197'>/' .
+@     GTO 0004 .
+@0005:.
+@     LDV v194a3=0 .
+@     INC v194  IF v194 gt v196,(0004) ; LDV,p v192a3=v194 .
+@     XQT ' '<TIC$''v197''TIC$>v195(v199-1)v198'['v192']'=/'<'v197'>[v192]/' .
+@     GTO lin-2 .
+@0006:.
+@     LDV v193i3=0 .
+@0007:INC v193  IF v193 gt 189,(0009) ; LDV,z v193 .
+@     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+2 .
+@     DEF,v,0007 v197h12,vv193  IF v197 ne '',(0007) ; .
+@     IF SYSNAM$(1-1) ne 'M' . ; GTO lin+2 .
+@     DEF,i,0007 v199i1,vv193 .
+@     DEF,s,0007 v198a3,vv193  LDV,p v198 .
+@     DEF,i v199i1,vv193 .
+@     DEF,q v196i3,vv193  IF v196 gt 0,(0008) ; .
+ 'v'v193v195(v199-1)v198=/vv193/
+@     GTO 0007 .
+@0008:.
+@     LDV v194a3=0 .
+@     INC v194  IF v194 gt v196,(0007) ; LDV,p v192a3=v194 .
+ 'v'v193v195(v199-1)v198'['v192']'=/vv193[v192]/
+@     GTO lin-2 .
+@0009:.
+@     LDV,w v193a2=MAPER$  IF v193(2-1) ge 0 & le 9 . ; LDV v193(2-1)='' .
+@     IF SYSNAM$(1-1) eq 'M'  IF v193 lt 43,(0011) ; .
+@     IF SYSNAM$(1-1) ne 'M'  IF v193 lt 8,(0011) ; .
+--------------------------------------------------------------------------------
+ Global Variables
+--------------------------------------------------------------------------------
+@     LDV v193i3=0,v196i3=99  IF MAXGVR$ ne 'MAXGVR$'  LDV,w v196=MAXGVR$ ; .
+@0010:INC v193  IF v193 gt v196,(0011) ; .
+@     DEF,g,0010 v197h12,v193  IF v197 eq '',(0010) ; LDV,pu v197 .
+@     XQT '@DEF,s v198a3,<*'v197'>  LDV,p v198' .
+@     XQT '@DEF,i v199i1,<*'v197'>' .
+@     XQT ' '<*TIC$''v197''TIC$>v195(v199-1)v198=/'<*'v197'>/' .
+@     GTO 0010 .
+@0011:.
+@     LDV,p v196i6=v190,v192i6=v196  IF v196 gt 50  LDV v196i2=50 ; .
+--------------------------------------------------------------------------------
+ Output Area : Lines 1-v196 of v192
+--------------------------------------------------------------------------------
+@     LDV,w v193i3=CHAR$  RDC,-0,1,V196 1-v193 v195s .
+v195
+@     LZR,-0 v196i6  IF v196 eq v190,(0012) ; DEC,v190 v196  INC v190 .
+@     LDV,p v196,v191  IF v196 gt 50  LDV v196i2=50 ; .
+--------------------------------------------------------------------------------
+ Report-0 : Lines 1-v196 of v191
+--------------------------------------------------------------------------------
+@     LDV,w v193i3=CHAR$  RDC,-0,v190,V196 1-v193 v195s .
+v195
+@0012:.
+@     LDV v193i2=0 .
+@0013:INC v193  IF v193 gt 16,(0014) ; LDV,p v197i2=v193 .
+@     XQT '@IF DRW'v197'$ eq 0,'TIC$'DRW'v197'$'TIC$',(0013) ; .' .
+@     XQT '@LZR,-'v197' v192i6,v194i3,,,,,,,,,v198i1' .
+@     IF v198 eq 0,3 . ; GTO 0013 .
+@     LDV,p v192,v196i6=v192  IF v196 gt 50  LDV v196i2=50 ; .
+--------------------------------------------------------------------------------
+ Report-v197 : Lines 1-v196 of v192
+--------------------------------------------------------------------------------
+@     XQT '@RDC,-'v197',1,v196 1-v194 v195s ' .
+v195
+@     GTO 0013 .
+@0014:.
+@     BRK  RNM -1 .
+@.
+@     FDR,ECAB$,B,0002,,,lin+4 '' 'Parameter' ¬,'PROD_NAME' .
+@     RLN 'Value' v196h8 .
+@     FND,-1,,lin+2 '' 'Parameter' ¬,'Product Name' ,v191i6 .
+@     WRL,-1,v191 'Value(1-8)' ¬,v196 .
+@     FDR,ECAB$,B,0002,,,lin+5 '' 'Parameter' ¬,'RADS_VERSION' .
+@     RLN 'Value' v192h16  LDV,p v192 .
+@     RDL,ECAB$,B,0002,2,lin+3 73-8 v193h  LDV v195s28=v192' - 'v193 .
+@     FND,-1,,lin+2 '' 'Parameter' ¬,'Version' ,v191i6 .
+@     WRL,-1,v191 'Value(1-28)' ¬,v195 .
+@     IF <*RADSAPP> eq '','RADS','<*RADSAPP>',(lin+9) ; .
+@     IF <*RADSACB> eq '','<*RADSACB>' . ; LDV v192i4=<*RADSACB>  GTO lin+2 .
+@     FDR,ECAB$,B,0101,,,lin+7 '' 'AppID' ¬,<*RADSAPP>  RLN 'Cab' v192i .
+@     RNM,ECAB$,B,0002 -0  LDV,w v193h1=ADRW$,v194i4=RPT$ .
+@     FDR,v192,v193,v194,,,lin+5 '' 'Parameter' ¬,APP_VERSION .
+@     RLN 'Value(1-5)' v196a5 .
+@     RDL,v192,v193,v194,2,lin+3 73-8 v197h .
+@     FND,-1,,lin+2 '' 'Parameter' ¬,'App Version' ,v191i6 .
+@     WRL,-1,v191 'Value(1-16)' ¬,v196' - 'v197 .
+@.
+@     FND,-1,2,lin+7 '' 2-13 ' ','Variable Dump' ,v191i6  INC,2 v191 .
+@     FND,-1,v191,lin+6 '' 2-1 '-','-' ,v192i6  DEC,v191 v192 .
+@     IF v192 lt 1,(lin+5) ; LNY,-1,v191,v192  LN-,-1,v191,v192 .
+@     BRK,DRW1$ .
+*=
+@     BRK  LNP,-0,2 .
+@     SOR,-0 '' 2-22 '',1  LNY,-0,3,v192  DEC v191  LNP,-1,v191 .
+@.
+@     FND,-1,2,lin+7 '' 2-16 ' ','Global Variables' ,v191i6  INC,2 v191 .
+@     FND,-1,v191,lin+6 '' 2-1 '-','-' ,v192i6  DEC,v191 v192 .
+@     IF v192 lt 1,(lin+5) ; LNY,-1,v191,v192  LN-,-1,v191,v192 .
+@     BRK,DRW1$ .
+*=
+@     BRK  LNP,-0,2 .
+@     SOR,-0 '' 2-14 '',1  LNY,-0,3,v192  DEC v191  LNP,-1,v191 .
+@.
+@     DEF,m v192i4,XDRW$  DEF,a v193h1,XDRW$ .
+@     LDV,w v194i4=XRPT$,v195i6=XLINE$ .
+@     CHG v196i4 CERR$ .
+@     IF SYSNAM$(1-1) ne 'M' . ; SC x EEL;rsm .
+@     LSM,v196 V197s79 .
+@     LDV,w v198h12=USER$ .
+@     IF <*RADSUSR> eq '<*RADSUSR>','' . ; LDV v198=<*RADSUSR> .
+@.
+@     CLS .
+@.
+@     IF Debug_Enabled ne 'Debug_Enabled',(0015) ; .
+@.
+@     DUP,-1,0,F  LDV,rw v196a4=RPT$ .
+@.
+@     DFU ECAB$,B,0016 .
+@     LN+,ECAB$,B,0016,5,2 .
+@     WRL,ECAB$,B,0016,6 'Cab','D','Rpt','Date','Time','User-ID',\
+      'Err Cab','ED','Err Rpt','Error Line','Sub Sys' \
+      ¬,'   0',F,v196,DATE11$,TIME$,v198,v192,v193,v194,v195,APP .
+@     LDV,l v197 .
+@     WRL,ECAB$,B,0016,7 2-79 .,v197 .
+@     CMU .
+@.
+@     LDV,pw v196h12=RUN$ .
+@     MBX,RC,E,'Program Error' "/\
+ An internal program error has occurred and/\
+ diagnostic information has been saved.//\
+ Would you like to restart v196 now?" \
+      R,(0198),C,(0199) .
+@0015:.
+@     DSP,-1 .
+@     DSP,v192,v193,v194,v195,,,,,v197 .
+@     GTO lin-2 .
+@.
+@0101:. -------------------------- Entry Point ---------------------------------
+@.
+@     CHG v196i4 CERR$ .
+@     SC x EEL';'rsm .
+@     CLS  MNU RESET .
+@     MBX,OK,S,'Non-Recoverable Error' "/\
+ Your application path was not properly configured/\
+ and has caused this program to terminate.//\
+ Press OK to restart, and use the Options services/\
+ on the Main Menu screen to (re)configure it." \
+      O,(0198) .
+@.
+@. ------------------------------- Termination ---------------------------------
+@.
+@0198:.
+@     BRK  DLR,-0 .
+@     RUN RUN$ .
+@0199:.
+@     IF DASH$ ne 'DASH$'  DSH,0 ; .
+@     DSX,-1 .
