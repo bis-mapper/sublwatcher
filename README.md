@@ -69,4 +69,8 @@ Browse to your sublwatcher folder and select the folder for the site that your c
 
 The BIS report that you typed `SUBL` on will now be saved in this folder and you should be able to modify this file in Sublime and have the changes saved back to BIS.
 
-## Color Scheme - Syntax Files - Keyboard Shortcuts
+## License
+
+Portions copyright © IT Resource Solutions (ITRS)
+Permission has been granted by ITRS for use of their software in this package.
+Copying or reuse of that software is prohibited without the expressed consent of ITRS.
