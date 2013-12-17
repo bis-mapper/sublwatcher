@@ -14,7 +14,7 @@
 @.
 @.    #TEST SETUP#
 @     LDV <STATUS>h1=0 .
-@ rdb CALL 0001 (<STATUS>) .
+@     CALL 0001 (<STATUS>) .
 @     GTO END .
 @.
 @0001:(<STATUS>) .
@@ -40,7 +40,7 @@
 @.
 @.    #  File contains  "User entered input|c:\temp\example\file.bis"
 @     LCV,lin3 'b1' <FILEOUTPUT> '|' <VPOS>i3  DEC <VPOS> .
-@     LDV <CTL>s80=<FILEOUTPUT>(1-<VPOS>)  INC,2 <VPOS> .
+@     LDV,U <CTL>s80=<FILEOUTPUT>(1-<VPOS>)  INC,2 <VPOS> .
 @     LDV <FILE>s256=<FILEOUTPUT>(<VPOS>-0) .
 @.
 @.    # Read file name
