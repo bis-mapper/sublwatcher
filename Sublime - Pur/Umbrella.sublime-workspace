@@ -1,0 +1,899 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"OC",
+				"OCUPATION"
+			],
+			[
+				"PAR",
+				"PARTNERS"
+			],
+			[
+				"TRAM",
+				"TRAMPREM"
+			],
+			[
+				"TR",
+				"TRAMPREM"
+			],
+			[
+				"APP",
+				"APPONLY"
+			],
+			[
+				"QTE",
+				"QTEPROGRESS"
+			],
+			[
+				"REC",
+				"RECEIPTS"
+			],
+			[
+				"UL",
+				"ULLIM"
+			],
+			[
+				"print",
+				"println"
+			],
+			[
+				"event",
+				"event	*fsnotify.FileEvent ν"
+			],
+			[
+				"Prin",
+				"Println	n int, err error ƒ"
+			],
+			[
+				"P",
+				"Println	n int, err error ƒ"
+			],
+			[
+				"app",
+				"application"
+			],
+			[
+				"INC",
+				"INCRECORDS"
+			],
+			[
+				"bt",
+				"btn-remove"
+			],
+			[
+				"UMB",
+				"UMBNEWCOV_"
+			],
+			[
+				"pre",
+				"previous"
+			],
+			[
+				"TOT",
+				"TOTSTAT"
+			],
+			[
+				"rem",
+				"removeClass	.removeClass"
+			],
+			[
+				"inc",
+				"incidental"
+			],
+			[
+				"SS",
+				"SSUSERID"
+			],
+			[
+				"UM",
+				"UMBQTESTEPS_"
+			],
+			[
+				"STA",
+				"STATUS"
+			],
+			[
+				"prop",
+				"prop	.prop() - single"
+			],
+			[
+				"tab",
+				"tabindex	Attr"
+			],
+			[
+				"GUR",
+				"GUrlCat"
+			],
+			[
+				"pro",
+				"prop	.prop() - single"
+			],
+			[
+				"ONDI",
+				"ONDISPLAY"
+			],
+			[
+				"FORM",
+				"FORMSUBMIT"
+			],
+			[
+				"format",
+				"formatCurrency"
+			],
+			[
+				"mrbtn",
+				"mrbtn01"
+			],
+			[
+				"manual",
+				"manualRateSection"
+			],
+			[
+				"man",
+				"manual-rate-section"
+			],
+			[
+				"impo",
+				"important"
+			],
+			[
+				"RESP",
+				"RESPREM1"
+			],
+			[
+				"OCC",
+				"OCCUPIED"
+			],
+			[
+				"PT",
+				"PTYPE"
+			],
+			[
+				"sa",
+				"saveButtonText"
+			],
+			[
+				"save",
+				"saved"
+			],
+			[
+				"PRE",
+				"PREFILL"
+			],
+			[
+				"SSH",
+				"SSHSUB"
+			],
+			[
+				"um",
+				"umuim-notice"
+			],
+			[
+				"HT",
+				"HTRUCK"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Summary)20F832.BIS",
+			"settings":
+			{
+				"buffer_size": 44247,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/Users/winne/sublwatcher/site-d/sublwatcher/Sublime/14B56.BIS",
+			"settings":
+			{
+				"buffer_size": 2990,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "Packages/User/BIS.sublime-build",
+	"command_palette":
+	{
+		"height": 375.0,
+		"selected_items":
+		[
+			[
+				"p",
+				"Package Control: Enable Package"
+			],
+			[
+				"ssbis",
+				"Set Syntax: BIS"
+			],
+			[
+				"ssbi",
+				"Set Syntax: BIS"
+			],
+			[
+				"pi",
+				"Package Control: Install Package"
+			],
+			[
+				"git",
+				"Git: Quick Add"
+			],
+			[
+				"git sta",
+				"Git: Status"
+			],
+			[
+				"pl",
+				"Package Control: List Packages"
+			],
+			[
+				"go",
+				"Set Syntax: Go"
+			],
+			[
+				"ssbs",
+				"Set Syntax: BIS"
+			],
+			[
+				"ssrail",
+				"Set Syntax: Ruby on Rails"
+			],
+			[
+				"table",
+				"Table Editor: Enable for current syntax"
+			],
+			[
+				"sshtml",
+				"Set Syntax: bis-html5"
+			],
+			[
+				"ssb",
+				"Set Syntax: BIS"
+			],
+			[
+				"sftp",
+				"SFTP: Setup Server…"
+			],
+			[
+				"sft",
+				"SFTP: Browse Server…"
+			],
+			[
+				"ssibs",
+				"Set Syntax: BIS"
+			],
+			[
+				"gitsta",
+				"Git: Status"
+			],
+			[
+				"con",
+				"Plist Json Converter: JSON to PLIST"
+			],
+			[
+				"conv",
+				"Plist Json Converter: PLIST to JSON"
+			],
+			[
+				"gitad",
+				"Git: Custom Command"
+			],
+			[
+				"gitq",
+				"Git: Quick Add"
+			],
+			[
+				"ssr",
+				"Set Syntax: Ruby"
+			],
+			[
+				"conver",
+				"Plist Json Converter: PLIST to JSON"
+			],
+			[
+				"pcl",
+				"Package Control: List Packages"
+			]
+		],
+		"width": 522.0
+	},
+	"console":
+	{
+		"height": 148.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/D/Users/winne/sublwatcher/site-d/sublwatcher/Sublime/14B56.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Home)3F832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Misc_screen)19F832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(change_as_new)7f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umprella/Umbrella_test/(Underlying_screen)12f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umprella/Umbrella_test/(applicant)2f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Quick_quote)9F832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umprella/Umbrella_test/(Summary)20f832.BIS",
+		"/c/temp/27f832.bisdiff",
+		"/c/temp/20F832.bisdiff",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Summary)20F832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Umb_Common)27F832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umprella/Umbrella_test/(Umb_Common)27f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(send_receive)4F832.BIS",
+		"/c/temp/2f832.bisdiff",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Data_NewCov)5F832.BIS",
+		"/c/temp/19F832.bisdiff",
+		"/c/temp/27F832.bisdiff",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/test.txt",
+		"/D/Users/winne/sublwatcher/site-d/Umprella/Umbrella_test/(Driver_screen)15f832.BIS",
+		"/c/temp/3F832.bisdiff",
+		"/c/temp/5F832.bisdiff",
+		"/D/Users/winne/sublwatcher/site-d/Umprella/Umbrella_test/(watercraft_screen)17f832.BIS",
+		"//arthur/COOL_ICE/Default Gateway/file_download.asp",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Location_screen)13F832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umprella/Umbrella_test/(Location_screen)13f832.BIS",
+		"//excaliber/homeshare/it/winne/Application Data/Sublime Text 3/Packages/GoSublime/CHANGELOG.md",
+		"/D/Users/winne/sublwatcher/site-d/common/ICE_Modules_Test/(ICE_Form_Val)25F444.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umprella/Umbrella_test/(Home)3f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(applicant)2F832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umprella/Umbrella_test/(send_receive)4f832.BIS",
+		"/c/temp/3f832.bisdiff",
+		"//excaliber/homeshare/IT/winne/Application Data/Sublime Text 3/Packages/bis-sublime/BISCMD.py",
+		"//excaliber/homeshare/IT/winne/Application Data/Sublime Text 3/Packages/bis-sublime/BISERB.py",
+		"//excaliber/homeshare/it/winne/Application Data/Sublime Text 3/Packages/Default/Default (Windows).sublime-keymap",
+		"//excaliber/homeshare/it/winne/Application Data/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
+		"//excaliber/homeshare/it/winne/Application Data/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(app_questions)29F832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Retrieve)28F832.BIS",
+		"//excaliber/homeshare/it/winne/Application Data/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umb_test_tables/()20B832.BIS",
+		"/D/Users/winne/node/umbr/app/styles/lib/_variables.scss",
+		"//arthur/COOL_ICE/Default Gateway/Style/Test/main-1.0.2.css",
+		"/D/Users/winne/sublwatcher/site-d/Umprella/Umbrella_test/(Data_retrieve)34f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(applicant)2F832.BIST.txt",
+		"/c/temp/29F832.bisdiff",
+		"/c/temp/.29F832.bisdiff.tmp",
+		"/c/temp/.20F832.bisdiff.tmp",
+		"/c/temp/20F832.bisdiff.tmp",
+		"/D/Users/winne/go/src/nsmut/winne/sublwatcher/fsnotify/fsnotify.go",
+		"/D/Users/winne/go/src/nsmut/winne/sublwatcher/fsnotify/pipeline.go",
+		"//excaliber/homeshare/IT/winne/Application Data/Sublime Text 3/Packages/User/BIS.sublime-build",
+		"/D/Users/winne/go/src/nsmut/winne/sublwatcher/main2.go",
+		"/D/Users/winne/sublwatcher/sublwatcher.bat",
+		"/D/Users/winne/sublwatcher/site-d/sublwatcher/Sublime - Pur/sublime.pur",
+		"/D/Users/winne/sublwatcher/site-d/sublwatcher/Sublime - Pur/Umbrella.sublime-project",
+		"/D/Users/winne/sublwatcher/changes.txt",
+		"/C/temp/recursive.bis",
+		"/D/Users/winne/go/src/nsmut/winne/sublwatcher/listener.rb",
+		"/D/Users/winne/sublwatcher/site-d/sublwatcher/Sublime/5B56.BIS",
+		"/D/Users/winne/sublwatcher/site-d/sublwatcher/Sublime/4B56.BIS",
+		"/D/Users/winne/sublwatcher/site-d/sublwatcher/Sublime/6B56.BIS",
+		"/D/Users/winne/sublwatcher/site-d/sublwatcher/Sublime/99B56.BIS",
+		"/D/Users/winne/sublwatcher/site-d/sublwatcher/Sublime/9B56.BIS",
+		"/D/Users/winne/sublwatcher/site-d/sublwatcher/README.md",
+		"/D/Users/winne/go/src/github.com/gophertown/fsnotify_ext/fsnotify_ext.go",
+		"/D/Users/winne/go/src/nsmut/winne/sublwatcher/fsnotify/fsnotify_linux.go",
+		"/D/Users/winne/go/src/nsmut/winne/sublwatcher/fsnotify/fsnotify_windows.go",
+		"/D/Users/winne/go/src/nsmut/winne/sublwatcher/main.go",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(breadcrumbs)33F832.BIS",
+		"/D/Users/winne/go/src/nsmut/winne/sublwatcher/fsnotify/recursive.go",
+		"/D/Users/winne/go/src/github.com/gophertown/fsnotify_ext/recursive.go",
+		"/D/Users/winne/go/src/github.com/gophertown/fsnotify_ext/pipeline.go",
+		"/D/Users/winne/go/src/nsmut/winne/sublwatcher/fsnotify/main.go",
+		"/D/Users/winne/go/src/nsmut/winne/sublwatcher/fsnotify/example_test.go",
+		"/D/Users/winne/go/src/nsmut/winne/sublwatcher/test/test.bis",
+		"/D/Users/winne/go/src/nsmut/fsnotify_ext/pipeline.go",
+		"/D/Users/winne/go/src/nsmut/winne/sublwatcher/main1.go",
+		"/D/Users/winne/sublwatcher/site-d/sublwatcher/Sublime/11B56.BIS",
+		"/D/Users/winne/sublwatcher/site-d/sublwatcher/Sublime - Tables/3C56.BIS",
+		"/D/Users/winne/sublwatcher/site-d/sublwatcher/Sublime - Tables/8C56.BIS",
+		"/c/temp/2B56.bisdiff",
+		"/D/Users/winne/go/src/nsmut/winne/golang/chapter3/main.go",
+		"/C/temp/test.txt",
+		"/D/Users/winne/sublwatcher/site-d/()576f402.BIS",
+		"//excaliber/homeshare/it/winne/Application Data/Sublime Text 3/Packages/User/GoSublime-Go.sublime-settings",
+		"//excaliber/homeshare/it/winne/Application Data/Sublime Text 3/Packages/User/Package Control.sublime-settings",
+		"/D/Users/winne/go/src/nsmut/winne/hello/hello.go",
+		"/D/Users/winne/sublwatcher/site-d/common/ICE_Modules_Test/(ICE_HTML_Tags)26f444.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Database_Calls)25F832.BIS",
+		"/c/temp/25F832.bisdiff",
+		"/D/Users/winne/sublwatcher/site-d/common/ICE_Modules_Test/(ICE_MANUAL_NAV)29F444.BIS",
+		"/c/temp/29F444.bisdiff",
+		"/D/Users/winne/sublwatcher/site-d/Umprella/Umbrella_test/(Misc_screen)19f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Tests/25C832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/common/ICE_Modules_Test/(NS_Config)11f444.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Ajax_Database_Calls)26F832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(coverage)6F832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Inquire)24F832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(menu_screen)38F832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/common/ICE_Modules_Test/(ICE_Errors)22F444.BIS",
+		"/c/temp/11f444.bisdiff",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/()56F832.BIS",
+		"/c/temp/7f832.bisdiff",
+		"/D/Users/winne/node/umbr/app/styles/main.scss",
+		"/D/Users/winne/sublwatcher/site-d/common/ICE_Modules_Test/(NS_PARSE_POLICY)30f444.BIS",
+		"/D/Users/winne/sublwatcher/site-d/(Pol_Results)8F410.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Dsp_PDF)39F832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Data_retrieve)34F832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Quick_quote)9f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/()12G832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/()18B832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(app_questions)29f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(send_receive)4f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Retrieve)28f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/()1f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Home)3f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Umb_Common)27f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Underlying_screen)12f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(applicant)2f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Data_NewCov)5f832.BIS",
+		"/c/temp/23f832.bisdiff",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(pre_summary1)36F832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(pre_summary)6f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Record_Format)10f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Underlying_validate)23f832.BIS",
+		"/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(summary_screen)22f832.BIS",
+		"//excaliber/homeshare/it/winne/Application Data/Sublime Text 3/Packages/Table Editor/Default (Windows).sublime-keymap"
+	],
+	"find":
+	{
+		"height": 36.0
+	},
+	"find_in_files":
+	{
+		"height": 92.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"<VEH>",
+			"<AULIM>",
+			"<RECV>",
+			"'qq'",
+			"<DRV>",
+			"'QQ'",
+			"<CNTY",
+			"<SWIM>",
+			"<PARTPREM",
+			"<PARTNERS>",
+			"<PART>",
+			"'part'",
+			"'PtOf'",
+			"<PART>",
+			"'part'",
+			"0137",
+			"-4",
+			"0010",
+			"<PARTPREM>",
+			"<EMPLPREM>",
+			"<CUSTPREM>",
+			"<YDRVPREM",
+			"<BIZPREM>",
+			"0020",
+			"<PARTPREM>",
+			"<PART>",
+			"SRH,-1 ''",
+			"qq",
+			"<LTRUCK>",
+			"<RECVPREM",
+			"<RECVPREM>",
+			"<BIZPREM",
+			"<BIZPREM>",
+			"<CUST>",
+			"UMBCOMMON_",
+			"<METRO>",
+			"<SWIM>",
+			"watercraft",
+			"<perscraft>",
+			"watercraft",
+			"0135",
+			"f8.2",
+			"ICESCHEMA_",
+			"only",
+			"<RENTALS>",
+			"<BIZ>",
+			"0051",
+			"0060",
+			"-4",
+			"-2",
+			"<HONUM>",
+			"<HONUM",
+			"<ULLIM>",
+			"<HONUM",
+			"horses",
+			"string",
+			"newPipeline",
+			"verbose",
+			"internalEvent",
+			"isHidden",
+			"path",
+			"pattern",
+			"process recursive",
+			"WatchHidden",
+			"clss",
+			"inc-section",
+			"increcords",
+			"0050",
+			"remove-btn",
+			"removeSection",
+			"manually rated items",
+			"0060",
+			"0009",
+			"0005",
+			"<TOTSTAT>",
+			"0115",
+			"Custom",
+			"custom",
+			"rdb",
+			"trampoline",
+			"0180",
+			"<*MODEL>",
+			"<PARTTIME>",
+			"<EFFDATE>",
+			"ssuptype",
+			"biz",
+			"<PARTTIME>",
+			"<FULLTIME>",
+			"<CUSTOM>",
+			"<OFFICERS>",
+			"<PARTNERS>",
+			"lim",
+			".app-section",
+			"app-section",
+			"<SWIM>",
+			"col-lg",
+			"<LNS>",
+			"getSS_",
+			"0105",
+			"0095",
+			"navbar",
+			"rdb",
+			"#mstat",
+			"<MSTAT>",
+			"delSS_",
+			"<ppol>",
+			"POLIYCY",
+			"<INACCTPOL>",
+			"<POLPREFIX>",
+			"<POLLOB>",
+			"disabled",
+			"<DSP>",
+			"rdb",
+			"<MSTAT>",
+			"<mstat",
+			"rdb",
+			"'mrdesc'",
+			"<ZIP>",
+			"holdzip",
+			"var holdzip",
+			"$zip",
+			"spinner",
+			"addItem",
+			"<totstat>",
+			"<totstat",
+			"Owner",
+			"manual-rate-section",
+			"newQteNum"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"SRH,-1 'd'",
+			"UMBNEWCOV_",
+			"f6.2",
+			"<FULLTIME>",
+			"<YOUTH>",
+			"<PARTTIME>",
+			"<FULLTIME>",
+			"<CUSTOM>",
+			"<OFFICERS>",
+			"<POOL>",
+			"col",
+			"0195",
+			"0190",
+			"<STAT>",
+			"POLICY",
+			"<POLICY>",
+			"<PREFIX>",
+			"<LOB>",
+			"col-offset-5",
+			"<MSTAT>",
+			"\""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/D/Users/winne/sublwatcher/site-d/Umbrella/Umbrella_test/(Summary)20F832.BIS",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 44247,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1766,
+								1766
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/HTML5/Syntaxes/HTML 5.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/D/Users/winne/sublwatcher/site-d/sublwatcher/Sublime/14B56.BIS",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2990,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								751,
+								751
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/HTML5/Syntaxes/HTML 5.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 26.0
+	},
+	"input":
+	{
+		"height": 36.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.GoSublime-main-output":
+	{
+		"height": 120.0
+	},
+	"output.exec":
+	{
+		"height": 263.0
+	},
+	"output.sftp":
+	{
+		"height": 0.0
+	},
+	"project": "Umbrella.sublime-project",
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"5f832",
+				"Umbrella\\Umbrella_test\\(Data_NewCov)5F832.BIS"
+			],
+			[
+				"2f832",
+				"Umbrella\\Umbrella_test\\(applicant)2F832.BIS"
+			],
+			[
+				"29f832",
+				"Umbrella\\Umbrella_test\\(app_questions)29F832.BIS"
+			],
+			[
+				"25f",
+				"c:\\temp\\25F832.bisdiff"
+			],
+			[
+				"25f832",
+				"Umbrella\\Umbrella_test\\(Database_Calls)25F832.BIS"
+			],
+			[
+				"",
+				"Umbrella\\Umbrella_test\\(Quick_quote)9F832.BIS"
+			],
+			[
+				"29f44",
+				"common\\ICE_Modules_Test\\(ICE_MANUAL_NAV)29F444.BIS"
+			],
+			[
+				"q",
+				"Umbrella\\Umbrella_test\\(Quick_quote)9F832.BIS"
+			],
+			[
+				"daa",
+				"Umbrella\\Umbrella_test\\(Data_NewCov)5F832.BIS"
+			],
+			[
+				"umb",
+				"Umbrella\\Umbrella_test\\(Umb_Common)27F832.BIS"
+			],
+			[
+				"9f",
+				"Umbrella\\Umbrella_test\\(Quick_quote)9F832.BIS"
+			],
+			[
+				"9f832",
+				"Umbrella\\Umbrella_test\\(Dsp_PDF)39F832.BIS"
+			],
+			[
+				"change",
+				"Umbrella\\Umbrella_test\\(change_as_new)7f832.BIS"
+			],
+			[
+				"quic",
+				"Umbrella\\Umbrella_test\\(Quick_quote)9F832.BIS"
+			],
+			[
+				"data",
+				"Umbrella\\Umbrella_test\\(Data_NewCov)5f832.BIS"
+			],
+			[
+				"cover",
+				"Umbrella\\Umbrella_test\\(coverage)6F832.BIS"
+			],
+			[
+				"home",
+				"Umbrella\\Umbrella_test\\(Home)3f832.BIS"
+			],
+			[
+				"hom",
+				"Umbrella\\Umbrella_test\\(Home)3f832.BIS"
+			],
+			[
+				"16f802",
+				"D:\\Users\\winne\\sublwatcher\\site-d\\(summary_screen)16f802.BIS"
+			],
+			[
+				"16f8",
+				"c:\\temp\\16f802.bisdiff"
+			],
+			[
+				"24b",
+				"D:\\Users\\winne\\sublwatcher\\site-d\\24B56.BIS"
+			],
+			[
+				"60f",
+				"D:\\Users\\winne\\sublwatcher\\site-d\\()60F410.BIS"
+			],
+			[
+				"6f4",
+				"D:\\Users\\winne\\sublwatcher\\site-d\\(Menu)6F410.BIS"
+			],
+			[
+				"24b56",
+				"D:\\Users\\winne\\sublwatcher\\site-d\\24B56.BIS"
+			],
+			[
+				"16f",
+				"c:\\temp\\16f802.bisdiff"
+			],
+			[
+				"24",
+				"D:\\Users\\winne\\sublwatcher\\site-d\\24B56.BIS"
+			],
+			[
+				"26",
+				"D:\\Users\\winne\\sublwatcher\\site-d\\24B56.BIS"
+			],
+			[
+				"12f832",
+				"Umbrella\\Umbrella_test\\(Underlying_screen)12f832.BIS"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 266.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "D:\\Users\\winne\\sublwatcher\\site-d\\Umbrella"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "D:\\Users\\winne\\sublwatcher\\site-d\\common"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "D:\\Users\\winne\\sublwatcher\\site-d\\sublwatcher"
+		}
+	]
+}
