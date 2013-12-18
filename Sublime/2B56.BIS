@@ -11,7 +11,8 @@
 @.
 @.    #  Call entry point
 @0001:(<RUN>) .                                                                 Call from BisCmd?
-@     RER,0,E,2 0001  RAR,0,E,2 0001 .                                          sets-run-error
+@     RER 0198 .
+@     RAR,0,E,2 0001 .                                                          sets-run-error
 @.
 @     IF <RUN> eq '<RUN>',(0005) .                                              Normal or Call?
 @     LDV <CALL>h1=y,<DLN>s0 .
@@ -44,7 +45,7 @@
 @.    #  If it does exist load <FILE> to current location
 @     LDV <FOLDER>s256=<DATADIR>(p)'\' .
 @     LDV <PROGRAM>s40=<SRVS><RPT>(p)<DRW>(p)<CAB>(p)<EXT> .
-@     CALL,SUBLCOMMON_ getOsVer_ (<OSVER>i1) ..
+@     CALL,SUBLCOMMON_ getOsVer_ (<OSVER>i1) .
 @     IF <OSVER> gt 5 . ; gto 0014 .
 @     CALL,SUBLCOMMON_ searchFolders_ (<FOLDER>,<PROGRAM>,<FILE>s256) .
 @     IF <FILE> eq ' ' . ; GTO 0015 .
@@ -73,6 +74,11 @@
 @     FDR,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,USER$,<SUBLWATCHER>  GTO 0199 .    currently running?
 @     WAT 1000 .                                                                pause for first time
 @     RUN <SUBLWATCHER> .                                                       start file watcher utility
+@.
+@.    #  Output Growl error message
+@0198:CHG <ERR>i4 CERR$  LSM,<ERR> <MSG>s88 .
+@     IF <MSG> eq ' '  LDV <MSG>='That request cannot be processed' .
+@     CALL,GROWL_ 0001 ('BISCMD Failed','FAILED',<MSG>) .
 @.
 @.    #  Return if called otherwise display current report
 @0199:IF <CALL> eq y  RETURN . ; DSP,<CAB>,<DRW>,<RPT> .
