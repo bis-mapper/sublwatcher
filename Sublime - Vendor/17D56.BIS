@@ -1,6 +1,7 @@
 .Data_Std_Labels      Standardize Labels
 .REV: 2.2    DATE: 20120218
 *===============================================================================
+:INCLUDE,ECAB$,B,1 .
 *  Copyright (c) 2012 IT Resource Solutions (ITRS)                             *
 *  --------------------------------------------------------------------------  *
 *  The SBS utility is a free software package, provided for the benefit        *
@@ -159,7 +160,7 @@ FKEY,1,Rescan,KEY
 FKEY,2,Ignore,KEY
 @     BRK  FKY,-0 .
 @     LDV <SBSMSG>s80='Action required by SBS' .
-@     CALL,"GROWL" 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
+@     CALL,GROWL_ 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
 @     DSP,-1,<LIN>,,,Q,1 .
 @.
 @     CHG <ROW>i2 SCNV$ - 9 // 2 + 1  CHG <CLM>i3 SCNH$ - 50 // 2 + 1 .
