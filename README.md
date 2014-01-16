@@ -75,3 +75,5 @@ The BIS report that you typed `SUBL` on will now be saved in this folder and you
 Portions copyright © IT Resource Solutions (ITRS)
 Permission has been granted by ITRS for use of their software in this package.
 Copying or reuse of that software is prohibited without the expressed consent of ITRS.
+
+The remaining code is licensed under the GPL found here [License](https://github.com/bis-mapper/sublwatcher/blob/master/LICENSE.md)
