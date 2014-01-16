@@ -40,6 +40,11 @@ Install Growl for Windows
     * `SUBL` - `2B56` or substitue your cabinet
     * `SUBLWATCHER` - `3B56` or substitue your cabinet
     * Make sure when registering that you leave the max I/O and Lines fields open as this program runs in a continuous loop
+* ADD THE CABINETS to 11g2
+* Sublime                           B56                    W
+* Sublime - Executables             E56                    W
+* Sublime - Tables                  C56                    W
+* Sublime - Vendor                  D56                    W
 
 ## Install Sublime Packages (Syntax files and utilities)
 

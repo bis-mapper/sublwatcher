@@ -80,7 +80,7 @@
 @.    #  Make sure were on the correct site for this file...
 @0037:LCV,0038 'b1' <FILE> 'site-' <POS>i3 .                                    Find string
 @     INC,5 <POS>  LDV <SL>h1=<FILE>(<POS>-1) .                                 Read Site Letter from file
-@     IF <SL> ne NETSIT$ . ; gto 0038 .                                         Compare
+@     IF <SL> ne NETSIT$ . ; GTO 0038 .                                         Compare
 @     LDV <MSG>s256='Site letters differ... Cannot save file.' .
 @     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
 @     GTO 0036 .
@@ -147,7 +147,7 @@
 @.
 @.    #  Check if user matches control line
 @0050:RDL,<CAB>,<DRW>,<RPT>,1 53-11 <CONTROLUSER>s .
-@     IF USER$ ne <CONTROLUSER> . ; gto 0056 .
+@     IF USER$ ne <CONTROLUSER> . ; GTO 0056 .
 @     LDV <MSG>s256='You do not have update control of this report.',\
           <MSG>=<MSG>(p)'Waiting for input...' .
 @     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
@@ -155,11 +155,13 @@
 "You do not have update control of this report. //\
  Run:   <RPT>(p)<DRW>(p)<CAB>(p)    Name:   <CONTROLUSER>(p) //\
  Would you like to take control of this report?//" Y,(lin+1),N,(0036) .
-@0056:LZR,3950,d,1,0061 .                                                       ICE Enabled Site?
-@     SRH,3950,d,1,,,0061 'ad' 'SvcCab','sd' ¬,<CAB>,<DRW> .
+@0056:LDV <REPORT>h11='1D3950' .
+@     dir <REPORT> ,,,,,<ACC>h1  IF <ACC> eq '',(0061) .                         ICE Enabled Site?
+@     LZR,3950,d,1,0061 .                                                       ICE Enabled Site?
+@     SRH,3950,d,1,,,0061 'ad' 'SvcCab','sd'  ,<CAB>,<DRW> .
 @     LZR,-0 ,,<HLN>i7  INC <HLN> .
 @     RDL,-0,<HLN>,lin+1 'cab','dw','rpt' <ICAB>h,<IDW>h,<IRPT>h .
-@     FDR,<ICAB>,<IDW>,<IRPT>,,,0061 '' 'cab','dw','rpt' ¬,<CAB>,<DRW>,<RPT> .
+@     FDR,<ICAB>,<IDW>,<IRPT>,,,0061 '' 'cab','dw','rpt'  ,<CAB>,<DRW>,<RPT> .
 @     RLN,,lin+1 'service' <SRVS>s  GTO 0061 .
 @     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED','Check input message') .
 @     MBX,YN,Q,'What are we doing?' \
@@ -171,9 +173,12 @@
 @     CALL,SUBLCOMMON_ charReplace_ ('import') .                                Replace tab character
 @     RNM -4 .
 @.
-@     DFU <CAB>,<DRW>,<RPT> .
-@     REP,-4,<CAB>,<DRW>,<RPT> .
-@     CMU .
+@     LOK,<CAB>,<DRW>,<RPT>,lin+1  GTO 0063 .
+@     LDV <MSG>s80='Updating of report '<RPT>(p)<DRW>(p)<CAB>(p)' is in progress...' .
+@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0036 .
+@0063:REP,-4,<CAB>,<DRW>,<RPT> .
+@     ULK .
 @     GTO 0036 .
 @.
 @.    #  Start over and keep re-checking

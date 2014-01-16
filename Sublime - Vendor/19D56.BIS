@@ -1,6 +1,7 @@
 .Data_Check_Term      Check For Missing/Improper Termination
 .REV: 2.2    DATE: 20120218
 *===============================================================================
+:INCLUDE,ECAB$,B,1 .
 *  Copyright (c) 2012 IT Resource Solutions (ITRS)                             *
 *  --------------------------------------------------------------------------  *
 *  The SBS utility is a free software package, provided for the benefit        *
@@ -67,7 +68,7 @@ FKEY,10,SkpAll,KEY
 @     FON,t .
 @.
 @     LDV <SBSMSG>s80='Action required by SBS' .
-@     CALL,"GROWL" 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
+@     CALL,GROWL_ 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
 @     DSP,-1,<LIN>,,,,1 .
 @     CLS,<WIN1>  LDV <WIN1>=0 .
 @     FKY .
@@ -93,7 +94,7 @@ FKEY,2,Skip,KEY
 FKEY,10,SkpAll,KEY
 @     BRK  FKY,-0 .
 @     LDV <SBSMSG>s80='Action required by SBS' .
-@     CALL,"GROWL" 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
+@     CALL,GROWL_ 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
 @     DSP,-1,<LIN>,,,Q,1 .
 @.
 @     CHG <ROW>i2 SCNV$ - 11 // 2 + 1  CHG <CLM>i3 SCNH$ - 48 // 2 + 1 .
@@ -113,7 +114,7 @@ FKEY,10,SkpAll,KEY
 @     FON,t .
 @.
 @     LDV <SBSMSG>s80='Action required by SBS' .
-@     CALL,"GROWL" 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
+@     CALL,GROWL_ 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
 @     DSP,-1,<LIN>,,,,1 .
 @     CLS,<WIN1>  LDV <WIN1>=0 .
 @     FKY .
@@ -151,7 +152,7 @@ FKEY,2,Skip,KEY
 FKEY,10,SkpAll,KEY
 @     BRK  FKY,-0 .
 @     LDV <SBSMSG>s80='Action required by SBS' .
-@     CALL,"GROWL" 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
+@     CALL,GROWL_ 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
 @     DSP,-1,<LIN>,,,Q,1 .
 @.
 @     CHG <ROW>i2 SCNV$ - 10 // 2 + 1  CHG <CLM>i3 SCNH$ - 48 // 2 + 1 .
@@ -213,7 +214,7 @@ FKEY,10,SkpAll,KEY
 @     FON,t .
 @.
 @     LDV <SBSMSG>s80='Action required by SBS' .
-@     CALL,"GROWL" 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
+@     CALL,GROWL_ 0001 ('SBS Input needed','PENDING',<SBSMSG>) .
 @     DSP,-1,<LIN>,,,,1 .
 @     CLS,<WIN1>  LDV <WIN1>=0 .
 @     FKY .
