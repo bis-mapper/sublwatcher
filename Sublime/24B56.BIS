@@ -65,7 +65,8 @@
 @     LDV <MSG>s256='Could not locate '<FILE> .
 @     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
 @     GTO 0199 .
-@     RDL,-0,7  1-10,13-5 <DATE>h,<TIME>h .
+@     RDL,-0,lin1  1-10,13-5 <DATE>h,<TIME>h  GTO lin+2 .
+@     LDV <DTIME>h0,<D2DATE>h0  GTO 0015 .
 @     DC D2=D16(<DATE>) <D2DATE>h9 .
 @     LDV <DTIME>h8=<TIME>':00' .
 @.
