@@ -81,7 +81,7 @@
 @     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
 @     GTO 0199 .
 @.
-@     RDL,<PCAB>,<PRDW>,<PRPT>,1 1-80 <INFO>s .                                    Get time and date
+@     RDL,<PCAB>,<PDRW>,<PRPT>,1 1-80 <INFO>s .                                    Get time and date
 @     RSL,<PCAB>,<PDRW>,<PRPT> .                                                          Get result
 @     CALL,SUBLCOMMON_ charReplace_ ('export') .                               Replace tab character
 @     RNM -1 .
