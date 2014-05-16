@@ -1,0 +1,10 @@
+.Match/Merge Report
+*   .            .            .M.                        .
+*Rep.Last Name   .First Name  .I.Name                    .
+*===.============.============.=.========================.
+	AEF	Fuller      	Andrew      	E	Fuller, Andrew          	
+	ASD	Dodsworth   	Anne        	S	Dodsworth, Anne         	
+	JIL	Leverling   	Janet       	I	Leverling, Janet        	
+	MRP	Peacock     	Margaret    	R	Peacock, Margaret       	
+	NAD	Davolio     	Nancy       	A	Davolio, Nancy          	
+	RLK	King        	Robert      	L	King, Robert            	

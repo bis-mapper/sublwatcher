@@ -17,48 +17,28 @@
 @     CALL 0001 (<STATUS>) .
 @     GTO END .
 @.
-@0001:(<STATUS>) .
+@0001:(<FILE>,<INPUT>,<STATUS>) .
 @     LDV <STATUS>=0 .                                                          set flag to ok
 @     RER 0198 .
 @     RAR 0199 .                                                                sets-run-abort
 @.
 @     RSR,SUBLCOMMON_ configVars_ .
 @.
-@     LDV,p <BISCMD>s256=<APPDIR>'\BisCmd.bis' .                                Get cmd from SUBL
-@.
-@.    # Find File
-@     PCR,0,I,-0,n,n,lin+1 <BISCMD>  GTO 0002 .                                 File Exist?
-@     LDV <STATUS>=9 .
-@     GTO 0199 .
-@     MBX,ok,E,'BisCmd' \
-      "Could not find the BisCmd.Bis file."  O,(0199) .
-@0002:RNM -2 .
-@     PC,bcw "del <BISCMD>" .                                                   Clean up file
-@.
-@     RDL,-2,2 1-256 <FILEOUTPUT>s .                                            Read Sublime input
-@     LDV,p <FILEOUTPUT> .
-@.
-@.    #  File contains  "User entered input|c:\temp\example\file.bis"
-@     LCV,lin3 'b1' <FILEOUTPUT> '|' <VPOS>i3  DEC <VPOS> .
-@     LDV,U <CTL>s80=<FILEOUTPUT>(1-<VPOS>)  INC,2 <VPOS> .
-@     LDV <FILE>s256=<FILEOUTPUT>(<VPOS>-0) .
-@.
 @.    # Read file name
 @     CALL,SUBLCOMMON_ getFileName_ (<FILE>,<RUN>s60) .                         Extracts File Name from path
-@.ew  LCV,0199 'b99' <RUN> '.bis'/'' .                                          Remove file type
 @.
-@     IF <CTL> eq ''  GTO 0199 .                                                Nothing entered?
+@     IF <INPUT> eq ''  GTO 0199 .                                                Nothing entered?
 @.
 @.    # ICE UTILITIES
 @     DVS,SUBLUTILS_ 'Util' <RUNNAME>s .
-@     DEF <TY>i2,<CTL>(1-1)  IF <TY> eq 1 . ; gto lin+2                         Check numeric
+@     DEF <TY>i2,<INPUT>(1-1)  IF <TY> eq 1 . ; gto lin+2                         Check numeric
 @     LDV <RUNNAME>='SUBLCTL'  gto 0020 .
-@     LCV 't@' <CTL> ' ' <VPOS>  dec <VPOS> .
-@     LDV <RUNNAME>=<CTL>(1-<VPOS>) .                                           Get run name from user input
+@     LCV 't@' <INPUT> ' ' <VPOS>i3 dec <VPOS> .
+@     LDV <RUNNAME>=<INPUT>(1-<VPOS>) .                                           Get run name from user input
 @.
 @.    #  Find program in lookup table and execute it
 @0020:FDR,SUBLUTILS_,,,0198 '' 'Util' ¬,<RUNNAME>  RLN 'Rid' <rrid>i .
-@     CALL,EDRW$,<RRID> 0001 (<CTL>,<FILE>,<RUNNAME>,<STATUS>h1) .
+@     CALL,EDRW$,<RRID> 0001 (<INPUT>,<FILE>,<RUNNAME>,<STATUS>h1) .
 @     IF <STATUS> eq 0,' ',(0199) .
 @.
 @.    #  Output Growl error message

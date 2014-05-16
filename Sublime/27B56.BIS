@@ -1,0 +1,130 @@
+.Object Name: DIFF
+*
+*===================================================================================================
+:INCLUDE,ECAB$,B,1 .                                                                         INCLUDE
+@.
+@.    #---------------------------------------------------------------------------------------------
+@.    #  SBUILD
+@.    #  This will build the sublwatcher purge
+@.    #
+@.    #  Written: 04/04/2014
+@.    #---------------------------------------------------------------------------------------------
+@.
+@.    # Test Setup
+@     LDV <CTL>s80='DIFF' .
+@     LDV <CTL>s80='DIF 24b56' .
+@     LDV <FILE>s132='d:\users\winne\sublwatcher\site-d\Umbrella\Umbrella_Test\(Summary)20f832.bis' .
+@     CALL 0001 (<CTL>,<FILE>,'',<STATUS>h1) .
+@     GTO END .
+@.
+@0001:(<CTL>,<FILE>,<RUNNAME>,<STATUS>) .
+@.
+@     RAR,0,E,2 0199 .                                                          sets-run-abort
+@     RER,0,E,2 0001 .                                                          sets-run-error
+@     RSR,SUBLCOMMON_ configVars_ .
+@.
+@     LCV 't@' <CTL> ' ' <pos>i3  inc <pos> .
+@     LDV <PRUN>h11=<CTL>(<pos>-0) .
+@.
+@.    #  Make sure were on the correct site for this file...
+@     LCV,0005 'b1' <FILE> 'site-' <POS>i3 .                                    Find string
+@     INC,5 <POS>  LDV <SL>h1=<FILE>(<POS>-1) .                                 Read Site Letter from file
+@     IF <SL> ne NETSIT$ . ; GTO 0005 .                                         Compare
+@     LDV <MSG>s256='Site letters differ... Cannot do diff on different site' .
+@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@.
+@.    Get bis script and make sure has correct extension
+@0005:CALL,SUBLCOMMON_ getFileName_ (<FILE>,<RUN>s60) .                         Extracts File Name from path
+@     LDV <TFILE>s256=<FILE>  LCV '' <TFILE> <RUN>/'' .
+@     LCV,lin+1 'b99' <RUN> '.bis'/''  GTO lin+4 .                                   Remove file type
+@     LDV <MSG>s256='Cannot do diff on non BIS file type' .
+@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@.
+@.    #  Make sure files exists
+@     CALL,SUBLCOMMON_ getCabDrwRpt_ (<RUN>,<CAB>i4,<DRW>h1,<RPT>i4) .
+@     PCR,0,I,-0,n,n,lin+1 <FILE>  RNM -2  GTO lin+4 .
+@     LDV <MSG>s256='Could not locate '<FILE> .
+@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@.
+@.    #  Get file attributes date time
+@     LDV <ATTFIL>s80='c:\temp\attrib.txt' .
+@     PC,bcw "dir <FILE>(p) > <ATTFIL>" .
+@     PCR,0,I,-0,n,n,lin1 <ATTFIL> .
+@     RDL,-0,7,lin1  1-10,13-5 <DATE>h,<TIME>h  GTO lin+2 .
+@     LDV <DTIME>h0,<D2DATE>h0  GTO 0010 .
+@     DC D2=D16(<DATE>) <D2DATE>h9 .
+@     LDV <DTIME>h8=<TIME>':00' .
+@.
+@.    #  Check if run was etnered.  Otherwise just use local copy
+@0010:IF <PRUN> eq ' ' . ; GTO 0015 .
+@     LZR,<CAB>,<DRW>,<RPT>,lin1  GTO LIN+4 .
+@     LDV <MSG>s256='Could not locate '<CAB><DRW><RPT> .
+@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@.
+@     RDL,<CAB>,<DRW>,<RPT>,1 1-80 <INFO>s .                                       Get time and date
+@     RSL,<CAB>,<DRW>,<RPT> .                                                             Get result
+@     CALL,SUBLCOMMON_ charReplace_ ('export') .                               Replace tab character
+@     RNM -1 .
+@     DUP,-1,0,I .
+@     LDV <LOCALRPT>i4=RPT$ .
+@     GTO 0020 .
+@.
+@.    #  Check if alternate report was entered
+@.    #  This will do a diff from the current report and the report entered.
+@0015:CALL,SUBLCOMMON_ getCabDrwRpt_ (<PRUN>,<PCAB>i4,<PDRW>h1,<PRPT>i4) .
+@     LZR,<PCAB>,<PDRW>,<PRPT>,lin1  GTO LIN+4 .
+@     LDV <MSG>s256='Could not locate '<PCAB><PDRW><PRPT> .
+@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@.
+@     RDL,<PCAB>,<PRDW>,<PRPT>,1 1-80 <INFO>s .                                    Get time and date
+@     RSL,<PCAB>,<PDRW>,<PRPT> .                                                          Get result
+@     CALL,SUBLCOMMON_ charReplace_ ('export') .                               Replace tab character
+@     RNM -1 .
+@     DUP,-1,0,I .
+@     LDV <LOCALRPT>i4=RPT$ .
+@     GTO 0020 .
+@.
+@.    #  Temporary report to hold external file
+@0020:RSL,-2 .
+@     CALL,SUBLCOMMON_ charReplace_ ('export') .                               Replace tab character
+@     RNM -2 .
+@     DUP,-2,0,I .
+@     LDV <EXTERNALRPT>i4=RPT$ .
+@.
+@.    #  Get diff between local and external file
+@     DIF,0,I,<LOCALRPT>,0,I,<EXTERNALRPT> ' ' .
+@     RNM -3 .
+@.
+@.    #  Update the control lines to refelct actual file dates and times
+@     FDR,-3 '' 2-4 .,'DATE' ,<DLN1>i3 .
+@     CHG <TLN>i3 <DLN1> + 1 .
+@     FDR,-3,<TLN> '' 2-4 .,'DATE' ,<DLN2>i3 .
+@     CHG <TLN>i3 <DLN2> + 1 .
+@     FDR,-3,<TLN> '' 2-4 .,'DATE' ,<DLN3>i3 .
+@     WRL,-3,<DLN2> 20-8,34-4,38-1,42-9 .,<DTIME>,<RPT>,<DRW>(U),<D2DATE> .
+@     WRL,-3,<DLN3> 1-80 .,<INFO> .
+@.
+@.    #  Clean up temp files
+@     DLR,0,I,<LOCALRPT> .
+@     DLR,0,I,<EXTERNALRPT> .
+@.
+@.    #  Start text editor
+@.    #  Refer to "http://www.sublimetext.com/docs/2/osx_command_line.html" for all options
+@     LDV <DIFFILE>s256=<BTEMP>(p)'\'<RUN>(p)'.bisdiff' .
+@     PCW,-3,2,lin+1 <DIFFILE>(p)  GTO lin+4 .                                            Write file
+@     LDV <MSG>s256='Could not write diff file' .
+@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@.
+@     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
+@     PC,r '"'<APPPATH>(p)'" -a' '"'<DIFFILE>(p)':'<DLN>(p)'"' .           start editor with options
+@.
+@     PC,bcw "del <DIFFILE>(p)" .                                                        Clean it up
+@.
+@.    # Exit
+@0199:RETURN .

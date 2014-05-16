@@ -40,12 +40,18 @@
 @     LDV,p <FLDRPATH>s256=<datadir> .
 @     CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
 @.
+@.    #  Read quick open flag
+@     CALL,SUBLCOMMON_ getCompName_ (<COMPUTER>s30) .
+@     FDR,SUBLPATH_,,,lin+2 ' ' 'User ID','Computer Name' ¬,<USER>,<COMPUTER> . Get Application Path
+@     RLN 'Quick Open' <QUICKOPEN>s .
+@.
 @.    #  Check if program exists already in folder.
 @.    #  If it doesn't exist load <FILE> to default site location
 @.    #  If it does exist load <FILE> to current location
 @     LDV <FOLDER>s256=<DATADIR>(p)'\' .
 @     LDV <PROGRAM>s40=<SRVS><RPT>(p)<DRW>(p)<CAB>(p)<EXT> .
 @     CALL,SUBLCOMMON_ getOsVer_ (<OSVER>i1) .
+@     IF <QUICKOPEN> eq 'ENABLED',(0014) .
 @     IF <OSVER> gt 5 . ; gto 0014 .
 @     CALL,SUBLCOMMON_ searchFolders_ (<FOLDER>,<PROGRAM>,<FILE>s256) .
 @     IF <FILE> eq ' ' . ; GTO 0015 .
@@ -70,7 +76,7 @@
 @.    #  Refer to "http://www.sublimetext.com/docs/2/osx_command_line.html" for all options
 @0020:PC,r '"'<APPPATH>(p)'" -a' '"'<FILE>':'<DLN>(p)'"' .                      start editor with options
 @     SYS .                                                                     system
-@     IF <CALL> ne Y  PC 'cmd /C '"<BATFILE>" . ; .                             start / check if running
+@.ew  IF <CALL> ne Y  PC 'cmd /C '"<BATFILE>" . ; .                             start / check if running
 @     FDR,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,USER$,<SUBLWATCHER>  GTO 0199 .    currently running?
 @     WAT 1000 .                                                                pause for first time
 @     RUN <SUBLWATCHER> .                                                       start file watcher utility

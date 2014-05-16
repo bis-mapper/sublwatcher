@@ -44,13 +44,13 @@
 @     LDV,p <REPORT>h11='1d3950' .
 @     dir <report> ,,,,,<acc>h1 if <acc> eq '',(0013) .
 @     LZR,3950,d,1,0013 .
-@     SRH,3950,d,1,,,0013 'ad' 'SvcCab','sd' 	,\
+@     SRH,3950,d,1,,,0013 'ad' 'SvcCab','sd' ¬,\
         <CAB>,<DRW> .
 @     LZR,-0 ,,<HLN>i7  INC <HLN> .
 @     RDL,-0,<HLN>,0013 'cab','dw','rpt' \
         <ICAB>h,<IDW>h,<IRPT>h .
 @     FDR,<ICAB>,<IDW>,<IRPT>,,,lin+2 '' \
-        'cab','dw','rpt' 	,<CAB>,<DRW>,<RPT> .
+        'cab','dw','rpt' ¬,<CAB>,<DRW>,<RPT> .
 @     RLN 'service' <SVC>s .
 @     LDV,p <SRVS>='('<SVC>(p)')' .
 @0013:return .
@@ -100,9 +100,10 @@
 @.    #  Get file name from output file
 @.    #  getFileName_
 @0035:(<FILE>,<RUN>) .
-@     LCV 'b99' <FILE> '\' ,<OCC>i3 .                                           Find last occurance
-@     LCV 'b<occ>' <FILE> '\' <POS>i3  INC <POS> .                              Last \ pos
-@     LDV,p <RUN>=<FILE>(<POS>-0),<FILE> .                                      Load BIS run
+@     DVS,SUBLOG_ 'File' <TFILE>s  LDV <TFILE>=<FILE> .
+@     LCV 'b99' <TFILE> '\' ,<OCC>i3 .                                          Find last occurance
+@     LCV 'b<occ>' <TFILE> '\' <POS>i3  INC <POS> .                             Last \ pos
+@     LDV,p <RUN>=<TFILE>(<POS>-0) .                                            Load BIS run
 @     LCV,0039 'b1' <RUN> '(' <LPOS>i3 .                                        Find pos
 @     LCV 'b1' <RUN> ')' <RPOS>i3 .                                             Find pos
 @     LDV <RUN>(<LPOS>-<RPOS>)='' .                                             Remove name

@@ -11,11 +11,11 @@
 @.    #---------------------------------------------------------------------------------------------
 @.
 @.    # Test Setup
-@ rdb ldv <CTL>s80='export f832 -fUmbrella' .
-@     ldv <file>s42='D\Users\winne\sublwatcher\site-d\2f832.bis' .
-@     ldv <runname>s12='export' .
-@     call 0001 (<CTL>,<FILE>,<RUNNAME>,<STATUS>h1) .
-@     gto end .
+@ RDB LDV <CTL>s80='build 56 -fsublwatcher' .
+@     LDV <FILE>s42='D\Users\winne\sublwatcher\site-d\2f832.bis' .
+@     LDV <RUNNAME>s12='export' .
+@     CALL 0001 (<CTL>,<FILE>,<RUNNAME>,<STATUS>h1) .
+@     GTO END .
 @.
 @0001:(<CTL>,<FILE>,<RUNNAME>,<STATUS>) .
 @.
@@ -23,6 +23,12 @@
 @     RER,0,E,2 0199 .                                                          sets-run-error
 @     RSR,SUBLCOMMON_ configVars_ .
 @     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
+@.
+@     CALL,SUBLCOMMON_ getFileName_ (<FILE>,<RUN>s60) .                         Extracts File Name from path
+@     LCV,lin+1 'b99' <RUN> '.bis'/''  GTO lin+4 .                                   Remove file type
+@     LDV <MSG>s256='Must be BIS file type' .
+@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
 @.
 @.    #  Open windows explorer using MFXFILE.EXE
 @.    #  <PTH> contains users selected path to export the application
@@ -36,10 +42,10 @@
 @     LDV,p <CTLOPT>s40=<CTL>(<VPOS>-0) .
 @.
 @.    #  Check for folder flag
-@     LCV,lin4 '' <CTLOPT> '-f' <fpos>i3 .
-@     inc,2 <fpos>  ldv <ifolder>s40=<CTLOPT>(<fpos>-0) .
-@     ldv <pth>=<pth>(p)<ifolder>(lp)'\' .                                      Add folder to base path
-@     dec,3 <fpos>  ldv,p <t>s40=<CTLOPT>(1-<fpos>),<CTLOPT>s40=<T> .           Exclude folder option
+@     LCV,lin+4 '' <CTLOPT> '-f' <FPOS>i3 .
+@     INC,2 <FPOS>  LDV <IFOLDER>s40=<CTLOPT>(<FPOS>-0) .
+@     LDV <PTH>=<PTH>(p)<IFOLDER>(lp)'\' .                                      Add folder to base path
+@     DEC,3 <FPOS>  LDV,p <T>s40=<CTLOPT>(1-<FPOS>),<CTLOPT>s40=<T> .           Exclude folder option
 @.
 @.    #
 @.    #  Export by cabinet number... EXPORT 56
@@ -48,8 +54,8 @@
 @     LDV <DRAWERS>h8='BCDEFGHI',<DRWREF>i1=0,<DRW>h1,<CAB>i4=<CTLOPT> .
 @0002:INC <DRWREF>  IF <DRWREF> eq 9,(0199) .                                   Loop through drawers
 @     LDV <DRW>=<DRAWERS>(<DRWREF>-1) .
-@     ldv <drawer>h11='0'<drw><cab>  call 0110 (<drawer>,<exist>h1) .
-@     if <exist> eq 0 . ; gto 0002 .
+@     LDV <DRAWER>h11='0'<DRW><CAB>  CALL 0110 (<DRAWER>,<EXIST>h1) .
+@     IF <EXIST> eq 0 . ; GTO 0002 .
 @     DRW,<CAB>,<DRW>,0002 ,,,,,<VHIRPTD>i4,,,,,,<FOLDER>s26 .                  Drawer exist?
 @     LDV <RPT>i4=0 .
 @0003:INC <RPT>  IF <RPT> gt <VHIRPTD>,(0002) .
@@ -59,8 +65,7 @@
 @.    #
 @.    #  Export by cabinet+drawer... EXPORT 56b or b56
 @.    #
-@0010:.
-@     DEF,p <SZ>i3,<CTLOPT>  IF <SZ> le 5 . ; GTO 0020 .
+@0010:DEF,p <SZ>i3,<CTLOPT>  IF <SZ> le 5 . ; GTO 0020 .
 @     IF <TY> eq 3 . ; GTO 0020 .                                               Alphanumeric
 @     LCV,lin+1 b1 <CTLOPT> 'a' <APOS>a1  GTO 0012 .
 @     LCV,lin+1 b1 <CTLOPT> 'b' <APOS>a1  GTO 0012 .
@@ -73,14 +78,14 @@
 @     LCV,lin+1 b1 <CTLOPT> 'i' <APOS>a1 .
 @.
 @.    #  Handle both formats f402 or 402f
-@0012:IF <APOS> eq 1 . ; gto lin+4 .
+@0012:IF <APOS> eq 1 . ; GTO lin+4 .
 @     LDV <DRW>h1=<CTLOPT>(<APOS>-1) .
 @     INC <APOS>  LDV <CAB>i4=<CTLOPT>(<APOS>-0) .
-@     gto lin+3 .
+@     GTO lin+3 .
 @     DEC <APOS>    LDV <CAB>i4=<CTLOPT>(1-<APOS>) .
 @     INC,2 <APOS>  LDV <DRW>h1=<CTLOPT>(<APOS>-1) .
-@     ldv <drawer>h11='0'<drw><cab>  call 0110 (<drawer>,<exist>h1) .
-@     if <exist> eq 0 . ; gto 0012 .
+@     LDV <DRAWER>h11='0'<DRW><CAB>  CALL 0110 (<DRAWER>,<EXIST>h1) .
+@     IF <EXIST> eq 0 . ; GTO 0012 .
 @     DRW,<CAB>,<DRW>,0012 ,,,,,<VHIRPTD>i4,,,,,,<FOLDER>s26 .                  Drawer exist?
 @     LDV <RPT>i4=0 .
 @0013:INC <RPT>  IF <RPT> gt <VHIRPTD>,(0199) .
@@ -114,15 +119,15 @@
 @     CALL,SUBLCOMMON_ chkMkDir_ (<PTH>,<FOLDER>,<EXPATH>) .
 @     LDV,p <EXPFILE>s256=<EXPATH>(p)<PROGRAM> .
 @     RSL,<CAB>,<DRW>,<RPT> .
-@     if <RTYPE> eq 1,(lin2) .                                                  Skip binary
+@     IF <RTYPE> eq 1,(lin+2) .                                                 Skip binary
 @     CALL,SUBLCOMMON_ charReplace_ ('export') .                                Replace tab character
 @     PCW,-0,2 <EXPFILE> .                                                      Write file
 @0105:ESR .
 @.
 @.    # Check if drawer exists... This should work with @drw but for some reason it's not
-@0110:(<rpt>,<exist>)
-@     ldv <exist>h1=0 .
-@     dir <rpt> ,,,,,<acc>h1 if <acc> eq ''  ldv <exist>=9 .                    If no error routine
+@0110:(<RPT>,<EXIST>) .
+@     LDV <EXIST>h1=0 .
+@     dir <RPT> ,,,,,<ACC>h1  IF <ACC> eq ''  LDV <EXIST>=9 .                    If no error routine
 @     return .
 @.
 @.    # Exit

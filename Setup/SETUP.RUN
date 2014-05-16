@@ -1,0 +1,879 @@
+.SETUP+ - Installation Routine
+.REV: 1.0    DATE: 20140415
+*===============================================================================
+*  SETUP+ Installation Package                                                 *
+*  Copyright (c) 2014 - John Thalhuber Associates (JTA)                        *
+*  --------------------------------------------------------------------------  *
+*  The SETUP+ installation package (program code, table/file structures and    *
+*  methodology) may not be reused or distributed, in whole or part, without    *
+*  the expressed consent of JTA.  No warranty is provided or implied, and JTA  *
+*  will assume no liability for defects or problems resulting from its use.    *
+*===============================================================================
+@.
+@     CALL 0001() .
+@     IF CDRW$ ne 0  ESR ; IF LINK$ ne 0,(END) ; REL .
+@.
+@0001:() .
+@.
+@. -------------------------- Module Initialization ----------------------------
+@.
+@     BRK  RNM -8  DLR,-8 .
+@.
+@     LDV <WIN1>i6=0 .
+@     RAR 0196 .
+@.
+@     LDV,p <PRD>h12=SUBLWATCHER . <PRD> contains Product name
+@     LDV <OVR>h1=N .
+@     LDV <GEN>h1=Y .
+@     LDV <PTQ>h1=Y .
+@     LDV <PTH>s256 .
+@     LDV,pw <DPT>a4=MSTRD$ .
+@.
+@. ----------------------- Check System & Level Info ---------------------------
+@.
+@     IF WS$ eq 0,(0180) ; .
+@     IF DWCAP$(9-1) ne 1,(0181) ; .
+@     IF SYSNAM$(1-1) eq 'M'  IF MAPER$(1-2) lt 37,(0181) ; .
+@     IF CPRIV$ eq 0,(0182) ; .
+@     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+3 .
+@     FDR,USRDRW$,DEPN$,,,0183 '' 'USER' 	,USER$ .
+@     RLN 46-1 <X>h  IF <X> ne '',(0183) ; .
+@.
+@. --------------------------- Initialize Screen -------------------------------
+@.
+@     LDV <STP>i1=0 .
+@     SC q cs .
+@     MNU,t MENUBAR,"",,'' .
+@     HID .
+@     FON,r .
+@     IF DWCAP$(12-1) eq 0 . ; GTO lin+2 .
+@     FON,r,'Terminal',09,pd .
+@     IF DWCAP$(12-1) eq 1 . ; GTO lin+3 .
+@     FON,r,'Terminal',09,p,lin+1  GTO lin+2 .
+@     FON,r,'MAPPER Standard',09,pd .
+@     FON,t .
+@     WIN,,01,01,01,01,,h '' <WIN1>i6  CLS,<WIN1>  LDV <WIN1>=0 .
+@.
+@. -------------------------- Display Wizard Screen ----------------------------
+@.
+@     LDV,p <B>h1=b,<3>h1  IF DWCAP$(13-1) eq 1  LDV <B>h1=3,<3>h1=3 ; .
+@     LDV <WID>i3=62,<HGT>i2=30 .
+@     IF SCNV$ lt <HGT> . ; GTO lin+5 .
+@     MBX,OK,E,'Recommendation' "/\
+ Please maximize your window to/\
+ better utilize this installation wizard." \
+      O,(lin+1) .
+@     CHG <ROW>i3 SCNV$ - <HGT> // 2  IF <ROW> lt 2  LDV <ROW>=2 ; .
+@     CHG <COL>i3 SCNH$ - <WID> // 2 + 1 .
+@     WIN,,<ROW>,<COL>,<HGT>,<WID>,lgra,bc <PRD>' Setup Wizard' <WIN1>i6 .
+@     TXT,"",<WIN1>,01,01,05,62,bla/whi,b<3> .
+@     FON,t,'Arial',09,pdb .
+@     TXT,"",<WIN1>,02,04,01,80,bla/whi <MSG1>i6 .
+@     FON,t,'Arial',09,pd .
+@     TXT,"",<WIN1>,04,06,01,80,bla/whi <MSG2>i6 .
+@     FON,t,'Arial',08,pd .
+@     TXT,"SETUP+ Installation Tools",<WIN1>,29,01,02,32,gra/lgra,c .
+@     TXT,"(c) John Thalhuber Associates",<WIN1>,30,01,02,32,gra/lgra,c .
+@     FON,t,'Arial',08,pdb .
+@     BTN,<WIN1>,28,24,02,08 'Read Me' <READ>i6  HID,<READ> .
+@     BTN,<WIN1>,28,34,02,08 '< Back' <BACK>i6 .
+@     BTN,<WIN1>,28,42,02,08 'Next >' <NEXT>i6 .
+@     BTN,<WIN1>,28,52,02,08 'Quit'   <EXIT>i6 .
+@     TIP," View the README file ",<READ> .
+@     TIP," Go back to the previous step ",<BACK> .
+@     TIP," Proceed with the installation process ",<NEXT> .
+@     TIP," Exit without installing this product ",<EXIT> .
+@.
+@     BRK,0,A  BRK  LN+,-0,1,1 .
+@     FON,t,'Arial',09,pd .
+@     TXT,-0,2,99,<WIN1>,07,06,16,85,bla/lgra <TXTH>i6 .
+@     FON,t .
+@.
+@     IF <*PTH> ne '<*PTH>'  LDV,p <PTX>s256=<*PTH>  GTO 0024 ; .
+@.
+@0010:. ------------------------ Welcome Screen --------------------------------
+@.
+@     LDV <STP>i1=1 .
+@.
+@     TXT,"",<WIN1>,01,01,25,62,bla/whi,<B> <TXT1>i6 .
+@     TXT,"",<WIN1>,01,01,25,20,dblu <TXT2>i6 .
+@     LDV <PIC1>i6=0 .
+@     FON,t,'Arial',14,pd .
+@     BRK,0,A .
+ Welcome to the <PRD>
+ Setup Wizard
+@     BRK  TXT,-0,2,2,<WIN1>,03,23,02,40,bla/whi <TXT3>i6 .
+@     FON,t,'Arial',09,pd .
+@     BRK,0,A .
+ (This program works seamlessly with MAPPER to allow you to modify/edit MAPPER files)
+ (It allows for a more modern programming environment over a traditional MPC screen)
+ (It is highly configurable and customizable to do just about anything to fit your needs)
+ _____________________________________________
+
+ This wizard will guide you through the steps
+ required to install <PRD> on your system.
+
+ To continue, click Next.
+@     BRK  TXT,-0,2,99,<WIN1>,08,23,09,62,bla/whi <TXT4>i6 .
+@     FON,t .
+@.
+@     IF <PTH> ne ''  SHW,<READ> . ; HID,<READ> .
+@     BTN,<BACK>,,,,,,g '< Back' .
+@     BTN,<NEXT> 'Next >' .
+@     LDV <FOC>i6=<NEXT> .
+@0011:.
+@     INP,<FOC>,,<WIN1> .
+@     IF ACTINP$ eq <NEXT>,(0012) ; .
+@     IF ACTINP$ eq <READ>  PC,bcw "START <PTH>\readme.txt" ; .
+@     IF ACTINP$ eq <EXIT>,(0198) ; .
+@     GTO 0011 .
+@0012:.
+@     CLS,<PIC1>,<TXT1>,<TXT2>,<TXT3>,<TXT4> .
+@.
+@     IF <PTQ> eq 'N',(0030) ; .
+@.
+@0020:. ------------------- Specify Installation Path --------------------------
+@.
+@     LDV <STP>i1=2 .
+@.
+@     LDV,p <PTX>s256=<PTH>  IF <PTX> eq ''  LDV,p <PTX>s3='D:\' ; .
+@     TXT,"Installation Path",<MSG1> .
+@     TXT,"Where are you loading the product from?",<MSG2> .
+@.
+@     BRK,0,A .
+ You must specify the drive or directory containing
+ the <PRD> product software ( i.e., D:\ ).
+
+ To continue, click Next.
+@     BRK  TXT,-0,2,99,<TXTH> .
+@.
+@     TXT,"",<WIN1>,14,08,07,47,lgra,<B> <TXT1>i6 .
+@     FON,t,'Arial',08,pd .
+@     TXT,"Installation Media Path",<WIN1>,16,11,01,24,bla/lgra <TXT2>i6 .
+@     FON,t .
+@     EDT,"<PTX>",<WIN1>,17,11,01,41,bla/whi,b<3>h <EDT1>i6 .
+@.
+@     BTN,<BACK> '< Back' .
+@     BTN,<NEXT> 'Next >' .
+@     LDV <FOC>i6=<EDT1> .
+@0021:.
+@     INP,<FOC>,,<WIN1> .
+@     IF ACTINP$ eq <NEXT>,(0023) ; .
+@     IF ACTINP$ eq <EDT1>,(0023) ; .
+@     IF ACTINP$ eq <BACK>,(0022) ; .
+@     IF ACTINP$ eq <EXIT>,(0198) ; .
+@     GTO 0021 .
+@0022:.
+@     CLS,<TXT1>,<TXT2>,<EDT1> .
+@     GTO 0010 .
+@0023:.
+@     INP,<EDT1>,Y .
+@     CHG INPUT$ <PTX>s256  LDV,p <PTX> .
+@0024:.
+@     DEF,s <SIZ>i3,<PTX>  IF <SIZ> ge 9 . ; GTO lin+2 .
+@     IF <PTX>(0-9) eq 'SETUP.RUN'  LDV <PTX>(0-9)=''  LDV,p <PTX> ; .
+@     IF <PTX> ne ''  IF <PTX>(0-1) eq '\'  LDV <PTX>(0-1)=''  LDV,p <PTX> ; .
+@     IF <PTX> eq '',(0184) ; .
+@     LDV <X>h7='/*?"<>|'  DEF,s <N>i3,<X> .
+@     LCV,0184 n <PTX> <X>(<N>-1)  DEC <N>  IF <N> gt 0,(lin-0) ; .
+@     DEF,s <SIZ>i3,<PTX>  IF <SIZ> gt 1,(lin+2) ; .
+@     IF <PTX> ge 'A' & le 'Z'  LDV <DRV>h1=<PTX>,<PTX>h2=<DRV>':' ; .
+@     PCR,0,A,-0,,,0185 <PTX>'\'  RNM -1 .
+@     FND,-1,,0185 a 2-11 S,ETUP.INF .
+@     FND,-1,,0185 a 2-11 T,OC.TXT .
+@     PCR,0,A,-0,,,0185 <PTX>'\'SETUP.INF  RNM -2 .
+@     LN+,-2,1,1  WRL,-2,2 2-1 *,= .
+@     SRH,-2,,,0185 dp 2-8 [,DRAWERS] .
+@     LOC,-0,4,0185 afm 2-79 Drawer ,<LIN>i4 .
+@     RDL,-0,<LIN> 1-80 <DAT>s  LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
+@     LDV,lq <CPL>i3=<DAT>(<COL>-0),1(,),<DNM>s26=<DAT>(<COL>-0),2(,) .
+@     PCR,0,F,-0,,,0185 <PTX>'\'TOC.TXT  RNM -3 .
+@     TOT,-3 '' 'Lines' ' ',+ <TLN>i12 .
+@     BRK,0,A .
+.
+*
+* Run Name   .Rpt .I/O  .LLP   1MDNF.
+*============.====.=====.=====.=====.
+@     SRH,-2,,,0026 dp 2-8 [,RUNS]  LDV <LIN>i6=3 .
+@0025:INC <LIN>  LOC,-0,<LIN>,0026 afm 2-79 Run ,<LIN> .
+@     RDL,-0,<LIN> 1-80 <DAT>s  LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
+@     LDV,lq <RUN>h12=<DAT>(<COL>-0),0(,) .
+@     LDV,rq <RPT>i4=<DAT>(<COL>-0),1(,) .
+@     LDV,rq <IOS>i5=<DAT>(<COL>-0),2(,) .
+@     LDV,rq <LLP>i5=<DAT>(<COL>-0),3(,) .
+@     LDV,lq <FLG>h5=<DAT>(<COL>-0),4(,) .
+	<RUN>	<RPT>	<IOS>	<LLP>	<FLG>
+@     GTO 0025 .
+@0026:.
+@     BRK  RNM -4 .
+@     LDV,p <PTH>s256=<PTX> .
+@.
+@     IF <STP> eq 2,(0027) ; .
+@     LDV <PTQ>h1=N .
+@     GTO 0010 .
+@0027:.
+@     CLS,<TXT1>,<TXT2>,<EDT1> .
+@.
+@0030:. --------------------- Display License Agreement ------------------------
+@.
+@     LDV <STP>i1=3 .
+@.
+@     TXT,"Software License Agreement",<MSG1> .
+@     TXT,"Do you accept this Software License Agreement?",<MSG2> .
+@.
+@     BRK,0,A .
+ IMPORTANT!  Please read the following information carefully.
+ You must check the Accept box to continue; doing so means you
+ agree to all terms stated in this Software License Agreement.
+@     BRK  TXT,-0,2,99,<TXTH> .
+@.
+@     BRK,0,A .
+
+ Software License Agreement
+ --------------------------
+ (Terms & conditions detailed starting at this line)
+
+@     BRK  RNM -1 .
+@.
+@     FON,t,'Arial',08,pd .
+@     LDV <CLR>h3=whi  IF DWCAP$(13-1) eq 1  LDV <CLR>h6=E8E8E8 ; .
+@     WIN,<WIN1>,12,06,09,52,<CLR>,c '' <WIN2>i6 .
+@     FON,t,'Arial',08,pdb .
+@     LST,-1,5,Y,license.txt,<WIN2>,01,01,00,00,dblu/<CLR>,m '' .
+@     BTN,<WIN1>,23,50,02,08 'Display' <BTN1>i6 .
+@     BTN,<WIN1>,23,06,02,32,bla/lgra,ac(0) \
+      'Accept Software License Agreement' <CHK1>i6 .
+@     FON,t .
+@     IF DWCAP$(12-1) eq 1 . ; GTO lin+2 .
+@     TIP," Display license agreement text as a result ",<BTN1> .
+@.
+@     SHW,<READ> .
+@     BTN,<BACK> '< Back' .
+@     BTN,<NEXT>,,,,,,g 'Next >' .
+@     LDV <FOC>i6=<BTN1> .
+@0031:.
+@     INP,<FOC>,,<WIN1> .
+@     IF ACTINP$ eq <CHK1>,(0033) ; .
+@     IF ACTINP$ eq <NEXT>,(0035) ; .
+@     IF ACTINP$ eq <BTN1>,(0034) ; .
+@     IF ACTINP$ eq <BACK>,(0032) ; .
+@     IF ACTINP$ eq <READ>  PC,bcw "START <PTH>\readme.txt" ; .
+@     IF ACTINP$ eq <EXIT>,(0198) ; .
+@     GTO 0031 .
+@0032:.
+@     CLS,<WIN2>,<CHK1>,<BTN1>,<PIC1> .
+@     TXT," ",<MSG1> .
+@     TXT," ",<MSG2> .
+@     HID,<READ> .
+@     IF <PTQ> eq 'Y',(0020) ; GTO 0010 .
+@0033:.
+@     IF INPUT$ eq 0 . ; GTO lin+3 .
+@     BTN,<NEXT>,,,,,,g 'Next >' .
+@     LDV <FOC>i6=<CHK1> .
+@     IF INPUT$ ne 0 . ; GTO lin+3 .
+@     BTN,<NEXT> 'Next >' .
+@     LDV <FOC>i6=<NEXT> .
+@     GTO 0031 .
+@0034:.
+@     BRK,0,A .
+fkey,01,''      '',KEY
+fkey,04,''Return'',KEY
+fkey,10,''Quit  '',KEY
+@     BRK  FKY,-0 .
+@     SC q CS .
+@     HID .
+@     DSP,-1 .
+@     SC q CS .
+@     SHW .
+@     FKY .
+@     IF FKEY$ eq 10,(0198) ; .
+@     GTO 0031 .
+@0035:.
+@     CLS,<WIN2>,<CHK1>,<BTN1> .
+@.
+@0040:. ------------------- Run Registration Info ------------------------------
+@.
+@     LZR,-4 <LNS>i4  IF <LNS> lt 6,(0050) ; .
+@     RDL,-4,6 'Run' <RUN>h .
+@.
+@     LDV <STP>i1=4 .
+@.
+@     TXT,"Run Registration Parameters",<MSG1> .
+@     TXT,"Designate who will be allowed to execute <PRD>",<MSG2> .
+@     LDV,pw <USR>h12=USER$,<MST>a4=MSTRD$ .
+@     BRK,0,A .
+ Run script(s) need to be registered.  Specify the department and
+ user(s) to register them for.  Use the Master department (<MST>)
+ to permit access by all users (recommended).
+@     BRK  TXT,-0,2,99,<TXTH> .
+@.
+@     TXT,"",<WIN1>,13,15,07,34,lgra,<B> <TXT1>i6 .
+@     FON,t,'Arial',08,pd .
+@     TXT,"Department",<WIN1>,15,18,01,12,bla/lgra <TXT2>i6 .
+@     FON,t .
+@     EDT,"<DPT>",<WIN1>,16,19,01,04,bla/whi,b<3>n <EDT1>i6 .
+@     FON,t,'Arial',08,pdb .
+@     BTN,<WIN1>,15,28,01,20,bla/lgra,ar(1) \
+      'All Users in Department' <RAD1>i6 .
+@     BTN,<WIN1>,17,28,01,20,bla/lgra,ar(0) \
+      'User '<USR>' Only'       <RAD2>i6 .
+@     FON,t .
+@.
+@     BTN,<BACK> '< Back' .
+@     BTN,<NEXT> 'Next >' .
+@     LDV <FOC>i6=<NEXT> .
+@0041:.
+@     INP,<FOC>,,<WIN1> .
+@     IF ACTINP$ eq <NEXT>,(0043) ; .
+@     IF ACTINP$ eq <EDT1>,(0043) ; .
+@     IF ACTINP$ eq <BACK>,(0042) ; .
+@     IF ACTINP$ eq <READ>  PC,bcw "START <PTH>\readme.txt" ; .
+@     IF ACTINP$ eq <EXIT>,(0198) ; .
+@     GTO 0041 .
+@0042:.
+@     CLS,<TXT1>,<TXT2>,<EDT1>,<RAD1>,<RAD2> .
+@     GTO 0030 .
+@0043:.
+@     INP,<EDT1>,<RAD1> .
+@     CHG INPUT$ <DPT>a4,<ALL>i1  LDV,p <DPT> .
+@     DEF <N>i1,<DPT>  IF <N> ne 1,(0186) ; .
+@     LCV,0186 n <DPT> '-'  LCV,0186 n <DPT> '+'  LCV,0186 n <DPT> '.' .
+@     IF <DPT> ge 1 & le 2000 . ; GTO 0186 .
+@     LZR,RUNDRW$,<DPT>,0186 .
+@     DVS,RUNDRW$,<DPT>,0186 'Run' .
+@     FDR,RUNDRW$,<DPT>,,,0044 '' 'Run' 	,<RUN> .
+@.
+@     IF SYSNAM$(1-1) eq 'M'  RLN 'TYPE','RID' <DRN>a,<RPT>i ; .
+@     IF SYSNAM$(1-1) ne 'M'  RLN 'Drawer','Rpt' <DRN>a,<RPT>i ; .
+@     DEF <DEF>i1,<DRN>  IF <DEF> eq 1,3 . ; GTO 0044 .
+@     LDV,p <DRN> .
+@     IF <DEF> eq 1  DEF,m <CAB>a4,<DRN>  DEF,a <DRW>h1,<DRN> ; .
+@     IF <DEF> eq 3  LDV <CAB>a4=<DRN>(2-0),<DRW>h1=<DRN>(1-1) ; .
+@     DRW,<CAB>,<DRW>,0044 <CHR>i3  IF <CHR> ne <CPL>,(0044) ; .
+@.
+@     LDV,p <CAB> .
+@     MBX,YN,Q,'Confirmation' "/\
+ A prior installation was detected.//\
+ The <RUN> run script is already/\
+ installed in Cabinet <CAB>, Drawer <DRW>.//\
+ Do you want to overlay the existing version?" \
+      N,(0044) .
+@     LDV <OVR>h1=Y,<GEN>h1=N .
+@     GTO 0045 .
+@0044:.
+@     LDV <OVR>h1=N,<GEN>h1=Y .
+@0045:.
+@     CLS,<TXT1>,<TXT2>,<EDT1>,<RAD1>,<RAD2> .
+@.
+@     IF <OVR> eq 'Y',(0070) ; .
+@.
+@0050:. -------------------- Specify Empty Drawer ------------------------------
+@.
+@     LDV <STP>i1=5 .
+@.
+@     LDV <GEN>h1=Y .
+@     LDV <CAB>a4=16,<DRW>h1=B  IF SYSNAM$(1-1) eq 'M'  LDV <CAB>=2 ; .
+@     DRW,<CAB>,<DRW>,lin+3  CHG <DRW> <DRW> + 1  IF <DRW> le 'I',(lin-0) ; .
+@     LDV <DRW>=B  INC,2 <CAB>  IF <CAB> le MAXCAB$,(lin-1) ; GTO 0187 .
+@     IF SYSNAM$(1-1) eq 'M'  IF <CAB> eq 200  LDV <CAB>=252 ; GTO lin-2 .
+@     LDV,p <CAB> .
+@     TXT,"Drawer Location",<MSG1> .
+@     TXT,"Designate drawer to contain <PRD> software.",<MSG2> .
+@     BRK,0,A .
+ Specify an empty drawer to load the <PRD> package into.
+
+ The first available drawer on your system is: <DRW><CAB>.
+@     BRK  TXT,-0,2,99,<TXTH> .
+@.
+@     TXT,"",<WIN1>,13,15,07,34,lgra,<B> <TXT1>i6 .
+@     FON,t,'Arial',08,pd .
+@     TXT,"Cabinet",<WIN1>,15,27,01,12,bla/lgra <TXT2>i6 .
+@     TXT,"Drawer",<WIN1>,15,33,01,12,bla/lgra <TXT3>i6 .
+@     FON,t .
+@     EDT,"<CAB>",<WIN1>,16,27,01,04,bla/whi,b<3>n <EDT1>i6 .
+@     LDV <ABC>h8=BCDEFGHI  LCV '' <ABC> <DRW> <HL>i1 .
+@     BRK,0,A  LDV <N>i1=1 .
+<ABC>(<N>-1)
+@     INC <N>  IF <N> le 8,(lin-1) ; .
+@     BRK .
+@     IF DWCAP$(12-1) eq 1 . ; GTO lin+2 .
+@     CBX,-0,2,Y,combobox.dat,<WIN1>,16,33,08,01,bla/whi,p,<HL> <EDT2>i6 .
+@     IF DWCAP$(12-1) ne 1 . ; GTO lin+2 .
+@     EDT,-0,2,8,<WIN1>,16,33,10,02,bla/whi,bad(<HL>) <EDT2>i6 .
+@.
+@     BTN,<BACK> '< Back' .
+@     BTN,<NEXT> 'Next >' .
+@     LDV <FOC>i6=<EDT1> .
+@0051:.
+@     INP,<FOC>,,<WIN1> .
+@     IF ACTINP$ eq <NEXT>,(0053) ; .
+@     IF ACTINP$ eq <EDT1>,(0053) ; .
+@     IF ACTINP$ eq <EDT2>,(0053) ; .
+@     IF ACTINP$ eq <BACK>,(0052) ; .
+@     IF ACTINP$ eq <READ>  PC,bcw "START <PTH>\readme.txt" ; .
+@     IF ACTINP$ eq <EXIT>,(0198) ; .
+@     GTO 0051 .
+@0052:.
+@     CLS,<TXT1>,<TXT2>,<TXT3>,<EDT1>,<EDT2> .
+@     LZR,-4 <LNS>i4  IF <LNS> lt 6,(0030) ; GTO 0040 .
+@0053:.
+@     INP,<EDT1>,<EDT2> .
+@     CHG INPUT$ <CAB>a4,<DRW>h1  LDV,p <CAB>  LDV,u <DRW> .
+@     DEF <N>i1,<CAB>  IF <N> ne 1,(0188) ; .
+@     LCV,0188 n <CAB> '-'  LCV,0188 n <CAB> '+'  LCV,0188 n <CAB> '.' .
+@     LDV,r <CAX>a4=<CAB>  IF <CAX>(0-1) eq 1,3,5,7,9,(0188) ; .
+@     IF SYSNAM$(1-1) eq 'M' . ; IF <CAB> ge 16 & le MAXCAB$ . ; GTO 0189 .
+@     IF SYSNAM$(1-1) ne 'M' . ; IF <CAB> ge 2 & le MAXCAB$ . ; GTO 0190 .
+@     IF SYSNAM$(1-1) ne 'M' . ; IF <CAB> ge 200 & le 250,(0191) ; .
+@     IF <DRW> ge 'B' & le 'I' . ; GTO 0192 .
+@     IF SYSNAM$(1-1) ne 'M'  DRW,<CAB>,<DRW>,0055 <CHR>i3 ; .
+@     IF SYSNAM$(1-1) eq 'M'  DRW,<CAB>,<DRW>,0055 <CHR>i3,<CS>i1 ; .
+@     IF <CHR> ne <CPL>,(0191) ; .
+@     IF SYSNAM$(1-1) eq 'M'  IF <CS> ne 1,(0192) ; .
+@     IF STAT1$ eq 0,(0054) ; .
+@.
+@     MBX,YN,Q,'Confirmation' "/\
+ The drawer you specified already exists.//\
+ Are you sure you want to overlay the existing/\
+ reports in Cabinet <CAB> Drawer <DRW>?" \
+      N,(0051) .
+@0054:.
+@     LDV <GEN>h1=N .
+@0055:.
+@     CLS,<TXT1>,<TXT2>,<TXT3>,<EDT1>,<EDT2> .
+@.
+@     IF SYSNAM$(1-1) eq 'M'  IF <GEN> eq 'Y',(0060) ; GTO 0070 .
+@.
+@0060:. ----------------------- Database File (2200) ---------------------------
+@.
+@     LDV <STP>i1=6 .
+@.
+@     LDV,pw <MXF>i4=MAXFIL$ .
+@     TXT,"Drawer Generation",<MSG1> .
+@     TXT,"Designate Database File",<MSG2> .
+@     BRK,0,A .
+ Specify the MAPERn database file for the new drawer.
+ Available files are 3-<MXF>.
+@     BRK  TXT,-0,2,99,<TXTH> .
+@.
+@     TXT,"",<WIN1>,13,15,07,34,lgra,<B> <TXT1>i6 .
+@     FON,t,'Arial',08,pd .
+@     TXT,"Database File",<WIN1>,15,28,01,16,bla/lgra <TXT2>i6 .
+@     FON,t .
+@     EDT,"3",<WIN1>,16,30,01,04,bla/whi,b<3>n <EDT1>i6 .
+@.
+@     BTN,<BACK> '< Back' .
+@     BTN,<NEXT> 'Next >' .
+@     LDV <FOC>i6=<EDT1> .
+@0061:.
+@     INP,<FOC>,,<WIN1> .
+@     IF ACTINP$ eq <NEXT>,(0063) ; .
+@     IF ACTINP$ eq <EDT1>,(0063) ; .
+@     IF ACTINP$ eq <BACK>,(0062) ; .
+@     IF ACTINP$ eq <READ>  PC,bcw "START <PTH>\readme.txt" ; .
+@     IF ACTINP$ eq <EXIT>,(0198) ; .
+@     GTO 0061 .
+@0062:.
+@     CLS,<TXT1>,<TXT2>,<EDT1> .
+@     GTO 0050 .
+@0063:.
+@     INP,<EDT1>,Y .
+@     CHG INPUT$ <FIL>i4 .
+@     DEF <N>i1,<FIL>  IF <N> ne 1,(0193) ; .
+@     LCV,0193 n <FIL> '-'  LCV,0193 n <FIL> '+'  LCV,0193 n <FIL> '.' .
+@     IF <FIL> ge 3 & le MAXFIL$ . ; GTO 0193 .
+@.
+@     CLS,<TXT1>,<TXT2>,<EDT1> .
+@.
+@0070:. ---------------------- Final Verification ------------------------------
+@.
+@     LDV <STP>i1=7 .
+@.
+@     TXT,"Installation Confirmation",<MSG1> .
+@     TXT,"Is this information correct?",<MSG2> .
+@.
+@     BRK,0,A .
+ Examine the following installation information carefully.
+ Click Back if you need to modify options or selections.
+ If correct, click Install to perform the installation.
+
+ [Destination]
+@     IF <GEN> eq 'N' . ; GTO lin+2 .
+  Drawer <DRW><CAB> - Existing drawer will be overwritten
+@     IF <GEN> eq 'Y' . ; GTO lin+2 .
+  Drawer <DRW><CAB> - New drawer will be generated
+@     IF <GEN> eq 'Y'  IF SYSNAM$(1-1) eq 'M' . ; GTO lin+2 .
+  Database file <FIL> will be used
+
+@     LZR,-4 <LNS>i4  IF <LNS> lt 6,(lin+4) ; .
+ [Run Registration]
+@     LDV,w <USR>h12=USER$  IF <ALL> eq 1  LDV <USR>=All ; .
+  Department: <DPT>    User(s): <USR>
+@     BRK  TXT,-0,2,99,<TXTH> .
+@.
+@     BTN,<BACK> '< Back' .
+@     BTN,<NEXT> 'Install' .
+@     LDV <FOC>i6=<NEXT> .
+@0071:.
+@     INP,<FOC>,,<WIN1> .
+@     IF ACTINP$ eq <NEXT>,(0073) ; .
+@     IF ACTINP$ eq <BACK>,(0072) ; .
+@     IF ACTINP$ eq <READ>  PC,bcw "START <PTH>\readme.txt" ; .
+@     IF ACTINP$ eq <QUIT>,(0198) ; .
+@     GTO 0071 .
+@0072:.
+@     IF SYSNAM$(1-1) eq 'M'  IF <GEN> eq 'Y',(0060) ; .
+@     IF <OVR> eq 'N',(0050) ; .
+@     LZR,-4 <LNS>i4  IF <LNS> lt 6,(0030) ; GTO 0040 .
+@0073:.
+@     CLS,<READ>,<BACK>,<NEXT>,<EXIT> .
+@     LDV <STP>i1=0 .
+@.
+@0080:. ------------------------ Drawer Setup ----------------------------------
+@.
+@     IF <GEN> eq 'N',(0081) ; .
+@.
+@. Generate Drawer
+@.
+@     TXT,"Drawer Generation",<MSG1> .
+@     TXT,"... Please Wait ...",<MSG2> .
+@     BRK,0,A .
+
+ Drawer <DRW><CAB> is now being generated ...
+
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@.
+@     WAT 2000 .
+@.
+@     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+2 .
+@     GEN,<CAB>,<DRW> <FIL>,<CPL>,F,,,,<TTL>(1-24),USER$ .
+@     IF SYSNAM$(1-1) ne 'M' . ; GTO lin+2 .
+@     GEN,<CAB>,<DRW>,<CPL> .
+@.
+@0081:. Update Drawer Permission Report
+@.
+@     TXT,"Drawer Registration",<MSG1> .
+@     TXT,"... Please Wait ...",<MSG2> .
+@     BRK,0,A .
+
+ Updating Drawer Permissions report ...
+
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@.
+@     WAT 2000 .
+@.
+@     IF 0 eq SECDRW$,SECRPT$,SECGRP$,(0083) ; .
+@     DFU SECDRW$,SECRPT$ .
+@     LDV <LIN>i6=5 .
+@     INC <LIN>  RDL,SECDRW$,SECRPT$,<LIN>,0082 1-1,29-9 <LT>h,<DC>a .
+@     IF <LT> ne 	,(lin-1) ; .
+@     LDV,l <DC>  IF <DC>(2-0) eq <CAB> IF <DC>(1-1) eq <DRW> . ; GTO lin-2 .
+@     LN-,SECDRW$,SECRPT$,<LIN>,1 .
+@0082:.
+@     LDV,r <DRC>h6=<DRW><CAB> .
+@     IF SYSNAM$(1-1) eq 'M' \
+      LDV,rz <ZCB>a4=<CAB>  LDV <DRC>h6=<DRW>' '<ZCB> ; .
+@     LDV <SOR>i1=0 .
+@     BFN,SECDRW$,SECRPT$,,lin+1 k 2-26 	,k  LDV <SOR>=1  GTO lin+2 .
+@     BFN,SECDRW$,SECRPT$,,lin+1 kf'2,1' 34-4,32-1 	,k,k  LDV <SOR>=2 .
+@     FDR,SECDRW$,SECRPT$ '' 2-1 *,= ,<LIN>i6 .
+@     LN+,SECDRW$,SECRPT$,<LIN>,1  INC <LIN> .
+@     CHG <CLM>i3 56 + SECGRP$ .
+@     WRL,SECDRW$,SECRPT$,<LIN> 2-26,32-6,<CLM>-1 	,<DNM>,<DRC>,W .
+@     WRL,SECDRW$,SECRPT$,<LIN> 28-1,38-1,56-1 	,	,	,	 .
+@     IF <SOR> eq 1 SRR,SECDRW$,SECRPT$ '' 2-26,29-9 	,1,2 ; .
+@     IF <SOR> eq 2 SRR,SECDRW$,SECRPT$ '' 34-4,32-1 	,2n,1 ; .
+@     CMU .
+@.
+@0083:. Update Drawer Description
+@.
+@     TXT,"Drawer Description",<MSG1> .
+@     TXT,"... Please Wait ...",<MSG2> .
+@     BRK,0,A .
+
+ Updating Cabinet Table of Contents report ...
+
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@.
+@     WAT 2000 .
+@.
+@     LDV <ROW>i1=1,<COL>i2=4 .
+@     IF SYSNAM$(1-1) ne 'M'  IF <DRW> eq 'F','G','H','I'  LDV <COL>=39 ; .
+@     IF SYSNAM$(1-1) eq 'M'  IF <DRW> eq 'F','G','H','I'  LDV <COL>=38 ; .
+@     IF <DRW> eq 'C','G'  LDV <ROW>=2 ; .
+@     IF <DRW> eq 'D','H'  LDV <ROW>=3 ; .
+@     IF <DRW> eq 'E','I'  LDV <ROW>=4 ; .
+@     IF SYSNAM$(1-1) ne 'M'  CHG <LIN>i6 <CAB> // 2 * 6 + 18 + <ROW> ; .
+@     IF SYSNAM$(1-1) eq 'M'  CHG <LIN>i6 <CAB> // 2 * 15 + 21 + <ROW> ; .
+@     LOK,TYPDRW$,TYPRD$ .
+@     LDV <SIZ>i2=26  IF SYSNAM$(1-1) eq 'M'  LDV <SIZ>=24 ; .
+@     WRL,TYPDRW$,TYPRD$,<LIN> <COL>-<SIZ> ' ',<DNM>(1-<SIZ>) .
+@     ULK .
+@.
+@0090:. ---------------------- Load Runs & Data --------------------------------
+@.
+@     TXT,"Software Modules",<MSG1> .
+@     TXT,"... Please Wait ...",<MSG2> .
+@     BRK,0,A .
+
+ Loading <PRD> code modules, tables and other reports ...
+
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@.
+@     TXT,"",<WIN1>,15,13,08,37,lgra,<B> <TXT1>i6 .
+@     FON,t,'Arial',08,pd .
+@     TXT,"Completion Status",<WIN1>,14,14,01,18,bla/lgra,c <TXT2>i6 .
+@     TXT,"",<WIN1>,21,24,01,24,bla/lgra,c <TXT3>i6 .
+@     FON,t .
+@     TXT,"",<WIN1>,17,19,03,25,whi,<B> <TXT4>i6 .
+@     TXT,"",<WIN1>,17,19,03,25,whi,<B> <TXT5>i6 .
+@     TXT,"",<WIN1>,18,29,01,05,dblu/whi,cs <TXT6>i6 .
+@     JUV,r <CAB> .
+@.
+@     LDV <LIN>i4=5,<XLN>i12=0,<QTY>a4=0 .
+@0091:INC <LIN>  RDL,-3,<LIN>,0095 'Rpt','Lines','Typ','Title' \
+      <RPT>a,<RLN>i,<EXT>h,<TTL>s79 .
+@     INC <QTY>  INC,<RLN> <XLN>  JUV,r <RPT>  LDV,l <RID>h5=<RPT><DRW> .
+@     TXT,"Loading Report: <RID>",<TXT3>  JUV,z <RPT> .
+@     LDV <BIN>h1=N  IF <EXT> eq 'BMP','PCX','JPG','BIN'  LDV <BIN>h1=Y ; .
+@.
+@     PCR,<CAB>,<DRW>,<RPT>,<BIN> <PTH>'\'RPT-<RPT>.<EXT> .
+@.
+@     CHG <PC>i4 <XLN> / <TLN> * 100  CHG <WID>i4 <PC> * 25 / 100 .
+@     IF <WID> gt 0  TXT,"",<TXT5>,17,19,03,<WID>,dblu ; .
+@     LDV,p <PC>  TXT,"<PC>%",<TXT6>,,,,,,s .
+@     IF <RPT> eq 0,(0092) ; .
+@     LOK,<CAB>,<DRW>,<RPT>  WRL,<CAB>,<DRW>,<RPT>,2 2-79 .,<TTL>  ULK .
+@     GTO 0091 .
+@0092:.
+@     RNM -5 .
+@     DRW,<CAB>,<DRW> <CPL>i3 .
+@     LOK,<CAB>,<DRW>,0 .
+@     LDV <ZLN>i6=1 .
+@0093:INC <ZLN>  RDL,-5,<ZLN>,0094 1-<CPL> <DAT>s .
+@     CHG <WID>i3 <CPL> - 1 .
+@     IF <DAT>(1-1) eq '.'  IF <WID> gt 79  LDV <WID>=79 ; .
+@     WRZ,<CAB>,<DRW>,<ZLN> 2-<WID> <DAT>(1-1),<DAT>(2-<WID>) .
+@     GTO 0093 .
+@0094:.
+@     ULK .
+@     GTO 0091 .
+@0095:.
+@     CLS,<TXT1>,<TXT2>,<TXT3>,<TXT4>,<TXT5>,<TXT6> .
+@.
+@0100:. -------------------- Update Run Registration ---------------------------
+@.
+@     TXT,"Run Script Registration",<MSG1> .
+@     TXT,"... Please Wait ...",<MSG2> .
+@     BRK,0,A .
+
+ Registering run script(s) in Department <DPT> ...
+
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@.
+@     WAT 2000 .
+@.
+@     DFU RUNDRW$,<DPT> .
+@     LDV <SOR>h1=N  BFN,RUNDRW$,<DPT>,,lin+1 k 'RUN' 	,k  LDV <SOR>=Y .
+@     MAU,-4,RUNDRW$,<DPT>,0101 dm 'Run' 	,1 'Run' 	,1 .
+@     DEL .
+@0101:.
+@     IF SYSNAM$(1-1) ne 'M',(0102) ; .
+@     DVS,RUNDRW$,<DPT> \
+      'RUN','USER','TYPE','RID','F','I/O','LINE','MODE','1MDNF' \
+      <RUN>h,<USR>h,<DRN>a,<RPT>i,<F>h,<IOS>a,<LLP>a,<CBS>s,<FLG>h .
+@     GTO 0103 .
+@0102:.
+@     DVS,RUNDRW$,<DPT> \
+      'Run','User','Drawer','Rpt','F','I/O','Line','Cab','1MDNF' \
+      <RUN>h,<USR>h,<DRN>a,<RPT>i,<F>h,<IOS>a,<LLP>a,<CBS>s,<FLG>h .
+@0103:.
+@     LDV,lw <USR>=USER$  IF <ALL> eq 1  LDV <USR>='' ; .
+@     LDV <F>=Y,<CBS>=ALL .
+@     LZR,-4 <LNQ>i3  DEC,5 <LNQ> .
+@     LZR,RUNDRW$,<DPT> ,,<LIN>i6 .
+@     LN+,RUNDRW$,<DPT>,<LIN>,<LNQ> .
+@     LDV <RLN>i4=5 .
+@0104:INC <RLN>,<LIN> .
+@     RDL,-4,<RLN>,0106 'Run','Rpt','I/O','LLP','1MDNF' \
+      <RUN>,<RPT>,<IOS>,<LLP>,<FLG> .
+@     IF SYSNAM$(1-1) ne 'M',(0105) ; .
+@     LDV <DRC>a6=<CAB><DRW>  DEF,n <DRN>,<DRC> .
+@     WRL,RUNDRW$,<DPT>,<LIN> \
+      'RUN','USER','TYPE','RID','F','I/O','LINE','MODE','1MDNF' \
+      	,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG> .
+@     GTO 0104 .
+@0105:.
+@     LDV,r <DRN>(0-5)=<DRW><CAB> .
+@     WRL,RUNDRW$,<DPT>,<LIN> \
+      'Run','User','Drawer','Rpt','F','I/O','Line','Cab','1MDNF' \
+      	,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG> .
+@     GTO 0104 .
+@0106:.
+@     IF <SOR> eq Y  SRR,RUNDRW$,<DPT> '' 'RUN','USER' 	,1,2d ; .
+@     CMU .
+@     GTO 0150 .
+@.
+@0150:. ------------------------- Install Complete -----------------------------
+@.
+@     LDV <STP>i1=8 .
+@.
+@     TXT,"Installation Complete",<MSG1> .
+@     TXT,"Press Finish to display Installation Notes",<MSG2> .
+@     BRK,0,A .
+  <PRD> successfully loaded into Drawer <DRW><CAB>.
+
+@     LZR,-4 <LNS>i4  IF <LNS> lt 6,(lin+2) ; .
+  Run script(s) were registered in Department <DPT>.
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@.
+@     FON,t,'Courier New',08,pd  .
+@     BRK,0,A .
+@     LDV <CLR>h3=whi  IF DWCAP$(13-1) eq 1  LDV <CLR>h6=E8E8E8 ; .
+@     BRK .
+@     FON,t .
+@.
+@     FON,t,'Arial',08,pdb .
+@     BTN,<WIN1>,28,52,02,08 'Finish' <EXIT>i6 .
+@     FON,t .
+@     INP,<EXIT> .
+@0151:.
+@     CLS,<WIN1>  LDV <WIN1>=0 .
+@     FON,r  FON,t .
+@     WIN,,01,01,01,01,,h '' <WIN1>i6  CLS,<WIN1>  LDV <WIN1>=0 .
+@.
+@     BRK,0,A .
+.Installation Notes
+*===============================================================================
+
+ <PRD> has been successfully installed in Drawer <DRW><CAB>.
+
+@     LDV <RUN>h12  RDL,-4,6,0152 'Run' <RUN> .
+@.
+@     IF <DPT> ne MSTRD$,(lin+2) ; .
+ The following runs have been globally registered for all users:
+@     IF <DPT> eq MSTRD$,(lin+2) ; .
+ The following runs have been registered for all users in department <DPT>:
+
+ Run Name
+ --------
+@     RDC,-4,6 'Run' <V1>h .
+ <V1>
+
+@0152:.
+@     BRK  RNM -8 .
+@.
+@     IF <RUN> eq '',(lin+3) ; .
+@     IF <DPT> eq MSTRD$ . ; IF <DPT> eq DEPN$ . ; GTO lin+2 .
+fkey,01,''Run   '',KEY
+fkey,10,''Quit  '',KEY
+@     BRK  FKY,-0 .
+@     DSP,-8 .
+@     FKY .
+@     IF <RUN> eq '',(0199) ; .
+@     IF FKEY$ eq 10,(0199) ; .
+@     BRK  DLR,-0 .
+@     SC q prep .
+@     IF <DPT> eq MSTRD$  RUN <RUN> . ; IF <DPT> eq DEPN$  RUN <RUN> . ; .
+@     CLS,<WIN1>  LDV <WIN1>=0 .
+@     GTO 0199 .
+@.
+@. --------------------------------- Errors ------------------------------------
+@.
+@0180:.
+@     SC '' \
+ CS;MSG,1,e,,TIC$'<Installation requires a Graphical Workstation>'TIC$ .
+@     REL .
+@0181:.
+@     MBX,OK,s,'Restriction' "/\
+ Your Graphical Workstation or BIS level does not support SBS" \
+      O,(0199) .
+@0182:.
+@     MBX,OK,S,'Insufficient Privileges' "/\
+ You must have coordinator privileges to perform this installation." \
+      O,(0199) .
+@0183:.
+@     MBX,OK,S,'Insufficient Privileges' "/\
+ Your user-id is not permitted to generate a new drawer." \
+      O,(0199) .
+@0184:.
+@     IF <STP> eq 0,(0010) ; .
+@     LDV <FOC>=<EDT1> .
+@     MBX,OK,S,'Invalid Entry' "/\
+ Path name contains invalid characters." \
+      O,(0021) .
+@0185:.
+@     IF <STP> eq 0,(0010) ; .
+@     LDV <FOC>=<EDT1> .
+@     MBX,OK,S,'Invalid Installation File(s)' "/\
+ Installation file(s) not found in the path specified or are corrupt.//\
+ Please verify the path name." \
+      O,(0021) .
+@0186:.
+@     LDV <FOC>=<EDT1> .
+@     MBX,OK,S,'Invalid Entry' "/\
+ Invalid run registration department number." \
+      O,(0041) .
+@0187:.
+@     MBX,OK,S,'Insufficient Database Space' "/\
+ No empty drawers available this system." \
+      O,(0199) .
+@0188:.
+@     LDV <FOC>=<EDT1> .
+@     MBX,OK,S,'Invalid Entry' "/\
+ You must specify an even-numbered cabinet." \
+      O,(0051) .
+@0189:.
+@     LDV <FOC>=<EDT1> .
+@     MBX,OK,S,'Invalid Entry' "/\
+ Cabinet must be 16 through MAXCAB$." \
+      O,(0051) .
+@0190:.
+@     LDV <FOC>=<EDT1> .
+@     MBX,OK,S,'Invalid Entry' "/\
+ Cabinet must be 2 through MAXCAB$." \
+      O,(0051) .
+@0191:.
+@     LDV <FOC>=<EDT1> .
+@     MBX,OK,S,'System Restriction' "/\
+ Cabinets 200 through 250 are reserved and may not be used." \
+      O,(0051) .
+@0192:.
+@     LDV <FOC>=<EDT2> .
+@     MBX,OK,S,'Invalid Entry' "/\
+ Invalid Drawer letter." \
+      O,(0051) .
+@0193:.
+@     LDV <FOC>=<EDT1> .
+@     MBX,OK,S,'Invalid Entry' "/\
+ Database file number must be 3 through 'MAXFIL$" \
+      O,(0061) .
+@.
+@. ------------------------------- Termination ---------------------------------
+@.
+@0196:. Abort
+@.
+@     IF SYSNAM$(1-1) ne 'M'  CHG <ERR>i4 CERR$ ; .
+@     IF SYSNAM$(1-1) eq 'M'  SC x EEL';'rsm ; .
+@     RAR 0196 .
+@.
+@0198:. Quit
+@.
+@     IF <STP> ge 1 & le 7 . ; GTO lin+4 .
+@     MBX,YN,Q,'Confirmation' "/\
+ Are you sure you want to abandon this installation?" \
+      N,(lin+1),Y,(0199) .
+@     IF <STP> eq 1,(0011) ; .
+@     IF <STP> eq 2,(0021) ; .
+@     IF <STP> eq 3,(0031) ; .
+@     IF <STP> eq 4,(0041) ; .
+@     IF <STP> eq 5,(0051) ; .
+@     IF <STP> eq 6,(0061) ; .
+@     IF <STP> eq 7,(0071) ; .
+@     IF <STP> eq 8,(0151) ; .
+@     GTO 0199 .
+@.
+@0199:. Exit
+@.
+@     CLS,<WIN1> .
+@     IF DRW8$ ne 0  LZR,-8,lin+1  DSX,-8 ; .

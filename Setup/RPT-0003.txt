@@ -1,0 +1,18 @@
+.Status Report
+*St.Order . Product .Ord.Cust.  Unit  .Extended.Req d .Sale.                                                            .
+*Cd.Number.  Type   .Qty.Code. Retail . Retail .Delivr.Rep .    Customer     .   Address     .      City    .State. Zip .
+*==.======.=========.===.====.========.========.======.====.=================.===============.==============.=====.=====.
+	OR	99951S	GREENBOX9	  2	AMCO	        	        	840312	DJR 	AMERICAN OIL CO. 	7300 CENTRAL AV	NEW ORLEANS   	   LA	64301	
+	OR	99951S	BLACKBOX9	  1	AMCO	        	        	840312	DJR 	AMERICAN OIL CO. 	7300 CENTRAL AV	NEW ORLEANS   	   LA	64301	
+	OR	99951S	GREENBOX7	  1	AMCO	        	        	840312	DJR 	AMERICAN OIL CO. 	7300 CENTRAL AV	NEW ORLEANS   	   LA	64301	
+	OR	96652S	BLACKBOX4	  1	ARCO	        	        	840412	LSJ 	ARGENTINE CORP   	2300 5TH AVE   	NEW YORK      	   NY	33021	
+	OR	96652S	GREENBOX4	  2	ARCO	        	        	840412	LSJ 	ARGENTINE CORP   	2300 5TH AVE   	NEW YORK      	   NY	33021	
+	OR	96652S	GREENBOX5	  1	ARCO	        	        	840412	LSJ 	ARGENTINE CORP   	2300 5TH AVE   	NEW YORK      	   NY	33021	
+	OR	99753S	GREENBOX5	  1	DICO	        	        	840312	LSJ 	DIGITAL CORP     	1782 NORTH ST  	NEW YORK      	   NY	54002	
+	OR	99842S	BLACKBOX8	  1	FEDS	        	        	840312	PLR 	FED SYSTEMS CORP 	1566 COLUMBIA  	WASHINGTON    	   DC	20001	
+	OR	99842S	BLACKBOX0	  1	FEDS	        	        	840312	PLR 	FED SYSTEMS CORP 	1566 COLUMBIA  	WASHINGTON    	   DC	20001	
+	OR	96751S	GREENBOX1	  1	FEDS	        	        	840312	PLR 	FED SYSTEMS CORP 	1566 COLUMBIA  	WASHINGTON    	   DC	20001	
+	OR	94525S	GREENBOX8	  1	FEDS	        	        	840312	PLR 	FED SYSTEMS CORP 	1566 COLUMBIA  	WASHINGTON    	   DC	20001	
+	OR	99725S	BLACKBOX4	  1	INTR	        	        	840312	LTR 	INTERNATIONAL CO 	3301 SUMMIT AV 	CHICAGO       	  ILL	65320	
+	OR	98782S	BLACKBOX9	  1	USSC	        	        	840312	SSF 	UNION STEEL/SULFR	5430 ALCAN AVE 	SEATTLE       	 WASH	73001	
+	OR	96755S	GREENBOX9	  1	USSC	        	        	840312	SSF 	UNION STEEL/SULFR	5430 ALCAN AVE 	SEATTLE       	 WASH	73001	

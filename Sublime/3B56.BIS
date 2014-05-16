@@ -15,20 +15,12 @@
 @.    #  Read config table to load in run variables
 @     RSR,SUBLCOMMON_ configVars_ .
 @.
-@.    #  Get field sizes for logging
-@     DVS,SUBLOG_ 'Event','Report','File','Object' \
-        <EXX>h,<RXX>h,<FXX>s,<OXX>h .
-@     DEF,s <ESZ>i3,<EXX> .
-@     DEF,s <RSZ>i3,<RXX> .
-@     DEF,s <FSZ>i3,<FXX> .
-@     DEF,s <OSZ>i3,<OXX> .
-@.
 @.    #  Get application path... If first time run setup
 @     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
 @     CALL,SUBLCOMMON_ getChgsFile_ (<APPDIR>,<CHGSFILE>s256) .
 @.
 @.    #  Start watchmedo.exe to watch directories
-@0005:PC,bc 'cmd /C '"<BATFILE>" .
+@0005:.ew   PC,bc 'cmd /C '"<BATFILE>" .
 @.
 @.    #  Set up animation
 @0010:INC <CNT> .
@@ -62,10 +54,16 @@
 @     PCR,0,I,-0,n,n,0010 <CHGSFILE> .                                          File Exist?
 @     RNM -5  LZR,-5 <LNS>i7,,<LNH>i7 .
 @     IF <LNS> gt <LNH> . ; GTO 0010 .                                          Look for changes
+
+@.    #  Get field sizes for logging
+@     DVS,SUBLOG_ 'Event','File','Object','Input' \
+        <EVENT>s,<FILE>s,<OBJ>s,<INPUT>s .
+@.
 @0036:INC <LNH>  RDL,-5,<LNH>,0070 1-256 <DATA>s .                              Get files
-@     LDV,ql <EVENT>s<ESZ>=<DATA>,0(,),\
-             <FILE>s<FSZ>=<DATA>,1(,),\
-             <OBJ>s<OSZ>=<DATA>,2(,) .
+@     LDV,ql <EVENT>=<DATA>,0(,),\
+             <FILE>=<DATA>,1(,),\
+             <OBJ>=<DATA>,2(,),\
+             <INPUT>=<DATA>,3(,) .
 @.
 @.    #  Start BisBug Debugging Session
 @     LCV,lin+2 '' <FILE> 'BisBug' ,<OCC>i3 .                                   Check for BisBug
@@ -73,14 +71,15 @@
 @.
 @.    #  Start BisCmd
 @     LDV <BISCMD>h1=n .
-@     LCV,0037 '' <FILE> 'BisCmd' ,<OCC>i3  LDV <BISCMD>h1=y .                  Check for BisCmd
-@     CALL,BISCMD_ 0001 (<STATUS>h1) .
+@     IF <EVENT> eq 'BisCmd' . ; GTO 0037 .
+@     LDV <BISCMD>h1=y .
+@     CALL,BISCMD_ 0001 (<FILE>,<INPUT>,<STATUS>h1) .
 @     IF <STATUS> eq 9,(0036) .
 @.
 @.    #  Make sure were on the correct site for this file...
 @0037:LCV,0038 'b1' <FILE> 'site-' <POS>i3 .                                    Find string
 @     INC,5 <POS>  LDV <SL>h1=<FILE>(<POS>-1) .                                 Read Site Letter from file
-@     IF <SL> ne NETSIT$ . ; GTO 0038 .                                         Compare
+@     IF <SL> ne NETSIT$ . ; gto 0038 .                                         Compare
 @     LDV <MSG>s256='Site letters differ... Cannot save file.' .
 @     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
 @     GTO 0036 .
@@ -147,7 +146,7 @@
 @.
 @.    #  Check if user matches control line
 @0050:RDL,<CAB>,<DRW>,<RPT>,1 53-11 <CONTROLUSER>s .
-@     IF USER$ ne <CONTROLUSER> . ; GTO 0056 .
+@     IF USER$ ne <CONTROLUSER> . ; gto 0056 .
 @     LDV <MSG>s256='You do not have update control of this report.',\
           <MSG>=<MSG>(p)'Waiting for input...' .
 @     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
@@ -155,13 +154,11 @@
 "You do not have update control of this report. //\
  Run:   <RPT>(p)<DRW>(p)<CAB>(p)    Name:   <CONTROLUSER>(p) //\
  Would you like to take control of this report?//" Y,(lin+1),N,(0036) .
-@0056:LDV <REPORT>h11='1D3950' .
-@     dir <REPORT> ,,,,,<ACC>h1  IF <ACC> eq '',(0061) .                         ICE Enabled Site?
-@     LZR,3950,d,1,0061 .                                                       ICE Enabled Site?
-@     SRH,3950,d,1,,,0061 'ad' 'SvcCab','sd'  ,<CAB>,<DRW> .
+@0056:LZR,3950,d,1,0061 .                                                       ICE Enabled Site?
+@     SRH,3950,d,1,,,0061 'ad' 'SvcCab','sd' ¬,<CAB>,<DRW> .
 @     LZR,-0 ,,<HLN>i7  INC <HLN> .
 @     RDL,-0,<HLN>,lin+1 'cab','dw','rpt' <ICAB>h,<IDW>h,<IRPT>h .
-@     FDR,<ICAB>,<IDW>,<IRPT>,,,0061 '' 'cab','dw','rpt'  ,<CAB>,<DRW>,<RPT> .
+@     FDR,<ICAB>,<IDW>,<IRPT>,,,0061 '' 'cab','dw','rpt' ¬,<CAB>,<DRW>,<RPT> .
 @     RLN,,lin+1 'service' <SRVS>s  GTO 0061 .
 @     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED','Check input message') .
 @     MBX,YN,Q,'What are we doing?' \
@@ -173,7 +170,7 @@
 @     CALL,SUBLCOMMON_ charReplace_ ('import') .                                Replace tab character
 @     RNM -4 .
 @.
-@     LOK,<CAB>,<DRW>,<RPT>,lin+1  GTO 0063 .
+@     LOK,<CAB>,<DRW>,<RPT>,LIN1  GTO 0063 .
 @     LDV <MSG>s80='Updating of report '<RPT>(p)<DRW>(p)<CAB>(p)' is in progress...' .
 @     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
 @     GTO 0036 .

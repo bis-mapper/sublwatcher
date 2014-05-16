@@ -49,44 +49,55 @@
 @     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
 @     GTO 0199 .
 @.
-@.    #  Check if alternate report was entered
-@.    #  This will do a diff from the current report and the report entered.
-@     if <PRUN> gt '' . ; gto 0010 .
-@     CALL,SUBLCOMMON_ getCabDrwRpt_ (<PRUN>,<PCAB>i4,<PDRW>h1,<PRPT>i4) .
-@     RSL,<PCAB>,<PDRW>,<PRPT> .
-@     RNM -2 .
-@     RDL,-2,1 20-8,34-4,38-1,42-9 <DTIME>h,<RPT>h,<DRW>h,<D2DATE>h .
-@     GTO 0015 .
-@.
 @.    #  Get file attributes date time
-@0010:LDV <ATTFIL>s80='c:\temp\attrib.txt' .
+@     LDV <ATTFIL>s80='c:\temp\attrib.txt' .
 @     PC,bcw "dir <FILE>(p) > <ATTFIL>" .
-@     PCR,0,I,-0,n,n,0034 <ATTFIL>  GTO LIN+4 .
-@     LDV <MSG>s256='Could not locate '<FILE> .
-@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
-@     GTO 0199 .
-@     RDL,-0,lin1  1-10,13-5 <DATE>h,<TIME>h  GTO lin+2 .
-@     LDV <DTIME>h0,<D2DATE>h0  GTO 0015 .
+@     PCR,0,I,-0,n,n,lin1 <ATTFIL> .
+@     RDL,-0,7,lin1  1-10,13-5 <DATE>h,<TIME>h  GTO lin+2 .
+@     LDV <DTIME>h0,<D2DATE>h0  GTO 0010 .
 @     DC D2=D16(<DATE>) <D2DATE>h9 .
 @     LDV <DTIME>h8=<TIME>':00' .
 @.
-@.    #  Temporary report to hold local file
-@0015:RDL,<CAB>,<DRW>,<RPT>,1 1-80 <INFO>s .                                       Get time and date
+@.    #  Check if run was etnered.  Otherwise just use local copy
+@0010:IF <PRUN> eq ' ' . ; GTO 0015 .
+@     LZR,<CAB>,<DRW>,<RPT>,lin1  GTO LIN+4 .
+@     LDV <MSG>s256='Could not locate '<CAB><DRW><RPT> .
+@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@.
+@     RDL,<CAB>,<DRW>,<RPT>,1 1-80 <INFO>s .                                       Get time and date
 @     RSL,<CAB>,<DRW>,<RPT> .                                                             Get result
 @     CALL,SUBLCOMMON_ charReplace_ ('export') .                               Replace tab character
 @     RNM -1 .
 @     DUP,-1,0,I .
 @     LDV <LOCALRPT>i4=RPT$ .
+@     GTO 0020 .
+@.
+@.    #  Check if alternate report was entered
+@.    #  This will do a diff from the current report and the report entered.
+@0015:CALL,SUBLCOMMON_ getCabDrwRpt_ (<PRUN>,<PCAB>i4,<PDRW>h1,<PRPT>i4) .
+@     LZR,<PCAB>,<PDRW>,<PRPT>,lin1  GTO LIN+4 .
+@     LDV <MSG>s256='Could not locate '<PCAB><PDRW><PRPT> .
+@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@.
+@     RDL,<PCAB>,<PRDW>,<PRPT>,1 1-80 <INFO>s .                                    Get time and date
+@     RSL,<PCAB>,<PDRW>,<PRPT> .                                                          Get result
+@     CALL,SUBLCOMMON_ charReplace_ ('export') .                               Replace tab character
+@     RNM -1 .
+@     DUP,-1,0,I .
+@     LDV <LOCALRPT>i4=RPT$ .
+@     GTO 0020 .
 @.
 @.    #  Temporary report to hold external file
-@     RSL,-2 .
+@0020:RSL,-2 .
 @     CALL,SUBLCOMMON_ charReplace_ ('export') .                               Replace tab character
 @     RNM -2 .
 @     DUP,-2,0,I .
 @     LDV <EXTERNALRPT>i4=RPT$ .
 @.
 @.    #  Get diff between local and external file
-@     DIF,0,I,<EXTERNALRPT>,0,I,<LOCALRPT> ' ' .
+@     DIF,0,I,<LOCALRPT>,0,I,<EXTERNALRPT> ' ' .
 @     RNM -3 .
 @.
 @.    #  Update the control lines to refelct actual file dates and times
@@ -101,7 +112,6 @@
 @.    #  Clean up temp files
 @     DLR,0,I,<LOCALRPT> .
 @     DLR,0,I,<EXTERNALRPT> .
-@.
 @.
 @.    #  Start text editor
 @.    #  Refer to "http://www.sublimetext.com/docs/2/osx_command_line.html" for all options

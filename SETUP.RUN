@@ -1,0 +1,2108 @@
+.SUBL_SETUP       SUBL Installation Program
+.REV: 4.6.0  DATE: 20130325
+*===============================================================================
+*  RADS - Rapid Application Development Studio                                 *
+*  Copyright (c) 2013 IT Resource Solutions (ITRS)                             *
+*  Execution of this program without a valid software license, or reuse        *
+*  of this program code without expressed consent of ITRS, is prohibited.      *
+*==============================================================================*
+@.
+@.
+@ rdb LDV <*PTH>s256='D:\Users\winne\sublwatcher\site-d\sublwatcher\' .
+@.
+@     CALL 0001() .
+@     IF LINK$ ne 0,(END) ; REL .
+@.
+@0001:() .
+@.
+@. -------------------------- Module Initialization ----------------------------
+@.
+@     LDV <STP>i2=0 .
+@     LDV <WIN1>i6=0,<WIN2>i6=0 .
+@     RAR 0196 .
+@.
+@     LDV,p <B>h1=b,<3>h1  IF DWCAP$(13-1) eq 1  LDV <B>h1=3,<3>h1=3 ; .
+@.
+@     LDV <SYS>h3=BIS .
+@     LDV,w <LEV>a2=MAPER$  IF <LEV>(2-1) ge 0 & le 9 . ; LDV <LEV>(2-1)='' .
+@     LDV <PRD>h4='SUBL' .
+@     LDV <PTH>s256 .
+@     LDV,p <FIL>h1 .
+@     LDV <LCAB>i4=3956 .
+@     LDV <RCAB>a4,<SCAB>a4 .
+@     LDV <OVR>h1=N,<OVS>h1=N .
+@     LDV <RGN>h1=N .
+@     LDV,pw <DPT>a4=DEPN$ .
+@.
+@. ----------------------- Check System & Level Info ---------------------------
+@.
+@     IF WS$ eq 0,(0170) ; .
+@     IF DWCAP$(9-1) ne 1,(0171) ; .
+@     IF CPRIV$ eq 0,(0173) ; .
+@     IF SYSNAM$(1-1) eq 'M',(0002) ; .
+@     IF SYSNAM$ eq 'PWNT1',(0003) ; .
+@     IF <LEV> ge 6,(0003) ; GTO 0172 .
+@0002:.
+@     IF <LEV> lt 39,(0172) ; .
+@     FDR,USRDRW$,DEPN$,,,0174 '' 'USER' ¬,USER$  RLN 46-1 <GEN>h .
+@     IF <GEN> ne '',(0174) ; .
+@0003:.
+@     IF SYSNAM$ eq 'PWNT0',(lin+4) ; .
+@     IF SYSNAM$ eq 'PWNT1'  IF <LEV> ge 10,(lin+3) ; .
+@     IF SYSNAM$(1-1) eq 'U','S'  IF <LEV> ge 11,(lin+2) ; .
+@     GTO 0004 .
+@     LDV <ICAB>i4=3950 .
+@     FDR,RUNDRW$,MSTRD$,,,lin+4 '' 2-12 ¬,ICEADMIN  RLN 'DRAWER' <DRN>h .
+@     DEF <DEF>i1,<DRN>  IF <DEF> eq 1,3  LDV,p <DRN> . ; GTO 0004 .
+@     IF <DEF> eq 1  DEF,m <ICAB>a4,<DRN>  LDV,p <ICAB> ; .
+@     IF <DEF> eq 3  LDV <ICAB>a4=<DRN>(2-0)  LDV,p <ICAB> ; .
+@     IF <ICAB> ge 16 & le MAXCAB$ . ; GTO 0004 .
+@     LDV <DRW>h1=D .
+@     DRW,<ICAB>,<DRW>,0004 .
+@     LZR,<ICAB>,<DRW>,1,0004  DVS,<ICAB>,<DRW>,1,0004 'Category' .
+@     LDV <DRW>h1=E .
+@     DRW,<ICAB>,<DRW>,0004 .
+@     LZR,<ICAB>,<DRW>,27,0004  DVS,<ICAB>,<DRW>,27,0004 'Keyword','Value' .
+@     LZR,<ICAB>,<DRW>,29,0004  DVS,<ICAB>,<DRW>,29,0004 'Alias','Directory' .
+@     LDV <SYS>h3=ICE .
+@.
+@. @0004:. ---------------------- Initialize Screen -------------------------------
+@. @.
+@. @     SC q cs .
+@. @     MNU,t MENUBAR,"",,'' .
+@. @     HID .
+@. @     FON,r .
+@. @     IF DWCAP$(12-1) eq 0 . ; GTO lin+2 .
+@. @     FON,r,'Terminal',09,pd .
+@. @     IF DWCAP$(12-1) eq 1 . ; GTO lin+3 .
+@. @     FON,r,'Terminal',09,p,lin+1  GTO lin+2 .
+@. @     FON,r,'MAPPER Standard',09,pd .
+@. @     FON,t .
+@. @     WIN,,01,01,01,01,,h '' <WIN1>i6  CLS,<WIN1>  LDV <WIN1>=0 .
+@. @.
+@. @0007:. ------------------ Verify Web Server Access ----------------------------
+@. @.
+@. @     IF <SYS> eq 'BIS',(0005) ; .
+@. @.
+@. @     IF SYSNAM$(1-1) eq 'P' . ; GTO lin+2 .
+@. @     LDV,pw <IDIR>s96=PRGM$'\CIUtilities\Images' .
+@. @     IF SYSNAM$(1-1) eq 'U','S' . ; GTO lin+2 .
+@. @     LDV,pw <IDIR>s96=PRGM$'/ICE/CIUtilities/Images' .
+@. @     LDV <DRW>h1=E .
+@. @     FDR,<ICAB>,<DRW>,29,,,lin+6 '' 'Alias' '  ','CISystem/Images' .
+@. @     RLN 'Directory' <IDIR>s  LDV,p <IDIR> .
+@. @     IF SYSNAM$(1-1) eq 'P' . ; GTO lin+2 .
+@. @     IF <IDIR>(0-1) eq '\'  LDV <IDIR>(0-1)=''  LDV,p <IDIR> ; .
+@. @     IF SYSNAM$(1-1) eq 'U','S' . ; GTO lin+2 .
+@. @     IF <IDIR>(0-1) eq '/'  LDV <IDIR>(0-1)=''  LDV,p <IDIR> ; .
+@. @.
+@. @     LDV <HGT>i2=06,<WID>i3=40 .
+@. @     CHG <ROW>i2 SCNV$ - <HGT> // 2 + 1  CHG <COL>i3 SCNH$ - <WID> // 2 + 1 .
+@. @     WIN,,<ROW>,<COL>,<HGT>,<WID>,lgra,bc 'Operation In Progress' <WIN2>i6 .
+@. @     FON,t,'Arial',09,pdb .
+@. @     TXT,"... Please Wait ...",<WIN2>,02,01,01,52,bla/lgra,c .
+@. @     TXT,"Validating Web Server Access",<WIN2>,04,01,01,52,dblu/lgra,cs .
+@. @     FON,t .
+@. @.
+@. @     IF SYSNAM$(1-1) eq 'P' . ; GTO lin+7 .
+@. @     OS,0,A,,,0175 -f 'cmd /c exit' .
+@. @     OS,0,A,,,0175 -f 'cmd /c dir "'<IDIR>'\"' .
+@. @     LZR,-0 <LNS>i6  IF <LNS> le 7,(0175) ; .
+@. @     OS,0,A,,,0175 -f 'cmd /c dir >"'<IDIR>'\WRITECHK"' .
+@. @     LZR,-0 <LNS>i6  IF <LNS> ne 1,(0175) ; .
+@. @     OS,0,A,,,lin+1 -f 'cmd /c del "'<IDIR>'\WRITECHK"' .
+@. @     IF SYSNAM$(1-1) eq 'U','S' . ; GTO lin+7 .
+@. @     UNX,0,F,,,0175 -f 'exit' .
+@. @     UNX,0,F,,,0175 -f 'ls -la '<IDIR> .
+@. @     LZR,-0 <LNS>i6  IF <LNS> lt 3,(0175) ; .
+@. @     UNX,0,F,,,0175 -f 'ls >'<IDIR>'/WRITECHK' .
+@. @     LZR,-0 <LNS>i6  IF <LNS> ne 1,(0175) ; .
+@. @     UNX,0,F,,,lin+1 -f 'rm '<IDIR>'\WRITECHK' .
+@. @.
+@. @     CLS,<WIN2>  LDV <WIN2>=0 .
+@.
+@0005:. ----------------- Verify Caller-Supplied Path --------------------------
+@.
+@ rdb LDV <PTX>s3='D:\'  IF <*PTH> eq '<*PTH>',(0006) ; .
+@     LDV,p <PTX>s256=<*PTH> .
+@     IF <PTX> ne ''  IF <PTX>(0-1) eq '\'  LDV <PTX>(0-1)=''  LDV,p <PTX> ; .
+@     DEF,s <SIZ>i3,<PTX>  IF <SIZ> ge 9 . ; GTO lin+2 .
+@     IF <PTX>(0-9) eq 'SETUP.RUN'  LDV <PTX>(0-9)=''  LDV,p <PTX> ; .
+@     IF <PTX> eq '',(0006) ; .
+@     LDV <X>h7='/*?"<>|'  DEF,s <N>i3,<X> .
+@     LCV,0006 n <PTX> <X>(<N>-1)  DEC <N>  IF <N> gt 0,(lin-0) ; .
+@     DEF,s <SIZ>i3,<PTX>  IF <SIZ> eq 1 . ; GTO lin+2 .
+@     IF <PTX> ge 'A' & le 'Z'  LDV <PXX>h1=<PTX>,<PTX>s2=<PXX>':' ; .
+@     PCR,0,A,-0,,,0006 <PTX>'\' .
+@     FND,-0,,0006 a 2-7 [,IMAGES] .
+@     FND,-0,,0006 a 2-9 [,RADSLITE] .
+@     FND,-0,,0006 a 2-6 [,SHELL] .
+@     PCR,0,A,-0,,,0006 <PTX>'\ID'  RDL,-0,2,0006 1-8 <ID>h .
+@     IF <ID> eq 'RADSLITE' . ; GTO 0006 .
+@     LDV,p <PTH>s256=<PTX> .
+@.
+@0006:. --------------------- Display Wizard Screen ----------------------------
+@.
+@     LDV <WID>i3=62,<HGT>i2=30 .
+@     IF SCNV$ lt <HGT> . ; GTO lin+5 .
+@     MBX,OK,E,'Recommendation' "/\
+ Please maximize your window to/\
+ better utilize this installation wizard." \
+      O,(lin+1) .
+@     CHG <ROW>i3 SCNV$ - <HGT> // 2  IF <ROW> lt 2  LDV <ROW>=2 ; .
+@     CHG <COL>i3 SCNH$ - <WID> // 2 + 1 .
+@     WIN,,<ROW>,<COL>,<HGT>,<WID>,lgra,bc \
+      <PRD>' Installation Wizard' <WIN1>i6 .
+@     TXT,"",<WIN1>,01,01,05,62,bla/whi,b<3> .
+@     FON,t,'Arial',09,pdb .
+@     TXT,"",<WIN1>,02,04,01,80,bla/whi <MSG1>i6 .
+@     FON,t,'Arial',09,pd .
+@     TXT,"",<WIN1>,04,05,01,80,bla/whi <MSG2>i6 .
+@     DC d12=d11(20130325) <DAT>h11  LDV,o <DAT>(5-2) .
+@     LDV <DAT>(3-1)='-',<DAT>(7-1)='-'  LDV,o <DAT>(5-2) .
+@     TXT,"Version 4.6.0/<DAT>",<WIN1>,28,02,02,20,dblu/lgra,c .
+@     FON,t,'Arial',08,pdb .
+@     BTN,<WIN1>,28,34,02,08 '< Back' <BACK>i6 .
+@     BTN,<WIN1>,28,42,02,08 'Next >' <NEXT>i6 .
+@     BTN,<WIN1>,28,52,02,08 'Cancel' <QUIT>i6 .
+@.
+@     BRK,0,A  BRK  LN+,-0,1,1 .
+@     FON,t,'Arial',09,pd .
+@     TXT,-0,2,99,<WIN1>,07,06,16,88,bla/lgra <TXTH>i6 .
+@     FON,t .
+@.
+@0010:. ------------------------ Welcome Screen --------------------------------
+@.
+@     LDV <STP>=1 .
+@     TXT,"",<WIN1>,01,01,25,62,bla/whi,<B> <TXT1>i6 .
+@     IF <PTH> eq '' . ; GTO lin+2 .
+@     TXT,"",<WIN1>,01,01,25,20,whi/dblu <PIC1>i6 .
+@     IF <PTH> ne '' . ; GTO lin+2 .
+@     PIC,,,,,<PTH>'\IMAGES\RADS1.bmp',<WIN1>,01,01,-1,-1 '' <PIC1>i6 .
+@     FON,t,'Arial',14,pd .
+@     TXT,"Welcome to the <PRD>",<WIN1>,03,23,01,80,bla/whi <TXT2>i6 .
+@     TXT,"Installation Wizard",<WIN1>,05,23,01,80,bla/whi <TXT3>i6 .
+@     FON,t,'Arial',09,pdb .
+@     BRK,0,A .
+ This wizard guides you through the steps required
+ to install <PRD> software on your <SYS> server.
+
+ To begin, press Next.
+@     FON,t,'Arial',09,pd .
+@     BRK  TXT,-0,2,99,<WIN1>,08,23,05,60,bla/whi <TXT4>i6 .
+@     FON,t .
+@.
+@     BTN,<BACK>,,,,,,g '< Back' .
+@     BTN,<NEXT> 'Next >' .
+@     LDV <FOC>i6=<NEXT> .
+@0011:.
+@     INP,<FOC>,,<WIN1> .
+@.
+@     IF ACTINP$ eq <NEXT>,(0012) ; .
+@     IF ACTINP$ eq <QUIT>,(0198) ; .
+@     GTO 0011 .
+@0012:.
+@     CLS,<PIC1>,<TXT1>,<TXT2>,<TXT3>,<TXT4> .
+@.
+@     IF <PTH> ne '',(0030) ; .
+@.
+@0020:. ------------------- Specify Installation Path --------------------------
+@.
+@     LDV <STP>=2 .
+@     TXT,"Specify Installation Media Path",<MSG1> .
+@     TXT,"Where are you loading this product from?",<MSG2> .
+@.
+@     BRK,0,A .
+ Specify the drive or directory containing the <PRD> software.
+
+ Press Next to continue.
+@     BRK  TXT,-0,2,99,<TXTH> .
+@.
+@     TXT,"",<WIN1>,12,06,05,52,lgra,<B> <BOX1>i6 .
+@     FON,t,'Arial',08,pd .
+@     TXT,"Installation Media Path",<WIN1>,13,08,01,24,bla/lgra <TXT1>i6 .
+@     FON,t .
+@     EDT,"<PTX>",<WIN1>,14,08,01,48,bla/whi,<B>h <EDT1>i6 .
+@.
+@     BTN,<BACK> '< Back' .
+@     BTN,<NEXT> 'Next >' .
+@     LDV <FOC>i6=<EDT1> .
+@0021:.
+@     INP,<FOC>,,<WIN1> .
+@     IF ACTINP$ eq <NEXT>,(0023) ; .
+@     IF ACTINP$ eq <EDT1>,(0023) ; .
+@     IF ACTINP$ eq <BACK>,(0022) ; .
+@     IF ACTINP$ eq <QUIT>,(0198) ; .
+@     GTO 0021 .
+@0022:.
+@     CLS,<BOX1>,<TXT1>,<EDT1> .
+@     GTO 0010 .
+@0023:.
+@     INP,<EDT1>,Y .
+@     CHG INPUT$ <PTX>s256  LDV,p <PTX> .
+@     IF <PTX> ne ''  IF <PTX>(0-1) eq '\'  LDV <PTX>(0-1)=''  LDV,p <PTX> ; .
+@     DEF,s <SIZ>i3,<PTX>  IF <SIZ> ge 9 . ; GTO lin+2 .
+@     IF <PTX>(0-9) eq 'SETUP.RUN'  LDV <PTX>(0-9)=''  LDV,p <PTX> ; .
+@     IF <PTX> eq '',(0176) ; .
+@     LDV <X>h7='/*?"<>|'  DEF,s <N>i3,<X> .
+@     LCV,0176 n <PTX> <X>(<N>-1)  DEC <N>  IF <N> gt 0,(lin-0) ; .
+@     DEF,s <SIZ>i3,<PTX>  IF <SIZ> gt 1,(lin+2) ; .
+@     IF <PTX> ge 'A' & le 'Z'  LDV <PXX>h1=<PTX>,<PTX>s2=<PXX>':' ; .
+@     PCR,0,A,-0,,,0177 <PTX>'\' .
+@     FND,-0,,0177 a 2-7 [,IMAGES] .
+@     FND,-0,,0177 a 2-9 [,RADSLITE] .
+@     FND,-0,,0177 a 2-6 [,SHELL] .
+@     PCR,0,A,-0,,,0178 <PTX>'\ID'  RDL,-0,2,0178 1-9 <ID>h .
+@     IF <ID> eq 'RADSLITE' . ; GTO 0178 .
+@     LDV,p <PTH>s256=<PTX> .
+@.
+@     CLS,<BOX1>,<TXT1>,<EDT1> .
+@     WIN,<WIN1>,,,,,,u <PRD>' Installation Wizard' .
+@.
+@0030:. --------------------- Display License Agreement ------------------------
+@.
+@     BRK,0,A .
+ RADS Lite Freeware License Agreement
+
+ RADS Lite - Rapid Application Development Studio
+ Copyright (c) 2013 IT Resource Solutions (ITRS)
+
+ This installation package contains proprietary information
+ and intellectual property belonging to ITRS.  Unauthorized
+ use of the products, tools or other information contained
+ herein is prohibited.
+
+ THIS IS A LEGAL AGREEMENT BETWEEN YOU (EITHER AN INDIVIDUAL
+ OR AN ENTITY) ("YOU" OR "LICENSEE") AND ITRS.  BY USING THE
+ ITRS RADS Lite FREEWARE, YOU AGREE TO BE BOUND BY THE
+ TERMS OF THIS LICENSE AGREEMENT ("AGREEMENT").
+
+ 1. License
+ RADS Lite software (the "Software") and accompanying user
+ documentation included in the online help files or provided
+ by ITRS (the "Documentation") are provided to you "AS IS"
+ and without charge and free to use.  Subject to the terms of
+ this Agreement, you have a nonexclusive and non-transferable
+ right to use the Software and Documentation for your internal
+ business uses only.  You may use this Software on a computer
+ located in the United States or Canada or any other country
+ to which this Software may be legally exported. You may make
+ a reasonable number of backup copies for your own use.  ITRS
+ and its licensors reserve all rights not expressly granted to
+ you under this Agreement.
+
+ 2. Term and Termination
+ This use of this Software is valid only when the Software is
+ installed into a properly licensed Unisys Business Information
+ Server (BIS) system.  ITRS reserves the unilateral right to
+ terminate this Agreement and your license to use the Software
+ and Documentation, with or without cause, and without penalty,
+ immediately upon written notice to you.
+
+ 3. Limitations on Use
+ You may not:
+
+ a. Loan, rent, lease, sell, sublicense, distribute, copy,
+ transmit or otherwise transfer or distribute the Software or
+ Documentation to others, in whole or in part, except by
+ separate written agreement with Company.
+
+ b. Modify, copy, alter, or translate the Software or
+ Documentation without the prior written consent of ITRS
+ (including without limitation, modify the Software to make it
+ operate on non-compatible hardware or software, or for any
+ other reason).
+
+ c. Decompile, disassemble, reverse engineer, or attempt to
+ create source code from the Software.
+
+ d. Remove, alter or cause not to be displayed any copyright
+ or trademark notices or startup messages contained in the
+ programs or documentation.
+
+ e. Download, transmit, or otherwise export or re-export any of
+ the Software or underlying information or technology in violation
+ of United States or other applicable laws or regulations.
+
+ 4. Transfer
+ You may not sublicense, assign, delegate, or otherwise transfer
+ this license or any of the related rights or obligations for
+ any reason.  Any attempt by you to make sublicense, assign,
+ delegate, or otherwise transfer the Software or Documentation
+ shall be void.
+
+ 5. Copyright
+ The Software and related Documentation are copyrighted by
+ ITRS and its licensors.  You agree to treat the Software as
+ confidential information and protect the contents of the
+ Software from unauthorized disclosure or use by any other party.
+
+ 6. Ownership
+ You agree that the Software and Documentation belong
+ exclusively to ITRS and its licensors.  You agree that
+ you neither own nor hereby acquire any claim or right of
+ ownership to the Software and Documentation or to any related
+ intellectual property rights, including without limitation,
+ the exclusive rights to all derivative works, enhancements,
+ and improvements to the Software and Documentation, however
+ developed.  ITRS retains all right, title and interest in
+ and to the Software and Documentation and all copies at all
+ times, regardless of the form or media in or on which the
+ original or other copies may subsequently exist.
+
+
+ 7. Disclaimer of Warranties
+ THE SOFTWARE AND DOCUMENTATION ARE PROVIDED TO YOU
+ "AS IS" WITHOUT WARRANTY OF ANY KIND.  ITRS DOES NOT
+ WARRANT THAT YOUR USE OF THE SOFTWARE WILL BE
+ UNINTERRUPTED OR THAT ITS OPERATION WILL BE ERROR FREE.
+ ITRS AND ITS LICENSORS DISCLAIM ALL WARRANTIES OF ANY
+ KIND, EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT
+ LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY
+ AND FITNESS FOR A PARTICULAR PURPOSE.
+ ITRS''s entire liability and your exclusive remedy under
+ this Agreement shall be, at ITRS''s sole discretion, either
+ termination of this Agreement and your license to use the
+ Software and Documentation, or repair or replacement of the
+ Software or Documentation.
+
+ 8. Limitation of Liability
+ In no event will ITRS or its licensors be liable to you or any
+ other party for any direct, indirect, incidental, consequential,
+ or special damages or damages of any kind arising out of your
+ use or inability to use this Software or Documentation including,
+ without limitation, loss or damage to data, lost revenue, profits
+ or savings, regardless of the legal theory under which such
+ claims are advanced, even if ITRS or its licensors knew or
+ should have known of the possibility of such damages.
+
+ 9. Export Controls
+ You understand that the Software and Documentation are subject
+ to United State export controls.  You agree to obtain all
+ required US export licenses, if any, to support your export of
+ the code to any other country.
+
+ 10. Exclusive Agreement
+ This Agreement is the complete and exclusive agreement
+ between you and ITRS, and supersedes all other
+ communications between us.
+
+ 11. Modifications
+ No modification or waiver of this Agreement or any provisions
+ shall be binding unless made in writing and signed by an
+ authorized representative of ITRS.
+
+ 12. Governing Law and Venue
+ This Agreement shall be governed by and construed under the
+ laws of the State of New York, without regard to choice of
+ law provisions. The application of the United Nations
+ convention on Contacts for the international Sale of Goods
+ is expressly excluded. Venue for any disputes arising out of
+ this Agreement, the Software and Documentation or you use of
+ the Software and Documentation shall be exclusively in a
+ State or Federal court of competent jurisdiction in the
+ County of Suffolk, State of New York.  You hereby consent
+ to the jurisdiction of such courts and agree to waive any
+ rights you may have to contest their jurisdiction.
+
+ 13. Saving Clause
+ If any provision of this Agreement is invalid under any applicable
+ statute or rule of law, such provision is deemed omitted, and the
+ balance of this Agreement shall remain binding on the parties.
+ The remaining terms shall be interpreted as closely as possible to
+ the intent of the parties as expressed in the unaltered Agreement.
+
+ 14. Remedies
+ Your remedies, as provided in this Agreement, are exclusive.
+@     BRK  RNM -1 .
+@.
+@. ------------------------- Software License Agreement ------------------------
+@.
+@     LDV <STP>=3 .
+@     TXT,"Software License Agreement",<MSG1> .
+@     TXT,"Do you accept this Software License Agreement?",<MSG2> .
+@     FON,t,'Arial',09,pd .
+@     TXT,"Lite Edition",<WIN1>,05,51,01,16,bla/whi,c .
+@     FON,t .
+@     PIC,,,,,<PTH>'\IMAGES\RADS2.bmp',<WIN1>,02,50,-1,-1 '' <PIC2>i6 .
+@.
+@     BRK,0,A .
+ IMPORTANT!  Please read the following information carefully.
+ You must check the Accept box to continue; doing so means you
+ agree to all terms stated in this Software License Agreement.
+@     BRK  TXT,-0,2,99,<TXTH> .
+@.
+@     LDV <CLR>h3=whi  IF DWCAP$(13-1) eq 1  LDV <CLR>h6=E8E8E8 ; .
+@     WIN,<WIN1>,12,06,11,50,<CLR>,c '' <WIN1A>i6 .
+@     FON,t,'Arial',08,pdb .
+@     LST,-1,2,Y,license.txt,<WIN1A>,01,01,00,00,dblu/<CLR>,m '' .
+@     BTN,<WIN1>,24,48,02,08 'Display' <BTN1>i6 .
+@     FON,t,'Arial',08,pd .
+@     BTN,<WIN1>,24,06,02,32,bla/lgra,ac(0) \
+      'Accept Software License Agreement' <CHK1>i6 .
+@     FON,t .
+@.
+@     BTN,<BACK> '< Back' .
+@     BTN,<NEXT>,,,,,,g 'Next >' .
+@     LDV <FOC>i6=<BTN1> .
+@0031:.
+@     INP,<FOC>,,<WIN1> .
+@     IF ACTINP$ eq <CHK1>,(0033) ; .
+@     IF ACTINP$ eq <NEXT>,(0035) ; .
+@     IF ACTINP$ eq <BTN1>,(0034) ; .
+@     IF ACTINP$ eq <BACK>,(0032) ; .
+@     IF ACTINP$ eq <QUIT>,(0198) ; .
+@     GTO 0019 .
+@0032:.
+@     CLS,<WIN1A>,<CHK1>,<BTN1>,<PIC2> .
+@     TXT," ",<MSG1> .
+@     TXT," ",<MSG2> .
+@     GTO 0010 .
+@0033:.
+@     IF INPUT$ eq 0 . ; GTO lin+3 .
+@     BTN,<NEXT>,,,,,,g 'Next >' .
+@     LDV <FOC>i6=<CHK1> .
+@     IF INPUT$ ne 0 . ; GTO lin+3 .
+@     BTN,<NEXT> 'Next >' .
+@     LDV <FOC>i6=<NEXT> .
+@     GTO 0031 .
+@0034:.
+@     IF DWCAP$(12-1) eq 1 . ; GTO lin+4 .
+@     PCW,-1,2,0031 %DATADIR%\<PRD>' License Agreement'.txt .
+@     PC notepad' '"%DATADIR%\<PRD>' License Agreement'.txt" .
+@     GTO 0031 .
+@.
+@     BRK,0,A .
+fkey,01,''      '',KEY
+fkey,04,''Return'',KEY
+fkey,10,''Quit  '',KEY
+@     BRK  FKY,-0 .
+@     SC q CS .
+@     HID .
+@     DSP,-1 .
+@     SC q cs .
+@     SHW .
+@     FKY .
+@     IF FKEY$ eq 10,(0198) ; .
+@     GTO 0031 .
+@0035:.
+@     CLS,<WIN1A>,<CHK1>,<BTN1> .
+@.
+@0040:. ---------------------- Select Components -------------------------------
+@.
+@     PCR,0,A,-0,,,0179 <PTH>'\SHELL\SETUP.INF' .
+@     LN+,-0,1,1  WRL,-0,2 2-1 *,= .
+@     SRH,-0,,,0179 dp 2-8 [,DRAWERS]  RNM -7 .
+@     LDV <DIR>h8=RADSLITE .
+@     PCR,0,A,-0,,,0179 <PTH>'\'<DIR>'\SETUP.INF'  RNM -2 .
+@     LN+,-2,1,1  WRL,-2,2 2-1 *,= .
+@     SRH,-2,,,0179 dp 2-8 [,DRAWERS]  RNM -6 .
+@     SRH,-2,,,0179 dp 2-5 [,DISK] .
+@     LOC,-0,4,0179 afm 2-79 Level ,<LIN>i4 .
+@     RDL,-0,<LIN> 1-80 <DAT>s .
+@     LCV,0179 '' <DAT> '=' <COL>i2  INC,2 <COL> .
+@     LDV,l <LVL>a5=<DAT>(<COL>-0) .
+@     PCR,0,F,-0,,,0179 <PTH>'\'<DIR>'\TOC.TXT'  RNM -3 .
+@.
+@     BRK,0,A .
+.
+*
+* Run Name   .D.Rpt .I/O  .LLP   1MDNF.
+*============.=.====.=====.=====.=====.
+@     SRH,-2,,,0179 dp 2-8 [,RUNS]  LDV <LIN>i6=3 .
+@0044:INC <LIN>  LOC,-0,<LIN>,0045 afm 2-79 Run ,<LIN> .
+@     RDL,-0,<LIN> 1-80 <DAT>s .
+@     LCV,0179 '' <DAT> '=' <COL>i2  INC <COL> .
+@     LDV,lq <RUN>h12=<DAT>(<COL>-0),0(,) .
+@     LDV,rq <DRW>h1=<DAT>(<COL>-0),1(,) .
+@     LDV,rq <RPT>i4=<DAT>(<COL>-0),2(,) .
+@     LDV,rq <IOS>i5=<DAT>(<COL>-0),3(,) .
+@     LDV,rq <LLP>i5=<DAT>(<COL>-0),4(,) .
+@     LDV,lq <FLG>h5=<DAT>(<COL>-0),5(,) .
+@     LDV,lq <TYP>h1=<DAT>(<COL>-0),6(,) .
+@     IF <TYP> eq 'C'  IF SYSNAM$(1-1) eq 'M',(0044) ; .
+@     IF <TYP> eq 'W'  IF <SYS> ne 'ICE',(0044) ; .
+  <RUN> <DRW> <RPT> <IOS> <LLP> <FLG>
+@     GTO 0044 .
+@0045:.
+@     BRK  RNM -4 .
+@.
+@0060:. --------------------- RADS Run Registration ----------------------------
+@.
+@     LDV <STP>=4 .
+@     TXT,"Run Registration",<MSG1> .
+@     TXT,"Specify script name(s), user & department to access tools.",<MSG2> .
+@.
+@     LDV <OVR>h1=N,<OVS>h1=N .
+@     IF <SYS> eq 'ICE' . ; GTO lin+14 .
+@     IF SYSNAM$(1-1) eq 'P' . ; GTO lin+5 .
+@     IF <LEV> lt 9 . ; GTO lin+2 .
+@     LDV,w <GURL>s64='http://'MACH$'/Cool-ICE/default.asp' .
+@     IF <LEV> ge 9 . ; GTO lin+2 .
+@     LDV,w <GURL>s64='http://'MACH$'/ICE/default.asp' .
+@     IF SYSNAM$(1-1) eq 'U','S' . ; GTO lin+2 .
+@     LDV,w <GURL>s64='http://'MACH$'/ICE/ICEServlet' .
+@     LDV <ISH>h12=ICESVCHND .
+@     LDV <IDS>h3=4 .
+@     LDV <ICAB>i4=3950 .
+@     FDR,RUNDRW$,MSTRD$,,,lin+4 '' 2-12  ,ICEADMIN  RLN 'DRAWER' <DRN>h .
+@     DEF <DEF>i1,<DRN>  IF <DEF> eq 1,3  LDV,p <DRN> . ; GTO lin+3 .
+@     IF <DEF> eq 1  DEF,m <ICAB>a4,<DRN>  LDV,p <ICAB> ; .
+@     IF <DEF> eq 3  LDV <ICAB>a4=<DRN>(2-0)  LDV,p <ICAB> ; .
+@.
+@     BRK,0,A .
+ The following run script(s) will be registered:
+
+
+
+
+ Specify department and user to register script(s) for.
+@     BRK  TXT,-0,2,99,<TXTH> .
+@     TXT,"",<WIN1>,16,14,07,36,lgra,<B> <BOX1>i6 .
+@     FON,t,'Arial',08,pdb .
+@     BTN,<WIN1>,09,14,01,32,bla/lgra,c(1) \
+      'RADSLITE' <CHK1>i6 .
+@     IF <DPT> ge 1 & le 2000 . ; GTO lin+6 .
+@     LZR,RUNDRW$,<DPT>,lin+5  DVS,RUNDRW$,<DPT>,lin+5 'Run' .
+@     FDR,RUNDRW$,<DPT>,,,lin+4 '' 'Run'  ,RADS .
+@     BTN,<WIN1>,11,14,01,32,bla/lgra,c(0)g \
+      'RADS  (already registered)' <CHK2>i6 .
+@     GTO lin+3 .
+@     BTN,<WIN1>,11,14,01,32,bla/lgra,ac(1) \
+      'RADS  (optional second script name)' <CHK2>i6 .
+@     FON,t,'Arial',08,pd .
+@     TXT,"Department",<WIN1>,18,18,01,12,bla/lgra <TXT1>i6 .
+@     FON,t .
+@     EDT,"<DPT>",<WIN1>,19,19,01,04,bla/whi,<B>n <EDT1>i6 .
+@     FON,t,'Arial',08,pdb .
+@     BTN,<WIN1>,18,28,01,20,bla/lgra,ar(1) \
+      'All Department Users' <RAD1>i6 .
+@     BTN,<WIN1>,20,28,01,20,bla/lgra,ar(0) \
+      'Only User 'USER$      <RAD2>i6 .
+@     FON,t .
+@.
+@     BTN,<BACK> '< Back' .
+@     BTN,<NEXT> 'Next >' .
+@     LDV <FOC>i6=<NEXT> .
+@0061:.
+@     INP,<FOC>,,<WIN1> .
+@     IF ACTINP$ eq <NEXT>,(0063) ; .
+@     IF ACTINP$ eq <EDT1>,(0063) ; .
+@     IF ACTINP$ eq <BACK>,(0062) ; .
+@     IF ACTINP$ eq <QUIT>,(0198) ; .
+@     GTO 0061 .
+@0062:.
+@     CLS,<BOX1>,<TXT1>,<EDT1>,<RAD1>,<RAD2>,<CHK1>,<CHK2> .
+@     GTO 0030 .
+@0063:.
+@     INP,<EDT1>,<RAD1>,<CHK2> .
+@     CHG INPUT$ <DPT>a4,<ALL>i1,<REG>a1  LDV,p <DPT> .
+@     DEF <N>i1,<DPT>  IF <N> ne 1,(0180) ; .
+@     LCV,0180 n <DPT> '-'  LCV,0180 n <DPT> '+'  LCV,0180 n <DPT> '.' .
+@     IF <DPT> ge 1 & le 2000 . ; GTO 0180 .
+@     LZR,RUNDRW$,<DPT>,0180 .
+@     DVS,RUNDRW$,<DPT>,0180 'Run' .
+@     FDR,RUNDRW$,<DPT>,,,0064 '' 'Run'   ,RADSLITE .
+@.
+@     IF SYSNAM$(1-1) eq 'M'  RLN 'TYPE','RID' <DRN>a,<RPT>i ; .
+@     IF SYSNAM$(1-1) ne 'M'  RLN 'Drawer','Rpt' <DRN>a,<RPT>i ; .
+@     DEF <DEF>i1,<DRN>  IF <DEF> eq 1,3  LDV,p <DRN> . ; GTO 0064 .
+@     IF <DEF> eq 1  DEF,m <CAB>a4,<DRN>  DEF,a <DRW>h1,<DRN> ; .
+@     IF <DEF> eq 3  LDV <CAB>a4=<DRN>(2-0),<DRW>h1=<DRN>(1-1) ; .
+@     IF <CAB> ge 0 & le MAXCAB$  IF <DRW> ge 'A' & le 'I' . ; GTO 0064 .
+@     DRW,<CAB>,<DRW>,0064  LZR,<CAB>,<DRW>,<RPT>,0064 .
+@.
+@     LDV <LIN>i2=3 .
+@     INC <LIN>  RDL,-6,<LIN>,lin+3 20-1,22-3 <DRW>h,<CPL>i .
+@     IF <DRW> eq 'B',(lin-1) ; DRW,<CAB>,<DRW>,lin-1 <CHR>i3 .
+@     IF <CHR> ne <CPL>,(0064) ; GTO lin-2 .
+@     LDV <DRW>h1=B .
+@     DRW,<CAB>,<DRW>,0064  LZR,<CAB>,B,0002,0064 .
+@     DVS,<CAB>,B,0002,0064 'Parameter' .
+@     FDR,<CAB>,B,0002,,,0064 '' 'Parameter'  ,APP_NAME .
+@     RLN 'Value(1-8)' <APP>h  IF <APP> ne 'RADSLITE',(0064) ; .
+@     FDR,<CAB>,B,0002,,,0064 '' 'Parameter'  ,APP_VERSION .
+@     RLN 'Value(1-5)' <OLV>a .
+@.
+@     LDV,p <CAB> .
+@     MBX,YN,Q,'Confirmation' "/\
+ A prior installation was detected in cabinet <CAB>.//\
+ Do you want to overlay the existing version?" \
+      Y,(lin+1),N,(0064) .
+@.
+@     LDV <OLX>a5=<OLV>,<LVX>a5=<LVL> .
+@     LCV '' <OLX>(3-0) '.'/''  LCV '' <LVX>(3-0) '.'/'' .
+@     IF <OLX> gt <LVX>,(0182) ; .
+@.
+@     LDV <OVR>h1=Y,<RCAB>a4=<CAB> .
+@.
+@     LDV <ENG>h3=BIS .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,GRAPH_ENGINE .
+@     RLN 'Value(1-3)' <ENG> .
+@     LDV <PDF>h3=OFF .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,PDF_EXPORT .
+@     RLN 'Value(1-3)' <PDF> .
+@     LDV <SPG>h3=CSV .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,SPREAD_GUI .
+@     RLN 'Value(1-3)' <SPG> .
+@     LDV <SPW>h3=CSV  IF SYSNAM$(1-1) eq 'U','S'  LDV <SPW>=APP ; .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,SPREAD_WEB .
+@     RLN 'Value(1-3)' <SPW> .
+@     LDV <INI>h3=NO .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,SYSTEM_INIT .
+@     RLN 'Value(1-3)' <INI> .
+@     IF <SYS> eq 'BIS',(0065) ; .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,ICE_URL .
+@     RLN 'Value(1-64)' <GURL> .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,ICE_SVCHND .
+@     RLN 'Value(1-12)' <ISH> .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,ICE_DATASETS .
+@     RLN 'Value(1-3)' <IDS> .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,ICE_CABINET .
+@     RLN 'Value(1-4)' <CAB>i  IF <CAB> eq <ICAB>,(0065) ; .
+@     IF <CAB> ge 16 & le MAXCAB$ . ; GTO 0065 .
+@     LDV <DRW>h1=D .
+@     DRW,<CAB>,<DRW>,0065 .
+@     LZR,<CAB>,<DRW>,1,0065  DVS,<CAB>,<DRW>,1,0065 'Category' .
+@     LDV <DRW>h1=E .
+@     DRW,<CAB>,<DRW>,0065 .
+@     LZR,<CAB>,<DRW>,27,0065  DVS,<CAB>,<DRW>,27,0065 'Keyword','Value' .
+@     LZR,<CAB>,<DRW>,29,0065  DVS,<CAB>,<DRW>,29,0065 'Alias','Directory' .
+@     LDV,p <ICAB>i4=<CAB> .
+@0065:.
+@     FDR,<RCAB>,B,0101,,,0064 '' 'AppID'   ,'$SHELL' .
+@     RLN 'Cab' <CAB>i4 .
+@     LDV <LIN>i2=3 .
+@     INC <LIN>  RDL,-7,<LIN>,lin+3 20-1,22-3 <DRW>h,<CPL>i .
+@     IF <DRW> eq 'B',(lin-1) ; DRW,<CAB>,<DRW>,lin-1 <CHR>i3 .
+@     IF <CHR> ne <CPL>,(0064) ; GTO lin-2 .
+@     LDV <DRW>h1=B .
+@     DRW,<CAB>,<DRW>,0064  LZR,<CAB>,B,0002,0064 .
+@     DVS,<CAB>,B,0002,0064 'Parameter','Value' .
+@     FDR,<CAB>,B,0002,,,0064 '' 'Parameter'  ,APP_NAME .
+@     RLN 'Value(1-8)' <APP>h  IF <APP> eq '','$SHELL' . ; GTO 0064 .
+@     LDV <OVS>h1=Y,<SCAB>i4=<CAB> .
+@0064:.
+@     CLS,<BOX1>,<TXT1>,<EDT1>,<RAD1>,<RAD2>,<CHK1>,<CHK2> .
+@.
+@     IF <OVR> eq 'N',(lin+2) ; .
+@     IF <OVS> eq 'Y',(0080) ; GTO 0070 .
+@.
+@     LDV <RCAB>i4=<LCAB>,<DRW>h1=A .
+@     CHG <DRW> <DRW> + 1  IF <DRW> gt 'I',(0070) ; DRW,<RCAB>,<DRW>,lin-0 .
+@     LDV <RCAB>=22  IF SYSNAM$(1-1) eq 'M'  LDV <RCAB>=0 ; .
+@     LDV <DRW>h1=A  INC,2 <RCAB>  IF <RCAB> gt MAXCAB$,(0199) ; .
+@     CHG <DRW> <DRW> + 1  IF <DRW> gt 'I',(0070) ; DRW,<RCAB>,<DRW>,lin-0 .
+@     IF SYSNAM$(1-1) ne 'M',(lin-2) ; .
+@     IF <RCAB> ge 200 & le 250  LDV <RCAB>=250 ; GTO lin-3 .
+@.
+@0070:. -------------------- Installation Cabinets -----------------------------
+@.
+@     LDV <STP>=5 .
+@     TXT,"Installation Cabinets",<MSG1> .
+@     TXT,"Where should the <PRD> software be loaded?",<MSG2> .
+@.
+@     IF <SCAB> eq '' . ; GTO lin+13 .
+@     IF <RCAB> eq <LCAB>,(lin+4) ; .
+@     LDV <SCAB>i4=3912  IF SYSNAM$(1-1) eq 'M'  LDV <SCAB>i4=248 ; .
+@     LDV <DRW>h1=A .
+@     CHG <DRW> <DRW> + 1  IF <DRW> gt 'I',(lin+9) ; DRW,<SCAB>,<DRW>,lin-0 .
+@     CHG <SCAB>i4 <RCAB> + 2  LDV <DRW>h1=A .
+@     CHG <DRW> <DRW> + 1  IF <DRW> gt 'I',(lin+7) ; DRW,<SCAB>,<DRW>,lin-0 .
+@     LDV <SCAB>i4=22  IF SYSNAM$(1-1) eq 'M'  LDV <SCAB>=0 ; .
+@     LDV <DRW>h1=A  INC,2 <SCAB>  IF <SCAB> gt MAXCAB$,(0199) ; .
+@     CHG <DRW> <DRW> + 1  IF <DRW> gt 'I',(lin+3) ; DRW,<SCAB>,<DRW>,lin-0 .
+@     IF SYSNAM$(1-1) ne 'M',(lin-2) ; .
+@     IF <SCAB> ge 200 & le 250  LDV <SCAB>=250 ; GTO lin-3 .
+@     IF <SCAB> eq <RCAB>,(lin-4) ; .
+@.
+@     LDV,p <RCAB>,<SCAB> .
+@.
+@     BRK,0,A .
+ <PRD> software requires an empty cabinet.
+@     IF <RCAB> eq <LCAB> . ; GTO lin+2 .
+ The suggested cabinet is <RCAB>.
+@     IF <RCAB> ne <LCAB> . ; GTO lin+2 .
+ The first available cabinet is <RCAB>.
+
+ A second cabinet is also required for the Application Shell,
+ which is used as a template for creating new Applications.
+@     LDV <CAB>i4=3912  IF SYSNAM$(1-1) eq 'M'  LDV <CAB>=248 ; .
+@     IF <SCAB> eq <CAB> . ; GTO lin+2 .
+ The suggested cabinet is <SCAB>.
+@     IF <SCAB> ne <CAB> . ; GTO lin+2 .
+ The first available cabinet is <SCAB>.
+@     BRK  TXT,-0,2,99,<TXTH> .
+@.
+@     TXT,"",<WIN1>,17,11,06,20,lgra,<B> <BOX1>i6 .
+@     TXT,"",<WIN1>,17,33,06,20,lgra,<B> <BOX2>i6 .
+@     FON,t,'Arial',08,pd .
+@     TXT,"<PRD> Cabinet",<WIN1>,16,12,01,20,bla/lgra,c <TXT1>i6 .
+@     TXT,"Application Shell Cabinet",<WIN1>,16,34,01,27,bla/lgra,c <TXT2>i6 .
+@     FON,t,'Arial',08,pdb .
+@     BTN,<WIN1>,19,22,02,03 '...' <BTN1>i6 .
+@     BTN,<WIN1>,19,44,02,03 '...' <BTN2>i6 .
+@     FON,t .
+@     EDT,"<RCAB>",<WIN1>,19,17,01,04,bla/whi,<B>n <EDT1>i6 .
+@     EDT,"<SCAB>",<WIN1>,19,39,01,04,bla/whi,<B>n <EDT2>i6 .
+@     FON,t,'Arial',09,pd .
+@     BRK,0,A .
+ Enter an empty cabinet number, or press Browse (...) to find one.
+@     BRK  TXT,-0,2,99,<WIN1>,25,06,01,85,bla/lgra <TXT3>i6 .
+@     FON,t .
+@.
+@     BTN,<BACK> '< Back' .
+@     BTN,<NEXT> 'Next >' .
+@     LDV <LST1>i6=0,<LST2>i6=0 .
+@     LDV <FOC>i6=<NEXT> .
+@0071:.
+@     INP,<FOC>,,<WIN1> .
+@     IF ACTINP$ eq <NEXT>,(0074) ; .
+@     IF ACTINP$ eq <EDT1>,(0074) ; .
+@     IF ACTINP$ eq <EDT2>,(0074) ; .
+@     IF ACTINP$ eq <LST1>,(0074) ; .
+@     IF ACTINP$ eq <LST2>,(0074) ; .
+@     IF ACTINP$ eq <BTN1>,(0073) ; .
+@     IF ACTINP$ eq <BTN2>,(0073) ; .
+@     IF ACTINP$ eq <BACK>,(0072) ; .
+@     IF ACTINP$ eq <QUIT>,(0198) ; .
+@     GTO 0071 .
+@0072:.
+@     CLS,<BOX1>,<BOX2>,<TXT1>,<TXT2>,<TXT3>,<EDT1>,<EDT2>,<BTN1>,<BTN2>,\
+      <LST1>,<LST2> .
+@     GTO 0060 .
+@0073:.
+@     BRK,0,A  LDV,w <SOE>h1=SOE$ .
+@     LDV <CAB>i4=14  IF SYSNAM$(1-1) eq 'M'  LDV <CAB>=0 ; .
+@     LDV <DRW>h1=A  INC,2 <CAB>  IF <CAB> gt MAXCAB$,(lin+6) ; .
+@     CHG <DRW> <DRW> + 1  IF <DRW> gt 'I',(lin+3) ; DRW,<CAB>,<DRW>,lin-0 .
+@     IF SYSNAM$(1-1) ne 'M',(lin-2) ; .
+@     IF <CAB> ge 200 & le 250  LDV <CAB>=252 ; GTO lin-3 .
+<SOE> <CAB> [Open]<SOE><CAB>
+@     GTO lin-5 .
+@     BRK .
+@     IF ACTINP$ eq <BTN1> . ; GTO lin+5 .
+@     HID,<TXT3>,<EDT1>,<BTN1> .
+@     TXT,"",<BOX1>,17,11,09,20,lgra,<B> .
+@     LST,-0,2,Y,cab.tmp,<WIN1>,18,13,07,16,bla/whi,s '' <LST1>i6 .
+@     LDV <FOC>i6=<LST1> .
+@     IF ACTINP$ eq <BTN2> . ; GTO lin+5 .
+@     HID,<TXT3>,<EDT2>,<BTN2> .
+@     TXT,"",<BOX2>,17,33,09,20,lgra,<B> .
+@     LST,-0,2,Y,cab.tmp,<WIN1>,18,35,07,16,bla/whi,s '' <LST2>i6 .
+@     LDV <FOC>i6=<LST2> .
+@     GTO 0071 .
+@0074:.
+@     IF <LST1> eq 0  LDV <FOC>i6=<EDT1>  INP,<EDT1>,Y ; .
+@     IF <LST1> ne 0  LDV <FOC>i6=<LST1>  INP,<LST1>,Y ; .
+@     CHG INPUT$ <CAB>a4  LDV,p <CAB> .
+@     DEF <N>i1,<CAB>  IF <N> ne 1,(0183) ; .
+@     LCV,0183 n <CAB> '-'  LCV,0183 n <CAB> '+'  LCV,0183 n <CAB> '.' .
+@     LDV,r <CAX>a4=<CAB>  IF <CAX>(0-1) eq 1,3,5,7,9,(0183) ; .
+@     IF SYSNAM$(1-1) ne 'M' . ; GTO lin+2 .
+@     IF <CAB> ge 16 & le MAXCAB$ . ; GTO 0184 .
+@     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+3 .
+@     IF <CAB> ge 2 & le MAXCAB$ . ; GTO 0185 .
+@     IF <CAB> eq <LCAB> . ; IF <CAB> ge 200 & le 250,(0186) ; .
+@     LDV <DRW>h1=A .
+@     CHG <DRW> <DRW> + 1  IF <DRW> gt 'I',(lin+2) ; DRW,<CAB>,<DRW>,lin-0 .
+@     GTO lin+3 .
+@     LDV <RCAB>i4=<CAB> .
+@     GTO 0075 .
+@.
+@     LDV <LIN>i2=3 .
+@     INC <LIN>  RDL,-6,<LIN>,lin+3 20-1,22-3 <DRW>h,<CPL>i .
+@     IF <DRW> eq 'B',(lin-1) ; DRW,<CAB>,<DRW>,lin-1 <CHR>i3 .
+@     IF <CHR> ne <CPL>,(0187) ; GTO lin-2 .
+@     LDV <DRW>h1=B .
+@     DRW,<CAB>,<DRW>,0187  LZR,<CAB>,B,0002,0187 .
+@     DVS,<CAB>,B,0002,0187 'Parameter','Value' .
+@     FDR,<CAB>,B,0002,,,0187 '' 'Parameter'  ,APP_NAME .
+@     RLN 'Value(1-8)' <APP>h  IF <APP> ne 'RADSLITE',(0187) ; .
+@     FDR,<CAB>,B,0002,,,0187 '' 'Parameter'  ,APP_VERSION .
+@     RLN 'Value(1-5)' <OLV>a .
+@.
+@     LDV,p <CAB> .
+@     MBX,YN,Q,'Confirmation' "/\
+ A prior installation was detected in cabinet <CAB>.//\
+ Do you want to overlay the existing version?" \
+      Y,(lin+1),N,(0071) .
+@.
+@     LDV <OLX>a5=<OLV>,<LVX>a5=<LVL> .
+@     LCV '' <OLX>(3-0) '.'/''  LCV '' <LVX>(3-0) '.'/'' .
+@     IF <OLX> gt <LVX>,(0188) ; .
+@.
+@     LDV <OVR>h1=Y,<RCAB>a4=<CAB> .
+@.
+@     LDV <ENG>h3=BIS .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,GRAPH_ENGINE .
+@     RLN 'Value(1-3)' <ENG> .
+@     LDV <PDF>h3=OFF .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,PDF_EXPORT .
+@     RLN 'Value(1-3)' <PDF> .
+@     LDV <SPG>h3=CSV .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,SPREAD_GUI .
+@     RLN 'Value(1-3)' <SPG> .
+@     LDV <SPW>h3=CSV  IF SYSNAM$(1-1) eq 'U','S'  LDV <SPW>=APP ; .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,SPREAD_WEB .
+@     RLN 'Value(1-3)' <SPW> .
+@     LDV <INI>h3=NO .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,SYSTEM_INIT .
+@     RLN 'Value(1-3)' <INI> .
+@     IF <SYS> eq 'ICE' . ; GTO 0075 .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,ICE_URL .
+@     RLN 'Value(1-64)' <GURL> .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,ICE_SVCHND .
+@     RLN 'Value(1-12)' <ISH> .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,ICE_DATASETS .
+@     RLN 'Value(1-3)' <IDS> .
+@     FDR,<RCAB>,B,0002,,,lin+2 '' 'Parameter'  ,ICE_CABINET .
+@     RLN 'Value(1-4)' <CAB>i  IF <CAB> eq <ICAB>,(0075) ; .
+@     IF <CAB> ge 16 & le MAXCAB$ . ; GTO 0075 .
+@     LDV <DRW>h1=D .
+@     DRW,<CAB>,<DRW>,0075 .
+@     LZR,<CAB>,<DRW>,1,0075  DVS,<CAB>,<DRW>,1,0075 'Category' .
+@     LDV <DRW>h1=E .
+@     DRW,<CAB>,<DRW>,0075 .
+@     LZR,<CAB>,<DRW>,27,0075  DVS,<CAB>,<DRW>,27,0075 'Keyword','Value' .
+@     LZR,<CAB>,<DRW>,29,0075  DVS,<CAB>,<DRW>,29,0075 'Alias','Directory' .
+@     LDV,p <ICAB>i4=<CAB> .
+@0075:.
+@     IF <LST2> eq 0  LDV <FOC>i6=<EDT2>  INP,<EDT2>,Y ; .
+@     IF <LST2> ne 0  LDV <FOC>i6=<LST2>  INP,<LST2>,Y ; .
+@     CHG INPUT$ <CAB>i4  LDV,p <CAB> .
+@     IF <CAB> eq <RCAB>,(0189) ; .
+@     DEF <N>i1,<CAB>  IF <N> ne 1,(0183) ; .
+@     LCV,0183 n <CAB> '-'  LCV,0183 n <CAB> '+'  LCV,0183 n <CAB> '.' .
+@     LDV,r <CAX>a4=<CAB>  IF <CAX>(0-1) eq 1,3,5,7,9,(0183) ; .
+@     IF SYSNAM$(1-1) ne 'M' . ; GTO lin+2 .
+@     IF <CAB> ge 16 & le MAXCAB$ . ; GTO 0184 .
+@     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+3 .
+@     IF <CAB> ge 2 & le MAXCAB$ . ; GTO 0185 .
+@     IF <CAB> eq <SCAB> . ; IF <CAB> ge 200 & le 250,(0186) ; .
+@     LDV <DRW>h1=A .
+@     CHG <DRW> <DRW> + 1  IF <DRW> gt 'I',(lin+2) ; DRW,<CAB>,<DRW>,lin-0 .
+@     GTO lin+3 .
+@     LDV <SCAB>i4=<CAB> .
+@     GTO 0076 .
+@.
+@     LDV <LIN>i2=3 .
+@     INC <LIN>  RDL,-7,<LIN>,lin+3 20-1,22-3 <DRW>h,<CPL>i .
+@     IF <DRW> eq 'B',(lin-1) ; DRW,<CAB>,<DRW>,lin-1 <CHR>i3 .
+@     IF <CHR> ne <CPL>,(0187) ; GTO lin-2 .
+@     LDV <DRW>h1=B .
+@     DRW,<CAB>,<DRW>,0187  LZR,<CAB>,B,0002,0187 .
+@     DVS,<CAB>,B,0002,0187 'Parameter','Value' .
+@     FDR,<CAB>,B,0002,,,0187 '' 'Parameter'  ,APP_NAME .
+@     RLN 'Value(1-8)' <APP>h  IF <APP> eq '','$SHELL' . ; GTO 0187 .
+@     LDV <OVS>h1=Y,<SCAB>i4=<CAB> .
+@0076:.
+@     CLS,<BOX1>,<BOX2>,<TXT1>,<TXT2>,<TXT3>,<EDT1>,<EDT2>,<BTN1>,<BTN2>,\
+      <LST1>,<LST2> .
+@.
+@0080:. ---------------------- Database File (2200) ----------------------------
+@.
+@     IF SYSNAM$(1-1) ne 'M',(0090) ; .
+@     LDV <LIN>i2=3,<FIL>i4=0 .
+@     INC <LIN>  RDL,-6,<LIN>,0090 20-1 <DRW>h .
+@     DRW,<RCAB>,<DRW>,lin+1  GTO lin-1 .
+@.
+@     LDV <STP>=6 .
+@     TXT,"Database File",<MSG1> .
+@     TXT,"Where should new <PRD> drawers be generated?",<MSG2> .
+@.
+@     TXT,"",<WIN1>,14,19,07,23,lgra,<B> <BOX1>i6 .
+@     FON,t,'Arial',08,pd .
+@     TXT,"File Number",<WIN1>,17,24,01,12,bla/lgra,r <TXT1>i6 .
+@     FON,t .
+@     EDT,"3",<WIN1>,17,32,01,04,bla/whi,<B>n <EDT1>i6 .
+@.
+@     LDV,pw <MXF>i4=MAXFIL$ .
+@     BRK,0,A .
+ Specify the MAPER file to contain drawers that will be generated.
+ Available files are 3-<MXF>.
+
+ To continue, press Next.
+@     BRK  TXT,-0,2,99,<TXTH> .
+@.
+@     BTN,<BACK> '< Back' .
+@     BTN,<NEXT> 'Next >' .
+@     LDV <FOC>i6=<NEXT> .
+@0081:.
+@     INP,<FOC>,,<WIN1> .
+@     IF ACTINP$ eq <NEXT>,(0083) ; .
+@     IF ACTINP$ eq <EDT1>,(0083) ; .
+@     IF ACTINP$ eq <BACK>,(0082) ; .
+@     IF ACTINP$ eq <QUIT>,(0198) ; .
+@     GTO 0081 .
+@0082:.
+@     CLS,<BOX1>,<TXT1>,<EDT1> .
+@     IF <OVR> eq 'Y',(0060) ; GTO 0070 .
+@0083:.
+@     INP,<EDT1>,Y .
+@     CHG INPUT$ <FIL>i4 .
+@     DEF <N>i1,<FIL>  IF <N> ne 1,(0190) ; .
+@     LCV,0190 n <FIL> '-'  LCV,0190 n <FIL> '+'  LCV,0190 n <FIL> '.' .
+@     IF <FIL> ge 3 & le MAXFIL$ . ; GTO 0190 .
+@.
+@     CLS,<BOX1>,<TXT1>,<EDT1> .
+@.
+@0090:. -------------------------- ICE Gateway ---------------------------------
+@.
+@     IF <SYS> eq 'BIS',(0100) ; IF <OVR> eq 'Y',(0100) ; .
+@.
+@     LDV <STP>=7 .
+@     TXT,"ICE Server URL",<MSG1> .
+@     TXT,"What is the Web address of this ICE system?",<MSG2> .
+@.
+@     TXT,"",<WIN1>,16,06,06,52,lgra,<B> <BOX1>i6 .
+@     FON,t,'Arial',08,pd .
+@     TXT,"URL Address",<WIN1>,18,08,01,16,bla/lgra <TXT1>i6 .
+@     FON,t .
+@     LDV,p <GURL> .
+@     EDT,"<GURL>",<WIN1>,19,08,01,48,bla/whi,<B>h <EDT1>i6 .
+@.
+@     BRK,0,A .
+ The URL address below identifies the server and Virtual Directory
+ required to access ICE on this system from a Web browser.
+
+ This is used to launch ICE services directly from <PRD>.
+
+ Modify if necessary, and press Next to continue.
+@     BRK  TXT,-0,2,99,<TXTH> .
+@     FON,t,'Arial',09,pd .
+@     LDV,w <SIT>h1=LRRSD$ .
+@     BRK,0,A .
+ Make sure the Virtual Directory in the address above matches the
+ ICE Gateway configuration for the current BIS system (Site <SIT>).
+@     BRK  TXT,-0,2,99,<WIN1>,23,06,02,88,dblu/lgra <TXT2>i6 .
+@     FON,t .
+@.
+@     BTN,<BACK> '< Back' .
+@     BTN,<NEXT> 'Next >' .
+@     LDV <FOC>i6=<NEXT> .
+@0091:.
+@     INP,<FOC>,,<WIN1> .
+@     IF ACTINP$ eq <NEXT>,(0093) ; .
+@     IF ACTINP$ eq <EDT1>,(0093) ; .
+@     IF ACTINP$ eq <BACK>,(0092) ; .
+@     IF ACTINP$ eq <QUIT>,(0198) ; .
+@     GTO 0091 .
+@0092:.
+@     CLS,<BOX1>,<TXT1>,<TXT2>,<EDT1> .
+@     IF <OVR> eq 'Y',(0060) ; GTO 0070 .
+@0093:.
+@     INP,<EDT1>,Y .
+@     IF INPUT$ eq '',(0091) ; .
+@     CHG INPUT$ <GURL>s64  LDV,p <GURL> .
+@.
+@     CLS,<BOX1>,<TXT1>,<TXT2>,<EDT1> .
+@.
+@0100:. -------------------- Installation Confirmation -------------------------
+@.
+@     LDV <STP>=8 .
+@     TXT,"Installation Confirmation",<MSG1> .
+@     TXT,"Is this information correct?",<MSG2> .
+@.
+@     LDV,p <RCAB>,<SCAB> .
+@.
+@     BRK,0,A .
+ Press Back if you need to modify options or selections.
+ If correct, press Finish to perform the installation.
+
+ [Destination]
+@     LDV <OVX>h1=N,<DRW>h1=A .
+@     CHG <DRW> <DRW> + 1  IF <DRW> gt 'I',(lin+2) ; DRW,<RCAB>,<DRW>,lin-0 .
+@     LDV <OVX>=Y .
+@     IF <OVX> eq 'Y' . ; GTO lin+2 .
+  <PRD> Cabinet: <RCAB> (existing drawers will be overlayed)
+@     IF <OVX> eq 'N' . ; GTO lin+2 .
+  <PRD> Cabinet: <RCAB> (new drawers will be generated)
+@     LDV <OVX>h1=N,<DRW>h1=A .
+@     CHG <DRW> <DRW> + 1  IF <DRW> gt 'I',(lin+2) ; DRW,<SCAB>,<DRW>,lin-0 .
+@     LDV <OVX>=Y .
+@     IF <OVX> eq 'Y' . ; GTO lin+2 .
+  Shell Cabinet: <SCAB> (existing drawers will be overlayed)
+@     IF <OVX> eq 'N' . ; GTO lin+2 .
+  Shell Cabinet: <SCAB> (new drawers will be generated)
+
+ [Components]
+  <PRD> Development Studio
+  MQS Plus! Form Designer
+
+ [Run Script Registration]
+@     IF <REG> eq 0 . ; GTO lin+2 .
+  Name: RADSLITE
+@     IF <REG> eq 1 . ; GTO lin+2 .
+  Names: RADSLITE , RADS
+@     LDV,w <USR>h12=USER$  IF <ALL> eq 1  LDV <USR>=All ; .
+  Department: <DPT>    User(s): <USR>
+@     BRK  TXT,-0,2,99,<TXTH> .
+@.
+@     BTN,<BACK> '< Back' .
+@     BTN,<NEXT> 'Finish' .
+@     LDV <FOC>i6=<NEXT> .
+@0101:.
+@     INP,<FOC>,,<WIN1> .
+@     IF ACTINP$ eq <NEXT>,(0103) ; .
+@     IF ACTINP$ eq <BACK>,(0102) ; .
+@     IF ACTINP$ eq <QUIT>,(0198) ; .
+@     GTO 0101 .
+@0102:.
+@     IF <SYS> eq 'ICE'  IF <OVR> eq 'N',(0090) ; .
+@     IF <OVR> eq 'Y',(0060) ; GTO 0070 .
+@0103:.
+@     CLS,<BACK>,<NEXT>,<QUIT> .
+@.
+@     LDV <STP>=99 .
+@.
+@     TXT,"Installation In Progress, Please Wait ...",<MSG1> .
+@.
+@. ----------------------------- Drawer Setup ----------------------------------
+@.
+@     TXT,"Drawer Generation",<MSG2> .
+@.
+@     BRK,0,A .
+ Required drawers in cabinet <RCAB> are now being generated.
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@.
+@     IF <OVR> eq 'Y' . ; GTO lin+3 .
+@     DUP,<RCAB>,B,0100,0,F  RNM -7 .
+@     DUP,<RCAB>,B,0101,0,F  RNM -8 .
+@.
+@     LDV <LIN>i2=3 .
+@     INC <LIN>  RDL,-6,<LIN>,lin+11 20-1,22-3,26-24 <DRW>h,<CPL>i,<TTL>s .
+@     DRW,<RCAB>,<DRW>,lin+3 <CPX>i3 .
+@     IF <OVR> eq 'N',(lin-2) ; IF <CPL> eq <CPX>,(lin-2) ; LDV <RGN>h1=Y .
+@     LOK,<RCAB>,<DRW>,0  WRZ,<RCAB>,<DRW>,2 2-5 D,ELETE  ULK .
+@     IF SYSNAM$(1-1) ne 'M' . ; GTO lin+3 .
+@     DRW,<RCAB>,<DRW>,lin+1  DTY,<RCAB>,<DRW> .
+@     GEN,<RCAB>,<DRW>,<CPL> .
+@     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+3 .
+@     DRW,<RCAB>,<DRW>,lin+1  RGN,<RCAB>,<DRW>,lin+1 ,,,,,,,- .
+@     GEN,<RCAB>,<DRW> <FIL>,<CPL>,F,,,,<TTL>(1-24),USER$ .
+@     GTO lin-10 .
+@.
+@     IF <OVR> eq 'N',(lin+4) ; IF <RGN> eq 'N',(lin+3) ; .
+@     REP,-7,<RCAB>,B,0100 .
+@     REP,-8,<RCAB>,B,0101 .
+@     DLR,-7  DLR,-8 .
+@.
+@. Drawer Permissions Setup
+@.
+@     TXT,"Drawer Permissions Setup",<MSG2> .
+@.
+@     BRK,0,A .
+ Drawer permissions report is now being updated.
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@     WAT 2000 .
+@.
+@     IF 0 eq SECDRW$,SECRPT$,SECGRP$,(0108) ; .
+@     DFU SECDRW$,SECRPT$ .
+@.
+@     LDV <LIN>i6=5 .
+@     INC <LIN>  RDL,SECDRW$,SECRPT$,<LIN>,0105 1-1,29-9 <LT>h,<DC>a .
+@     IF <LT> ne '  ',(lin-1) ; LDV,l <DC>  IF <DC>(2-0) ne <RCAB>,(lin-1) ; .
+@     LN-,SECDRW$,SECRPT$,<LIN>,1  DEC <LIN>  GTO lin-2 .
+@0105:.
+@     LDV <SOR>i1=0 .
+@     BFN,SECDRW$,SECRPT$,,lin+1 k 2-26   ,k  LDV <SOR>=1  GTO lin+2 .
+@     BFN,SECDRW$,SECRPT$,,lin+1 kf'2,1' 32-1,34-4  ,k,k  LDV <SOR>=2 .
+@     FDR,SECDRW$,SECRPT$ '' 2-1 *,= ,<LNX>i6  CHG <CLM>i3 56 + SECGRP$ .
+@     LDV <LIN>i2=3 .
+@0106:INC <LIN>  RDL,-6,<LIN>,0107 20-1,26-26 <DRW>h,<TTL>s .
+@     LDV,r <DRC>h6=<DRW><RCAB> .
+@     IF SYSNAM$(1-1) eq 'M'  LDV,rz <ZCB>a4=<RCAB> ; .
+@     IF SYSNAM$(1-1) eq 'M'  LDV <DRC>h6=<DRW>' '<ZCB> ; .
+@     LN+,SECDRW$,SECRPT$,<LNX>,1  INC <LNX> .
+@     WRL,SECDRW$,SECRPT$,<LNX> 2-26,32-6,<CLM>-1   ,<TTL>,<DRC>,W .
+@     WRL,SECDRW$,SECRPT$,<LNX> 28-1,38-1,56-1  , , ,  .
+@     GTO 0106 .
+@0107:.
+@     IF <SOR> eq 1 SRR,SECDRW$,SECRPT$ '' 2-26,29-9  ,1,2 ; .
+@     IF <SOR> eq 2 SRR,SECDRW$,SECRPT$ '' 32-1,34-4  ,2,1n ; .
+@     CMU .
+@.
+@0108:. Drawer Description Setup
+@.
+@     TXT,"Drawer Description Setup",<MSG2> .
+@.
+@     BRK,0,A .
+ Updating cabinet table of contents report.
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@     WAT 2000 .
+@.
+@     LOK,TYPDRW$,TYPRD$ .
+@     LDV <LIN>i2=3 .
+@0109:INC <LIN>  RDL,-6,<LIN>,0110 20-1,26-26 <DRW>h,<TTL>s .
+@     LDV <ROW>i1=1,<COL>i2=4 .
+@     IF SYSNAM$(1-1) ne 'M'  IF <DRW> eq 'F','G','H','I'  LDV <COL>=39 ; .
+@     IF SYSNAM$(1-1) eq 'M'  IF <DRW> eq 'F','G','H','I'  LDV <COL>=38 ; .
+@     IF <DRW> eq 'C','G'  LDV <ROW>=2 ; .
+@     IF <DRW> eq 'D','H'  LDV <ROW>=3 ; .
+@     IF <DRW> eq 'E','I'  LDV <ROW>=4 ; .
+@     IF SYSNAM$(1-1) ne 'M'  CHG <LNX>i6 <RCAB> // 2 * 6 + 18 + <ROW> ; .
+@     IF SYSNAM$(1-1) eq 'M'  CHG <LNX>i6 <RCAB> // 2 * 15 + 21 + <ROW> ; .
+@     LDV <SIZ>i2=26  IF SYSNAM$(1-1) eq 'M'  LDV <SIZ>=24 ; .
+@     WRL,TYPDRW$,TYPRD$,<LNX> <COL>-<SIZ> ' ',<TTL>(1-<SIZ>) .
+@     GTO 0109 .
+@0110:.
+@     ULK .
+@.
+@. -------------------------- Load Modules & Tables ----------------------------
+@.
+@     TXT,"Loading Modules & Tables",<MSG2> .
+@.
+@     BRK,0,A .
+ Now loading run script modules and tables
+ required for the <PRD> environment.
+@     BRK  TXT,-0,2,99,<TXTH> .
+@.
+@     WIN,<WIN1>,12,17,08,30,lgra,c '' <WIN2>i6 .
+@     TXT,"",<WIN2>,01,01,07,29,lgra,<B> .
+@     FON,t,'Arial',08,pd .
+@     TXT,"<PRD> Cabinet (<RCAB>)",<WIN2>,02,03,01,40,bla/lgra,c .
+@     FON,t .
+@     TXT,"",<WIN2>,04,03,01,25,whi,<B> .
+@     TXT,"",<WIN2>,04,03,01,25,whi,<B> <TXT1>i6 .
+@     TXT,"0%",<WIN2>,06,13,01,05,dblu/lgra,cs <TXT2>i6 .
+@.
+@     IF <SYS> ne 'ICE' . ; GTO lin+2 .
+@     CAL,-3 ac 'D','Rpt'   ,a,b if:a<>"H",b=0  RNM -3 .
+@.
+@     TOT,-3 a 'Lin' ' ',+ <TLN>i12 .
+@     LDV <LIN>i4=5,<XLN>i12=0,<OW>i4=0 .
+@0111:INC <LIN>  RDL,-3,<LIN>,0113 'D','Rpt','Lines','Typ','PR','Title' \
+      <DRW>h,<RPT>a,<RLN>i,<EXT>h,<PRO>h,<TIT>s79 .
+@     INC,<RLN> <XLN>  JUV,r <RPT>  LDV,l <RID>h5=<RPT><DRW> .
+@     IF <PRO> ne 'Y',(lin+2) ; IF <OVR> ne 'Y',(lin+2) ; .
+@     LZR,<RCAB>,<DRW>,<RPT>,lin+1  GTO 0111 .
+@     JUV,z <RPT>  LDV <BIN>h1=N .
+@     IF <EXT> eq 'BMP','PCX','JPG','GIF','BIN'  LDV <BIN>h1=Y ; .
+@     PCR,<RCAB>,<DRW>,<RPT>,<BIN> <PTH>'\'<DIR>'\'<DRW>-<RPT>.<EXT> .
+@     CHG <PC>i4 <XLN> / <TLN> * 100  CHG <W>i4 <PC> * 25 / 100  LDV,p <PC> .
+@     IF <W> eq <OW>,(lin+2) ; LDV <OW>=<W> .
+@     TXT,"",<TXT1>,04,03,01,<W>,dblu  TXT,"<PC>%",<TXT2>,,,,,,s .
+@     IF <RPT> eq 0,(0112) ; .
+@     LOK,<RCAB>,<DRW>,<RPT>  WRL,<RCAB>,<DRW>,<RPT>,2 2-79 .,<TIT>  ULK .
+@     GTO 0111 .
+@0112:.
+@     RNM -5 .
+@     DRW,<RCAB>,<DRW> <CPL>i3 .
+@     LOK,<RCAB>,<DRW>,0 .
+@     LDV <LNX>i6=1 .
+@     INC <LNX>  RDL,-5,<LNX>,lin+4 1-<CPL> <DAT>s  CHG <WID>i3 <CPL> - 1 .
+@     IF <DAT>(1-1) eq '.'  IF <WID> gt 79  LDV <WID>=79 ; .
+@     WRZ,<RCAB>,<DRW>,<LNX> 2-<WID> <DAT>(1-1),<DAT>(2-<WID>) .
+@     GTO lin-3 .
+@     ULK .
+@     GTO 0111 .
+@0113:.
+@     TXT,"",<TXT1>,04,03,01,25,dblu  TXT,"100%",<TXT2>,,,,,,s .
+@     WAT 1000 .
+@     CLS,<WIN2>  LDV <WIN2>=0 .
+@.
+@. ------------------------- RADS Cabinet Adjustments --------------------------
+@.
+@     TXT,"<PRD> Cabinet Adjustments",<MSG2> .
+@.
+@     BRK,0,A .
+ Now updating Runtime Shell tables
+ with required modifications.
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@     WAT 2000 .
+@.
+@     IF <SYS> ne 'ICE' . ; GTO lin+7 .
+@     SRU,<RCAB>,B,0004,,,lin+2 dn@ 'Web Rpt'   ,@ .
+@     TOT,-0 '' 'Web Rpt'   ,=  UPD .
+@     SRU,<RCAB>,B,0004,,,lin+1 d@ 'Rpt','Web Rpt'  ,@,@  DEL .
+@     SRU,<RCAB>,B,0008,,,lin+2 dn@ 'Web Rpt'   ,@ .
+@     TOT,-0 '' 'Web Rpt'   ,=  UPD .
+@     SRU,<RCAB>,B,0008,,,lin+1 d@ 'Rpt','Web Rpt'  ,@,@  DEL .
+@.
+@     IF <OVR> eq 'N',(0119) ; .
+@.
+@. System Table
+@.
+@     DFU <RCAB>,B,0002 .
+@     DVS,<RCAB>,B,0002 'Value' <VAL>s .
+@     LDV <VAL>=<ENG> .
+@     FND,<RCAB>,B,0002,,lin+1 '' \
+      'Parameter'   ,GRAPH_ENGINE ,<LIN>i6  GTO lin+2 .
+@     LN+,<RCAB>,B,0002,5,1  LDV <LIN>i4=6 .
+@     WRL,<RCAB>,B,0002,<LIN> 'Parameter','Siz','Value','Sub Sys' \
+        ,'GRAPH_ENGINE','  3',<VAL>,SHL .
+@     LDV <VAL>=<PDF> .
+@     FND,<RCAB>,B,0002,,lin+1 '' \
+      'Parameter'   ,PDF_EXPORT ,<LIN>i6  GTO lin+2 .
+@     LN+,<RCAB>,B,0002,5,1  LDV <LIN>i4=6 .
+@     WRL,<RCAB>,B,0002,<LIN> 'Parameter','Siz','Value','Sub Sys' \
+        ,'PDF_EXPORT  ','  3',<VAL>,SHL .
+@     LDV <VAL>=<SPG> .
+@     FND,<RCAB>,B,0002,,lin+1 '' \
+      'Parameter'   ,SPREAD_GUI ,<LIN>i6  GTO lin+2 .
+@     LN+,<RCAB>,B,0002,5,1  LDV <LIN>i4=6 .
+@     WRL,<RCAB>,B,0002,<LIN> 'Parameter','Siz','Value','Sub Sys' \
+        ,'SPREAD_GUI  ','  3',<VAL>,SHL .
+@     LDV <VAL>=<SPW> .
+@     FND,<RCAB>,B,0002,,lin+1 '' \
+      'Parameter'   ,SPREAD_WEB ,<LIN>i6  GTO lin+2 .
+@     LN+,<RCAB>,B,0002,5,1  LDV <LIN>i4=6 .
+@     WRL,<RCAB>,B,0002,<LIN> 'Parameter','Siz','Value','Sub Sys' \
+        ,'SPREAD_WEB  ','  3',<VAL>,SHL .
+@     LDV <VAL>=<INI> .
+@     FND,<RCAB>,B,0002,,lin+1 '' \
+      'Parameter'   ,SYSTEM_INIT ,<LIN>i6  GTO lin+2 .
+@     LN+,<RCAB>,B,0002,5,1  LDV <LIN>i4=6 .
+@     WRL,<RCAB>,B,0002,<LIN> 'Parameter','Siz','Value','Sub Sys' \
+        ,'SYSTEM_INIT ','  3',<VAL>,SHL .
+@     SRR,<RCAB>,B,0002 '' 'Parameter'  ,1 .
+@     CMU .
+@.
+@. Application Table
+@.
+@     DVS,<RCAB>,B,0101,lin+1 'GW'  GTO lin+4 .
+@     LOK,<RCAB>,B,0101 .
+@     WRL,<RCAB>,B,0101,3 67-2 *,'G.'/*,'W.'/*,'=.' .
+@     ULK .
+@.
+@. User Preference Table
+@.
+@     DVS,<RCAB>,B,0100,lin+1 'GW'  GTO lin+5 .
+@     LOK,<RCAB>,B,0100 .
+@     WRL,<RCAB>,B,0100,3 24-2 *,'G.'/*,'W.'/*,'=.' .
+@     ULK .
+@     CAU,<RCAB>,B,0100 '' 24-2   ,a a="G"  UPD .
+@     DVS,<RCAB>,B,0100,lin+1 'SI'  GTO lin+5 .
+@     LOK,<RCAB>,B,0100 .
+@     WRL,<RCAB>,B,0100,3 26-2 *,'S.'/*,'I.'/*,'=.' .
+@     ULK .
+@     CAU,<RCAB>,B,0100 '' 26-2   ,a a="N"  UPD .
+@     DVS,<RCAB>,B,0100,lin+1 'ScreenID'  GTO lin+6 .
+@     LOK,<RCAB>,B,0100 .
+@     WRL,<RCAB>,B,0100,3 28-13 \
+      *,'            .'/*,'ScreenID    .'/*,'============.' .
+@     ULK .
+@     CAU,<RCAB>,B,0100 '' 28-13  ,a a=""  UPD .
+@     DVS,<RCAB>,B,0100,lin+1 'QM'  GTO lin+5 .
+@     LOK,<RCAB>,B,0100 .
+@     WRL,<RCAB>,B,0100,3 41-2 *,'Q.'/*,'M.'/*,'=.' .
+@     ULK .
+@     CAU,<RCAB>,B,0100 '' 41-2   ,a a=""  UPD .
+@.
+@. Web Toolbar Profile Report
+@.
+@     FDR,<RCAB>,D,0001,,,lin+6 '' 'Profile'  ,'WEBTOOLBAR' .
+@     RLN 'Rpt' <RPT>i .
+@     DVS,<RCAB>,D,<RPT>,lin+1 'Pos','Lab'  GTO lin+4 .
+@     LOK,<RCAB>,D,<RPT> .
+@     WRL,<RCAB>,D,<RPT>,3 21-10 *,'     .   .'/*,'Pos  .Lab.'/*,'=====.===.' .
+@     ULK .
+@.
+@. Web System Style Sheet Profile Report
+@.
+@     FDR,<RCAB>,D,0001,,,0115 '' 'Profile'   ,'WEBSYSSTYLE' .
+@     RLN 'Rpt' <RPT>i .
+@     CNT,<RCAB>,D,<RPT> '' 'StyleID'   ,1  RNM -1 .
+@     LDV <LIN>i6=5 .
+@0114:INC <LIN>  RDL,-1,<LIN>,0115 'StyleID' <SID>h .
+@     DFU <RCAB>,D,<RPT> .
+@     SRU,<RCAB>,D,<RPT> dp 'StyleID'   ,<SID>  EXT .
+@     LDV <TTL>s50  FND,-0,,lin+2 @ 'Sty'   ,@ ,<LNX>i6 .
+@     INC <LNX>  RDL,-0,<LNX>,lin+1 2-50 <TTL>s .
+@     SRH,-0 dp 'CusDef'  ,CUS .
+@     MCH,<RCAB>,B,0035,-0 d \
+      'Sty','Property'  ,1,a 'Sty','Property'   ,1,a .
+@     ADD,-0,<RCAB>,B,0035 .
+@     TOT,-0 '' 'StyleID'   ,=<SID> .
+@     FND,-0,,lin+2 @ 'Sty'   ,@ ,<LNX>i6 .
+@     INC <LNX>  WRL,-0,<LNX> 2-50 *,<TTL> .
+@     ADD,-0,<RCAB>,D,<RPT> .
+@     SOR,-0 '' 'StyleID','Sty','Cus Def'   ,1,2,3 .
+@     REP,<RCAB>,D,<RPT> .
+@     CMU .
+@     GTO 0114 .
+@.
+@0115:. ----------------- Update Registered Applications -----------------------
+@.
+@     TXT,"Update Registered Applications",<MSG2> .
+@.
+@     BRK,0,A .
+ Now updating Runtime Shell links for
+ previously registered Applications.
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@.
+@     LDV <LIN>i6=5 .
+@0116:INC <LIN>  RDL,<RCAB>,B,0101,<LIN>,0120 'Cab' <ACAB>a .
+@     LDV <DRW>h1=B  DRW,<ACAB>,<DRW>,0116 .
+@     LZR,<ACAB>,B,0004,0116 .
+@     DVS,<ACAB>,B,0004,0116 \
+      'ScreenID','Title','Cab','D','Rpt','Mod Typ','Usr Cat','Sub Sys' .
+@.
+@     DFU <ACAB>,B,0004 .
+@     RNM,<ACAB>,B,0004 -0 .
+@     LDV,w <DRW>h1=ADRW$,<RPT>i4=RPT$ .
+@     SRU,<ACAB>,<DRW>,<RPT>,,,lin+1 d 'Mod Typ'  ,RAD  DEL .
+@     SRH,<RCAB>,B,0004 d 'Mod Typ','Sub Sys'   ,RAD,RAD .
+@     CAL,-0 '' 'Cab'   ,a a=<RCAB>  RNM -1 .
+@     LZR,<ACAB>,<DRW>,<RPT> ,,<LNX>i4  DEC <LNX> .
+@     LNY,<ACAB>,<DRW>,<RPT>,2,<LNX> .
+@     BRK,<ACAB>,<DRW>  BRK  LNP,-0,1 .
+@     DVS,-0,0117 'Web Rpt' .
+@     RFM,-1,-0 '' \
+      'ScreenID','Title','Cab','D','Rpt','Web Rpt',\
+      'Mod Typ','Usr Cat','Sub Sys'   ,a,b,c,d,e,f,g,h,i \
+      'ScreenID','Title','Cab','D','Rpt','Web Rpt',\
+      'Mod Typ','Usr Cat','Sub Sys'   ,a,b,c,d,e,f,g,h,i .
+@     GTO 0118 .
+@0117:.
+@     RFM,-1,-0 '' \
+      'ScreenID','Title','Cab','D','Rpt',\
+      'Mod Typ','Usr Cat','Sub Sys'   ,a,b,c,d,e,f,g,h \
+      'ScreenID','Title','Cab','D','Rpt',\
+      'Mod Typ','Usr Cat','Sub Sys'   ,a,b,c,d,e,f,g,h .
+@0118:.
+@     ADD,-0,<ACAB>,<DRW>,<RPT>  REP,<ACAB>,<DRW>,<RPT> .
+@     SRR,<ACAB>,<DRW>,<RPT> '' 'ScreenID','Sub Sys'  ,1,2 .
+@     CMU .
+@.
+@     SRH,<RCAB>,B,0007 d 'Menu'  ,Options .
+@     LCH,-0 fm 'Parameters' TIC$'RADS'TIC$/TIC$TIC$  RNM -1 .
+@     SRU,<ACAB>,B,0007,,,lin+1 d 'Menu'  ,Options  GTO lin+3 .
+@     TOT,-1 '' 'Menu'  ,=Setup  RNM -1 .
+@     SRU,<ACAB>,B,0007 d 'Menu'  ,Setup .
+@     MCH,-1,-0 d 'Menu','ScreenID','Parameters'  ,1,2,a \
+      'Menu','ScreenID','Parameters(1-48)'  ,1,2,a .
+@     UPD .
+@.
+@     GTO 0116 .
+@.
+@0119:. -------------- New System Installation Adjustments ---------------------
+@.
+@. System Table
+@.
+@     IF SYSNAM$(1-1) eq 'U','S' . ; GTO lin+5 .
+@     LOK,<RCAB>,B,0002 .
+@     FND,<RCAB>,B,0002,,lin+2 '' 'Parameter'   ,SPREAD_WEB ,<LIN>i6 .
+@     WRL,<RCAB>,B,0002,<LIN> 'Value(1-3)'  ,APP .
+@     ULK .
+@.
+@0120:. ------------------- Configure Web Environment --------------------------
+@.
+@     IF <SYS> eq 'BIS',(0123) ; .
+@.
+@     TXT,"Configuring Web Environment",<MSG2> .
+@.
+@     BRK,0,A .
+ Now setting up parameters required for the
+ <PRD> Web environment.
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@.
+@     DFU <RCAB>,B,0002 .
+@     DVS,<RCAB>,B,0002 'Value' <VAL>s .
+@     LDV <VAL>=YES .
+@     FND,<RCAB>,B,0002,,lin+1 '' \
+      'Parameter'   ,CLIENT_WEB ,<LIN>i6  GTO lin+2 .
+@     LN+,<RCAB>,B,0002,5,1  LDV <LIN>i4=6 .
+@     WRL,<RCAB>,B,0002,<LIN> 'Parameter','Siz','Value','Sub Sys' \
+        ,'CLIENT_WEB  ','  3',<VAL>,SHL .
+@     LDV,l <VAL>=<ICAB> .
+@     FND,<RCAB>,B,0002,,lin+1 '' \
+      'Parameter'   ,ICE_CABINET ,<LIN>i6  GTO lin+2 .
+@     LN+,<RCAB>,B,0002,5,1  LDV <LIN>i4=6 .
+@     WRL,<RCAB>,B,0002,<LIN> 'Parameter','Siz','Value','Sub Sys' \
+        ,'ICE_CABINET ','  4',<VAL>,SHL .
+@     LDV,l <VAL>=<IDS> .
+@     FND,<RCAB>,B,0002,,lin+1 '' \
+      'Parameter'   ,ICE_DATASETS ,<LIN>i6  GTO lin+2 .
+@     LN+,<RCAB>,B,0002,5,1  LDV <LIN>i4=6 .
+@     WRL,<RCAB>,B,0002,<LIN> 'Parameter','Siz','Value','Sub Sys' \
+        ,'ICE_DATASETS','  3',<VAL>,SHL .
+@     LDV <VAL>=<GURL> .
+@     LCV,lin+3 '' <VAL> '//' <N>i2  INC,2 <N>  IF <N> gt 64,(lin+3) ; .
+@     LDV <V1>s64=<VAL>(<N>-0)  LCV,lin+2 '' <V1> '/' <N>i2  DEC <N> .
+@     IF <V1>(1-<N>) eq MACH$  LCV '' <VAL> <V1>(1-<N>)/'MACH$' .
+@     FND,<RCAB>,B,0002,,lin+1 '' \
+      'Parameter'   ,ICE_URL ,<LIN>i6  GTO lin+2 .
+@     LN+,<RCAB>,B,0002,5,1  LDV <LIN>i4=6 .
+@     WRL,<RCAB>,B,0002,<LIN> 'Parameter','Siz','Value','Sub Sys' \
+        ,'ICE_URL     ',' 64',<VAL>,SHL .
+@     LDV <VAL>=<ISH> .
+@     FND,<RCAB>,B,0002,,lin+1 '' \
+      'Parameter'   ,ICE_SVCHND ,<LIN>i6  GTO lin+2 .
+@     LN+,<RCAB>,B,0002,5,1  LDV <LIN>i4=6 .
+@     WRL,<RCAB>,B,0002,<LIN> 'Parameter','Siz','Value','Sub Sys' \
+        ,'ICE_SVCHND  ',' 12',<VAL>,SHL .
+@     SRR,<RCAB>,B,0002 '' 'Parameter'  ,1 .
+@     CMU .
+@     CALL,<RCAB>,I,0072 0001 ('RADS','') .
+@.
+@     WAT 1000 .
+@.
+@     TXT,"Loading Web Server Images",<MSG2> .
+@.
+@     BRK,0,A .
+ The Web Server is now being initialized with icons
+ and other image files required for <PRD>.
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@.
+@     CALL,<RCAB>,I,0073 0001 ('RADS','N',<STS>h3) .
+@     IF <STS> eq 'OK',(0123) ; .
+@.
+@     MBX,OK,A,'Incomplete Installation' "/\
+ The <PRD> images could not be copied to the Web Server.//\
+ After installation is finished, start <PRD> and execute/\
+ the RADS System Setup task to complete this process." \
+      O,(0123) .
+@.
+@0123:. -------------------- Update Run Registration ---------------------------
+@.
+@     TXT,"Updating Run Registration",<MSG2> .
+@.
+@     BRK,0,A .
+ Adding run script registration in Department <DPT>
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@     WAT 2000 .
+@.
+@     DFU RUNDRW$,<DPT> .
+@     LDV <SOR>h1=N  BFN,RUNDRW$,<DPT>,,lin+1 k 'RUN'   ,k  LDV <SOR>=Y .
+@.
+@     IF <REG> eq 0  SRH,-4 dn 'Run'  ,RADS  RNM -4 ; .
+@     MAU,-4,RUNDRW$,<DPT>,lin+1 dm 'Run'   ,1 'Run'  ,1  DEL .
+@.
+@     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+4 .
+@     DVS,RUNDRW$,<DPT> \
+      'RUN','USER','TYPE','RID','F','I/O','LINE','MODE','1MDNF' \
+      <RUN>h,<USR>h,<DRN>a,<RPT>i,<F>h,<IOS>a,<LLP>a,<CBS>s,<FLG>h .
+@     IF SYSNAM$(1-1) ne 'M' . ; GTO lin+4 .
+@     DVS,RUNDRW$,<DPT> \
+      'Run','User','Drawer','Rpt','F','I/O','Line','Cab','1MDNF' \
+      <RUN>h,<USR>h,<DRN>a,<RPT>i,<F>h,<IOS>a,<LLP>a,<CBS>s,<FLG>h .
+@.
+@     LDV,lw <USR>=USER$  IF <ALL> eq 1  LDV <USR>='' ; .
+@     LDV <F>=Y,<CBS>=ALL .
+@     LZR,-4 <LNQ>i3  DEC,5 <LNQ> .
+@     FDR,RUNDRW$,<DPT> '' 2-1 *,= ,<LIN>i6 .
+@     LN+,RUNDRW$,<DPT>,<LIN>,<LNQ> .
+@.
+@     LDV <RLN>i4=5 .
+@0124:INC <RLN>,<LIN> .
+@     RDL,-4,<RLN>,0125 'Run','D','Rpt','I/O','LLP','1MDNF' \
+      <RUN>,<DRW>h,<RPT>,<IOS>,<LLP>,<FLG> .
+@     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+5 .
+@     LDV <DRC>a6=<RCAB><DRW>  DEF,n <DRN>,<DRC> .
+@     WRL,RUNDRW$,<DPT>,<LIN> \
+      'RUN','USER','TYPE','RID','F','I/O','LINE','MODE','1MDNF' \
+        ,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG> .
+@     IF SYSNAM$(1-1) ne 'M' . ; GTO lin+5 .
+@     LDV,r <DRN>(0-5)=<DRW><RCAB> .
+@     WRL,RUNDRW$,<DPT>,<LIN> \
+      'Run','User','Drawer','Rpt','F','I/O','Line','Cab','1MDNF' \
+        ,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG> .
+@     GTO 0124 .
+@0125:.
+@     IF <SOR> eq 'Y'  SRR,RUNDRW$,<DPT> '' 'RUN','USER'  ,1,2d ; .
+@     CMU .
+@.
+@. ------------------------------ MQS PLUS! Install ----------------------------
+@.
+@     TXT,"MQS Plus! Installation",<MSG2> .
+@.
+@     BRK,0,A .
+ Now loading reports, runs and data required
+ for the MQS Plus! Form Designer.
+@     BRK  TXT,-0,2,99,<TXTH> .
+@.
+@     LDV <DIR>h7=MQSPLUS,<DRW>h1=F .
+@     PCR,0,F,-0,,,0129 <PTH>'\'<DIR>'\TOC.TXT'  RNM -3 .
+@.
+@     WIN,<WIN1>,12,17,08,30,lgra,c '' <WIN2>i6 .
+@     TXT,"",<WIN2>,01,01,07,29,lgra,<B> .
+@     FON,t,'Arial',08,pd .
+@     TXT,"MQS Plus! Modules",<WIN2>,02,03,01,40,bla/lgra,c .
+@     FON,t .
+@     TXT,"",<WIN2>,04,03,01,25,whi,<B> .
+@     TXT,"",<WIN2>,04,03,01,25,whi,<B> <TXT1>i6 .
+@     TXT,"0%",<WIN2>,06,13,01,05,dblu/lgra,cs <TXT2>i6 .
+@.
+@     TOT,-3 a 'Lin' ' ',+ <TLN>i12 .
+@     LDV <LIN>i4=5,<XLN>i12=0,<OW>i4=0 .
+@0126:INC <LIN>  RDL,-3,<LIN>,0128 'Rpt','Lines','Typ','PR','Title' \
+      <RPT>a,<RLN>i,<EXT>h,<PRO>h,<TIT>s79 .
+@     INC,<RLN> <XLN>  JUV,r <RPT>  LDV,l <RID>h5=<RPT><DRW> .
+@     IF <PRO> ne 'Y',(lin+2) ; IF <OVR> ne 'Y',(lin+2) ; .
+@     LZR,<RCAB>,<DRW>,<RPT>,lin+1  GTO 0126 .
+@     JUV,z <RPT>  LDV <BIN>h1=N .
+@     IF <EXT> eq 'BMP','PCX','JPG','GIF','BIN'  LDV <BIN>h1=Y ; .
+@     PCR,<RCAB>,<DRW>,<RPT>,<BIN> <PTH>'\'<DIR>'\RPT-'<RPT>.<EXT> .
+@     CHG <PC>i4 <XLN> / <TLN> * 100  CHG <W>i4 <PC> * 25 / 100  LDV,p <PC> .
+@     IF <W> eq <OW>,(lin+2) ; LDV <OW>=<W> .
+@     TXT,"",<TXT1>,04,03,01,<W>,dblu  TXT,"<PC>%",<TXT2>,,,,,,s .
+@     IF <RPT> eq 0,(0127) ; .
+@     LOK,<RCAB>,<DRW>,<RPT>  WRL,<RCAB>,<DRW>,<RPT>,2 2-79 .,<TIT>  ULK .
+@     GTO 0126 .
+@0127:.
+@     RNM -5 .
+@     DRW,<RCAB>,<DRW> <CPL>i3 .
+@     LOK,<RCAB>,<DRW>,0 .
+@     LDV <LNX>i6=1 .
+@     INC <LNX>  RDL,-5,<LNX>,lin+4 1-<CPL> <DAT>s  CHG <WID>i3 <CPL> - 1 .
+@     IF <DAT>(1-1) eq '.'  IF <WID> gt 79  LDV <WID>=79 ; .
+@     WRZ,<RCAB>,<DRW>,<LNX> 2-<WID> <DAT>(1-1),<DAT>(2-<WID>) .
+@     GTO lin-3 .
+@     ULK .
+@     GTO 0126 .
+@0128:.
+@     TXT,"",<TXT1>,04,03,01,25,dblu  TXT,"100%",<TXT2>,,,,,,s .
+@     WAT 1000 .
+@     CLS,<WIN2>  LDV <WIN2>=0 .
+@.
+@0129:. ------------------- Application Shell Installation ---------------------
+@.
+@     TXT,"Application Shell Installation",<MSG2> .
+@.
+@     BRK,0,A .
+ Now loading reports, runs and data required
+ for the Application Shell.
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@.
+@     FDR,<RCAB>,B,0004,,,0132 '' 'ScreenID'  ,'SHELLAUTIMP' .
+@     RLN 'Rpt' <RPT>i .
+@0130:.
+@     CALL,<RCAB>,I,<RPT> \
+      0001*('$SHELL',<SCAB>,<FIL>,<PTH>,<WIN1>,<MSX>s80,<STS>h3) .
+@     IF <STS> ne 'OK',(0131) ; .
+@     GTO 0132 .
+@0131:.
+@     LDV,p <MSX> .
+@     MBX,YN,Q,'Installation Failure' "/\
+ Shell installation failed with the following error: //\
+ [<MSX>] //\
+ Do you want to try again?" \
+      Y,(0130),N,(0199) .
+@.
+@0132:. --------------------- Initialize ICECLEAN ------------------------------
+@.
+@     IF <SYS> eq 'BIS',(0141) ; .
+@.
+@     TXT,"State Management Cleanup",<MSG2> .
+@.
+@     BRK,0,A .
+ Setting up the ICECLEAN service to monitor and
+ maintain the ICE State Management environment.
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@     WAT 2000 .
+@.
+@     FND,RUNDRW$,MSTRD$,,0141 '' 2-12  ,ICECLEAN<ICAB> .
+@     LDV <DRW>h1=F .
+@     DRW,0012,<DRW>,0141  LZR,0012,<DRW>,0001,0141 .
+@     DVS,0012,<DRW>,0001,0141 'IQ','From Run' .
+@     FND,0012,<DRW>,0001,,lin+2 '' 'IQ','From Run'   ,d,ICECLEAN<ICAB> .
+@     GTO 0141 .
+@     LDV <INT>h5=01:00 .
+@     LDV <DRW>h1=E .
+@     FDR,<ICAB>,<DRW>,27,,,lin+2 '' 'Keyword'  ,ICECleanup .
+@     RLN 'Value(1-5)' <INT> .
+@     DC d1=today;t2=time;t2=time+t1(<INT>) <DAT>a6,<NOW>a6,<TIM>a6 .
+@     IF <NOW> ge <TIM>  DC d1=today+1 <DAT> ; .
+@     BRK  DLR,-0 .
+@     SCH,<DAT>,<TIM> br ICECLEAN<ICAB> .
+@.
+@0141:. --------------------- Update Developer Profiles ------------------------
+@.
+@     TXT,"Updating Developer Profiles",<MSG2> .
+@.
+@     BRK,0,A .
+ Initializing profile tables associated with
+ <PRD> developer preferences.
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@     WAT 2000 .
+@.
+@     LDV,w <USR>h12=USER$  LDV,rw <DPN>a4=DEPN$ .
+@     FDR,<RCAB>,D,0001,,,0142 '' 'Profile'   ,RADSINSTALL .
+@     RLN 'Rpt' <RPT>i .
+@     DVS,<RCAB>,D,<RPT> 'Path' <PTX>s  LDV <PTX>=<PTH> .
+@     LOK,<RCAB>,D,<RPT> .
+@     BFN,<RCAB>,D,<RPT>,,lin+1 '' 'User','Dept' \
+        ,<USR>,<DPN> ,<LIN>i6  GTO lin+2 .
+@     LN+,<RCAB>,D,<RPT>,<LIN>,1  INC <LIN> .
+@     WRL,<RCAB>,D,<RPT>,<LIN> 'User','Dept','Path'   ,<USR>,<DPN>,<PTX> .
+@     ULK .
+@0142:.
+@     FDR,<RCAB>,D,0001,,,0143 '' 'Profile'   ,ICONPATH .
+@     RLN 'Rpt' <RPT>i .
+@     DVS,<RCAB>,D,<RPT> 'Path' <PTX>s  LDV <PTX>=<PTH>'\ICONS' .
+@     LOK,<RCAB>,D,<RPT> .
+@     BFN,<RCAB>,D,<RPT>,,lin+1 '' 'User','Dept' \
+        ,<USR>,<DPN> ,<LIN>i6  GTO lin+2 .
+@     LN+,<RCAB>,D,<RPT>,<LIN>,1  INC <LIN> .
+@     WRL,<RCAB>,D,<RPT>,<LIN> 'User','Dept','Path'   ,<USR>,<DPN>,<PTX> .
+@     ULK .
+@0143:.
+@     FDR,<RCAB>,D,0001,,,0144 '' 'Profile'   ,WELCOME .
+@     RLN 'Rpt' <RPT>i .
+@     LZR,<RCAB>,D,<RPT> <LNS>i6  IF <LNS> lt 6,(0144) ; .
+@     LOK,<RCAB>,D,<RPT> .
+@     LN-,<RCAB>,D,<RPT>,6,9999 .
+@     ULK .
+@0144:.
+@     FDR,<RCAB>,D,0001,,,0150 '' 'Profile'   ,WELCOMETOOLS .
+@     RLN 'Rpt' <RPT>i .
+@     LZR,<RCAB>,D,<RPT> <LNS>i6  IF <LNS> lt 6,(0150) ; .
+@     LOK,<RCAB>,D,<RPT> .
+@     LN-,<RCAB>,D,<RPT>,6,9999 .
+@     ULK .
+@.
+@0150:. ------------------------- Install Complete -----------------------------
+@.
+@     LDV <APP>h3=NO .
+@     PCR,0,A,-0,,,lin+1 <PTH>'\'  FND,-0,,lin+1 a 2-5 [,APPS]  LDV <APP>=YES .
+@.
+@     LDV <STP>=0 .
+@     FON,t,'Arial',08,pdb .
+@     IF <APP> eq 'YES' . ; GTO lin+2 .
+@     BTN,<WIN1>,28,28,02,20 'Install Demo Applications' <BTN1>i6 .
+@     BTN,<WIN1>,28,52,02,08 'Done' <QUIT>i6 .
+@     FON,t .
+@0151:.
+@     TXT,"<PRD> installation complete",<MSG1> .
+@     IF <APP> eq 'YES' . ; GTO lin+2 .
+@     TXT,"Load Demo Applications now (recommended) or press Done",<MSG2> .
+@     IF <APP> ne 'YES' . ; GTO lin+2 .
+@     TXT,"Press Done to finish",<MSG2> .
+@.
+@     BRK,0,A .
+ Installation Details:
+
+ [Destination]
+  <PRD> Cabinet: <RCAB>
+  SHELL Cabinet: <SCAB>
+
+ [Components Installed]
+  <PRD> Development Studio
+  MQS Plus! Form Designer
+
+ [Run Script Registration]
+@     IF <REG> eq 0 . ; GTO lin+2 .
+  Name: RADSLITE
+@     IF <REG> eq 1 . ; GTO lin+2 .
+  Names: RADSLITE , RADS
+@     LDV,w <USR>h12=USER$  IF <ALL> eq 1  LDV <USR>=All ; .
+  Department: <DPT>    User(s): <USR>
+
+@     BRK  TXT,-0,2,99,<TXTH> .
+@     LDV <TXT1>i6=0 .
+@     IF <APP> ne 'YES',(0152) ; .
+@     FON,t,'Arial',09,pd .
+@     BRK,0,A .
+
+Prebuilt Demo Applications
+are available in this package.
+
+These are working examples of
+both RADS Lite and Professional
+Applications that you can
+examine and execute.
+
+Press Install Demo Applications
+to load them now, or you may use
+the RADS Lite Import function to
+install them later on.
+
+@     BRK  TXT,-0,2,14,<WIN1>,07,36,14,40,whi/dcya,<B>c <TXT1>i6 .
+@     FON,t .
+@0152:.
+@     IF <APP> eq 'YES'  LDV <FOC>i6=<BTN1> . ; LDV <FOC>i6=<QUIT> .
+@0153:.
+@     INP,<FOC>,,<WIN1> .
+@     IF <APP> eq 'YES' . ; GTO lin+2 .
+@     IF ACTINP$ eq <BTN1>,(0160) ; .
+@     IF ACTINP$ eq <QUIT>,(0197) ; .
+@     GTO 0153 .
+@.
+@0160:. ------------------- Install Demo Applications --------------------------
+@.
+@     PCR,0,A,-0,,,0191 <PTH>'\APPS\TOC.TXT' .
+@     DVS,-0,0191 'AppID','Description','Size' .
+@     SRH,-0,,,0191 adn 'AppID'   ,$SHELL  RNM -1 .
+@.
+@     BRK,0,A .
+*
+*AppID    Description                 Status        Size Ver
+*========.===========================.=============.====.====.
+  ACME     Decision Support System                        Pro
+  JDOE     JDOE Legacy Modernization                      Lite
+@     IF <SYS> eq 'ICE' . ; GTO lin+2 .
+  ICEME    BIS Web Access (ICE-PCME)                      Pro
+  BMS      Business Management System                     Pro
+@     IF <SYS> eq 'ICE' . ; GTO lin+2 .
+  JSX      Browser JavaScript Examples                    Lite
+  SAMPLES  RADS Application Samples                       Pro
+  RADSDEMO RADS Demonstration System                      Lite
+@     IF <SYS> eq 'ICE' . ; GTO lin+2 .
+  FUSION   Fusion Charts Examples                         Pro
+@     BRK .
+@     MCH,-1,-0 adm 'AppID','Size(0-4)'   ,1,a 'AppID','Size'   ,1,a  RNM -1 .
+@     LZR,-1 <N>i2  DEC,4 <N>  IF <N> gt 9  LDV <N>=9 ; .
+@.
+@     CLS,<TXT1>,<BTN1> .
+@     TXT,"Install Demo Applications",<MSG1> .
+@     TXT,"See list below for installation status",<MSG2> .
+@.
+@     BRK,0,A .
+ Select Application and press Install to load it.
+ Press Details for more information such as database requirements.
+@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@     CHG <V1>i2 <N> + 7 .
+@     TXT,"",<WIN1>,11,02,<V1>,60,lgra,<B> <BOX1>i6 .
+@     FON,t,'Arial',08,pd .
+@     TXT,"Application",<WIN1>,13,04,01,14,bla/lgra <TXT1>i6 .
+@     TXT,"Description",<WIN1>,13,13,01,14,bla/lgra <TXT2>i6 .
+@     TXT,"Status     ",<WIN1>,13,41,01,08,bla/lgra <TXT3>i6 .
+@     TXT,"RADS       ",<WIN1>,12,56,01,06,bla/lgra <TXT4>i6 .
+@     TXT,"Version    ",<WIN1>,13,56,01,08,bla/lgra <TXT5>i6 .
+@     FON,t .
+@     BRK,0,A  BRK  LN+,-0,1,1 .
+@     LST,-0,2,Y,app.tmp,<WIN1>,14,03,<N>,58,bla/whi '' <LST1>i6 .
+@     FON,t,'Arial',08,pdb .
+@     CHG <V1>i2 <N> + 15 .
+@     BTN,<WIN1>,<V1>,23,02,08 'Install' <BTN1>i6 .
+@     BTN,<WIN1>,<V1>,32,02,08 'Details' <BTN2>i6 .
+@     FON,t .
+@.
+@     CALL,<RCAB>,I,0060 0001 () .
+@0161:.
+@     TOT,-1 '' 'Status'  ,='Not Installed'  RNM -1 .
+@.
+@     LDV <LIN>i2=4 .
+@0162:INC <LIN>  RDL,-1,<LIN>,0163 'AppID' <APP>h  LDV,p <APP> .
+@     FDR,<RCAB>,B,0101,,,0162 '' 'AppID'   ,<APP> .
+@     RLN 'Cab' <ACAB>i4 .
+@     LZR,<ACAB>,B,0002,0162 .
+@     DVS,<ACAB>,B,0002,0162 'Parameter','Value' .
+@     FDR,<ACAB>,B,0002,,,0162 '' 'Parameter'   ,APP_VERSION .
+@     RLN 'Value' <AVER>s  RDL,<ACAB>,B,0002,2 73-8 <ADAT>h .
+@     LDV <STS>h13=Installed .
+@     PCR,<RCAB>,B,-0,,,lin+6 <PTH>'\APPS\'<APP>'\B-0002.TXT' .
+@     FDR,-0,,,lin+3 '' 'Parameter'   ,APP_VERSION .
+@     RLN 'Value' <NVER>s .
+@     RDL,-0,2 73-8 <NDAT>h .
+@     IF <AVER> ne <NVER>  LDV <STS>h13=Outdated ; .
+@     IF <ADAT> ne <NDAT>  LDV <STS>h13=Outdated ; .
+@     WRL,-1,<LIN> 'Status'   ,<STS> .
+@     GTO 0162 .
+@0163:.
+@     LDV <HL>i2=1 .
+@     FDR,-1,,,lin+2 '' 'Status'  ,'Not Installed'/ ,'Outdated' .
+@     CHG <HL> LINE$ - 4 .
+@     BRK,0,A .
+@     RDC,-1,5 'AppID','Description','Status','Ver' <V1>h,<V2>s,<V3>h,<V4>h .
+ <V1> <V2> <V3>  <V4>
+@     BRK .
+@     LST,-0,2,Y,app.tmp,<LST1>,,,,,,,<HL> '' .
+@0164:.
+@     INP,<LST1>,,<WIN1> .
+@     IF ACTINP$ eq <BTN1>,(0165) ; . Install
+@     IF ACTINP$ eq <BTN2>,(0166) ; . Details
+@     IF ACTINP$ eq <QUIT>,(0168) ; .
+@     GTO 0164 .
+@.
+@0165:. Install
+@.
+@     INP,<LST1>,Y .
+@     CHG <LIN>i6 LITEM$ + 4 .
+@     RDL,-1,<LIN>,0164 'AppID','Status' <APP>h,<STS>h .
+@     LDV,p <APP>,<PTX>s64=<PTH>'\APPS\' .
+@     IF <STS> eq 'Installed','Outdated',(0169) ; .
+@     FDR,<RCAB>,B,0101,,,lin+4 '' 'AppID'  ,<APP> .
+@     RLN 'Cab' <ACAB>i4 .
+@     LZR,<ACAB>,B,0002,lin+2 .
+@     DVS,<ACAB>,B,0002,lin+1 'Parameter','Value'  GTO 0169 .
+@.
+@     PCR,<RCAB>,B,-0,,,0164 <PTH>'\APPS\'<APP>'\B-0002.TXT' .
+@     LDV <GUI>h3=YES,<WEB>h3=NO .
+@     FDR,-0,,,lin+1 '' 'Parameter'   ,CLIENT_GUI  RLN 'Value(1-3)' <GUI>h3 .
+@     FDR,-0,,,lin+1 '' 'Parameter'   ,CLIENT_WEB  RLN 'Value(1-3)' <WEB>h3 .
+@     IF <SYS> eq 'BIS'  IF <WEB> eq 'YES'  IF <GUI> ne 'YES',(0164) ; .
+@     IF <SYS> eq 'BIS'  LDV <WEB>=NO ; IF 'YES' eq <GUI>,<WEB> . ; GTO 0164 .
+@     IF <GUI> eq 'YES' . ; GTO 0159 .
+@     LZR,RUNDRW$,MSTRD$,0159  DVS,RUNDRW$,MSTRD$,0159 'Run' .
+@     FDR,RUNDRW$,MSTRD$,,,0159 '' 'Run'  ,<APP> .
+@     IF SYSNAM$(1-1) eq 'M'  RLN 'TYPE','RID' <DRN>a,<RPT>i ; .
+@     IF SYSNAM$(1-1) ne 'M'  RLN 'Drawer','Rpt' <DRN>a,<RPT>i ; .
+@     DEF <DEF>i1,<DRN>  IF <DEF> eq 1,3  LDV,p <DRN> . ; GTO 0159 .
+@     IF <DEF> eq 1  DEF,m <CAB>a4,<DRN>  DEF,a <DRW>h1,<DRN> ; .
+@     IF <DEF> eq 3  LDV <CAB>a4=<DRN>(2-0),<DRW>h1=<DRN>(1-1) ; .
+@     IF <CAB> ge 0 & le MAXCAB$  IF <DRW> ge 'A' & le 'I' . ; GTO 0159 .
+@     DRW,<CAB>,<DRW>,0159  LZR,<CAB>,<DRW>,<RPT>,0159 .
+@     IF <DRW> eq 'I'  IF <RPT> eq 2 . ; GTO 0192 .
+@     LDV <DRW>h1=B  DRW,<CAB>,<DRW>,0192  LZR,<CAB>,B,0004,0192 .
+@     DVS,<CAB>,B,0004,0192 'ScreenID','Cab' .
+@     FDR,<CAB>,B,0004,,,0192 '' 'ScreenID'   ,RADSPROFILE .
+@     RLN 'Cab' <CAB>a  IF <CAB> eq <RCAB>,'',(0159) ; .
+@     LZR,<CAB>,B,0101,0159 .
+@     DVS,<CAB>,B,0101,0159 'AppID' .
+@     FND,<CAB>,B,0101,,0159 '' 'AppID'   ,<APP>  GTO 0192 .
+@0159:.
+@     IF <WEB> eq 'YES' . ; GTO 0169 .
+@     LDV <DRW>h1=D  FDR,<ICAB>,<DRW>,1,,,0169 '' 'Category'  ,<APP> .
+@     RLN 'Svc Cab','SD' <CAB>a,<DRW>h .
+@     IF <CAB> ge 0 & le MAXCAB$  IF <DRW> ge 'A' & le 'I' . ; GTO 0169 .
+@     DRW,<CAB>,<DRW>,0169 .
+@     LDV <DRW>h1=B  DRW,<CAB>,<DRW>,0192  LZR,<CAB>,B,0004,0192 .
+@     DVS,<CAB>,B,0004,0192 'ScreenID','Cab' .
+@     FDR,<CAB>,B,0004,,,0192 '' 'ScreenID'   ,RADSPROFILE .
+@     RLN 'Cab' <CAB>a  IF <CAB> eq <RCAB>,'',(0169) ; .
+@     LZR,<CAB>,B,0101,0169 .
+@     DVS,<CAB>,B,0101,0169 'AppID' .
+@     FND,<CAB>,B,0101,,0169 '' 'AppID'   ,<APP>  GTO 0192 .
+@0169:.
+@     FDR,<RCAB>,B,0004 '' 'ScreenID'   ,SHELLIMPORT .
+@     RLN 'Rpt' <RPT>i .
+@     HID .
+@     CALL,<RCAB>,I,<RPT> 0001*(<APP>,<PTX>) .
+@     SHW .
+@     CALL,<RCAB>,I,0098 0001 (<APP>,'','','') .
+@     GTO 0161 .
+@.
+@0166:. Application Details
+@.
+@     INP,<LST1>,Y .
+@     CHG <LIN>i6 LITEM$ + 4 .
+@     RDL,-1,<LIN>,0164 'AppID','Size' <APP>h,<SIZ>h  LDV,p <APP>,<SIZ> .
+@     PCR,<RCAB>,B,-0,,,0164 <PTH>'\APPS\'<APP>'\B-0002.TXT'  RNM -2 .
+@.
+@     BRK,0,A .
+
+       Application ID: <APP>
+@     FDR,-2,,,lin+2 '' 'Parameter'   ,APP_TITLE    RLN 'Value' <V1>s50 .
+    Application Title: <V1>
+                 Size: <SIZ> MB
+@     FDR,-2,,,lin+2 '' 'Parameter'   ,APP_VERSION  RLN 'Value' <V1>h5 .
+              Version: <V1>
+@     RDL,-2,2,lin+2 73-8 <V1>h .
+                 Date: <V1>
+@     FDR,<RCAB>,B,0101,,,lin+1 '' 'AppID'  ,<APP>  GTO lin+3 .
+  Currently Installed: No
+@     GTO 0167 .
+@     RLN 'Cab' <ACAB>h  LDV,p <ACAB> .
+  Currently Installed: Yes
+@     FDR,<ACAB>,B,0002,,,lin+3 '' 'Parameter'  ,APP_VERSION .
+@     RLN 'Value' <V1>h5 .
+    Installed Version: <V1>
+@     RDL,<ACAB>,B,0002,2,lin+2 73-8 <V1>h .
+       Installed Date: <V1>
+  Application Cabinet: <ACAB>
+@     CNT,<ACAB>,B,0003 '' 'Cab'  ,1 .
+@     SRH,-0,,,lin+2 dn@ 'Cab'  ,@  RDL,-0,6 'Cab' <V1>h  LDV,p <V1> .
+     Database Cabinet: <V1>
+@0167:.
+@     PCR,0,A,-0,,,lin+7 <PTH>'\APPS\'<APP>'\B-0011.TXT'  RNM -3 .
+@     SRH,-3,,,lin+1 dp 'ScreenID'  ,ABOUTTHISAPP  GTO lin+3 .
+@     SRH,-3,,,lin+1 dp 'ScreenID'  ,WELCOME  GTO lin+2 .
+@     SRH,-3,,,lin+4 dpl(*) 'ScreenID','Sub Sys'  ,MAINMENU,APP .
+
+@     RDC,-0,7,,,lin+2 1-80 <V1>s .
+<V1>
+@     BRK  RNM -3 .
+@.
+@     IF DWCAP$(12-1) eq 1 . ; GTO lin+4 .
+@     PCW,-3,2,0164 %DATADIR%\'About '<APP>.txt .
+@     PC notepad' '"%DATADIR%\'About '<APP>.txt" .
+@     GTO 0164 .
+@.
+fkey,01,''      '',KEY
+fkey,04,''Return'',KEY
+fkey,10,''Quit  '',KEY
+@     BRK  FKY,-0 .
+@     SC q CS .
+@     HID .
+@     DSP,-3 .
+@     SC q cs .
+@     SHW .
+@     FKY .
+@     IF FKEY$ ne 10,(0164) ; .
+@0168:.
+@     FND,-1,,0197 '' 'Status'  ,'Not Installed'/ ,'Outdated' .
+@.
+@     MBX,YN,Q,'Confirmation' "/\
+ Do you want to quit without completing/\
+ installation of all the Demo Applications?//\
+ Note:/\
+ You may use the Import Application/\
+ task to load them at a later time." \
+      N,(0164),Y,(0197) .
+@.
+@. --------------------------------- Errors ------------------------------------
+@.
+@0170:.
+@     SC '' \
+ CS;MSG,1,e,,TIC$'<Installation requires a Graphical Workstation>'TIC$ .
+@     REL .
+@0171:.
+@     MBX,OK,S,'Unable To Proceed' "/\
+ Your workstation software must be upgraded/\
+ to a 32-bit version to install <PRD>" \
+      O,(0199) .
+@0172:.
+@     MBX,OK,S,'Unable To Proceed' "/\
+ To install this product, your system must be/\
+ at or above one of the following levels: //\
+    2200 - 39R1 /\
+     MSW - 2.1  /\
+ Windows - 6.x /\
+    UNIX - 6Rx /\
+     ICE - 2.1 " \
+      O,(0199) .
+@0173:.
+@     MBX,OK,S,'Unable To Proceed' "/\
+ You must have coordinator privileges to perform this installation." \
+      O,(0199) .
+@0174:.
+@     MBX,OK,S,'Unable To Proceed' "/\
+ Your user-id is not permitted to generate a new drawer." \
+      O,(0199) .
+@0175:.
+@     CLS,<WIN2>  LDV <WIN2>=0 .
+@     MBX,RC,S,'Server Access Denied' "/\
+ The Web Server ICE Images directory cannot be accessed./\
+ This may be caused by one of the following reasons://\
+ 1. Your workstation logon does not have proper authorization./\
+     Ensure the user-id is a member of the [ MAPPER Users ] group.//\
+ 2. Your workstation is connected in passthru mode to this system, and/\
+     the network session logon may not have proper authorization.//\
+ 3. The ICE Image Directory path is not configured properly./\
+     Use ICEADMIN to verify this is set up correctly." \
+      C,(0199),R,(0007) .
+@0176:.
+@     LDV <FOC>=<EDT1> .
+@     MBX,OK,S,'Invalid Path' "/\
+ Path name contains invalid filename characters." \
+      O,(0021) .
+@0177:.
+@     LDV <FOC>=<EDT1> .
+@     MBX,OK,S,'Invalid Path' "/\
+ Verify path name.//\
+ Installation file(s) not found in path specified." \
+      O,(0021) .
+@0178:.
+@     MBX,OK,S,'Invalid Path' "/\
+ The media you are attempting to install from does not/\
+ contain the correct product files for <PRD>." \
+      O,(0021) .
+@0179:.
+@     MBX,OK,S,'Invalid Path' "/\
+ Verify path name.//\
+ Setup information file is missing or corrupted." \
+      O,(0020) .
+@0180:.
+@     LDV <FOC>=<EDT1> .
+@     MBX,OK,S,'Invalid Department' "/\
+ Invalid run registration department number." \
+      O,(0061) .
+@0181:.
+@     MBX,OK,S,'Registration Conflict' "/\
+ A RADSLITE run is already registered for that Department./\
+ It is not compatible with this product.//\
+ You must specify a different Department or User, or/\
+ remove the current RADSLITE run registration to proceed." \
+      O,(0061) .
+@0182:.
+@     MBX,OK,S,'Restriction' "/\
+ The installed version of <PRD> software is <OLV>./\
+ You are attempting to overwrite it with version <LVL>.//\
+ Older versions cannot be installed over newer ones." \
+      O,(0061) .
+@0183:.
+@     MBX,OK,S,'Invalid Cabinet' "/\
+ You must specify an even numbered cabinet" \
+      O,(0071) .
+@0184:.
+@     MBX,OK,S,'Invalid Cabinet' "/\
+ Cabinet must be 16 through MAXCAB$" \
+      O,(0071) .
+@0185:.
+@     MBX,OK,S,'Invalid Cabinet' "/\
+ Cabinet must be 2 through MAXCAB$" \
+      O,(0071) .
+@0186:.
+@     MBX,OK,S,'Invalid Cabinet' "/\
+ Cabinets 200 through 250 are reserved and may not be used." \
+      O,(0071) .
+@0187:.
+@     LDV,p <CAB> .
+@     MBX,OK,S,'Invalid Cabinet' "/\
+ Cabinet <CAB> is not empty.//\
+ To use this cabinet you must delete it first." \
+      O,(0071) .
+@0188:.
+@     MBX,OK,S,'Restriction' "/\
+ The installed version of <PRD> software is <OLV>./\
+ You are attempting to overwrite it with version <LVL>.//\
+ Older versions cannot be installed over newer ones." \
+      O,(0071) .
+@0189:.
+@     MBX,OK,S,'Invalid Cabinet' "/\
+ <PRD> and Application Shell cannot be loaded in the same cabinet." \
+      O,(0071) .
+@0190:.
+@     LDV <FOC>=<EDT1> .
+@     MBX,OK,S,'Invalid File' "/\
+ File number must be 3 through 'MAXFIL$" \
+      O,(0081) .
+@0191:.
+@     MBX,OK,S,'Operation Unavailable' "/\
+ The media you are attempting to install from/\
+ does not contain the Demo Applications." \
+      O,(0151) .
+@0192:.
+@     MBX,OK,S,'Registration Conflict' "/\
+ An Application with the same ID (<APP>) already exists.//\
+ This may occur if the Application is currently registered/\
+ with another RADS environment on this system.//\
+ Either remove the existing Application and try again,/\
+ or Import it later using a different Application ID." \
+      O,(0164) .
+@.
+@. ------------------------------- Termination ---------------------------------
+@.
+@0196:.
+@     DCU .
+@     ULK .
+@     FON,t .
+@     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+3 .
+@     SC x eel;rsm .
+@     GTO 0199 .
+@     CHG <ERR>i4 CERR$ .
+@     RAR 0196 .
+@     GTO 0198 .
+@0197:.
+@     IF <DPT> eq DEPN$,MSTRD$ . ; GTO 0199 .
+@     MBX,YN,Q,'Installation Complete' "/\
+ Do you want to start <PRD> now?" \
+      Y,(lin+1),N,(0199) .
+@     BRK  DLR,-0 .
+@     RUN "RADSLITE" .
+@0198:.
+@     IF <STP> eq 0,(0199) ; .
+@     MBX,YN,Q,'Confirmation' "/\
+ Are you sure you want to abandon installation of <PRD>?" \
+      N,(lin+1),Y,(0199) .
+@     IF <STP> eq 1,(0011) ; .
+@     IF <STP> eq 2,(0021) ; .
+@     IF <STP> eq 3,(0031) ; .
+@     IF <STP> eq 4,(0061) ; .
+@     IF <STP> eq 5,(0071) ; .
+@     IF <STP> eq 6,(0081) ; .
+@     IF <STP> eq 7,(0091) ; .
+@     IF <STP> eq 8,(0101) ; .
+@.
+@     MBX,OK,S,'Installation Aborted' "/\
+ <PRD> installation was aborted/\
+ before all components could be loaded.//\
+ To complete this installation, you/\
+ will need to restart this process." \
+      O,(0199) .
+@0199:.
+@     IF <WIN2> ne 0  CLS,<WIN2> ; IF <WIN1> ne 0  CLS,<WIN1> ; .
+@     RETURN .
