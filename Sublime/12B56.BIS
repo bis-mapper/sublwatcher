@@ -7,7 +7,7 @@
 *===============================================================================
 :INCLUDE,ECAB$,B,1 .                                                            INCLUDE
 @     ldv <run>h1=y,<category>s20='ICE_MODULES_TEST',<status>h1 .
-@ rdb ldv <path>s256='\\excaliber\is\bis-files\site-E\' .
+@     ldv <path>s256='\\excaliber\is\bis-files\site-E\' .
 @     ldv <path>=<path>(p)'WINNE\Employee_Menu\ICE_Modules\' .
 @     RSR,SUBLCOMMON_ configVars_ .
 @     LDV <FOLDER>s20='ice_modules' .
