@@ -119,9 +119,9 @@ On this line you can type a report that you want to open just as you do in MAPPE
     - `export 56 -f Sublwatcher` Exports the entire category into a folder of your choice, set by the -f option
     - `export f56 -f Sublwatcher` Exports only drawer F in category 56 to a folder of your choice.
     - `export b56 -f Sublwatcher` Exports only drawer B in category 56 to a folder of your choice.
-* BIS ERB - An easy way to wrap variables in the HTML output area.
-    - `ctrl + shift + .` will wrap a variable like this `<%<VAR>(p)%>` saves you a few extra keystrokes
 
+####  BIS ERB - An easy way to wrap variables in the HTML output area.
+`ctrl + shift + .` will wrap a variable like this `<%<VAR>(p)%>` saves you a few extra keystrokes
 
 #### Help on a command or <html> tag
 
