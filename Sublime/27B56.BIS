@@ -38,7 +38,7 @@
 @     IF SYSNAM$(1-1) eq 'M'  IF MAPER$(1-2) lt 37,(0181) ; .
 @.ew  IF CPRIV$ eq 0,(0182) ; .
 @     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+3 .
-@     FDR,USRDRW$,DEPN$,,,0183 '' 'USER' Â¬,USER$ .
+@     FDR,USRDRW$,DEPN$,,,0183 '' 'USER' ¬,USER$ .
 @     RLN 46-1 <X>h  IF <X> ne '',(0183) ; .
 @.
 @. --------------------------- Initialize Screen -------------------------------
@@ -215,7 +215,7 @@
 @     LDV,rq <LLP>i5=<DAT>(<COL>-0),3(,) .
 @     LDV,lq <FLG>h5=<DAT>(<COL>-0),4(,) .
 @     LDV,lq <RDRW>h4=<DAT>(<COL>-0),5(,) .
-Â¬<RUN>Â¬<RPT>Â¬<IOS>Â¬<LLP>Â¬<FLG>Â¬<RDRW>Â¬
+¬<RUN>¬<RPT>¬<IOS>¬<LLP>¬<FLG>¬<RDRW>¬
 @     GTO 0027 .
 @0028:.
 @     BRK  RNM -4 .
@@ -234,7 +234,7 @@
 @     LDV,qr <RCAB>i4=<DAT>(<COL>-0),3(,),\
              <RDRW>h1=<DAT>(<COL>-0),4(,),\
              <RRPT>i4=<DAT>(<COL>-0),5(,) .
-Â¬<ECAB>Â¬<EDRW>Â¬<ERPT>Â¬<RCAB>Â¬<RDRW>Â¬<RRPT>Â¬
+¬<ECAB>¬<EDRW>¬<ERPT>¬<RCAB>¬<RDRW>¬<RRPT>¬
 @     GTO 0128 .
 @0129:BRK  RNM -7 .
 @     IF <STP> eq 2,(0029) ; .
@@ -371,7 +371,7 @@ fkey,10,''Quit  '',KEY
 @     IF <DPT> ge 1 & le 2000 . ; GTO 0186 .
 @     LZR,RUNDRW$,<DPT>,0186 .
 @     DVS,RUNDRW$,<DPT>,0186 'Run' .
-@     FDR,RUNDRW$,<DPT>,,,0044 '' 'Run' Â¬,<RUN> .
+@     FDR,RUNDRW$,<DPT>,,,0044 '' 'Run' ¬,<RUN> .
 @.
 @     IF SYSNAM$(1-1) eq 'M'  RLN 'TYPE','RID' <DRN>a,<RPT>i ; .
 @     IF SYSNAM$(1-1) ne 'M'  RLN 'Drawer','Rpt' <DRN>a,<RPT>i ; .
@@ -624,7 +624,7 @@ fkey,10,''Quit  '',KEY
 @     DFU SECDRW$,SECRPT$ .
 @     LDV <LIN>i6=5 .
 @     INC <LIN>  RDL,SECDRW$,SECRPT$,<LIN>,0083 1-1,29-9 <LT>h,<DC>a .
-@     IF <LT> ne Â¬,(lin-1) ; .
+@     IF <LT> ne ¬,(lin-1) ; .
 @     LDV,l <DC>  IF <DC>(2-0) eq <CAB> IF <DC>(1-1) eq <DRW> . ; GTO lin-2 .
 @     LN-,SECDRW$,SECRPT$,<LIN>,1 .
 @0083:.
@@ -632,15 +632,15 @@ fkey,10,''Quit  '',KEY
 @     IF SYSNAM$(1-1) eq 'M' \
       LDV,rz <ZCB>a4=<CAB>  LDV <DRC>h6=<DRW>' '<ZCB> ; .
 @     LDV <SOR>i1=0 .
-@     BFN,SECDRW$,SECRPT$,,lin+1 k 2-26 Â¬,k  LDV <SOR>=1  GTO lin+2 .
-@     BFN,SECDRW$,SECRPT$,,lin+1 kf'2,1' 34-4,32-1 Â¬,k,k  LDV <SOR>=2 .
+@     BFN,SECDRW$,SECRPT$,,lin+1 k 2-26 ¬,k  LDV <SOR>=1  GTO lin+2 .
+@     BFN,SECDRW$,SECRPT$,,lin+1 kf'2,1' 34-4,32-1 ¬,k,k  LDV <SOR>=2 .
 @     FDR,SECDRW$,SECRPT$ '' 2-1 *,= ,<LIN>i6 .
 @     LN+,SECDRW$,SECRPT$,<LIN>,1  INC <LIN> .
 @     CHG <CLM>i3 56 + SECGRP$ .
-@     WRL,SECDRW$,SECRPT$,<LIN> 2-26,32-6,<CLM>-1 Â¬,<DNM>,<DRC>,W .
-@     WRL,SECDRW$,SECRPT$,<LIN> 28-1,38-1,56-1 Â¬,Â¬,Â¬,Â¬ .
-@     IF <SOR> eq 1 SRR,SECDRW$,SECRPT$ '' 2-26,29-9 Â¬,1,2 ; .
-@     IF <SOR> eq 2 SRR,SECDRW$,SECRPT$ '' 34-4,32-1 Â¬,2n,1 ; .
+@     WRL,SECDRW$,SECRPT$,<LIN> 2-26,32-6,<CLM>-1 ¬,<DNM>,<DRC>,W .
+@     WRL,SECDRW$,SECRPT$,<LIN> 28-1,38-1,56-1 ¬,¬,¬,¬ .
+@     IF <SOR> eq 1 SRR,SECDRW$,SECRPT$ '' 2-26,29-9 ¬,1,2 ; .
+@     IF <SOR> eq 2 SRR,SECDRW$,SECRPT$ '' 34-4,32-1 ¬,2n,1 ; .
 @     CMU .
 @.
 @0084:. Update Drawer Description
@@ -671,7 +671,7 @@ fkey,10,''Quit  '',KEY
 @0090:. ---------------------- Load Runs & Data --------------------------------
 @.
 @     PCR,0,F,-0,,,0185 <PTX>'\'<DNM>(p)'\TOC.TXT'  RNM -3 .
-@     TOT,-3 '' 'Lines' 'Â¬',+ <TLN>i12 .
+@     TOT,-3 '' 'Lines' '¬',+ <TLN>i12 .
 @.
 @     TXT,"Software Modules",<MSG1> .
 @     TXT,"... Please Wait ...",<MSG2> .
@@ -704,7 +704,7 @@ fkey,10,''Quit  '',KEY
 @     IF <BIN> eq Y  LDV,p <REPORT>s79=<TTL> .
 @.
 @.    #  Database rids
-@     FDR,-7,,,0092 '' 'Ecab','Ed','Erpt' Â¬,<TCAB>,<TDRW>,<RPT> .
+@     FDR,-7,,,0092 '' 'Ecab','Ed','Erpt' ¬,<TCAB>,<TDRW>,<RPT> .
 @     RLN 'RCab','Rd','RRpt' <RCAB>i,<RDRW>h,<RRPT>a .
 @     LZR,<TCAB>,<TDRW>,<RPT>,0092  ,<TCC>i3,<THLN>i3  DEC <THLN> .
 @     PCR,<CAB>,<DRW>,-0,<BIN> <PTH>'\'<DNM>(p)'\'<SVCNME>(p)<REPORT> .
@@ -778,8 +778,8 @@ fkey,10,''Quit  '',KEY
 @     WAT 1000 .
 @.
 @     DFU RUNDRW$,<DPT> .
-@     LDV <SOR>h1=N  BFN,RUNDRW$,<DPT>,,lin+1 k 'RUN' Â¬,k  LDV <SOR>=Y .
-@     MAU,-4,RUNDRW$,<DPT>,0101 dm 'Run' Â¬,1 'Run' Â¬,1 .
+@     LDV <SOR>h1=N  BFN,RUNDRW$,<DPT>,,lin+1 k 'RUN' ¬,k  LDV <SOR>=Y .
+@     MAU,-4,RUNDRW$,<DPT>,0101 dm 'Run' ¬,1 'Run' ¬,1 .
 @     DEL .
 @0101:.
 @     IF SYSNAM$(1-1) ne 'M',(0102) ; .
@@ -806,16 +806,16 @@ fkey,10,''Quit  '',KEY
 @     LDV <DRC>a6=<CAB><RDRW>  DEF,n <DRN>,<DRC> .
 @     WRL,RUNDRW$,<DPT>,<LIN> \
       'RUN','USER','TYPE','RID','F','I/O','LINE','MODE','1MDNF' \
-      Â¬,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG> .
+      ¬,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG> .
 @     GTO 0104 .
 @0105:.
 @     LDV,r <DRN>(0-5)=<RDRW><CAB> .
 @     WRL,RUNDRW$,<DPT>,<LIN> \
       'Run','User','Drawer','Rpt','F','I/O','Line','Cab','1MDNF' \
-      Â¬,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG> .
+      ¬,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG> .
 @     GTO 0104 .
 @0106:.
-@     IF <SOR> eq Y  SRR,RUNDRW$,<DPT> '' 'RUN','USER' Â¬,1,2d ; .
+@     IF <SOR> eq Y  SRR,RUNDRW$,<DPT> '' 'RUN','USER' ¬,1,2d ; .
 @     CMU .
 @     GTO 0150 .
 @.
