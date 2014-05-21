@@ -110,8 +110,6 @@
 @     FON,t,'Arial',09,pd .
 @     BRK,0,A .
 
- This program allows you to:
-
  - Seamlessly edit MAPPER files in Sublime Text.
  - Modern programming environment compared to MPC.
  - Blazing fast file editing that doesn''t get in your way.
