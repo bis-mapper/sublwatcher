@@ -4,10 +4,10 @@
 *====.=.====.======.===.====================.===============================================================================.
 	  56 E    0     39 BIS
 	  56 E    1     16 BIS
-	  56 E    2    530 exe                      watchmedo.exe
-	  56 E    3    406 exe                      mfxfile.exe
+	  56 E    2    533 exe                      watchmedo.exe
+	  56 E    3    408 exe                      mfxfile.exe
 	  56 E    4     12 BIS                      watchmedo-script.py
-	  56 E    5    557 EXE                      GROWLNOTIFY.EXE
+	  56 E    5    560 EXE                      GROWLNOTIFY.EXE
 	  56 E    6     10 jpg                      cmd.jpg
 	  56 E    7     33 png                      failed.png
 	  56 E    8     25 png                      pending.png

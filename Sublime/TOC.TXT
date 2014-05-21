@@ -20,7 +20,7 @@
 	  56 B   15     55 BIS                      BIS_BUG
 	  56 B   16     55 BIS                      BisPkg
 	  56 B   17     22 BIS                      Object Name: SUBL_CTL
-	  56 B   18     31 BIS                      Object Name: SBS
+	  56 B   18     32 BIS                      Object Name: SBS
 	  56 B   19     31 BIS                      RJUST
 	  56 B   20    130 BIS                      EXPORT
 	  56 B   21    116 BIS                      IMPORT
@@ -29,6 +29,6 @@
 	  56 B   24    131 BIS                      DIFF
 	  56 B   25     38 BIS                      BDT
 	  56 B   26    109 BIS                      Build
-	  56 B   27    998 BIS                      SETUP+ - Installation Routine
+	  56 B   27   1025 BIS                      SETUP+ - Installation Routine
 	  56 B   28    880 BIS                      SETUP+ - Installation Routine
 	  56 B   99    249 BIS                      Error_Routine        Error Routine

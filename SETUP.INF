@@ -10,8 +10,8 @@
  Drawer          = D,132,Sublime - Vendor
  Drawer          = E,132,Sublime - Executables
 [RUNS]
- Run             = SUBL,2,,,NYNWN,B
  Run             = SUBLWATCHER,3,,,NYNWN,B
+ Run             = SUBL,2,,,NYNWN,B
 [DATABASE]
  Report          = 56,C,3,56,C,14
  Report          = 56,C,8,56,C,13

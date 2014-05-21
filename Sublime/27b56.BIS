@@ -10,8 +10,8 @@
 *  will assume no liability for defects or problems resulting from its use.    *
 *===============================================================================
 @.
-@     RER,0,E,2 0001 RAR 0196 .
-@     LDV <*PTH>s256='D:\users\winne\sublwatcher\site-e\sublwatcher\setup.run' .
+@     RER,0,E,2 0001  RAR 0196 .
+@.dbg LDV <*PTH>s256='D:\users\winne\sublwatcher\site-e\sublwatcher\setup.run' .
 @     CALL 0001() .
 @     IF CDRW$ ne 0  ESR ; IF LINK$ ne 0,(END) ; REL .
 @.
@@ -100,6 +100,7 @@
 @     TXT,"",<WIN1>,01,01,25,62,bla/whi,<B> <TXT1>i6 .
 @     TXT,"",<WIN1>,01,01,25,20,bla <TXT2>i6 .
 @     LDV <PIC1>i6=0 .
+@     IF <PTX> ne '<PTX>'  IF <PTX> gt ' ' . ; GTO lin+2 .
 @     PIC,,,,,<PTX>'\DOCS\IMAGES\SUBLIME.JPG',<WIN1>,05,05,-1,-1 '' <PIC1>i6 .
 @     FON,t,'Arial',14,pd .
 @     BRK,0,A .
@@ -174,6 +175,8 @@
 @     INP,<EDT1>,Y .
 @     CHG INPUT$ <PTX>s256  LDV,p <PTX> .
 @0024:.
+@     SYS .
+@     SRH,-0,,,lin+1 '' 'RUNNAME' ¬,<PRD>  GTO 0195 .                   running?
 @     DEF,s <SIZ>i3,<PTX>  IF <SIZ> ge 9 . ; GTO lin+2 .
 @     IF <PTX>(0-9) eq 'SETUP.RUN'  LDV <PTX>(0-9)=''  LDV,p <PTX> ; .
 @     IF <PTX> ne ''  IF <PTX>(0-1) eq '\'  LDV <PTX>(0-1)=''  LDV,p <PTX> ; .
@@ -188,9 +191,10 @@
 @     LN+,-2,1,1  WRL,-2,2 2-1 *,= .
 @     SRH,-2,,,0185 dp 2-8 [,DRAWERS] .
 @     SRH,-0,,,0185 dp 2-6 ,Drawer <DCNT>i2 .
-@     LDA <DRWA>h1[<DCNT>]  LDV <CNT>i2=0
+@     RNM -6 .
+@     IF <DRWA> eq '<DRWA>'  LDA <DRWA>h1[<DCNT>]  LDV <CNT>i2=0 . ; .
 @     LOC,-0,4,0185 afm 2-79 Drawer ,<LIN>i4  DEC,2 <LIN> .
-@0025:INC <LIN>,<CNT>  RDL,-0,<LIN>,0026 1-80 <DAT>s .
+@0025:INC <LIN>,<CNT>  RDL,-6,<LIN>,0026 1-80 <DAT>s .
 @     LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
 @     LDV,lq <DDRW>h1=<DAT>(<COL>-0),0(,),\
              <CPL>i3=<DAT>(<COL>-0),1(,),\
@@ -205,7 +209,7 @@
 * Run Name   .Rpt .I/O  .LLP   1MDNF.RDRW.
 *============.====.=====.=====.=====.====.
 @     SRH,-2,,,0028 dp 2-8 [,RUNS]  LDV <LIN>i6=3 .
-@0027:INC <LIN>  LOC,-0,<LIN>,0028 afm 2-79 Run ,<LIN> .
+@0027:INC <LIN>  LOC,-0,<LIN>,0028 afm 2-79  RUN ,<LIN> .
 @     RDL,-0,<LIN> 1-80 <DAT>s  LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
 @     LDV,lq <RUN>h12=<DAT>(<COL>-0),0(,) .
 @     LDV,rq <RPT>i4=<DAT>(<COL>-0),1(,) .
@@ -259,7 +263,30 @@
 
  Software License Agreement
  --------------------------
- (Terms & conditions detailed starting at this line)
+ Portions copyright © IT Resource Solutions (ITRS)
+ Permission has been granted by ITRS for use of their software in this package.
+ Copying or reuse of that software is prohibited without the expressed consent
+ of ITRS.
+
+ The MIT License (MIT)
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
 
 @     BRK  RNM -1 .
 @.
@@ -285,7 +312,7 @@
 @     IF ACTINP$ eq <NEXT>,(0035) ; .
 @     IF ACTINP$ eq <BTN1>,(0034) ; .
 @     IF ACTINP$ eq <BACK>,(0032) ; .
-@     IF ACTINP$ eq <READ>  PC,bcw "START <PTH>\readme.txt" ; .
+@     IF ACTINP$ eq <READ>  PC,bcw "START <PTH>\README.MD" ; .
 @     IF ACTINP$ eq <EXIT>,(0198) ; .
 @     GTO 0031 .
 @0032:.
@@ -402,7 +429,7 @@ fkey,10,''Quit  '',KEY
 @     LDV <GEN>h1=Y .
 @     LDV <CAB>i4=20,<DRW>h1=B  IF SYSNAM$(1-1) eq 'M'  LDV <CAB>=2 ; .
 @     DEF,q <LGTH>i2,<DRWA>  LDV <CNT>i2=0 .
-@0051:INC <CNT>  IF <CNT> gt <LGTH>,(0052)
+@0051:INC <CNT>  IF <CNT> gt <LGTH>,(0052) .
 @     LDV <CHKDRW>h1=<DRWA>[<CNT>] .
 @     DRW,<CAB>,<CHKDRW>,0051  LDV <CNT>i2=0 .
 @     INC,2 <CAB>  IF <CAB> le MAXCAB$,(0051) ; GTO 0187 .
@@ -534,7 +561,7 @@ fkey,10,''Quit  '',KEY
 @     LOC,-0,4,0185 afm 2-79 Drawer ,<LIN>i4  DEC,2 <LIN> .
 @     INC <LIN>,<CNT>  RDL,-0,<LIN>,0073 1-80 <DAT>s .
 @     LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
-@     LDV,lq <DDRW>h1=<DAT>(<COL>-0),0(,).
+@     LDV,lq <DDRW>h1=<DAT>(<COL>-0),0(,) .
   Drawer <DDRW><CAB> - Existing drawer will be overwritten
 @     GTO lin-4 .
 @0071:IF <GEN> eq 'Y' . ; GTO 0072 .
@@ -577,10 +604,7 @@ fkey,10,''Quit  '',KEY
 @.
 @. Get List of Drawers
 @.
-@     SRH,-2,,,0185 dp 2-8 [,DRAWERS] .
-@     LOC,-0,4,0185 afm 2-79 Drawer ,<DLIN>i4  DEC <DLIN> .
-@     RNM -6 .
-@.
+@     LZR,-6 ,,<DLIN>i4 .
 @0081:INC <DLIN> .
 @     RDL,-6,<DLIN>,0098 1-80 <DAT>s  LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
 @     LDV,lq <DRW>h1=<DAT>(<COL>-0),0(,),\
@@ -623,7 +647,7 @@ fkey,10,''Quit  '',KEY
 @     LDV <LIN>i6=5 .
 @     INC <LIN>  RDL,SECDRW$,SECRPT$,<LIN>,0083 1-1,29-9 <LT>h,<DC>a .
 @     IF <LT> ne ¬,(lin-1) ; .
-@     LDV,l <DC>  IF <DC>(2-0) eq <CAB> IF <DC>(1-1) eq <DRW> . ; GTO lin-2 .
+@     LDV,l <DC>  IF <DC>(2-0) eq <CAB>  IF <DC>(1-1) eq <DRW> . ; GTO lin-2 .
 @     LN-,SECDRW$,SECRPT$,<LIN>,1 .
 @0083:.
 @     LDV,r <DRC>h6=<DRW><CAB> .
@@ -637,8 +661,8 @@ fkey,10,''Quit  '',KEY
 @     CHG <CLM>i3 56 + SECGRP$ .
 @     WRL,SECDRW$,SECRPT$,<LIN> 2-26,32-6,<CLM>-1 ¬,<DNM>,<DRC>,W .
 @     WRL,SECDRW$,SECRPT$,<LIN> 28-1,38-1,56-1 ¬,¬,¬,¬ .
-@     IF <SOR> eq 1 SRR,SECDRW$,SECRPT$ '' 2-26,29-9 ¬,1,2 ; .
-@     IF <SOR> eq 2 SRR,SECDRW$,SECRPT$ '' 34-4,32-1 ¬,2n,1 ; .
+@     IF <SOR> eq 1  SRR,SECDRW$,SECRPT$ '' 2-26,29-9 ¬,1,2 ; .
+@     IF <SOR> eq 2  SRR,SECDRW$,SECRPT$ '' 34-4,32-1 ¬,2n,1 ; .
 @     CMU .
 @.
 @0084:. Update Drawer Description
@@ -707,20 +731,20 @@ fkey,10,''Quit  '',KEY
 @     LZR,<TCAB>,<TDRW>,<RPT>,0092  ,<TCC>i3,<THLN>i3  DEC <THLN> .
 @     PCR,<CAB>,<DRW>,-0,<BIN> <PTH>'\'<DNM>(p)'\'<SVCNME>(p)<REPORT> .
 @     RNM -8  LZR,-8 ,<CC>i3,<HLN>i3  DEC <HLN> .
-@     BRK,0,I  RDC,-8,2,<HLN> 1-<CC> <HDGS>s
+@     BRK,0,I  RDC,-8,2,<HLN> 1-<CC> <HDGS>s .
 <HDGS>
 @     BRK  RNM -8 .
-@     BRK,0,I  RDC,<TCAB>,<TDRW>,<RPT>,2,<HLN> 1-<TCC> <HDGS>s
+@     BRK,0,I  RDC,<TCAB>,<TDRW>,<RPT>,2,<HLN> 1-<TCC> <HDGS>s .
 <HDGS>
 @     BRK .
 @     DIF,-0,-8 ' ' .
 @     LZR,-0 <LNS>i7,,<HLN>i3  LDV <DIF>h1=N  IF <LNS> eq <HLN>,(0092) .
-@     INC,4 <HLN>  LOC,-0,<HLN> AFM 2-79 DATE ,<LIN>I4  INC <LIN> .
-@     LOC,-0,<LIN>,LIN1 AFM 2-2 '>+'  LDV <DIF>=Y .
-@     LOC,-0,<LIN>,LIN1 AFM 2-2 '<-'  LDV <DIF>=Y .
+@     INC,4 <HLN>  LOC,-0,<HLN> afm 2-79 DATE ,<LIN>I4  INC <LIN> .
+@     LOC,-0,<LIN>,lin+1 afm 2-2 '>+'  LDV <DIF>=Y .
+@     LOC,-0,<LIN>,lin+1 afm 2-2 '<-'  LDV <DIF>=Y .
 @.
 @.    #  Replace headings if new
-@     IF <DIF> EQ Y . ; GTO 0092 .
+@     IF <DIF> eq Y . ; GTO 0092 .
 @     LOK,<TCAB>,<TDRW>,<RPT> .
 @     ADD,<TCAB>,<TDRW>,<RPT>,-8 .
 @     REP,<TCAB>,<TDRW>,<RPT> .
@@ -849,7 +873,7 @@ fkey,10,''Quit  '',KEY
 .Installation Notes
 *===============================================================================
 
- <PRD> has been successfully installed in Drawer <DRW><CAB>.
+ <PRD> has been successfully installed in Cabinet <CAB>.
 
  Please sign off as MAPCOORD and sign on as yourself.
  You can then open up a report in Sublime by typing SUBL on the control line.
@@ -963,6 +987,11 @@ fkey,01,''Quit  '',KEY
 @     MBX,OK,S,'Invalid Installation File(s)' "/\
  Run drawer was not specified in SETUP.INF file.//\
  Please specify and try again." \
+      O,(0021) .
+@0195:.
+@     LDV <FOC>=<EDT1> .
+@     MBX,OK,S,<PRD>' is already running' "/\
+ Please close all current instances of <PRD>." \
       O,(0021) .
 @.
 @. ------------------------------- Termination ---------------------------------

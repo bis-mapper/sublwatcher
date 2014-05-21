@@ -72,7 +72,8 @@ Navigate to that folder and select the *sublime_text.exe*
 
 ## Your file watching folder (sublwatcher)
 
-Some files are downloaded to your workstation when you run the `SUBL` command.  These files are stored in the sublwatcher folder (%USERPROFILE% usually c:\users\winne\sublwatcher\)
+Some files are downloaded to your workstation when you run the `SUBL` command.  These files are stored in the sublwatcher folder 
+`%USERPROFILE% usually c:\users\winne\sublwatcher\`
 
 A browse utility will pop up asking you where you want to put the file that your opening.
 <img src="https://raw.github.com/bis-mapper/sublwatcher/master/Docs/Images/browse.png" border="0">
@@ -86,7 +87,7 @@ The BIS report that you typed `SUBL` on will now be saved in this folder and you
 You can also type `SUBLWATCHER` on the control line to start the file watching utility.  This skips the process of opening up a specific report and starts the script that watches the files.  This is helpful if you already have the files you want open and just need to start saving the changes back to MAPPER.
 
 ## Thanks
-A big thanks goes out to John Thalhuber for allowing me to use portions of his code in this software.  Especially the SETUP+ package that he created which allows this application to be installed onto others systems with very little friction.  
+A big thanks goes out to John Thalhuber and ITRS for allowing me to use portions of their code in this software.  I'm also very appreciative of the SETUP+ package that he created which allows this application to be installed onto other MAPPER systems with very little friction.  
 
 I'd also like to thank North Star Mutual for allowing me to develop this product.  It's been a joy to be able to build a tool that allows me to get my job done faster with less pain and frustration.  
 
