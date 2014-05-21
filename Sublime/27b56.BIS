@@ -184,7 +184,6 @@
 @     IF <PTX> ge 'A' & le 'Z'  LDV <DRV>h1=<PTX>,<PTX>h2=<DRV>':' ; .
 @     PCR,0,A,-0,,,0185 <PTX>'\'  RNM -1 .
 @     FND,-1,,0185 a 2-11 S,ETUP.INF .
-@     FND,-1,,0185 a 2-11 T,OC.TXT .
 @     PCR,0,A,-0,,,0185 <PTX>'\'SETUP.INF  RNM -2 .
 @     LN+,-2,1,1  WRL,-2,2 2-1 *,= .
 @     SRH,-2,,,0185 dp 2-8 [,DRAWERS] .
@@ -197,10 +196,9 @@
              <CPL>i3=<DAT>(<COL>-0),1(,),\
              <DNM>s26=<DAT>(<COL>-0),2(,) .
 @     LDA <DRWA>[<CNT>]=<DDRW> .
+@     PCR,0,F,-0,,,0185 <PTX>'\'<DNM>(p)'\TOC.TXT' .
 @     GTO 0025 .
 @0026:.
-@. @     PCR,0,F,-0,,,0185 <PTX>'\'TOC.TXT  RNM -3 .
-@. @     TOT,-3 '' 'Lines' ' ',+ <TLN>i12 .
 @     BRK,0,A .
 .
 *
