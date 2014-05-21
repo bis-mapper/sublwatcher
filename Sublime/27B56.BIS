@@ -826,7 +826,7 @@ fkey,10,''Quit  '',KEY
 @     TXT,"Installation Complete",<MSG1> .
 @     TXT,"Press Finish to display Installation Notes",<MSG2> .
 @     BRK,0,A .
-  <PRD> successfully loaded into Drawer <DRW><CAB>.
+  <PRD> successfully loaded into Cabinet <CAB>.
 
 @     LZR,-4 <LNS>i4  IF <LNS> lt 6,(lin+2) ; .
   Run script(s) were registered in Department <DPT>.
