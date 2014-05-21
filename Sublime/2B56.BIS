@@ -26,7 +26,7 @@
 @.
 @.    #  Load the application configuration variables from table
 @0007:RSR,SUBLCOMMON_ configVars_ .
-@     IF <RPT> eq 0  REL . ; .                                                  No report on display?
+@     IF <RPT> eq 0 REL . ; .                                                  No report on display?
 @     CALL,SUBLCOMMON_ chkIceSvc_ (<CAB>,<DRW>,<RPT>,<SRVS>s30) .               Ice Service?
 @     LDV,p <SRVS> .
 @.
@@ -77,7 +77,7 @@
 @0020:PC,r '"'<APPPATH>(p)'" -a' '"'<FILE>':'<DLN>(p)'"' .                      start editor with options
 @     SYS .                                                                     system
 @.ew  IF <CALL> ne Y  PC 'cmd /C '"<BATFILE>" . ; .                             start / check if running
-@     FDR,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,USER$,<SUBLWATCHER>  GTO 0199 .    currently running?
+@0025:FDR,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,USER$,<SUBLWATCHER>  GTO 0199 .    currently running?
 @     WAT 1000 .                                                                pause for first time
 @     RUN <SUBLWATCHER> .                                                       start file watcher utility
 @.

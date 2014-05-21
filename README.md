@@ -11,7 +11,7 @@ In order to use this you must first install Sublime Text and Package Control.
 
 [Package Control](https://sublime.wbond.net/installation)
 
-## Dependencies
+<!-- ## Dependencies
 
 Python 2.7
 
@@ -29,7 +29,10 @@ Install Growl for Windows
 
 * Follow setup instructions
 * Once installed open up the growl GUI interface (System Icon tray in windows)
-* You can set your default Displays and check to start program when computer is booted.
+* You can set your default Displays and check to start program when computer is booted. -->
+
+## SUBLWATCHER - Load application package
+
 
 ## sublwatcher - install in BIS
 
@@ -81,4 +84,4 @@ Portions copyright © IT Resource Solutions (ITRS)
 Permission has been granted by ITRS for use of their software in this package.
 Copying or reuse of that software is prohibited without the expressed consent of ITRS.
 
-The remaining code is licensed under the GPL found here [License](https://github.com/bis-mapper/sublwatcher/blob/master/LICENSE.md)
+The remaining code is licensed under the MIT license found [here](http://opensource.org/licenses/MIT)

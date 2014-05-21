@@ -10,7 +10,10 @@
 *  will assume no liability for defects or problems resulting from its use.    *
 *===============================================================================
 @.
-@ rdb CALL 0001() .
+@     RER,0,E,2 0001 RAR 0196 .
+@     IF USER$ eq ED . ; GTO LIN+2 .
+@     LDV <*PTH>s256='D:\users\winne\sublwatcher\site-e\sublwatcher\setup.run' .
+@     CALL 0001() .
 @     IF CDRW$ ne 0  ESR ; IF LINK$ ne 0,(END) ; REL .
 @.
 @0001:() .
@@ -36,7 +39,7 @@
 @     IF SYSNAM$(1-1) eq 'M'  IF MAPER$(1-2) lt 37,(0181) ; .
 @.ew  IF CPRIV$ eq 0,(0182) ; .
 @     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+3 .
-@     FDR,USRDRW$,DEPN$,,,0183 '' 'USER'  ,USER$ .
+@     FDR,USRDRW$,DEPN$,,,0183 '' 'USER' 	,USER$ .
 @     RLN 46-1 <X>h  IF <X> ne '',(0183) ; .
 @.
 @. --------------------------- Initialize Screen -------------------------------
@@ -105,9 +108,9 @@
 @     BRK  TXT,-0,2,2,<WIN1>,03,23,02,40,bla/whi <TXT3>i6 .
 @     FON,t,'Arial',09,pd .
 @     BRK,0,A .
- (This program works seamlessly with MAPPER to allow you to modify/edit MAPPER files)
- (It allows for a more modern programming environment over a traditional MPC screen)
- (It is highly configurable and customizable to do just about anything to fit your needs)
+ (This program works seamlessly with MAPPER to allow you to modify/edit files)
+ (It allows for a modern programming environment over a traditional MPC screen)
+ (It is highly configurable and customizable to do just about anything)
  _____________________________________________
 
  This wizard will guide you through the steps
@@ -184,34 +187,60 @@
 @     PCR,0,A,-0,,,0185 <PTX>'\'SETUP.INF  RNM -2 .
 @     LN+,-2,1,1  WRL,-2,2 2-1 *,= .
 @     SRH,-2,,,0185 dp 2-8 [,DRAWERS] .
-@     LOC,-0,4,0185 afm 2-79 Drawer ,<LIN>i4 .
-@     RDL,-0,<LIN> 1-80 <DAT>s  LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
-@     LDV,lq <CPL>i3=<DAT>(<COL>-0),1(,),<DNM>s26=<DAT>(<COL>-0),2(,) .
-@     PCR,0,F,-0,,,0185 <PTX>'\'TOC.TXT  RNM -3 .
-@     TOT,-3 '' 'Lines' ' ',+ <TLN>i12 .
+@     SRH,-0,,,0185 dp 2-6 ,Drawer <DCNT>i2 .
+@     LDA <DRWA>h1[<DCNT>]  LDV <CNT>i2=0
+@     LOC,-0,4,0185 afm 2-79 Drawer ,<LIN>i4  DEC,2 <LIN> .
+@0025:INC <LIN>,<CNT>  RDL,-0,<LIN>,0026 1-80 <DAT>s .
+@     LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
+@     LDV,lq <DDRW>h1=<DAT>(<COL>-0),0(,),\
+             <CPL>i3=<DAT>(<COL>-0),1(,),\
+             <DNM>s26=<DAT>(<COL>-0),2(,) .
+@     LDA <DRWA>[<CNT>]=<DDRW> .
+@     GTO 0025 .
+@0026:.
+@. @     PCR,0,F,-0,,,0185 <PTX>'\'TOC.TXT  RNM -3 .
+@. @     TOT,-3 '' 'Lines' ' ',+ <TLN>i12 .
 @     BRK,0,A .
 .
 *
-* Run Name   .Rpt .I/O  .LLP   1MDNF.
-*============.====.=====.=====.=====.
-@     SRH,-2,,,0026 dp 2-8 [,RUNS]  LDV <LIN>i6=3 .
-@0025:INC <LIN>  LOC,-0,<LIN>,0026 afm 2-79 Run ,<LIN> .
+* Run Name   .Rpt .I/O  .LLP   1MDNF.RDRW.
+*============.====.=====.=====.=====.====.
+@     SRH,-2,,,0028 dp 2-8 [,RUNS]  LDV <LIN>i6=3 .
+@0027:INC <LIN>  LOC,-0,<LIN>,0028 afm 2-79 Run ,<LIN> .
 @     RDL,-0,<LIN> 1-80 <DAT>s  LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
 @     LDV,lq <RUN>h12=<DAT>(<COL>-0),0(,) .
 @     LDV,rq <RPT>i4=<DAT>(<COL>-0),1(,) .
 @     LDV,rq <IOS>i5=<DAT>(<COL>-0),2(,) .
 @     LDV,rq <LLP>i5=<DAT>(<COL>-0),3(,) .
 @     LDV,lq <FLG>h5=<DAT>(<COL>-0),4(,) .
-  <RUN> <RPT> <IOS> <LLP> <FLG>
-@     GTO 0025 .
-@0026:.
+@     LDV,lq <RDRW>h4=<DAT>(<COL>-0),5(,) .
+	<RUN>	<RPT>	<IOS>	<LLP>	<FLG>	<RDRW>	
+@     GTO 0027 .
+@0028:.
 @     BRK  RNM -4 .
 @     LDV,p <PTH>s256=<PTX> .
-@.
-@     IF <STP> eq 2,(0027) ; .
+@     BRK,0,A .
+.
+*     E.    .    .R.    .
+*ECab d.ERpt.RCab.d.RRpt.
+*====.=.====.====.=.====.
+@     SRH,-2,,,0129 dp 2-8 [,DATABASE]  LDV <LIN>i6=3 .
+@0128:INC <LIN>  LOC,-0,<LIN>,0129 afm 2-79 Report ,<LIN> .
+@     RDL,-0,<LIN>,0129 1-80 <DAT>s  LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
+@     LDV,qr <ECAB>i4=<DAT>(<COL>-0),0(,),\
+             <EDRW>h1=<DAT>(<COL>-0),1(,),\
+             <ERPT>i4=<DAT>(<COL>-0),2(,) .
+@     LDV,qr <RCAB>i4=<DAT>(<COL>-0),3(,),\
+             <RDRW>h1=<DAT>(<COL>-0),4(,),\
+             <RRPT>i4=<DAT>(<COL>-0),5(,) .
+	<ECAB>	<EDRW>	<ERPT>	<RCAB>	<RDRW>	<RRPT>	
+@     GTO 0128 .
+@0129:BRK  RNM -7 .
+@     IF <STP> eq 2,(0029) ; .
 @     LDV <PTQ>h1=N .
 @     GTO 0010 .
-@0027:.
+@0029:.
+@.
 @     CLS,<TXT1>,<TXT2>,<EDT1> .
 @.
 @0030:. --------------------- Display License Agreement ------------------------
@@ -341,7 +370,7 @@ fkey,10,''Quit  '',KEY
 @     IF <DPT> ge 1 & le 2000 . ; GTO 0186 .
 @     LZR,RUNDRW$,<DPT>,0186 .
 @     DVS,RUNDRW$,<DPT>,0186 'Run' .
-@     FDR,RUNDRW$,<DPT>,,,0044 '' 'Run'   ,<RUN> .
+@     FDR,RUNDRW$,<DPT>,,,0044 '' 'Run' 	,<RUN> .
 @.
 @     IF SYSNAM$(1-1) eq 'M'  RLN 'TYPE','RID' <DRN>a,<RPT>i ; .
 @     IF SYSNAM$(1-1) ne 'M'  RLN 'Drawer','Rpt' <DRN>a,<RPT>i ; .
@@ -372,17 +401,19 @@ fkey,10,''Quit  '',KEY
 @     LDV <STP>i1=5 .
 @.
 @     LDV <GEN>h1=Y .
-@     LDV <CAB>a4=16,<DRW>h1=B  IF SYSNAM$(1-1) eq 'M'  LDV <CAB>=2 ; .
-@     DRW,<CAB>,<DRW>,lin+3  CHG <DRW> <DRW> + 1  IF <DRW> le 'I',(lin-0) ; .
-@     LDV <DRW>=B  INC,2 <CAB>  IF <CAB> le MAXCAB$,(lin-1) ; GTO 0187 .
-@     IF SYSNAM$(1-1) eq 'M'  IF <CAB> eq 200  LDV <CAB>=252 ; GTO lin-2 .
-@     LDV,p <CAB> .
+@     LDV <CAB>i4=20,<DRW>h1=B  IF SYSNAM$(1-1) eq 'M'  LDV <CAB>=2 ; .
+@     DEF,q <LGTH>i2,<DRWA>  LDV <CNT>i2=0 .
+@0051:INC <CNT>  IF <CNT> gt <LGTH>,(0052)
+@     LDV <CHKDRW>h1=<DRWA>[<CNT>] .
+@     DRW,<CAB>,<CHKDRW>,0051  LDV <CNT>i2=0 .
+@     INC,2 <CAB>  IF <CAB> le MAXCAB$,(0051) ; GTO 0187 .
+@0052:LDV,p <CAB> .
 @     TXT,"Drawer Location",<MSG1> .
 @     TXT,"Designate drawer to contain <PRD> software.",<MSG2> .
 @     BRK,0,A .
- Specify an empty drawer to load the <PRD> package into.
+ Specify an empty cabinet to load the <PRD> package into.
 
- The first available drawer on your system is: <DRW><CAB>.
+ The first available cabinet on your system is: <CAB>.
 @     BRK  TXT,-0,2,99,<TXTH> .
 @.
 @     TXT,"",<WIN1>,13,15,07,34,lgra,<B> <TXT1>i6 .
@@ -391,10 +422,10 @@ fkey,10,''Quit  '',KEY
 @     TXT,"Drawer",<WIN1>,15,33,01,12,bla/lgra <TXT3>i6 .
 @     FON,t .
 @     EDT,"<CAB>",<WIN1>,16,27,01,04,bla/whi,b<3>n <EDT1>i6 .
-@     LDV <ABC>h8=BCDEFGHI  LCV '' <ABC> <DRW> <HL>i1 .
+@     LDV <ABC>h1=B  LCV '' <ABC> <DRW> <HL>i1 .
 @     BRK,0,A  LDV <N>i1=1 .
 <ABC>(<N>-1)
-@     INC <N>  IF <N> le 8,(lin-1) ; .
+@     INC <N>  IF <N> le 1,(lin-1) ; .
 @     BRK .
 @     IF DWCAP$(12-1) eq 1 . ; GTO lin+2 .
 @     CBX,-0,2,Y,combobox.dat,<WIN1>,16,33,08,01,bla/whi,p,<HL> <EDT2>i6 .
@@ -404,19 +435,19 @@ fkey,10,''Quit  '',KEY
 @     BTN,<BACK> '< Back' .
 @     BTN,<NEXT> 'Next >' .
 @     LDV <FOC>i6=<EDT1> .
-@0051:.
+@0053:.
 @     INP,<FOC>,,<WIN1> .
-@     IF ACTINP$ eq <NEXT>,(0053) ; .
-@     IF ACTINP$ eq <EDT1>,(0053) ; .
-@     IF ACTINP$ eq <EDT2>,(0053) ; .
-@     IF ACTINP$ eq <BACK>,(0052) ; .
+@     IF ACTINP$ eq <NEXT>,(0055) ; .
+@     IF ACTINP$ eq <EDT1>,(0055) ; .
+@     IF ACTINP$ eq <EDT2>,(0055) ; .
+@     IF ACTINP$ eq <BACK>,(0054) ; .
 @     IF ACTINP$ eq <READ>  PC,bcw "START <PTH>\readme.txt" ; .
 @     IF ACTINP$ eq <EXIT>,(0198) ; .
-@     GTO 0051 .
-@0052:.
+@     GTO 0053 .
+@0054:.
 @     CLS,<TXT1>,<TXT2>,<TXT3>,<EDT1>,<EDT2> .
 @     LZR,-4 <LNS>i4  IF <LNS> lt 6,(0030) ; GTO 0040 .
-@0053:.
+@0055:.
 @     INP,<EDT1>,<EDT2> .
 @     CHG INPUT$ <CAB>a4,<DRW>h1  LDV,p <CAB>  LDV,u <DRW> .
 @     DEF <N>i1,<CAB>  IF <N> ne 1,(0188) ; .
@@ -426,20 +457,20 @@ fkey,10,''Quit  '',KEY
 @     IF SYSNAM$(1-1) ne 'M' . ; IF <CAB> ge 2 & le MAXCAB$ . ; GTO 0190 .
 @     IF SYSNAM$(1-1) ne 'M' . ; IF <CAB> ge 200 & le 250,(0191) ; .
 @     IF <DRW> ge 'B' & le 'I' . ; GTO 0192 .
-@     IF SYSNAM$(1-1) ne 'M'  DRW,<CAB>,<DRW>,0055 <CHR>i3 ; .
-@     IF SYSNAM$(1-1) eq 'M'  DRW,<CAB>,<DRW>,0055 <CHR>i3,<CS>i1 ; .
+@     IF SYSNAM$(1-1) ne 'M'  DRW,<CAB>,<DRW>,0057 <CHR>i3 ; .
+@     IF SYSNAM$(1-1) eq 'M'  DRW,<CAB>,<DRW>,0057 <CHR>i3,<CS>i1 ; .
 @     IF <CHR> ne <CPL>,(0191) ; .
 @     IF SYSNAM$(1-1) eq 'M'  IF <CS> ne 1,(0192) ; .
-@     IF STAT1$ eq 0,(0054) ; .
+@     IF STAT1$ eq 0,(0056) ; .
 @.
 @     MBX,YN,Q,'Confirmation' "/\
  The drawer you specified already exists.//\
  Are you sure you want to overlay the existing/\
  reports in Cabinet <CAB> Drawer <DRW>?" \
-      N,(0051) .
-@0054:.
+      N,(0053) .
+@0056:.
 @     LDV <GEN>h1=N .
-@0055:.
+@0057:.
 @     CLS,<TXT1>,<TXT2>,<TXT3>,<EDT1>,<EDT2> .
 @.
 @     IF SYSNAM$(1-1) eq 'M'  IF <GEN> eq 'Y',(0060) ; GTO 0070 .
@@ -498,40 +529,66 @@ fkey,10,''Quit  '',KEY
  If correct, click Install to perform the installation.
 
  [Destination]
-@     IF <GEN> eq 'N' . ; GTO lin+2 .
-  Drawer <DRW><CAB> - Existing drawer will be overwritten
-@     IF <GEN> eq 'Y' . ; GTO lin+2 .
-  Drawer <DRW><CAB> - New drawer will be generated
-@     IF <GEN> eq 'Y'  IF SYSNAM$(1-1) eq 'M' . ; GTO lin+2 .
+@     IF <GEN> eq 'N' . ; GTO 0071 .
+@     SRH,-2,,,0185 dp 2-8 [,DRAWERS] <DCNT>i2 .
+@     SRH,-0,,,0185 dp 2-6 ,Drawer <DCNT>i2 .
+@     LOC,-0,4,0185 afm 2-79 Drawer ,<LIN>i4  DEC,2 <LIN> .
+@     INC <LIN>,<CNT>  RDL,-0,<LIN>,0073 1-80 <DAT>s .
+@     LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
+@     LDV,lq <DDRW>h1=<DAT>(<COL>-0),0(,).
+  Drawer <DDRW><CAB> - Existing drawer will be overwritten
+@     GTO lin-4 .
+@0071:IF <GEN> eq 'Y' . ; GTO 0072 .
+@     SRH,-2,,,0185 dp 2-8 [,DRAWERS] .
+@     SRH,-0,,,0185 dp 2-6 ,Drawer <DCNT>i2 .
+@     LOC,-0,4,0185 afm 2-79 Drawer ,<LIN>i4  DEC,2 <LIN> .
+@     INC <LIN>,<CNT>  RDL,-0,<LIN>,0073 1-80 <DAT>s .
+@     LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
+@     LDV,lq <DDRW>h1=<DAT>(<COL>-0),0(,) .
+  Drawer <DDRW><CAB> - New drawer will be generated
+@     GTO lin-4 .
+@0072:IF <GEN> eq 'Y'  IF SYSNAM$(1-1) eq 'M' . ; GTO 0073 .
   Database file <FIL> will be used
 
-@     LZR,-4 <LNS>i4  IF <LNS> lt 6,(lin+4) ; .
+@0073:LZR,-4 <LNS>i4  IF <LNS> lt 6,(0074) ; .
  [Run Registration]
 @     LDV,w <USR>h12=USER$  IF <ALL> eq 1  LDV <USR>=All ; .
   Department: <DPT>    User(s): <USR>
-@     BRK  TXT,-0,2,99,<TXTH> .
+@0074:BRK  TXT,-0,2,99,<TXTH> .
 @.
 @     BTN,<BACK> '< Back' .
 @     BTN,<NEXT> 'Install' .
 @     LDV <FOC>i6=<NEXT> .
-@0071:.
+@0075:.
 @     INP,<FOC>,,<WIN1> .
-@     IF ACTINP$ eq <NEXT>,(0073) ; .
-@     IF ACTINP$ eq <BACK>,(0072) ; .
+@     IF ACTINP$ eq <NEXT>,(0077) ; .
+@     IF ACTINP$ eq <BACK>,(0076) ; .
 @     IF ACTINP$ eq <READ>  PC,bcw "START <PTH>\readme.txt" ; .
-@     IF ACTINP$ eq <QUIT>,(0198) ; .
-@     GTO 0071 .
-@0072:.
+@     IF ACTINP$ eq <EXIT>,(0198) ; .
+@     GTO 0075 .
+@0076:.
 @     IF SYSNAM$(1-1) eq 'M'  IF <GEN> eq 'Y',(0060) ; .
 @     IF <OVR> eq 'N',(0050) ; .
 @     LZR,-4 <LNS>i4  IF <LNS> lt 6,(0030) ; GTO 0040 .
-@0073:.
+@0077:.
 @     CLS,<READ>,<BACK>,<NEXT>,<EXIT> .
 @     LDV <STP>i1=0 .
 @.
 @0080:. ------------------------ Drawer Setup ----------------------------------
 @.
-@     IF <GEN> eq 'N',(0081) ; .
+@. Get List of Drawers
+@.
+@     SRH,-2,,,0185 dp 2-8 [,DRAWERS] .
+@     LOC,-0,4,0185 afm 2-79 Drawer ,<DLIN>i4  DEC <DLIN> .
+@     RNM -6 .
+@.
+@0081:INC <DLIN> .
+@     RDL,-6,<DLIN>,0098 1-80 <DAT>s  LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
+@     LDV,lq <DRW>h1=<DAT>(<COL>-0),0(,),\
+             <CPL>i3=<DAT>(<COL>-0),1(,),\
+             <DNM>s26=<DAT>(<COL>-0),2(,) .
+@.
+@     IF <GEN> eq 'N',(0082) ; .
 @.
 @. Generate Drawer
 @.
@@ -543,14 +600,14 @@ fkey,10,''Quit  '',KEY
 
 @     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
 @.
-@     WAT 2000 .
+@     WAT 1000 .
 @.
 @     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+2 .
 @     GEN,<CAB>,<DRW> <FIL>,<CPL>,F,,,,<TTL>(1-24),USER$ .
 @     IF SYSNAM$(1-1) ne 'M' . ; GTO lin+2 .
 @     GEN,<CAB>,<DRW>,<CPL> .
 @.
-@0081:. Update Drawer Permission Report
+@0082:. Update Drawer Permission Report
 @.
 @     TXT,"Drawer Registration",<MSG1> .
 @     TXT,"... Please Wait ...",<MSG2> .
@@ -560,32 +617,32 @@ fkey,10,''Quit  '',KEY
 
 @     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
 @.
-@     WAT 2000 .
+@     WAT 1000 .
 @.
-@     IF 0 eq SECDRW$,SECRPT$,SECGRP$,(0083) ; .
+@     IF 0 eq SECDRW$,SECRPT$,SECGRP$,(0084) ; .
 @     DFU SECDRW$,SECRPT$ .
 @     LDV <LIN>i6=5 .
-@     INC <LIN>  RDL,SECDRW$,SECRPT$,<LIN>,0082 1-1,29-9 <LT>h,<DC>a .
-@     IF <LT> ne  ,(lin-1) ; .
+@     INC <LIN>  RDL,SECDRW$,SECRPT$,<LIN>,0083 1-1,29-9 <LT>h,<DC>a .
+@     IF <LT> ne 	,(lin-1) ; .
 @     LDV,l <DC>  IF <DC>(2-0) eq <CAB> IF <DC>(1-1) eq <DRW> . ; GTO lin-2 .
 @     LN-,SECDRW$,SECRPT$,<LIN>,1 .
-@0082:.
+@0083:.
 @     LDV,r <DRC>h6=<DRW><CAB> .
 @     IF SYSNAM$(1-1) eq 'M' \
       LDV,rz <ZCB>a4=<CAB>  LDV <DRC>h6=<DRW>' '<ZCB> ; .
 @     LDV <SOR>i1=0 .
-@     BFN,SECDRW$,SECRPT$,,lin+1 k 2-26   ,k  LDV <SOR>=1  GTO lin+2 .
-@     BFN,SECDRW$,SECRPT$,,lin+1 kf'2,1' 34-4,32-1  ,k,k  LDV <SOR>=2 .
+@     BFN,SECDRW$,SECRPT$,,lin+1 k 2-26 	,k  LDV <SOR>=1  GTO lin+2 .
+@     BFN,SECDRW$,SECRPT$,,lin+1 kf'2,1' 34-4,32-1 	,k,k  LDV <SOR>=2 .
 @     FDR,SECDRW$,SECRPT$ '' 2-1 *,= ,<LIN>i6 .
 @     LN+,SECDRW$,SECRPT$,<LIN>,1  INC <LIN> .
 @     CHG <CLM>i3 56 + SECGRP$ .
-@     WRL,SECDRW$,SECRPT$,<LIN> 2-26,32-6,<CLM>-1   ,<DNM>,<DRC>,W .
-@     WRL,SECDRW$,SECRPT$,<LIN> 28-1,38-1,56-1  , , ,  .
-@     IF <SOR> eq 1 SRR,SECDRW$,SECRPT$ '' 2-26,29-9  ,1,2 ; .
-@     IF <SOR> eq 2 SRR,SECDRW$,SECRPT$ '' 34-4,32-1  ,2n,1 ; .
+@     WRL,SECDRW$,SECRPT$,<LIN> 2-26,32-6,<CLM>-1 	,<DNM>,<DRC>,W .
+@     WRL,SECDRW$,SECRPT$,<LIN> 28-1,38-1,56-1 	,	,	,	 .
+@     IF <SOR> eq 1 SRR,SECDRW$,SECRPT$ '' 2-26,29-9 	,1,2 ; .
+@     IF <SOR> eq 2 SRR,SECDRW$,SECRPT$ '' 34-4,32-1 	,2n,1 ; .
 @     CMU .
 @.
-@0083:. Update Drawer Description
+@0084:. Update Drawer Description
 @.
 @     TXT,"Drawer Description",<MSG1> .
 @     TXT,"... Please Wait ...",<MSG2> .
@@ -595,7 +652,7 @@ fkey,10,''Quit  '',KEY
 
 @     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
 @.
-@     WAT 2000 .
+@     WAT 1000 .
 @.
 @     LDV <ROW>i1=1,<COL>i2=4 .
 @     IF SYSNAM$(1-1) ne 'M'  IF <DRW> eq 'F','G','H','I'  LDV <COL>=39 ; .
@@ -611,6 +668,9 @@ fkey,10,''Quit  '',KEY
 @     ULK .
 @.
 @0090:. ---------------------- Load Runs & Data --------------------------------
+@.
+@     PCR,0,F,-0,,,0185 <PTX>'\'<DNM>(p)'\TOC.TXT'  RNM -3 .
+@     TOT,-3 '' 'Lines' '	',+ <TLN>i12 .
 @.
 @     TXT,"Software Modules",<MSG1> .
 @     TXT,"... Please Wait ...",<MSG2> .
@@ -630,38 +690,81 @@ fkey,10,''Quit  '',KEY
 @     TXT,"",<WIN1>,18,29,01,05,dblu/whi,cs <TXT6>i6 .
 @     JUV,r <CAB> .
 @.
-@     LDV <LIN>i4=5,<XLN>i12=0,<QTY>a4=0 .
-@0091:INC <LIN>  RDL,-3,<LIN>,0095 'Rpt','Lines','Typ','Title' \
-      <RPT>a,<RLN>i,<EXT>h,<TTL>s79 .
+@     LDV <XLN>i12=0,<QTY>a4=0 .
+@     LZR,-3 ,,<RLIN>i4 .
+@0091:INC <RLIN>  RDL,-3,<RLIN>,0097 'Cab','Dw','Rpt','Lines','Typ','Name',\
+        'Title' <TCAB>i,<TDRW>h,<RPT>a,<RLN>i,<EXT>h,<SVCNME>s,<TTL>s .
+@.
 @     INC <QTY>  INC,<RLN> <XLN>  JUV,r <RPT>  LDV,l <RID>h5=<RPT><DRW> .
-@     TXT,"Loading Report: <RID>",<TXT3>  JUV,z <RPT> .
-@     LDV <BIN>h1=N  IF <EXT> eq 'BMP','PCX','JPG','BIN'  LDV <BIN>h1=Y ; .
+@     TXT,"Loading Report: <RID>",<TXT3> .
+@     LDV,pu <REPORT>s20=<RPT>(p)<TDRW><TCAB>(p)'.'<EXT> .
+@     LDV <BIN>h1=N .
+@     IF <EXT> eq 'BMP','PCX','JPG','BIN','EXE','PNG'  LDV <BIN>h1=Y ; .
+@     IF <BIN> eq Y  LDV,p <REPORT>s79=<TTL> .
 @.
-@     PCR,<CAB>,<DRW>,<RPT>,<BIN> <PTH>'\'RPT-<RPT>.<EXT> .
+@.    #  Database rids
+@     FDR,-7,,,0092 '' 'Ecab','Ed','Erpt' 	,<TCAB>,<TDRW>,<RPT> .
+@     RLN 'RCab','Rd','RRpt' <RCAB>i,<RDRW>h,<RRPT>a .
+@     LZR,<TCAB>,<TDRW>,<RPT>,0092  ,<TCC>i3,<THLN>i3  DEC <THLN> .
+@     PCR,<CAB>,<DRW>,-0,<BIN> <PTH>'\'<DNM>(p)'\'<SVCNME>(p)<REPORT> .
+@     RNM -8  LZR,-8 ,<CC>i3,<HLN>i3  DEC <HLN> .
+@     BRK,0,I  RDC,-8,2,<HLN> 1-<CC> <HDGS>s
+<HDGS>
+@     BRK  RNM -8 .
+@     BRK,0,I  RDC,<TCAB>,<TDRW>,<RPT>,2,<HLN> 1-<TCC> <HDGS>s
+<HDGS>
+@     BRK .
+@     DIF,-0,-8 ' ' .
+@     LZR,-0 <LNS>i7,,<HLN>i3  LDV <DIF>h1=N  IF <LNS> eq <HLN>,(0092) .
+@     INC,4 <HLN>  LOC,-0,<HLN> AFM 2-79 DATE ,<LIN>I4  INC <LIN> .
+@     LOC,-0,<LIN>,LIN1 AFM 2-2 '>+'  LDV <DIF>=Y .
+@     LOC,-0,<LIN>,LIN1 AFM 2-2 '<-'  LDV <DIF>=Y .
 @.
-@     CHG <PC>i4 <XLN> / <TLN> * 100  CHG <WID>i4 <PC> * 25 / 100 .
+@.    #  Replace headings if new
+@     IF <DIF> EQ Y . ; GTO 0092 .
+@     LOK,<TCAB>,<TDRW>,<RPT> .
+@     ADD,<TCAB>,<TDRW>,<RPT>,-8 .
+@     REP,<TCAB>,<TDRW>,<RPT> .
+@     ULK .
+@.
+@0092:PCR,<CAB>,<DRW>,<RPT>,<BIN> <PTH>'\'<DNM>(p)'\'<SVCNME>(p)<REPORT> .
+@.
+@.    #  Handle character replacement
+@     IF <RPT> eq 0,(0093) .
+@     IF <BIN> eq y,(0093) .
+@     RSL,<CAB>,<DRW>,<RPT> .
+@     CHG <NS>h1 CHR$254  LZR,-0 ,<CC>i4 .
+@     CHG <NS1>h1 CHR$302 .
+@     LDV <CHAR>h0 .
+@     LCH,-0,,lin+1 'af' 1-<CC> <NS1><NS>/TAB$ .
+@     LCH,-0,,lin+1 'af' 1-<CC> <NS1>/'' .
+@     LCH,-0,,lin+1 'af' 1-<CC> <NS>/TAB$ .
+@     REP,<CAB>,<DRW>,<RPT> .
+@.
+@0093:CHG <PC>i4 <XLN> / <TLN> * 100  CHG <WID>i4 <PC> * 25 / 100 .
 @     IF <WID> gt 0  TXT,"",<TXT5>,17,19,03,<WID>,dblu ; .
 @     LDV,p <PC>  TXT,"<PC>%",<TXT6>,,,,,,s .
-@     IF <RPT> eq 0,(0092) ; .
+@     IF <RPT> eq 0,(0094) ; .
 @     LOK,<CAB>,<DRW>,<RPT>  WRL,<CAB>,<DRW>,<RPT>,2 2-79 .,<TTL>  ULK .
 @     GTO 0091 .
-@0092:.
+@0094:.
 @     RNM -5 .
 @     DRW,<CAB>,<DRW> <CPL>i3 .
 @     LOK,<CAB>,<DRW>,0 .
 @     LDV <ZLN>i6=1 .
-@0093:INC <ZLN>  RDL,-5,<ZLN>,0094 1-<CPL> <DAT>s .
+@0095:INC <ZLN>  RDL,-5,<ZLN>,0096 1-<CPL> <DAT>s .
 @     CHG <WID>i3 <CPL> - 1 .
 @     IF <DAT>(1-1) eq '.'  IF <WID> gt 79  LDV <WID>=79 ; .
 @     WRZ,<CAB>,<DRW>,<ZLN> 2-<WID> <DAT>(1-1),<DAT>(2-<WID>) .
-@     GTO 0093 .
-@0094:.
+@     GTO 0095 .
+@0096:.
 @     ULK .
 @     GTO 0091 .
-@0095:.
-@     CLS,<TXT1>,<TXT2>,<TXT3>,<TXT4>,<TXT5>,<TXT6> .
+@0097:.
+@     GTO 0081 .                                        Get next drawer and runs
+@0098:CLS,<TXT1>,<TXT2>,<TXT3>,<TXT4>,<TXT5>,<TXT6> .
 @.
-@0100:. -------------------- Update Run Registration ---------------------------
+@0099:. -------------------- Update Run Registration ---------------------------
 @.
 @     TXT,"Run Script Registration",<MSG1> .
 @     TXT,"... Please Wait ...",<MSG2> .
@@ -671,11 +774,11 @@ fkey,10,''Quit  '',KEY
 
 @     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
 @.
-@     WAT 2000 .
+@     WAT 1000 .
 @.
 @     DFU RUNDRW$,<DPT> .
-@     LDV <SOR>h1=N  BFN,RUNDRW$,<DPT>,,lin+1 k 'RUN'   ,k  LDV <SOR>=Y .
-@     MAU,-4,RUNDRW$,<DPT>,0101 dm 'Run'  ,1 'Run'  ,1 .
+@     LDV <SOR>h1=N  BFN,RUNDRW$,<DPT>,,lin+1 k 'RUN' 	,k  LDV <SOR>=Y .
+@     MAU,-4,RUNDRW$,<DPT>,0101 dm 'Run' 	,1 'Run' 	,1 .
 @     DEL .
 @0101:.
 @     IF SYSNAM$(1-1) ne 'M',(0102) ; .
@@ -695,22 +798,23 @@ fkey,10,''Quit  '',KEY
 @     LN+,RUNDRW$,<DPT>,<LIN>,<LNQ> .
 @     LDV <RLN>i4=5 .
 @0104:INC <RLN>,<LIN> .
-@     RDL,-4,<RLN>,0106 'Run','Rpt','I/O','LLP','1MDNF' \
-      <RUN>,<RPT>,<IOS>,<LLP>,<FLG> .
+@     RDL,-4,<RLN>,0106 'Run','Rpt','I/O','LLP','1MDNF','RDRW' \
+      <RUN>,<RPT>,<IOS>,<LLP>,<FLG>,<RDRW> .
+@     LDV,p <RDRW> .
 @     IF SYSNAM$(1-1) ne 'M',(0105) ; .
-@     LDV <DRC>a6=<CAB><DRW>  DEF,n <DRN>,<DRC> .
+@     LDV <DRC>a6=<CAB><RDRW>  DEF,n <DRN>,<DRC> .
 @     WRL,RUNDRW$,<DPT>,<LIN> \
       'RUN','USER','TYPE','RID','F','I/O','LINE','MODE','1MDNF' \
-        ,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG> .
+      	,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG> .
 @     GTO 0104 .
 @0105:.
-@     LDV,r <DRN>(0-5)=<DRW><CAB> .
+@     LDV,r <DRN>(0-5)=<RDRW><CAB> .
 @     WRL,RUNDRW$,<DPT>,<LIN> \
       'Run','User','Drawer','Rpt','F','I/O','Line','Cab','1MDNF' \
-        ,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG> .
+      	,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG> .
 @     GTO 0104 .
 @0106:.
-@     IF <SOR> eq Y  SRR,RUNDRW$,<DPT> '' 'RUN','USER'  ,1,2d ; .
+@     IF <SOR> eq Y  SRR,RUNDRW$,<DPT> '' 'RUN','USER' 	,1,2d ; .
 @     CMU .
 @     GTO 0150 .
 @.
@@ -748,6 +852,10 @@ fkey,10,''Quit  '',KEY
 
  <PRD> has been successfully installed in Drawer <DRW><CAB>.
 
+ Please sign off as MAPCOORD and sign on as yourself.
+ You can then open up a report in Sublime by typing SUBL on the conrol line.
+
+
 @     LDV <RUN>h12  RDL,-4,6,0152 'Run' <RUN> .
 @.
 @     IF <DPT> ne MSTRD$,(lin+2) ; .
@@ -765,17 +873,16 @@ fkey,10,''Quit  '',KEY
 @.
 @     IF <RUN> eq '',(lin+3) ; .
 @     IF <DPT> eq MSTRD$ . ; IF <DPT> eq DEPN$ . ; GTO lin+2 .
-fkey,01,''Run   '',KEY
-fkey,10,''Quit  '',KEY
+fkey,01,''Quit  '',KEY
 @     BRK  FKY,-0 .
 @     DSP,-8 .
 @     FKY .
 @     IF <RUN> eq '',(0199) ; .
-@     IF FKEY$ eq 10,(0199) ; .
-@     BRK  DLR,-0 .
-@     SC q prep .
-@     IF <DPT> eq MSTRD$  RUN <RUN> . ; IF <DPT> eq DEPN$  RUN <RUN> . ; .
-@     CLS,<WIN1>  LDV <WIN1>=0 .
+@     IF FKEY$ eq 1,(0199) ; .
+@.    BRK  DLR,-0 .
+@.    SC q prep .
+@.    IF <DPT> eq MSTRD$  RUN <RUN> . ; IF <DPT> eq DEPN$  RUN <RUN> . ; .
+@.    CLS,<WIN1>  LDV <WIN1>=0 .
 @     GTO 0199 .
 @.
 @. --------------------------------- Errors ------------------------------------
@@ -822,32 +929,39 @@ fkey,10,''Quit  '',KEY
 @     LDV <FOC>=<EDT1> .
 @     MBX,OK,S,'Invalid Entry' "/\
  You must specify an even-numbered cabinet." \
-      O,(0051) .
+      O,(0053) .
 @0189:.
 @     LDV <FOC>=<EDT1> .
 @     MBX,OK,S,'Invalid Entry' "/\
  Cabinet must be 16 through MAXCAB$." \
-      O,(0051) .
+      O,(0053) .
 @0190:.
 @     LDV <FOC>=<EDT1> .
 @     MBX,OK,S,'Invalid Entry' "/\
  Cabinet must be 2 through MAXCAB$." \
-      O,(0051) .
+      O,(0053) .
 @0191:.
 @     LDV <FOC>=<EDT1> .
 @     MBX,OK,S,'System Restriction' "/\
  Cabinets 200 through 250 are reserved and may not be used." \
-      O,(0051) .
+      O,(0053) .
 @0192:.
 @     LDV <FOC>=<EDT2> .
 @     MBX,OK,S,'Invalid Entry' "/\
  Invalid Drawer letter." \
-      O,(0051) .
+      O,(0053) .
 @0193:.
 @     LDV <FOC>=<EDT1> .
 @     MBX,OK,S,'Invalid Entry' "/\
  Database file number must be 3 through 'MAXFIL$" \
       O,(0061) .
+@0194:.
+@     IF <STP> eq 0,(0010) ; .
+@     LDV <FOC>=<EDT1> .
+@     MBX,OK,S,'Invalid Installation File(s)' "/\
+ Run drawer was not specified in SETUP.INF file.//\
+ Please specify and try again." \
+      O,(0021) .
 @.
 @. ------------------------------- Termination ---------------------------------
 @.
@@ -867,9 +981,9 @@ fkey,10,''Quit  '',KEY
 @     IF <STP> eq 2,(0021) ; .
 @     IF <STP> eq 3,(0031) ; .
 @     IF <STP> eq 4,(0041) ; .
-@     IF <STP> eq 5,(0051) ; .
+@     IF <STP> eq 5,(0053) ; .
 @     IF <STP> eq 6,(0061) ; .
-@     IF <STP> eq 7,(0071) ; .
+@     IF <STP> eq 7,(0075) ; .
 @     IF <STP> eq 8,(0151) ; .
 @     GTO 0199 .
 @.

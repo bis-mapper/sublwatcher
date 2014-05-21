@@ -1,4 +1,4 @@
-.Object Name: Build
+.Build
 *
 *===================================================================================================
 :INCLUDE,ECAB$,B,1 .                                                                         INCLUDE
@@ -9,29 +9,100 @@
 @.    #---------------------------------------------------------------------------------------------
 @.
 @.    # Test Setup
-@     LDV <CTL>s80='BDT 24b56' .
-@     LDV <CTL>s80='BDT' .
-@     LDV <FILE>s256='d:\users\winne\sublwatcher\site-d\Umbrella\Umbrella_Test\(Summary)20f832.bis' .
+@     LDV <CTL>s80='BUILD' .
+@     LDV <FILE>s256='d:\users\winne\sublwatcher\site-e\sublwatcher\Sublime\2b56.bis' .
 @     CALL 0001 (<CTL>,<FILE>,'',<STATUS>h1) .
 @     GTO END .
 @.
 @0001:(<CTL>,<FILE>,<RUNNAME>,<STATUS>) .
-@.
 @     RAR,0,E,2 0199 .                                                          sets-run-abort
 @     RER,0,E,2 0001 .                                                          sets-run-error
 @.
-@     CALL,SUBLCOMMON_ getFileName_ (<FILE>,<RUN>s60) .                         Extracts File Name from path
-@     LCV,lin+1 'b99' <RUN> '.bis'/''  GTO lin+4 .                                   Remove file type
-@     LDV <MSG>s256='Must be BIS file type' .
+@     RSR,SUBLCOMMON_ configVars_ .
+@     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
+@     LDV <PTH>s256=<DATADIR>'\'<APP>'\' .
+@.
+@.    Get bis script and make sure has correct extension
+@     CALL,SUBLCOMMON_ getFileName_ (<FILE>,<RUN>s60) .                 Extracts File Name from path
+@     LDV <TFILE>s256=<FILE>  LCV '' <TFILE> <RUN>/'' .
+@     LCV,lin+1 'b99' <RUN> '.bis'/''  GTO lin+4 .                                  Remove file type
+@     LDV <MSG>s256='Cannot build on non BIS file type' .
 @     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
 @     GTO 0199 .
 @.
-@     CALL,SUBLCOMMON_ getCabDrwRpt_ (<RUN>,<CAB>i4,<DRW>h1,<RID>i4) .
+@.    #  Make sure files exists
+@     CALL,SUBLCOMMON_ getCabDrwRpt_ (<RUN>,<CAB>i4,<DRW>h1,<RPT>i4) .
+@     PCR,0,I,-0,n,n,lin+1 <FILE>  RNM -2  GTO lin+4 .
+@     LDV <MSG>s256='Could not locate '<FILE> .
+@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
 @.
-@     CALL,"BLD-DEFTABLE" 0001 (<CAB>,<DRW>,<RID>,'SUBL','ALL') .               Re-build define table
+@.    #  Start SETUP.INF result
+@     BRK BRK .
+[DISK]
+ Level           = <VER>
+[NAME]
+ Name            = <APP>
+[TITLE]
+ Title           = <APPDESC>
+[DRAWERS]
+@     RNM -1 .
+@.
+@.    #  Get TOC table headings
+@     RSL,ECAB$,C,12 .
+@     RNM -2 .
 @
-@     LDV <MSG>s256='Defines re-built successfully' .
-@     CALL,GROWL_ 0001 ('sublwatcher: success!','SUCCESS',<MSG>) .
+@.    #  Loop through drawers to see which ones are available
+@     LDV <DRAWERS>h8='BCDEFGHI',<DPOS>i1=0 .
+@0005:INC <DPOS>  IF <DPOS> eq 9,(0030) .
+@     LDV <DRW>h1=<DRAWERS>(<DPOS>-1) .
+@     DRW,<CAB>,<DRW>,0005 <CPL>i3,,,,,<HRPT>i4,,,,,,<DESC>s26 .
+ Drawer          = <DRW>,<CPL>,<DESC>
+@     BRK  LZR,-1,lin1  ADD,-0,-1 .
+@     RNM -1 .
+@.
+@.    #  Now loop through each program in that drawer to populate table of contents
+@     LDV <RPT>i4=-1 .
+@     RSL,ECAB$,C,12 .                                                                  TOC headings
+@     RNM -2 .
+@0010:INC <RPT>  IF <RPT> gt <HRPT>,(0020) .
+@     LZR,<CAB>,<DRW>,<RPT>,0010 <LINES>i6,,,,,,,,,,<TYP>h1 .
+@     RDL,<CAB>,<DRW>,<RPT>,2 2-79 <TITLE>s .
+@     IF <TYP> eq 1 . ; LDV <EXT>h3='BIS'  GTO 0015 .
+@     LCV 'b99' <TITLE> '.' ,<OCC>i3 .                                           Find last occurance
+@     LCV 'b<occ>' <TITLE> '.' <POS>i3  INC <POS> .                                       Last . pos
+@     LDV,p <EXT>=<TITLE>(<POS>-0) .                                             Load file extension
+@0015:LN+,-2,,1  LDV <NLN>i3=STAT1$ .
+@     LDV,p <TITLE> .
+@     WRL,-2,<NLN> 'Cab','Dw','Rpt','Lines','Typ','Name','Title' ¬,\
+        <CAB>,<DRW>,<RPT>,<LINES>,<EXT>,,<TITLE> .
+@     GTO 0010 .
+@.
+@.    #  Write TOC file out to current folder
+@0020:LDV,p <FOLDER>s26=<DESC> .
+@     LDV,p <EXPATH>s256=<PTH>(p)<FOLDER>'\' .
+@     CALL,SUBLCOMMON_ chkMkDir_ (<PTH>,<FOLDER>,<EXPATH>) .
+@     LDV,p <TOCFILE>s256=<EXPATH>(p)'TOC.TXT' .
+@     PCW,-2,2 <TOCFILE> .                                                                Write file
+@     GTO 0005 .
+@.
+@.    #  Write SETUP.inf out to folder
+@0030:BRK .
+[RUNS]
+ Run             = SUBL,2,,,NYNWN,B
+ Run             = SUBLWATCHER,3,,,NYNWN,B
+[DATABASE]
+ Report          = 56,C,3,56,C,14
+ Report          = 56,C,8,56,C,13
+@     BRK .
+@     ADD,-0,-1 .
+@     RNM -1 .
+@     PCW,-1,2 <PTH>(p)'SETUP.INF' .
+@     PCW,ECAB$,AEDRW$,27,2 <PTH>(p)'SETUP.RUN' .
+@.
+@.    # Build complete message
+@     LDV <MSG>s80='Build Complete' .
+@     CALL,GROWL_ 0001 ('subwatcher: success!','SUCCESS',<MSG>) .
 @.
 @.    # Exit
 @0199:RETURN .

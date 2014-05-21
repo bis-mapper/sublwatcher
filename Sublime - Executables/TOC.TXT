@@ -1,10 +1,15 @@
 .Table Of Contents
-*
-*Rpt .Lines .Typ.Title
-*====.======.===.===============================================================================
-¬   5    557     GROWLNOTIFY.EXE
-¬   6     10     cmd.jpg
-¬   7     33     failed.png
-¬   8     25     pending.png
-¬   9     27     SUBLIME_TEXT.PNG
-¬  10     26     success.png
+*    .D.    .      .   .                    .                                                                               .
+*Cab .w.Rpt .Lines .Typ.Name                .Title                                                                          .
+*====.=.====.======.===.====================.===============================================================================.
+	  56 E    0     39 BIS
+	  56 E    1     16 BIS
+	  56 E    2    530 exe                      watchmedo.exe
+	  56 E    3    406 exe                      mfxfile.exe
+	  56 E    4     12 BIS                      watchmedo-script.py
+	  56 E    5    557 EXE                      GROWLNOTIFY.EXE
+	  56 E    6     10 jpg                      cmd.jpg
+	  56 E    7     33 png                      failed.png
+	  56 E    8     25 png                      pending.png
+	  56 E    9     27 PNG                      SUBLIME_TEXT.PNG
+	  56 E   10     26 png                      success.png

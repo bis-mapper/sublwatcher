@@ -1,8 +1,0 @@
-[DRAWERS]
- Drawer          = B,132,Sublime
- Drawer          = C,256,Sublime - Tables
- Drawer          = D,132,Sublime - Vendor
- Drawer          = E,132,Sublime - Executables
-[RUNS]
- Run             = SUBL,2,,,NYNWN
- Run             = SUBLWATCHER,2,,,NYNWN

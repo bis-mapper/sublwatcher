@@ -1,4 +1,4 @@
-.Object Name: EXPORT
+.EXPORT
 *
 *===================================================================================================
 :INCLUDE,ECAB$,B,1 .                                                                         INCLUDE
@@ -51,7 +51,7 @@
 @     ldv <drawer>h11='0'<drw><cab>  call 0110 (<drawer>,<exist>h1) .
 @     if <exist> eq 0 . ; gto 0002 .
 @     DRW,<CAB>,<DRW>,0002 ,,,,,<VHIRPTD>i4,,,,,,<FOLDER>s26 .                  Drawer exist?
-@     LDV <RPT>i4=0 .
+@     LDV <RPT>i4=-1 .
 @0003:INC <RPT>  IF <RPT> gt <VHIRPTD>,(0002) .
 @     RSR 0100 .                                                                Export file
 @     GTO 0003 .                                                                Next report
@@ -82,7 +82,7 @@
 @     ldv <drawer>h11='0'<drw><cab>  call 0110 (<drawer>,<exist>h1) .
 @     if <exist> eq 0 . ; gto 0012 .
 @     DRW,<CAB>,<DRW>,0012 ,,,,,<VHIRPTD>i4,,,,,,<FOLDER>s26 .                  Drawer exist?
-@     LDV <RPT>i4=0 .
+@     LDV <RPT>i4=-1 .
 @0013:INC <RPT>  IF <RPT> gt <VHIRPTD>,(0199) .
 @     RSR 0100 .                                                                Export file
 @     GTO 0013 .                                                                Next report

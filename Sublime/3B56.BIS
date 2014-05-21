@@ -104,8 +104,7 @@
         ¬,<EVENT>,<RUN>,USER$,DATE11$,TIME$,<FILE>,<OBJ> .
 @     CMU .
 @.
-@.ew  IF <EVENT> eq 'deleted',(0036) .                                          File deleted?
-@     IF <BISCMD> eq 'y',(0036) .                                               File deleted?
+@     IF <BISCMD> eq 'y',(0036) .                                               Wait for next event
 @.
 @.    #  Make sure its a valid MAPPER report
 @     LDV <VM>i1=0 .
