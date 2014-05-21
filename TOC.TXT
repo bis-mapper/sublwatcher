@@ -2,32 +2,3 @@
 *
 *Rpt .Lines .Typ.Title
 *====.======.===.===============================================================================
-     0     39 BIS
-     1     32 BIS Table_Define
-     2     92 BIS SUBL
-     3    195 BIS SUBLWATCHER
-     4    153 BIS FILESELECT
-     5     26 BIS Service_ReposPath    Get Workstation Repository Path
-     6     72 BIS Service_LoadProg     Load Version-Controlled Object
-     7    185 BIS SUBL_Common
-     8     94 BIS SUBL_Setup
-     9     52 BIS Display_WaitMsg      Display In-Progress Message
-    10    100 BIS Display_MessageBox   Display Message Box
-    11    108 BIS V     View & Display BIS Reports
-    12    210 BIS SUBL_EXPORT
-    13    252 BIS Import Category from a DOS Directory
-    14     52 BIS BisCmd
-    15     55 BIS BisBug
-    16     55 BIS BisPkg
-    17     22 BIS Object Name: SUBL_CTL
-    18     31 BIS Object Name: SBS
-    19     31 BIS Object Name: RJUST
-    20    130 BIS Object Name: EXPORT
-    21    116 BIS Object Name: IMPORT
-    22     38 BIS Object Name: GROWL
-    23     36 BIS Object Name: GROWL
-    24    131 BIS Object Name: DIFF
-    25     38 BIS Object Name: BDT
-    26     87 BIS Object Name: Build
-    27    880 BIS SETUP+ - Installation Routine
-    99    249 BIS Error_Routine        Error Routine
