@@ -109,6 +109,9 @@
 @     BRK  TXT,-0,2,2,<WIN1>,03,23,02,40,bla/whi <TXT3>i6 .
 @     FON,t,'Arial',09,pd .
 @     BRK,0,A .
+
+ This program allows you to:
+
  - Seamlessly edit MAPPER files in Sublime Text.
  - Modern programming environment compared to MPC.
  - Blazing fast file editing that doesn''t get in your way.
@@ -989,10 +992,9 @@ fkey,01,''Quit  '',KEY
  Please specify and try again." \
       O,(0021) .
 @0195:.
-@     LDV <FOC>=<EDT1> .
 @     MBX,OK,S,<PRD>' is already running' "/\
  Please close all current instances of <PRD>." \
-      O,(0021) .
+      O,(0199) .
 @.
 @. ------------------------------- Termination ---------------------------------
 @.

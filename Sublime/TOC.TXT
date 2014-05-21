@@ -29,6 +29,6 @@
 	  56 B   24    131 BIS                      DIFF
 	  56 B   25     38 BIS                      BDT
 	  56 B   26    109 BIS                      Build
-	  56 B   27   1025 BIS                      SETUP+ - Installation Routine
+	  56 B   27   1027 BIS                      SETUP+ - Installation Routine
 	  56 B   28    880 BIS                      SETUP+ - Installation Routine
 	  56 B   99    249 BIS                      Error_Routine        Error Routine

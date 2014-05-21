@@ -1,7 +1,7 @@
 [DISK]
- Level           = 0.0.8
+ Level           = 0.0.9
 [NAME]
- Name            = sublwatcher
+ Name            = SUBLWATCHER
 [TITLE]
  Title           = BIS File watching utility / IDE envrionment
 [DRAWERS]
