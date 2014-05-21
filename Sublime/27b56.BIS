@@ -36,7 +36,7 @@
 @     IF WS$ eq 0,(0180) ; .
 @     IF DWCAP$(9-1) ne 1,(0181) ; .
 @     IF SYSNAM$(1-1) eq 'M'  IF MAPER$(1-2) lt 37,(0181) ; .
-@.ew  IF CPRIV$ eq 0,(0182) ; .
+@     IF CPRIV$ eq 0,(0182) ; .
 @     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+3 .
 @     FDR,USRDRW$,DEPN$,,,0183 '' 'USER' ¬,USER$ .
 @     RLN 46-1 <X>h  IF <X> ne '',(0183) ; .
