@@ -11,7 +11,6 @@
 *===============================================================================
 @.
 @     RER,0,E,2 0001 RAR 0196 .
-@     IF USER$ eq ED . ; GTO LIN+2 .
 @     LDV <*PTH>s256='D:\users\winne\sublwatcher\site-e\sublwatcher\setup.run' .
 @     CALL 0001() .
 @     IF CDRW$ ne 0  ESR ; IF LINK$ ne 0,(END) ; REL .
@@ -99,8 +98,9 @@
 @     LDV <STP>i1=1 .
 @.
 @     TXT,"",<WIN1>,01,01,25,62,bla/whi,<B> <TXT1>i6 .
-@     TXT,"",<WIN1>,01,01,25,20,dblu <TXT2>i6 .
+@     TXT,"",<WIN1>,01,01,25,20,bla <TXT2>i6 .
 @     LDV <PIC1>i6=0 .
+@     PIC,,,,,<PTX>'\DOCS\IMAGES\SUBLIME.JPG',<WIN1>,05,05,-1,-1 '' <PIC1>i6 .
 @     FON,t,'Arial',14,pd .
 @     BRK,0,A .
  Welcome to the <PRD>
@@ -108,9 +108,10 @@
 @     BRK  TXT,-0,2,2,<WIN1>,03,23,02,40,bla/whi <TXT3>i6 .
 @     FON,t,'Arial',09,pd .
 @     BRK,0,A .
- (This program works seamlessly with MAPPER to allow you to modify/edit files)
- (It allows for a modern programming environment over a traditional MPC screen)
- (It is highly configurable and customizable to do just about anything)
+ - Seamlessly edit MAPPER files in Sublime Text.
+ - Modern programming environment compared to MPC.
+ - Blazing fast file editing that doesn''t get in your way.
+ - Easily extend, customize, and configure.
  _____________________________________________
 
  This wizard will guide you through the steps
@@ -825,7 +826,7 @@ fkey,10,''Quit  '',KEY
 @     TXT,"Installation Complete",<MSG1> .
 @     TXT,"Press Finish to display Installation Notes",<MSG2> .
 @     BRK,0,A .
-  <PRD> successfully loaded into Drawer <DRW><CAB>.
+  <PRD> successfully loaded into Cabinet <CAB>.
 
 @     LZR,-4 <LNS>i4  IF <LNS> lt 6,(lin+2) ; .
   Run script(s) were registered in Department <DPT>.
@@ -853,7 +854,10 @@ fkey,10,''Quit  '',KEY
  <PRD> has been successfully installed in Drawer <DRW><CAB>.
 
  Please sign off as MAPCOORD and sign on as yourself.
- You can then open up a report in Sublime by typing SUBL on the conrol line.
+ You can then open up a report in Sublime by typing SUBL on the control line.
+
+ Additional instructions and documentation can be found here:
+ https://github.com/bis-mapper/sublwatcher
 
 
 @     LDV <RUN>h12  RDL,-4,6,0152 'Run' <RUN> .

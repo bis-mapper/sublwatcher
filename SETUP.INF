@@ -3,7 +3,7 @@
 [NAME]
  Name            = sublwatcher
 [TITLE]
- Title           = <APPDESC>
+ Title           = BIS File watching utility / IDE envrionment
 [DRAWERS]
  Drawer          = B,132,Sublime
  Drawer          = C,256,Sublime - Tables

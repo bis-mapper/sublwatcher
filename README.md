@@ -3,58 +3,62 @@
 
 <img src="https://raw.github.com/bis-mapper/sublwatcher/master/Docs/Images/sublwatcher.png" border="0">
 
-## Initial Requirements
+## Initial Requirements 
 
-In order to use this you must first install Sublime Text and Package Control.
+In order to use this you must first install Sublime Text, Package Control, and Growl.
 
+## Sublime Text
 [Sublime Text](http://www.sublimetext.com/3)
+* Download and install.  
 
+## Package Control
 [Package Control](https://sublime.wbond.net/installation)
+* Follow install instructions on page.
 
-<!-- ## Dependencies
-
-Python 2.7
-
-[Python Download](http://www.python.org/ftp/python/2.7/python-2.7.amd64.msi)
-
-* Download [Distibute Setup](http://python-distribute.org/distribute_setup.py)
-* `cd c:\python27\`
-* Now run `c:\python27\distribute_setup.py`
-* Install *pip* `c:\python27\scripts\easy_install.exe pip`
-* Install *watchdog* `c:\python27\scripts\pip install watchdog`
-
-Install Growl for Windows
-
+## Growl for Windows
 [Growl Download](http://www.growlforwindows.com/gfw/d.ashx?f=GrowlInstaller.exe)
-
 * Follow setup instructions
 * Once installed open up the growl GUI interface (System Icon tray in windows)
-* You can set your default Displays and check to start program when computer is booted. -->
+* You can set your default Displays and check to start program when computer is booted. 
 
-## SUBLWATCHER - Load application package
+## SUBLWATCHER - Load application package (File Watching Utility)
 
+1. Download application package [Download](https://github.com/bis-mapper/sublwatcher/archive/master.zip)
+2. Unzip file to folder.
+3. Sign on as MAPCOORD.
+4. Run PCME
+5. Click -> Setup -> System Administration
+6. Then -> Setup -> Load Application Package
+7. Browse to the folder where you unzipped the application package.
+8. Open the SETUP.RUN file -> Click Ok
+9. The wizard will guide you through the rest of the steps.
 
-## sublwatcher - install in BIS
+## Install Sublime Plugins (Allow Sublime to work with BIS, syntax highlighting, etc)
 
-* Download this repository to your workstation [Download Sublwatcher Repository](https://github.com/bis-mapper/sublwatcher/archive/master.zip)
-* Unzip the files
-* `APPLOAD` the purge file to cabinet of your choosing (I have mine in 56)
-* REGISTER the following runs in your development dept
-    * `SUBL` - `2B56` or substitue your cabinet
-    * `SUBLWATCHER` - `3B56` or substitue your cabinet
-    * Make sure when registering that you leave the max I/O and Lines fields open as this program runs in a continuous loop
-* ADD THE CABINETS to 11g2
-* Sublime                           B56                    W
-* Sublime - Executables             E56                    W
-* Sublime - Tables                  C56                    W
-* Sublime - Vendor                  D56                    W
+Follow the commands below to get the syntax files and utilities configured:
 
-## Install Sublime Packages (Syntax files and utilities)
+* Type `ctrl + shift + p`
 
+* Then `pcar`
+
+* Select *Package Control: Add Repository*
+
+* copy and paste the URL *https://github.com/bis-mapper/bis-sublime* into the input field
+at the bottom of the screen.
+
+## Install package
+
+* Type the followinng commands: `ctrl + shift + p`
+
+* Then `pcip`
+
+* Then select *bis-sublime* from the list
+
+* Hit enter
+
+## Plugin repositories
 * Refer to [bis-sublime docs](https://github.com/bis-mapper/bis-sublime)
 * Refer to [bis-html5  docs](https://github.com/bis-mapper/bis-html5)
-
-
 
 # Getting Started
 
@@ -78,10 +82,27 @@ Browse to your sublwatcher folder and select the folder for the site that your c
 
 The BIS report that you typed `SUBL` on will now be saved in this folder and you should be able to modify this file in Sublime and have the changes saved back to BIS.
 
+## Watching Files
+You can also type `SUBLWATCHER` on the control line to start the file watching utility.  This skips the process of opening up a specific report and starts the script that watches the files.  This is helpful if you already have the files you want open and just need to start saving the changes back to MAPPER.
+
+## Thanks
+A big thanks goes out to John Thalhuber for allowing me to use portions of his code in this software.  Especially the SETUP+ package that he created which allows this application to be installed onto others systems with very little friction.  
+
+I'd also like to thank North Star Mutual for allowing me to develop this product.  It's been a joy to be able to build a tool that allows me to get my job done faster with less pain and frustration.  
+
+## Bug Reports
+Please report any issues you find with this product in the issues tab in this repository.  I'll do my best to fix issues in a reasonable amount of time, but I get pulled in a lot of directions, and don't always have time to work on this, so be patient if I'm not able to address it very quickly.
+
+## Contributing
+If you see features that you would like or want to make something work different feel free to submit pull requests and I'll see if it's something that will fit.  
+
+## Support
+At this time I'm only supporting Windows 7.  It was working on XP before switching to Windows 7 and I'm hoping Windows 8 will work out of the box.  If you would like support for other platforms you may have to modify it to work for you.
+
 ## License
 
 Portions copyright © IT Resource Solutions (ITRS)
 Permission has been granted by ITRS for use of their software in this package.
 Copying or reuse of that software is prohibited without the expressed consent of ITRS.
 
-The remaining code is licensed under the MIT license found [here](http://opensource.org/licenses/MIT)
+The remaining code is licensed under the MIT license found [here](https://github.com/bis-mapper/sublwatcher/blob/master/LICENSE.md)

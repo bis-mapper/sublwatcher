@@ -856,6 +856,9 @@ fkey,10,''Quit  '',KEY
  Please sign off as MAPCOORD and sign on as yourself.
  You can then open up a report in Sublime by typing SUBL on the control line.
 
+ Additional instructions and documentation can be found here:
+ https://github.com/bis-mapper/sublwatcher
+
 
 @     LDV <RUN>h12  RDL,-4,6,0152 'Run' <RUN> .
 @.
