@@ -33,9 +33,9 @@ In order to use this you must first install Sublime Text, Package Control, and G
 8. Open the SETUP.RUN file -> Click Ok
 9. The wizard will guide you through the rest of the steps.
 
-## Install Sublime Plugins (Allow Sublime to work with BIS, syntax highlighting, etc)
+## Install Sublime Plugins 
 
-Follow the commands below to get the syntax files and utilities configured:
+Open up Sublime Text and type in the following commands:
 
 * Type `ctrl + shift + p`
 
@@ -48,7 +48,7 @@ at the bottom of the screen.
 
 ## Install package
 
-* Type the followinng commands: `ctrl + shift + p`
+* Type the following commands: `ctrl + shift + p`
 
 * Then `pcip`
 
@@ -113,7 +113,7 @@ On this line you can type a report that you want to open just as you do in MAPPE
     - `ctrl + shift + o`
     - `sbs` will run the SBS utility.
     - You can change your "standardize run" settings in 99d.
-* Export - Export entire cateogry, or just a specifc drawer to a folder on your machine. 
+* Export - Export entire category, or just a specific drawer to a folder on your machine. 
     - **Usage**
     - `ctrl + shift + o`
     - `export 56 -f Sublwatcher` Exports the entire category into a folder of your choice, set by the -f option
@@ -125,7 +125,7 @@ On this line you can type a report that you want to open just as you do in MAPPE
 
 #### Help on a command or <html> tag
 
-Highlight a BIS cmd like @srh or @tot and press `ctrl + shift + h` this should pop open the Unisys help document and bring you to that command.  Not all commands are referenced in here, so it may bring it up withouth the command selected.
+Highlight a BIS cmd like @srh or @tot and press `ctrl + shift + h` this should pop open the Unisys help document and bring you to that command.  Not all commands are referenced in here, so it may bring it up without the command selected.
 
 This also works on html tags.  Highlight a `<div>` tag on your page and it will bring up the MDN (Mozilla Developer Network) documentation explaining this tag.
 
