@@ -39,21 +39,21 @@
 @.
 @.    #  Check for ICE Service return Service Title if ICE Enabled site
 @0010:(<CAB>,<DRW>,<RPT>,<SRVS>) .
-@     RER 0013 .
+@     LDV <SVC>s20 .
+@     IF <RPT> eq 0,(0012) .
+@     RER 0012 .
 @     LDV,l <CAB>  LDV,r <RPT>  LDV <SVC>s20 .
 @     LDV,p <REPORT>h11='1d3950' .
-@     dir <report> ,,,,,<acc>h1 if <acc> eq '',(0013) .
-@     LZR,3950,d,1,0013 .
-@     SRH,3950,d,1,,,0013 'ad' 'SvcCab','sd' ¬,\
-        <CAB>,<DRW> .
-@     LZR,-0 ,,<HLN>i7  INC <HLN> .
-@     RDL,-0,<HLN>,0013 'cab','dw','rpt' \
-        <ICAB>h,<IDW>h,<IRPT>h .
-@     FDR,<ICAB>,<IDW>,<IRPT>,,,lin+2 '' \
-        'cab','dw','rpt' ¬,<CAB>,<DRW>,<RPT> .
-@     RLN 'service' <SVC>s .
-@     LDV,p <SRVS>='('<SVC>(p)')' .
-@0013:return .
+@     DIR <REPORT> ,,,,,<ACC>h1  IF <ACC> eq '',(0013) .
+@     LZR,3950,d,1,0011 .
+@     FDR,3950,d,1,,,0011 '' 'SvcCab','sd' ¬,<CAB>,<DRW> .
+@     RLN 'cab','dw','rpt' <ICAB>h,<IDW>h,<IRPT>h .
+@     FDR,<ICAB>,<IDW>,<IRPT>,,,0011 '' 'cab','dw','rpt' ¬,<CAB>,<DRW>,<RPT> .
+@     RLN 'service' <SVC>s  GTO 0012 .
+@0011:FDR,<CAB>,<DRW>,<RPT>,2,,0012 'a' 2-12 .,'Object Name:' ,<VLNO>i3 .
+@     RLN 14-20 <SVC>s  GTO 0012 .
+@0012:IF <SVC> eq ' '  LDV,p <SRVS>=<SVC> . ; LDV,p <SRVS>='('<SVC>(p)')' .
+@     RETURN .
 @.
 @.    #  Check if folder exists.  If not create it.
 @0015:(<DIR>,<FLDR>,<FLDRPATH>) .
@@ -158,20 +158,20 @@
 @.    #  Replace tab character with special character
 @.    #  Pass 'export' to convert tab to special
 @.    #  Pass 'import' to convert special to tab
-@0055:(<direction>) .
-@     rnm -1 .
+@0055:(<DIRECTION>) .
+@     RNM -1 .
 @     CHG <NS>h1 CHR$254  LZR,-1 ,<CC>i4 .
 @     CHG <NS1>h1 CHR$302 .
 @     LDV <CHAR>h0 .
 @.
-@     if <direction> eq export . ; gto 0056 .
+@     IF <DIRECTION> eq export . ; GTO 0056 .
 @     LCH,-1,,lin+1 'af' 1-<CC> <NS1>TAB$/<NS>  RNM -1 .
 @     LCH,-1,,lin+1 'af' 1-<CC> TAB$/<NS>  RNM -1 .
 @     LCH,-1,,lin+1 'af' 1-<CC> <NS1><NS>/<NS>  RNM -1 .
 @. @     LCH,-1,,lin+1 'af' 1-<CC> <NS1>/''   RNM -1 .
-@     gto 0059 .
+@     GTO 0059 .
 @.
-@0056:if <direction> eq import . ; gto 0059 .
+@0056:IF <DIRECTION> eq import . ; GTO 0059 .
 @     LCH,-1,,lin+1 'af' 1-<CC> <NS1><NS>/TAB$  RNM -1 .
 @     LCH,-1,,lin+1 'af' 1-<CC> <NS1>/''   RNM -1 .
 @     LCH,-1,,lin+1 'af' 1-<CC> <NS>/TAB$  RNM -1 .

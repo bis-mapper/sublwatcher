@@ -7,6 +7,7 @@
 *===============================================================================
 :INCLUDE,ECAB$,B,1 .                                                            INCLUDE
 @.
+@     CHG INPUT$ <RUNINPUT>s20 .
 @     LDV <CALL>h1=n,<DLN>i7=DLINE$ .                                           Manual entrance
 @.
 @.    #  Call entry point
@@ -44,6 +45,7 @@
 @     CALL,SUBLCOMMON_ getCompName_ (<COMPUTER>s30) .
 @     FDR,SUBLPATH_,,,lin+2 ' ' 'User ID','Computer Name' ¬,<USER>,<COMPUTER> . Get Application Path
 @     RLN 'Quick Open' <QUICKOPEN>s .
+@     IF <RUNINPUT> ne '<RUNINPUT>'  IF <RUNINPUT>(p) eq 'q'  LDV <QUICKOPEN>s7='ENABLED' . ; .
 @.
 @.    #  Check if program exists already in folder.
 @.    #  If it doesn't exist load <FILE> to default site location
