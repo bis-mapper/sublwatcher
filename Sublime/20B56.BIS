@@ -105,6 +105,7 @@
 @.    ##############################################################################################
 @0100:LZR,<CAB>,<DRW>,<RPT>,0105 ,,,,,,,,,,<RTYPE>h1 .
 @     LDV,p <FOLDER> .
+@     LCV,lin1 '' <FOLDER> 'PARAM'  GTO 0105 .
 @     IF <RTYPE> eq 1 . ; GTO lin+3 .                                           Binary report?
 @     RDL,<CAB>,<DRW>,<RPT>,2 2-20 <SRVS>s .                                    Get name from report
 @     LDV,p <PROGRAM>s20=<SRVS>  GTO lin+3 .
