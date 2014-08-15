@@ -23,7 +23,7 @@
 @.
 @.    #  Write file back out to same path
 @     LDV,p <FILE> .
-@ rdb PCW,-0,2 <FILE> .
+@     PCW,-0,2 <FILE> .
 @     PC,r '"'<APPPATH>(p)'" -a' '"'<FILE>'"' .                                 Re-start editor
 @     GTO 0199 .
 @.
