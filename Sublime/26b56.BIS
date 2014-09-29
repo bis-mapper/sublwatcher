@@ -18,6 +18,9 @@
 @     RAR,0,E,2 0199 .                                                          sets-run-abort
 @     RER,0,E,2 0001 .                                                          sets-run-error
 @.
+@     LCV 't@' <CTL> ' ' <pos>i3  inc <pos> .
+@     LDV <REV>h5=<CTL>(<pos>-0) .
+@.
 @     RSR,SUBLCOMMON_ configVars_ .
 @     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
 @     LDV <PTH>s256=<DATADIR>'\'<APP>'\' .
@@ -25,17 +28,31 @@
 @.    Get bis script and make sure has correct extension
 @     CALL,SUBLCOMMON_ getFileName_ (<FILE>,<RUN>s60) .                 Extracts File Name from path
 @     LDV <TFILE>s256=<FILE>  LCV '' <TFILE> <RUN>/'' .
-@     LCV,lin+1 'b99' <RUN> '.bis'/''  GTO lin+4 .                                  Remove file type
-@     LDV <MSG>s256='Cannot build on non BIS file type' .
-@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
-@     GTO 0199 .
+@     LCV,0180 'b99' <RUN> '.bis'/'' .                                              Remove file type
 @.
 @.    #  Make sure files exists
 @     CALL,SUBLCOMMON_ getCabDrwRpt_ (<RUN>,<CAB>i4,<DRW>h1,<RPT>i4) .
-@     PCR,0,I,-0,n,n,lin+1 <FILE>  RNM -2  GTO lin+4 .
-@     LDV <MSG>s256='Could not locate '<FILE> .
-@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
-@     GTO 0199 .
+@     PCR,0,I,-0,n,n,0181 <FILE>  RNM -2 .
+@.
+@.    #  With each build bump the version number
+@.    #  Details found here: http://semver.org/
+@     FDR,SUBLCONFIG_,,,0185 '' 'Parameter' ¬,'VER'  RLN 'Siz','Ty' <VSZ>i,<VTY>h .
+@     IF <REV> EQ ''  LDV <REV>='PATCH' .                                          CAN NOT BE SPACES
+@     IF <REV> NE 'MAJOR','MINOR','PATCH','NEW',(0182) . ; .                    MUST BE ONE OF THESE
+@     IF <REV> EQ NEW  IF <VER> GT '',(0183) . ; .
+@     IF <VER> EQ '' . ; GTO 0003 .
+@     IF <REV> EQ NEW  LDV <VER>=0.1.0 . ; GTO 0184 .                       DEFAULT TO 1.0.0 FOR NEW
+@0003:LCV 'B1' <VER> '.' <VPOS1>I3 .
+@     LCV 'B2' <VER> '.' <VPOS2>I3 .
+@     CHG <MNSZ>I2 <VPOS2> - <VPOS1> .                                       GET MINOR REVISION SIZE
+@     DEC <VPOS1>  LDV <MAJOR>I3=<VER>(1-<VPOS1>)  INC <VPOS1> .           GET MAJOR REVESION NUMBER
+@     INC <VPOS1>  DEC <MNSZ>  LDV <MINOR>I3=<VER>(<VPOS1>-<MNSZ>) .       GET MINOR REVESION NUMBER
+@     INC <VPOS2>  LDV <PATCH>I3=<VER>(<VPOS2>-0) .                        GET PATCH REVESION NUMBER
+@     IF <REV> EQ MAJOR  INC <MAJOR>  LDV <MINOR>=0,<PATCH>=0 .
+@     IF <REV> EQ MINOR  INC <MINOR>  LDV <PATCH>=0 .
+@     IF <REV> EQ PATCH  INC <PATCH> .
+@     LDV <NEWVER><VTY><VSZ>=<MAJOR>(P)'.'<MINOR>(P)'.'<PATCH>(P) .      SAVE THE NEW VERSION NUMBER
+@     LDV <VER><VTY><VSZ>=<NEWVER> .
 @.
 @.    #  Start SETUP.INF result
 @     BRK BRK .
@@ -104,5 +121,34 @@
 @     LDV <MSG>s80='Build Complete' .
 @     CALL,GROWL_ 0001 ('subwatcher: success!','SUCCESS',<MSG>) .
 @.
-@.    # Exit
+@.    #  Exist
+@     GTO 0199 .
+@.
+@.    #  Errors
+@0180:LDV <MSG>s256='Cannot build on non BIS file type' .
+@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@.
+@0181:LDV <MSG>s256='Could not locate '<FILE> .
+@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@.
+@0182:LDV <MSG>s80='Not a valid revion, options are MAJOR, MINOR, PATCH, or NEW' .
+@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@.
+@0183:LDV <MSG>s80='Version already exists cannot be NEW' .
+@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@.
+@0184:LDV <MSG>s80='Must enter with a version level of NEW' .
+@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@.
+@0185:LDV <MSG>s80='Version not present in SUBLCFG table' .
+@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@.
+
+@.    #  Exit
 @0199:RETURN .
