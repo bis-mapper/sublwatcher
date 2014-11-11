@@ -56,9 +56,9 @@ at the bottom of the screen.
 
 * Hit enter
 
-## Plugin Repositories
-* Refer to [bis-sublime docs](https://github.com/bis-mapper/bis-sublime)
-* Refer to [bis-html5  docs](https://github.com/bis-mapper/bis-html5)
+## To Enable Color Scheme
+
+Preferences -> Color Scheme -> bis-sublime -> BisColorScheme
 
 # Getting Started (First Time Only)
 
@@ -161,6 +161,17 @@ This also works on html tags.  Highlight a `<div>` tag on your page and it will 
 #### Multiple Cursors (Helpful for editing more than one line at a time)
 * Multiple cursor `alt + ctrl + up/down arrow`
 * This feature is a killer one, it makes the transition from a MPC screen to Sublime a little smoother.
+
+#### Add it to the menu
+If you'd like to make this quickly accessible from the MPC menu add the following code into 69i2.
+
+```
+         MENUBAR,"&SUBLWATCHER"                   
+           "&Start watching files",,SUBLWATCHER   
+           "&Open report",,SUBL                   
+'@'RETURN          
+@008:BRK RNM -1 .  
+```
 
 
 ## Thanks
