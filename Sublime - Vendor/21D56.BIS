@@ -1,0 +1,3 @@
+function toLower(&value) {
+  value = value.toLowerCase();
+}

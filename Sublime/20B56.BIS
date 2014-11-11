@@ -11,7 +11,7 @@
 @.    #---------------------------------------------------------------------------------------------
 @.
 @.    # Test Setup
-@ rdb ldv <CTL>s80='export f832 -fUmbrella' .
+@     ldv <CTL>s80='export f832 -fUmbrella' .
 @     ldv <file>s42='D\Users\winne\sublwatcher\site-d\2f832.bis' .
 @     ldv <runname>s12='export' .
 @     call 0001 (<CTL>,<FILE>,<RUNNAME>,<STATUS>h1) .

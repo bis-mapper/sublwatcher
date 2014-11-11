@@ -1,11 +1,11 @@
-.RJUST
-*
+.Object Name: SBS
+*    Version: 0017
 *===================================================================================================
 :INCLUDE,ECAB$,B,1 .                                                            INCLUDE
 @.
 @.    #---------------------------------------------------------------------------------------------
-@.    #  RJUST Wrapper
-@.    #  Written: 08/15/2013
+@.    #  SBS
+@.    #  Written: 08/14/2013
 @.    #---------------------------------------------------------------------------------------------
 @.
 @.    # Test Setup
@@ -14,14 +14,15 @@
 @0001:(<CTL>,<FILE>,<RUNNAME>,<STATUS>) .
 @.
 @     RSR,SUBLCOMMON_ configVars_ .
-@.    #  TODO Look this up in an index so it's not hardcoded...
-@. @     FDR,SUBLUTILS_ '' 'Util' ¬,<RUNNAME>  RLN 'Cab','Dr','Rid' <CAB>i,<DRW>h,<RID>i .
+@     FDR,SUBLUTILS_ '' 'Util' ¬,<RUNNAME>  RLN 'Rid' <RRID>i .
 @     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
+@     PCR,0,I,-0,n,n,0199 <FILE>  RNM -1  RSL,-1 .
 @.
 @.    #  Standerdize run
-@     CALL,498,B,26 0001 ('s') .
+@     CALL,SBS_ 0002 (<RUN>h12,<STS>h3) .
 @.
 @.    #  Write file back out to same path
+@     LDV,p <FILE> .
 @     PCW,-0,2 <FILE> .
 @     PC,r '"'<APPPATH>(p)'" -a' '"'<FILE>'"' .                                 Re-start editor
 @     GTO 0199 .

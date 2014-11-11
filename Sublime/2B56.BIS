@@ -18,6 +18,7 @@
 @     IF <RUN> eq '<RUN>',(0005) .                                              Normal or Call?
 @     LDV <CALL>h1=y,<DLN>s0 .
 @     CALL,SUBLCOMMON_ getCabDrwRpt_ (<RUN>,<CAB>i4,<DRW>h1,<RPT>i4) .
+@     LDV,u <CAB>,<DRW>,<RPT> .
 @     GTO 0007 .
 @.
 @.    #  Otherwise we get report on display
@@ -53,10 +54,10 @@
 @     LDV <FOLDER>s256=<DATADIR>(p)'\' .
 @     LDV <PROGRAM>s40=<SRVS><RPT>(p)<DRW>(p)<CAB>(p)<EXT> .
 @     CALL,SUBLCOMMON_ getOsVer_ (<OSVER>i1) .
-@     IF <QUICKOPEN> eq 'ENABLED',(0014) .
 @     IF <OSVER> gt 5 . ; gto 0014 .
 @     CALL,SUBLCOMMON_ searchFolders_ (<FOLDER>,<PROGRAM>,<FILE>s256) .
 @     IF <FILE> eq ' ' . ; GTO 0015 .
+@     IF <QUICKOPEN> eq 'ENABLED',(0014) .
 @     LDV <ACT>h4=DIR,<PTH>s256 .
 @     CALL,EDRW$,0004 0001 (<ACT>,<PTH>s256,<FIL>s256,'','',<TYP>h1,<STS>h3) .
 @     IF <STS> eq OK . ; GTO 0199 .
@@ -78,7 +79,6 @@
 @.    #  Refer to "http://www.sublimetext.com/docs/2/osx_command_line.html" for all options
 @0020:PC,r '"'<APPPATH>(p)'" -a' '"'<FILE>':'<DLN>(p)'"' .                      start editor with options
 @     SYS .                                                                     system
-@.ew  IF <CALL> ne Y  PC 'cmd /C '"<BATFILE>" . ; .                             start / check if running
 @0025:FDR,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,USER$,<SUBLWATCHER>  GTO 0199 .    currently running?
 @     WAT 1000 .                                                                pause for first time
 @     RUN <SUBLWATCHER> .                                                       start file watcher utility
