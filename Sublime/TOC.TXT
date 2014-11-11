@@ -4,7 +4,7 @@
 *====.=.====.======.===.====================.===============================================================================.
 	  56 B    0     39 BIS
 	  56 B    1     32 BIS                      Table_Define
-	  56 B    2     92 BIS                      SUBL
+	  56 B    2     94 BIS                      SUBL
 	  56 B    3    194 BIS                      SUBLWATCHER
 	  56 B    4    153 BIS                      FILESELECT
 	  56 B    5     26 BIS                      Service_ReposPath    Get Workstation Repository Path
@@ -22,13 +22,12 @@
 	  56 B   17     22 BIS                      Object Name: SUBL_CTL
 	  56 B   18     32 BIS                      Object Name: SBS
 	  56 B   19     31 BIS                      RJUST
-	  56 B   20    130 BIS                      EXPORT
+	  56 B   20    132 BIS                      EXPORT
 	  56 B   21    116 BIS                      IMPORT
 	  56 B   22     38 BIS                      GROWL
 	  56 B   23     36 BIS                      GROWL
 	  56 B   24    131 BIS                      DIFF
 	  56 B   25     38 BIS                      BDT
-	  56 B   26    109 BIS                      Build
+	  56 B   26    155 BIS                      Build
 	  56 B   27   1025 BIS                      SETUP+ - Installation Routine
-	  56 B   28    880 BIS                      SETUP+ - Installation Routine
 	  56 B   99    249 BIS                      Error_Routine        Error Routine

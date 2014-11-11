@@ -9,8 +9,8 @@
 	  56 D    4    194 BIS                      Service_Help         SBS Help
 	  56 D    5    302 BIS                      Table_ResWords       List Of Reserved Words
 	  56 D    6     17 BIS                      Table_IF_Operands    @IF Operands
-	  56 D    7    234 BIS                      Table_RUN_Commands   Run Statements and characteristics
-	  56 D    8    115 BIS                      Table_ICE_Variable
+	  56 D    7    235 BIS                      Table_RUN_Commands   Run Statements and characteristics
+	  56 D    8     44 BIS                      Table_ICE_Variable
 	  56 D   10     92 BIS                      Data_Indent          Indent Logic
 	  56 D   11     75 BIS                      Data_IF_Operands     Standardize @IF Statement Operands
 	  56 D   12     78 BIS                      Data_linplusminus    Standardize lin+ and lin- Statements
@@ -19,7 +19,8 @@
 	  56 D   15    155 BIS                      Data_Double_Space    Double Space Between Commands
 	  56 D   16    156 BIS                      Data_Upper_Case      Uppercase Commands
 	  56 D   17    205 BIS                      Data_Std_Labels      Standardize Labels
-	  56 D   18     81 BIS                      Data_VariableNames   Uppercase Variable Names
+	  56 D   18    109 BIS                      Data_VariableNames   Uppercase Variable Names
 	  56 D   19    253 BIS                      Data_Check_Term      Check For Missing/Improper Termination
 	  56 D   20    575 BIS                      Data_Line_Wrap       Wrap Wizard
-	  56 D   99      9 BIS                      Table_UserPref
+	  56 D   21      4 BIS                      unction toLower(&value) {
+	  56 D   99     10 BIS                      Table_UserPref

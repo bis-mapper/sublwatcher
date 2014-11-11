@@ -5,12 +5,12 @@
 	  56 C    0     39 BIS
 	  56 C    1     16 BIS
 	  56 C    2     28 BIS                      SUBLCONFIG
-	  56 C    3     15 BIS                      SUBLPATH - text editor .exe location
+	  56 C    3     20 BIS                      SUBLPATH - text editor .exe location
 	  56 C    4     15 BIS                      Index_Program                                        REV: 4.6.0  DATE: 20121212
 	  56 C    5     64 BIS                      BATCHTEMP - BatchFile Template
 	  56 C    6    403 BIS                      Table_Message
 	  56 C    7      8 BIS                      BisPkg
-	  56 C    8     16 BIS                      SUBL-LOG                                       TAB-F Tables               F3112
+	  56 C    8   4398 BIS                      SUBL-LOG                                       TAB-F Tables               F3112
 	  56 C    9     19 BIS                      SUBLUTILS                                            VER: 0.0.5  DATE: 20130322
 	  56 C   10      8 BIS                      GROWL-Applications
 	  56 C   11      9 BIS                      GROWL-Alerts
