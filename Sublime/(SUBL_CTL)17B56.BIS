@@ -13,6 +13,8 @@
 @.
 @0001:(<CTL>,<FILE>,<RUNNAME>,<STATUS>) .
 @.
+@     ERROR_ .
+@.
 @     FDR,SUBLUTILS_ '' 'Util' ¬,'SUBL'  RLN 'Rid' <rrid>i .
 @     CALL,EDRW$,<RRID> 0001 (<CTL>) .                                                     Call SUBL
 @     GTO 0199 .

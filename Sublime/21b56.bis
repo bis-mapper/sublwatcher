@@ -18,8 +18,7 @@
 @.
 @0001:(<CTL>,<FILE>,<RUNNAME>,<STATUS>) .
 @.
-@     RAR,0,E,2 0199 .                                                          sets-run-abort
-@     RER,0,E,2 0001 .                                                          sets-run-error
+@     ERROR_ .
 @     RSR,SUBLCOMMON_ configVars_ .
 @     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
 @.

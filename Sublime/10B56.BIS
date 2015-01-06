@@ -21,7 +21,7 @@
 @.
 @     IF DRW$ ne 0  RNM -1 ; .
 @.
-@     RER,EDRW$,0099 0001  RAR 0196 .
+@     ERROR_ .
 @.
 @     LDA <M>s80[9] .
 @     CHG <CR>h1 <CR> - 19 .

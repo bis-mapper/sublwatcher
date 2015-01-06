@@ -22,7 +22,7 @@
 @     BRK  RNM -8  DLR,-8 .
 @.
 @     LDV <WIN1>i6=0 .
-@     RAR 0196 .
+@     ERROR_ .
 @.
 @     LDV,p <PRD>h12=SUBLWATCHER . <PRD> contains Product name
 @     LDV <OVR>h1=N .
@@ -109,16 +109,13 @@
 @     BRK  TXT,-0,2,2,<WIN1>,03,23,02,40,bla/whi <TXT3>i6 .
 @     FON,t,'Arial',09,pd .
 @     BRK,0,A .
-
  - Seamlessly edit MAPPER files in Sublime Text.
  - Modern programming environment compared to MPC.
  - Blazing fast file editing that doesn''t get in your way.
  - Easily extend, customize, and configure.
  _____________________________________________
-
  This wizard will guide you through the steps
  required to install <PRD> on your system.
-
  To continue, click Next.
 @     BRK  TXT,-0,2,99,<WIN1>,08,23,09,62,bla/whi <TXT4>i6 .
 @     FON,t .
@@ -149,7 +146,6 @@
 @     BRK,0,A .
  You must specify the drive or directory containing
  the <PRD> product software ( i.e., D:\ ).
-
  To continue, click Next.
 @     BRK  TXT,-0,2,99,<TXTH> .
 @.
@@ -261,26 +257,21 @@
 @     BRK  TXT,-0,2,99,<TXTH> .
 @.
 @     BRK,0,A .
-
  Software License Agreement
  --------------------------
  Portions copyright © IT Resource Solutions (ITRS)
  Permission has been granted by ITRS for use of their software in this package.
  Copying or reuse of that software is prohibited without the expressed consent
  of ITRS.
-
  The MIT License (MIT)
-
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
-
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
-
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -288,7 +279,6 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
-
 @     BRK  RNM -1 .
 @.
 @     FON,t,'Arial',08,pd .
@@ -439,7 +429,6 @@ fkey,10,''Quit  '',KEY
 @     TXT,"Designate drawer to contain <PRD> software.",<MSG2> .
 @     BRK,0,A .
  Specify an empty cabinet to load the <PRD> package into.
-
  The first available cabinet on your system is: <CAB>.
 @     BRK  TXT,-0,2,99,<TXTH> .
 @.
@@ -554,7 +543,6 @@ fkey,10,''Quit  '',KEY
  Examine the following installation information carefully.
  Click Back if you need to modify options or selections.
  If correct, click Install to perform the installation.
-
  [Destination]
 @     IF <GEN> eq 'N' . ; GTO 0071 .
 @     SRH,-2,,,0185 dp 2-8 [,DRAWERS] <DCNT>i2 .
@@ -576,7 +564,6 @@ fkey,10,''Quit  '',KEY
 @     GTO lin-4 .
 @0072:IF <GEN> eq 'Y'  IF SYSNAM$(1-1) eq 'M' . ; GTO 0073 .
   Database file <FIL> will be used
-
 @0073:LZR,-4 <LNS>i4  IF <LNS> lt 6,(0074) ; .
  [Run Registration]
 @     LDV,w <USR>h12=USER$  IF <ALL> eq 1  LDV <USR>=All ; .
@@ -619,9 +606,7 @@ fkey,10,''Quit  '',KEY
 @     TXT,"Drawer Generation",<MSG1> .
 @     TXT,"... Please Wait ...",<MSG2> .
 @     BRK,0,A .
-
  Drawer <DRW><CAB> is now being generated ...
-
 @     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
 @.
 @     WAT 1000 .
@@ -636,9 +621,7 @@ fkey,10,''Quit  '',KEY
 @     TXT,"Drawer Registration",<MSG1> .
 @     TXT,"... Please Wait ...",<MSG2> .
 @     BRK,0,A .
-
  Updating Drawer Permissions report ...
-
 @     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
 @.
 @     WAT 1000 .
@@ -671,9 +654,7 @@ fkey,10,''Quit  '',KEY
 @     TXT,"Drawer Description",<MSG1> .
 @     TXT,"... Please Wait ...",<MSG2> .
 @     BRK,0,A .
-
  Updating Cabinet Table of Contents report ...
-
 @     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
 @.
 @     WAT 1000 .
@@ -699,9 +680,7 @@ fkey,10,''Quit  '',KEY
 @     TXT,"Software Modules",<MSG1> .
 @     TXT,"... Please Wait ...",<MSG2> .
 @     BRK,0,A .
-
  Loading <PRD> code modules, tables and other reports ...
-
 @     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
 @.
 @     TXT,"",<WIN1>,15,13,08,37,lgra,<B> <TXT1>i6 .
@@ -793,9 +772,7 @@ fkey,10,''Quit  '',KEY
 @     TXT,"Run Script Registration",<MSG1> .
 @     TXT,"... Please Wait ...",<MSG2> .
 @     BRK,0,A .
-
  Registering run script(s) in Department <DPT> ...
-
 @     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
 @.
 @     WAT 1000 .
@@ -828,14 +805,14 @@ fkey,10,''Quit  '',KEY
 @     IF SYSNAM$(1-1) ne 'M',(0105) ; .
 @     LDV <DRC>a6=<CAB><RDRW>  DEF,n <DRN>,<DRC> .
 @     WRL,RUNDRW$,<DPT>,<LIN> \
-      'RUN','USER','TYPE','RID','F','I/O','LINE','MODE','1MDNF' \
-      ¬,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG> .
+      'RUN','USER','TYPE','RID','F','I/O','LINE','MODE','1MDNF','VAR','LAB' \
+      ¬,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG>,499,499 .
 @     GTO 0104 .
 @0105:.
 @     LDV,r <DRN>(0-5)=<RDRW><CAB> .
 @     WRL,RUNDRW$,<DPT>,<LIN> \
-      'Run','User','Drawer','Rpt','F','I/O','Line','Cab','1MDNF' \
-      ¬,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG> .
+      'Run','User','Drawer','Rpt','F','I/O','Line','Cab','1MDNF','VAR','LAB' \
+      ¬,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG>,499,499 .
 @     GTO 0104 .
 @0106:.
 @     IF <SOR> eq Y  SRR,RUNDRW$,<DPT> '' 'RUN','USER' ¬,1,2d ; .
@@ -850,7 +827,6 @@ fkey,10,''Quit  '',KEY
 @     TXT,"Press Finish to display Installation Notes",<MSG2> .
 @     BRK,0,A .
   <PRD> successfully loaded into Cabinet <CAB>.
-
 @     LZR,-4 <LNS>i4  IF <LNS> lt 6,(lin+2) ; .
   Run script(s) were registered in Department <DPT>.
 @     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
@@ -873,15 +849,11 @@ fkey,10,''Quit  '',KEY
 @     BRK,0,A .
 .Installation Notes
 *===============================================================================
-
  <PRD> has been successfully installed in Cabinet <CAB>.
-
  Please sign off as MAPCOORD and sign on as yourself.
  You can then open up a report in Sublime by typing SUBL on the control line.
-
  Additional instructions and documentation can be found here:
  https://github.com/bis-mapper/sublwatcher
-
 
 @     LDV <RUN>h12  RDL,-4,6,0152 'Run' <RUN> .
 @.
@@ -889,12 +861,10 @@ fkey,10,''Quit  '',KEY
  The following runs have been globally registered for all users:
 @     IF <DPT> eq MSTRD$,(lin+2) ; .
  The following runs have been registered for all users in department <DPT>:
-
  Run Name
  --------
 @     RDC,-4,6 'Run' <V1>h .
  <V1>
-
 @0152:.
 @     BRK  RNM -8 .
 @.

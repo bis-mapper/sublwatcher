@@ -19,6 +19,8 @@
 @.
 @0001:(<TITLE>,<TYPE>,<MSG>) .
 @.
+@     ERROR_ .
+@.
 @     RSR,SUBLCOMMON_ configVars_ .
 @.
 @.    #  Display GROWL notification

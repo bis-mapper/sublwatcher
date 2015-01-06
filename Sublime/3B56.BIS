@@ -7,7 +7,8 @@
 *===============================================================================
 :INCLUDE,ECAB$,B,1 .                                                            INCLUDE
 @0001:.
-@     RER,EDRW$,0099 0001  RAR 0198 .
+@     RAR 0198 .                                                                Abort label
+@     RER,0,E,2  0001 .
 @     BRK  BRK,0,I  RNM -2 .                                                    Clear Attrib Result
 @     BRK  BRK,0,I  RNM -3 .                                                    Read Attrib Result
 @.
@@ -111,7 +112,7 @@
 @     DEF <T>i2,<RPT>  IF <T> eq 1  INC <VM> .                                  Numeric
 @     DEF <T>i2,<DRW>  IF <T> eq 2  INC <VM> .                                  Alpha
 @     IF <VM> eq 3,(0047) .                                                     Valid
-@     PC,bcw "del <CHGSFILE>(p)" .                                              Clean up file
+@     PC,bnw "del <CHGSFILE>(p)" .                                              Clean up file
 @.
 @     LDV <MSG>s80=<FILE>': Is not a valid MAPPER report' .
 @     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
@@ -123,13 +124,13 @@
         LDV <MSG>s80='The file has been deleted' .
 @     IF STAT1$ eq 2 \
         LDV <MSG>s80='Binary files are not supported' .
-@     PC,bcw "del <CHGSFILE>(p)" .                                              Clean up file
+@     PC,bnw "del <CHGSFILE>(p)" .                                              Clean up file
 @.ew  MBX,OK,S,'Sublwatcher: Warning!' "<MSG>(p)" O,(0036) .
 @     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
 @     GTO 0036 .
 @.
 @0048:RNM -4 .
-@     PC,bcw "del <CHGSFILE>(p)" .                                              Clean up file
+@     PC,bnw "del <CHGSFILE>(p)" .                                              Clean up file
 @.
 @.    #  Make sure were not editing this file
 @     IF <CAB> eq ECAB$  IF <DRW> eq AEDRW$  IF <RPT> eq ERPT$,(0036) . ; .     Cannot modify itself
@@ -183,7 +184,7 @@
 @.
 @.    #  Start over and keep re-checking
 @0070:PCR,0,I,-0,n,n,lin+2 <CHGSFILE>(p) .                                      File Exist
-@     PC,bcw "del <CHGSFILE>(p)" .                                              Clean it up
+@     PC,bnw "del <CHGSFILE>(p)" .                                              Clean it up
 @     GTO 0010 .
 @.
 @.    #  Run was aborted

@@ -15,8 +15,8 @@
 @     GTO END .
 @.
 @0001:(<ctl>,<file>,<runname>,<status>) .
-@     rar,0,E,2 0199 .                                                          sets-run-abort
-@     rer,0,E,2 0001 .                                                          sets-run-error
+@.
+@     ERROR_ .
 @.
 @.    #  Get revision
 @     lcv 't@' <ctl> ' ' <pos>i3  inc <pos> .

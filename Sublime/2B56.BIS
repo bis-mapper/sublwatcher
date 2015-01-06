@@ -12,7 +12,7 @@
 @.
 @.    #  Call entry point
 @0001:(<run>) .                                                                 Call from BisCmd?
-@     rer,edrw$,0099 0001  rar 0198 .
+@     ERROR_ .
 @.
 @     if <run> eq '<RUN>',(0005) .                                              Normal or Call?
 @     ldv <call>h1=y,<dln>s0 .

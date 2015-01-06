@@ -30,7 +30,7 @@
 @0001:(<ACT>,<PTH>,<FIL>,<SPT>,<SFL>,<TYP>,<STS>) .
 @.
 @     RSR,SUBLCOMMON_ configVars_ .
-@     RER,EDRW$,0099 0001  RAR 0196 .
+@     ERROR_ .
 @.
 @     LDV,p <PTH>=<APPDIR> .
 @     LDV   <FLX>s24=USER$STNUM$LRRSD$ LCV t$ <FLX> ' '/  LDV,p <FLX> .
