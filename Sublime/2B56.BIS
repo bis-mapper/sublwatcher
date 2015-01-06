@@ -5,89 +5,88 @@
 *
 *
 *===============================================================================
-:INCLUDE,ECAB$,B,1 .                                                            INCLUDE
+:INCLUDE,ecab$,B,1 .                                                            INCLUDE
 @.
-@     CHG INPUT$ <RUNINPUT>s20 .
-@     LDV <CALL>h1=n,<DLN>i7=DLINE$ .                                           Manual entrance
+@     chg input$ <runinput>s20 .
+@     ldv <call>h1=n,<dln>i7=dline$ .                                           Manual entrance
 @.
 @.    #  Call entry point
-@0001:(<RUN>) .                                                                 Call from BisCmd?
-@     RER 0198 .
-@     RAR,0,E,2 0001 .                                                          sets-run-error
+@0001:(<run>) .                                                                 Call from BisCmd?
+@     rer,edrw$,0099 0001  rar 0198 .
 @.
-@     IF <RUN> eq '<RUN>',(0005) .                                              Normal or Call?
-@     LDV <CALL>h1=y,<DLN>s0 .
-@     CALL,SUBLCOMMON_ getCabDrwRpt_ (<RUN>,<CAB>i4,<DRW>h1,<RPT>i4) .
-@     LDV,u <CAB>,<DRW>,<RPT> .
-@     GTO 0007 .
+@     if <run> eq '<RUN>',(0005) .                                              Normal or Call?
+@     ldv <call>h1=y,<dln>s0 .
+@     call,SUBLCOMMON_ getCabDrwRpt_ (<run>,<cab>i4,<drw>h1,<rpt>i4) .
+@     ldv,u <cab>,<drw>,<rpt> .
+@     gto 0007 .
 @.
 @.    #  Otherwise we get report on display
 @.    #  This happens when user enters SUBL on a given report
-@0005:LDV <CAB>i4=CAB$,<DRW>h1=ADRW$,<RPT>i4=RPT$ .                             Get RPT on display
-@     CHG INPUT$ <CMD>s100 .
+@0005:ldv <cab>i4=cab$,<drw>h1=adrw$,<rpt>i4=rpt$ .                             Get RPT on display
+@     chg input$ <cmd>s100 .
 @.
 @.    #  Load the application configuration variables from table
-@0007:RSR,SUBLCOMMON_ configVars_ .
-@     IF <RPT> eq 0 REL . ; .                                                  No report on display?
-@     CALL,SUBLCOMMON_ chkIceSvc_ (<CAB>,<DRW>,<RPT>,<SRVS>s30) .               Ice Service?
-@     LDV,p <SRVS> .
+@0007:rsr,SUBLCOMMON_ configVars_ .
+@     if <rpt> eq 0  rel . ; .                                                  No report on display?
+@     call,SUBLCOMMON_ chkIceSvc_ (<cab>,<drw>,<rpt>,<srvs>s30) .               Ice Service?
+@     ldv,p <srvs> .
 @.
 @.    #  First time running program...Enable setup
-@     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
-@     IF <APPPATH> eq ' ',(0199) .                                              Exit
+@     call,SUBLCOMMON_ appPath_ (<user>,<apppath>s256) .
+@     if <apppath> eq ' ',(0199) .                                              Exit
 @.
 @.    #  Create folder for current site if it doesnt exist
-@0010:LDV,p <DIR>s256=<APPDIR>'\' .
-@     LDV,p <FLDR>s256=<SITE> .
-@     LDV,p <FLDRPATH>s256=<datadir> .
-@     CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
+@0010:ldv,p <dir>s256=<appdir>'\' .
+@     ldv,p <fldr>s256=<site> .
+@     ldv,p <fldrpath>s256=<datadir> .
+@     call,SUBLCOMMON_ chkMkDir_ (<dir>,<fldr>,<fldrpath>) .
 @.
 @.    #  Read quick open flag
-@     CALL,SUBLCOMMON_ getCompName_ (<COMPUTER>s30) .
-@     FDR,SUBLPATH_,,,lin+2 ' ' 'User ID','Computer Name' ¬,<USER>,<COMPUTER> . Get Application Path
-@     RLN 'Quick Open' <QUICKOPEN>s .
-@     IF <RUNINPUT> ne '<RUNINPUT>'  IF <RUNINPUT>(p) eq 'q'  LDV <QUICKOPEN>s7='ENABLED' . ; .
+@     call,SUBLCOMMON_ getCompName_ (<computer>s30) .
+@     fdr,SUBLPATH_,,,lin+2 ' ' 'User ID','Computer Name' ¬,<user>,<computer> . Get Application Path
+@     rln 'Quick Open' <quickopen>s .
+@     if <runinput> ne '<RUNINPUT>'  if <runinput>(p) eq 'q'  ldv <quickopen>s7='ENABLED' . ; .
 @.
 @.    #  Check if program exists already in folder.
 @.    #  If it doesn't exist load <FILE> to default site location
-@.    #  If it does exist load <FILE> to current location
-@     LDV <FOLDER>s256=<DATADIR>(p)'\' .
-@     LDV <PROGRAM>s40=<SRVS><RPT>(p)<DRW>(p)<CAB>(p)<EXT> .
-@     CALL,SUBLCOMMON_ getOsVer_ (<OSVER>i1) .
-@     IF <OSVER> gt 5 . ; gto 0014 .
-@     CALL,SUBLCOMMON_ searchFolders_ (<FOLDER>,<PROGRAM>,<FILE>s256) .
-@     IF <FILE> eq ' ' . ; GTO 0015 .
-@     IF <QUICKOPEN> eq 'ENABLED',(0014) .
-@     LDV <ACT>h4=DIR,<PTH>s256 .
-@     CALL,EDRW$,0004 0001 (<ACT>,<PTH>s256,<FIL>s256,'','',<TYP>h1,<STS>h3) .
-@     IF <STS> eq OK . ; GTO 0199 .
-@     LDV <FILE>s256=<PTH>(p)'\'<PROGRAM> .
-@     GTO 0015 .
-@0014:LDV <FILE>s256=<FOLDER>(P)<PROGRAM> .
-@0015:LDV,p <FILE> .
+@.    #  If it does exist load <file> to current location
+@0012:ldv <folder>s256=<datadir>(p)'\' .
+@     ldv <program>s40=<srvs><rpt>(p)<drw>(p)<cab>(p)<ext> .
+@     call,SUBLCOMMON_ getOsVer_ (<osver>i1) .
+@     if <osver> gt 5 . ; gto 0014 .
+@     call,SUBLCOMMON_ searchFolders_ (<folder>,<program>,<file>s256) .
+@     if <file> eq ' ' . ; gto 0015 .
+@     if <quickopen> eq 'ENABLED',(0014) .
+@     ldv <act>h4=DIR,<pth>s256 .
+@     call,edrw$,0004 0001 (<act>,<pth>s256,<fil>s256,'','',<typ>h1,<sts>h3) .
+@     if <sts> eq OK . ; gto 0199 .
+@     ldv <file>s256=<pth>(p)'\'<program> .
+@     gto 0015 .
+@0014:ldv <file>s256=<folder>(P)<program> .
+@0015:ldv,p <file> .
 @.
-@     RSL,<CAB>,<DRW>,<RPT> .                                                   Get result
-@     CALL,SUBLCOMMON_ charReplace_ ('export') .                                Replace tab character
-@     RNM -1 .
+@     rsl,<cab>,<drw>,<rpt> .                                                   Get result
+@     call,SUBLCOMMON_ charReplace_ ('export') .                                Replace tab character
+@     rnm -1 .
 @.
-@     PCW,-1,2,lin1 <FILE>  gto 0020 .                                          Write file
-@     ldv <MSG>s80='Could not write out '<file> .
-@     CALL,GROWL_ 0001 ('SUBL Failed','FAILED',<MSG>) .
+@     pcw,-1,2,lin+1 <file>  gto 0020 .                                         Write file
+@     ldv <msg>s80='Could not write out '<file> .
+@     call,GROWL_ 0001 ('SUBL Failed','FAILED',<msg>) .
 @     gto 0199 .
 @.
 @.    #  Start text editor
 @.    #  Refer to "http://www.sublimetext.com/docs/2/osx_command_line.html" for all options
-@0020:PC,r '"'<APPPATH>(p)'" -a' '"'<FILE>':'<DLN>(p)'"' .                      start editor with options
-@     SYS .                                                                     system
-@0025:FDR,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,USER$,<SUBLWATCHER>  GTO 0199 .    currently running?
-@     WAT 1000 .                                                                pause for first time
-@     RUN <SUBLWATCHER> .                                                       start file watcher utility
+@0020:pc,r '"'<apppath>(p)'" -a' '"'<file>':'<dln>(p)'"' .                      start editor with options
+@     sys .                                                                     system
+@0025:fdr,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,user$,<sublwatcher>  gto 0199 .    currently running?
+@     wat 1000 .                                                                pause for first time
+@     RUN <sublwatcher> .                                                       start file watcher utility
 @.
 @.    #  Output Growl error message
-@0198:CHG <ERR>i4 CERR$  LSM,<ERR> <MSG>s88 .
-@     IF <MSG> eq ' '  LDV <MSG>='That request cannot be processed' .
-@     CALL,GROWL_ 0001 ('BISCMD Failed','FAILED',<MSG>) .
+@0198:chg <err>i4 cerr$  lsm,<err> <msg>s88 .
+@     if <msg> eq ' '  ldv <msg>='That request cannot be processed' .
+@     call,GROWL_ 0001 ('BISCMD Failed','FAILED',<msg>) .
 @.
 @.    #  Return if called otherwise display current report
-@0199:IF <CALL> eq y  RETURN . ; DSP,<CAB>,<DRW>,<RPT> .
+@0199:if <call> eq y  return . ; dsp,<cab>,<drw>,<rpt> .
 @.
