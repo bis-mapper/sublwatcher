@@ -1,7 +1,7 @@
 .EXPORT
 *
 *===================================================================================================
-:INCLUDE,ECAB$,B,1 .                                                                         INCLUDE
+:INCLUDE,ecab$,B,1 .                                                                         INCLUDE
 @.
 @.    #---------------------------------------------------------------------------------------------
 @.    #  EXPORT
@@ -11,121 +11,195 @@
 @.    #---------------------------------------------------------------------------------------------
 @.
 @.    # Test Setup
-@     ldv <CTL>s80='export f832 -fUmbrella' .
+@     ldv <ctl>s80='export f832 -fUmbrella' .
 @     ldv <file>s42='D\Users\winne\sublwatcher\site-d\2f832.bis' .
 @     ldv <runname>s12='export' .
-@     call 0001 (<CTL>,<FILE>,<RUNNAME>,<STATUS>h1) .
-@     gto end .
+@     call 0001 (<ctl>,<file>,<runname>,<status>h1) .
+@     GTO END .
 @.
-@0001:(<CTL>,<FILE>,<RUNNAME>,<STATUS>) .
+@0001:(<ctl>,<file>,<runname>,<status>) .
+@     rnm -1 .
 @.
-@     RAR,0,E,2 0199 .                                                          sets-run-abort
-@     RER,0,E,2 0199 .                                                          sets-run-error
-@     RSR,SUBLCOMMON_ configVars_ .
-@     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .
+@     ldv <status>=0 .
 @.
-@.    #  Open windows explorer using MFXFILE.EXE
-@.    #  <PTH> contains users selected path to export the application
-@.    LDV <ACT>h4=OPEN .
-@.    CALL,EDRW$,0004 0001 (<ACT>,<PTH>s256,<FIL>s64,<SPT>s64,<SFL>h12,<TYP>h1,<STS>h3) .
-@.    IF <STS> ne 'OK ',(0199) .
-@     LDV <PTH>s256=<DATADIR>'\' .
+@     ERROR_
+@     rsr,SUBLCOMMON_ configVars_ .
+@     call,SUBLCOMMON_ appPath_ (<user>,<apppath>s256) .
 @.
-@.    #  Read in <CTL> Control Line Input for what to Export
-@     LCV,0199 't@' <CTL> ' ' <VPOS>i3  INC <VPOS> .
-@     LDV,p <CTLOPT>s40=<CTL>(<VPOS>-0) .
+@     ldv <pth>s256=<datadir>'\' .
+@.
+@.    #  Check if DEFINE Table exists
+@     ldv <*deflist>h1=n .
+@     if DEFLIST_ eq 'DEFLIST_'  gto 0004 . ; .
+@     lzr,DEFLIST_,0004 .
+@     dvs,DEFLIST_,0004 'Define','Category' <def>s,<cat>s .
+@     ldv <*deflist>=y .
+@.
+@.    #  Read in <ctl> Control Line Input for what to Export
+@0004:lcv,0199 't@' <ctl> ' ' <vpos>i3  inc <vpos> .
+@     ldv,p <ctlopt>s40=<ctl>(<vpos>-0) .
 @.
 @.    #  Check for folder flag
-@     LCV,lin4 '' <CTLOPT> '-f' <fpos>i3 .
-@     inc,2 <fpos>  ldv <ifolder>s40=<CTLOPT>(<fpos>-0) .
+@     lcv,lin+4 '' <ctlopt> '-f' <fpos>i3 .
+@     inc,2 <fpos>  ldv <ifolder>s40=<ctlopt>(<fpos>-0) .
 @     ldv <pth>=<pth>(p)<ifolder>(lp)'\' .                                      Add folder to base path
-@     dec,3 <fpos>  ldv,p <t>s40=<CTLOPT>(1-<fpos>),<CTLOPT>s40=<T> .           Exclude folder option
+@     dec,3 <fpos>  ldv,p <t>s40=<ctlopt>(1-<fpos>),<ctlopt>s40=<t> .           Exclude folder option
 @.
 @.    #
 @.    #  Export by cabinet number... EXPORT 56
 @.    #
-@     DEF <TY>i2,<CTLOPT>  IF <TY> eq 1 . ; GTO 0010 .                          Numeric only for cabinet option
-@     LDV <DRAWERS>h8='BCDEFGHI',<DRWREF>i1=0,<DRW>h1,<CAB>i4=<CTLOPT> .
-@0002:INC <DRWREF>  IF <DRWREF> eq 9,(0199) .                                   Loop through drawers
-@     LDV <DRW>=<DRAWERS>(<DRWREF>-1) .
-@     ldv <drawer>h11='0'<drw><cab>  call 0110 (<drawer>,<exist>h1) .
-@     if <exist> eq 0 . ; gto 0002 .
-@     DRW,<CAB>,<DRW>,0002 ,,,,,<VHIRPTD>i4,,,,,,<FOLDER>s26 .                  Drawer exist?
-@     LDV <RPT>i4=-1 .
-@0003:INC <RPT>  IF <RPT> gt <VHIRPTD>,(0002) .
-@     RSR 0100 .                                                                Export file
-@     GTO 0003 .                                                                Next report
+@     def <ty>i2,<ctlopt>  if <ty> eq 1 . ; gto 0010 .                          Numeric only for cabinet option
+@     ldv <drawers>h8='BCDEFGHI',<drwref>i1=0,<drw>h1,<cab>i4=<ctlopt> .
+@0005:inc <drwref>  if <drwref> eq 9,(0199) .                                   Loop through drawers
+@     ldv <drw>=<drawers>(<drwref>-1) .
+@     ldv <drawer>h11='0'<drw><cab>  call 0200 (<drawer>,<exist>h1) .
+@     if <exist> eq 0 . ; gto 0005 .
+@     drw,<cab>,<drw>,0005 ,,,,,<vhirptd>i4,,,,,,<folder>s26 .                  Drawer exist?
+@     ldv <rpt>i4=-1 .
+@0007:inc <rpt>  if <rpt> gt <vhirptd>,(0005) .
+@     call 0100 (<pth>,<cab>,<drw>,<rpt>,<folder>,<program>s40,<epath>s256,<status>h1) .
+@     if <status> eq 0 . ; gto 0007 .
+@     rsl,<cab>,<drw>,<rpt>  ldv,p <efile>s256=<epath>(p)<program> .
+@     call 0120 (<efile>,<status>) .
+@     gto 0007 .                                                                Next report
 @.
 @.    #
 @.    #  Export by cabinet+drawer... EXPORT 56b or b56
 @.    #
-@0010:.
-@     DEF,p <SZ>i3,<CTLOPT>  IF <SZ> le 5 . ; GTO 0020 .
-@     IF <TY> eq 3 . ; GTO 0020 .                                               Alphanumeric
-@     LCV,lin+1 b1 <CTLOPT> 'a' <APOS>a1  GTO 0012 .
-@     LCV,lin+1 b1 <CTLOPT> 'b' <APOS>a1  GTO 0012 .
-@     LCV,lin+1 b1 <CTLOPT> 'c' <APOS>a1  GTO 0012 .
-@     LCV,lin+1 b1 <CTLOPT> 'd' <APOS>a1  GTO 0012 .
-@     LCV,lin+1 b1 <CTLOPT> 'e' <APOS>a1  GTO 0012 .
-@     LCV,lin+1 b1 <CTLOPT> 'f' <APOS>a1  GTO 0012 .
-@     LCV,lin+1 b1 <CTLOPT> 'g' <APOS>a1  GTO 0012 .
-@     LCV,lin+1 b1 <CTLOPT> 'h' <APOS>a1  GTO 0012 .
-@     LCV,lin+1 b1 <CTLOPT> 'i' <APOS>a1 .
+@0010:def,p <sz>i3,<ctlopt>  if <sz> le 5 . ; gto 0090 .
+@     if <ty> eq 3 . ; gto 0090 .                                               Alphanumeric
+@     lcv,lin+1 b1 <ctlopt> 'a' <apos>a1  gto 0012 .
+@     lcv,lin+1 b1 <ctlopt> 'b' <apos>a1  gto 0012 .
+@     lcv,lin+1 b1 <ctlopt> 'c' <apos>a1  gto 0012 .
+@     lcv,lin+1 b1 <ctlopt> 'd' <apos>a1  gto 0012 .
+@     lcv,lin+1 b1 <ctlopt> 'e' <apos>a1  gto 0012 .
+@     lcv,lin+1 b1 <ctlopt> 'f' <apos>a1  gto 0012 .
+@     lcv,lin+1 b1 <ctlopt> 'g' <apos>a1  gto 0012 .
+@     lcv,lin+1 b1 <ctlopt> 'h' <apos>a1  gto 0012 .
+@     lcv,lin+1 b1 <ctlopt> 'i' <apos>a1 .
 @.
 @.    #  Handle both formats f402 or 402f
-@0012:IF <APOS> eq 1 . ; gto lin+4 .
-@     LDV <DRW>h1=<CTLOPT>(<APOS>-1) .
-@     INC <APOS>  LDV <CAB>i4=<CTLOPT>(<APOS>-0) .
+@0012:if <apos> eq 1 . ; gto lin+4 .
+@     ldv <drw>h1=<ctlopt>(<apos>-1) .
+@     inc <apos>  ldv <cab>i4=<ctlopt>(<apos>-0) .
 @     gto lin+3 .
-@     DEC <APOS>    LDV <CAB>i4=<CTLOPT>(1-<APOS>) .
-@     INC,2 <APOS>  LDV <DRW>h1=<CTLOPT>(<APOS>-1) .
-@     ldv <drawer>h11='0'<drw><cab>  call 0110 (<drawer>,<exist>h1) .
+@     dec <apos>    ldv <cab>i4=<ctlopt>(1-<apos>) .
+@     inc,2 <apos>  ldv <drw>h1=<ctlopt>(<apos>-1) .
+@     ldv <drawer>h11='0'<drw><cab>  call 0200 (<drawer>,<exist>h1) .
 @     if <exist> eq 0 . ; gto 0012 .
-@     DRW,<CAB>,<DRW>,0012 ,,,,,<VHIRPTD>i4,,,,,,<FOLDER>s26 .                  Drawer exist?
-@     LDV <RPT>i4=-1 .
-@0013:INC <RPT>  IF <RPT> gt <VHIRPTD>,(0199) .
-@     RSR 0100 .                                                                Export file
-@     GTO 0013 .                                                                Next report
+@     drw,<cab>,<drw>,0012 ,,,,,<vhirptd>i4,,,,,,<folder>s26 .                  Drawer exist?
+@     ldv <rpt>i4=-1 .
+@0013:inc <rpt>  if <rpt> gt <vhirptd>,(0199) .
+@     call 0100 (<pth>,<cab>,<drw>,<rpt>,<folder>,<program>s40,<epath>s256,<status>h1) .
+@     if <status> eq 0 . ; gto 0013 .
+@     rsl,<cab>,<drw>,<rpt>  ldv,p <efile>s256=<epath>(p)<program> .
+@     call 0120 (<efile>,<status>) .
+@.
+@. @     rsr 0100 .                                                                Export file
+@     gto 0013 .                                                                Next report
 @.
 @.    #
 @.    #  Export ICE Category... ICE_MODULES_TEST
 @.    #
-@0020:.
 @.    #  Export entire application
 @.    #  Export entire ice category
 @.    #  Export entire ice application
 @.
 @.    #  Write file back out to same path
-@     PCW,-0,2 <FILE> .
-@     PC,r '"'<APPPATH>(p)'" -a' '"'<FILE>'"' .                                 Re-start editor
-@     GTO 0199 .
+@0090:pcw,-0,2 <file> .
+@     pc,r '"'<apppath>(p)'" -a' '"'<file>'"' .                                 Re-start editor
+@     gto 0199 .
 @.
 @.    ##############################################################################################
 @.    #  Subroutine: Export File
 @.    ##############################################################################################
-@0100:LZR,<CAB>,<DRW>,<RPT>,0105 ,,,,,,,,,,<RTYPE>h1 .
-@     LCV,lin1 '' <FOLDER> '*'/ .
-@     LDV,p <FOLDER> .
-@     LCV,lin1 '' <FOLDER> 'PARAM'  GTO 0105 .
-@     IF <RTYPE> eq 1 . ; GTO lin+3 .                                           Binary report?
-@     RDL,<CAB>,<DRW>,<RPT>,2 2-20 <SRVS>s .                                    Get name from report
-@     LDV,p <PROGRAM>s20=<SRVS>  GTO lin+3 .
-@     CALL,SUBLCOMMON_ chkIceSvc_ (<CAB>,<DRW>,<RPT>,<SRVS>s30) .               Ice Service?
-@     LDV,p <PROGRAM>s40=<SRVS>(p)<RPT>(p)<DRW>(p)<CAB>(p)<EXT> .
-@     LDV,p <EXPATH>s256=<PTH>(p)<FOLDER>(p)'\' .
-@     CALL,SUBLCOMMON_ chkMkDir_ (<PTH>,<FOLDER>,<EXPATH>) .
-@     LDV,p <EXPFILE>s256=<EXPATH>(p)<PROGRAM> .
-@     RSL,<CAB>,<DRW>,<RPT> .
-@     if <RTYPE> eq 1,(lin2) .                                                  Skip binary
-@     CALL,SUBLCOMMON_ charReplace_ ('export') .                                Replace tab character
-@     PCW,-0,2 <EXPFILE> .                                                      Write file
-@0105:ESR .
+@0100:(<pth>,<cab>,<drw>,<rpt>,<folder>,<program>,<epath>,<status>) .
+@     ldv <status>=0 .
 @.
-@.    # Check if drawer exists... This should work with @drw but for some reason it's not
-@0110:(<rpt>,<exist>)
-@     ldv <exist>h1=0 .
-@     dir <rpt> ,,,,,<acc>h1 if <acc> eq ''  ldv <exist>=9 .                    If no error routine
+@     lzr,<cab>,<drw>,<rpt>,lin1 ,,,,,,,,,,<rtype>h1  gto lin+2 .
+@     ldv <status>=9  gto 0115 .
+@     lcv,lin+1 '' <folder> '*'/ .
+@     ldv,p <folder> .
+@.
+@.    #  Determine if ICEBUILD app and force folder name for drawer F to controllers
+@     ldv <ibld>h1=n .
+@     if <*deflist> eq y . ; gto 0101 .
+@     srh,DEFLIST_,,,0101 'd' 'Cab','icebld' ¬,<cab>(r),'yes' .
+@     ldv <ibld>h1=y .
+@.
+@0101:lcv,lin+1 '' <folder> 'PARAM'  ldv <status>=9  gto 0115 .
+@     if <rtype> eq 1 . ; gto lin+3 .                                           Binary report?
+@     rdl,<cab>,<drw>,<rpt>,2 2-20 <srvs>s .                                    Get name from report
+@     ldv,p <program>=<srvs>  gto lin+3 .
+@     call,SUBLCOMMON_ chkIceSvc_ (<cab>,<drw>,<rpt>,<srvs>s30) .               Ice Service?
+@     ldv,p <program>=<srvs>(p)<rpt>(p)<drw>(p)<cab>(p)'.BIS' .
+@.
+@.    #  Non IBLD applications create folder
+@     if <ibld> eq n . ; gto 0102 .
+@     ldv,p <epath>s256=<pth>(p)<folder>(p)'\' .
+@     call,SUBLCOMMON_ chkMkDir_ (<pth>,<folder>,<epath>) .
+@     gto 0115 .
+@.
+@.    #  For IBLD applications change folder structure
+@.    #  These drawers get put under the APP folder
+@0102:if <drw> eq f,i,h . ; gto 0105 .
+@     ldv <appfolder>h3='app' .
+@     if <drw> eq f  ldv <folder>s11='controllers' . ; .
+@     ldv,p <epath>s256=<pth>(p)<appfolder>(p)'\' .
+@     call,SUBLCOMMON_ chkMkDir_ (<pth>,<appfolder>,<epath>) .
+@     ldv,p <tpath>s256=<pth>(p)<appfolder>(p)'\' .
+@     ldv,p <epath>s256=<pth>(p)<appfolder>(p)'\'<folder>'\' .
+@     call,SUBLCOMMON_ chkMkDir_ (<tpath>,<folder>,<epath>) .
+@.
+@.    #  Generate shared folder for VIEW
+@0103:if <drw> eq 'H'  if <rpt> ge 1000 . ; gto 0105 .
+@     ldv,p <sharedfldr>h7='shared' .
+@     ldv,p <tpath>s256=<pth>(p)<appfolder>(p)'\views\' .
+@     ldv,p <epath>s256=<pth>(p)<appfolder>(p)'\views\'<sharedfldr>'\' .
+@     call,SUBLCOMMON_ chkMkDir_ (<tpath>,<sharedfldr>,<epath>) .
+@.
+@.    #  These drawers get put under the DB folder
+@0105:if <drw> eq b,e . ; gto 0107 .
+@     ldv <dbfolder>h2='db' .
+@     ldv,p <epath>s256=<pth>(p)<dbfolder>(p) .
+@     call,SUBLCOMMON_ chkMkDir_ (<pth>,<dbfolder>,<epath>) .
+@     ldv,p <tpath>s256=<pth>(p)<dbfolder>(p)'\' .
+@     ldv,p <epath>s256=<pth>(p)<dbfolder>(p)'\'<folder>(p)'\' .
+@     call,SUBLCOMMON_ chkMkDir_ (<tpath>,<folder>,<epath>) .
+@     gto 0115 .
+@.
+@.    #  These drawers get put under the LIB folder
+@0107:if <drw> eq c,d . ; gto 0115 .
+@     if <drw> eq c  ldv,p <folder>s10='internal' . ; .
+@     if <drw> eq d  ldv,p <folder>s10='tables' . ; .
+@     ldv <libfolder>h3='lib' .
+@     ldv,p <epath>s256=<pth>(p)<libfolder>(p) .
+@     call,SUBLCOMMON_ chkMkDir_ (<pth>,<libfolder>,<epath>) .
+@     ldv,p <tpath>s256=<pth>(p)<libfolder>(p)'\' .
+@     ldv,p <epath>s256=<pth>(p)<libfolder>(p)'\'<folder>(p)'\' .
+@     call,SUBLCOMMON_ chkMkDir_ (<tpath>,<folder>,<epath>) .
+@     gto 0115 .
+@.
+@. @0115:ldv,p <expfile>s256=<epath>(p)<program> .
+@. @     rsl,<cab>,<drw>,<rpt> .
+@. @     if <rtype> eq 1,(lin+2) .                                                 Skip binary
+@. @     call,SUBLCOMMON_ charReplace_ ('export') .                                Replace tab character
+@. @     pcw,-0,2 <expfile> .                                                      Write file
+@.
+@0115:return .
+@.
+@0120:(<file>,<status>) .
+@     lzr,-0 ,,,,,,,,,,<rtype>h1 .
+@     if <rtype> eq 1,(lin+2) .                                                 Skip binary
+@     call,SUBLCOMMON_ charReplace_ ('export') .                                Replace tab character
+@     pcw,-0,2 <file> .                                                         Write file
 @     return .
 @.
 @.    # Exit
-@0199:RETURN .
+@0199:return .
+@.
+@.    # Check if drawer exists... This should work with @drw but for some reason it's not
+@0200:(<rpt>,<exist>) .
+@     ldv <exist>h1=0 .
+@     dir <rpt> ,,,,,<acc>h1  if <acc> eq ''  ldv <exist>=9 .                    If no error routine
+@     return .
