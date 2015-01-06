@@ -1,16 +1,11 @@
-.SUBLUTILS                                            VER: 0.0.5  DATE: 20130322
+.SUBLUTILS
 *            .    .D.   .                                                                                                    .
 *Util        .Cab .r.Rid.Description                                                                                         .
 *============.====.=.===.====================================================================================================.
 ¬SUBL        ¬    ¬ ¬  2¬Used to open up files into SUBL from MAPPER
 ¬SUBLCTL     ¬    ¬ ¬ 17¬Wrapper for calling SUBL to open files from within Sublime
-*GEN         ¬    ¬ ¬ 17¬Generate new reports, applications, scaffolding
-*UPDATEVER   ¬    ¬ ¬ 17¬Update application version info
 ¬SBS         ¬    ¬ ¬ 18¬Standardize your run
-*RJUST       ¬    ¬ ¬ 19¬Right justify comments - Can pass in width if drawer is wider
 ¬EXPORT      ¬    ¬ ¬ 20¬Export files from mapper application
-*IMPORT      ¬    ¬ ¬ 21¬Import files from location on machine
-*HELP        ¬    ¬ ¬ 23¬Similar to help@, from control line
 ¬DIF         ¬    ¬ ¬ 24¬Get a diff of the program you have open
 ¬DIFF        ¬    ¬ ¬ 24¬Get a diff of the program you have open
 ¬BDT         ¬    ¬ ¬ 25¬Build define table
