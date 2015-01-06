@@ -67,7 +67,7 @@ start "" "%BASH%" --login -i -c "%shellfile%"
 @     ldv <time>i3 .
 @0015:pcr,0,f,-0,,,lin+1 <success>  gto 0020 .
 @     inc <time>  if <time> gt 480  ldv <status> eq 9  gto 0020 . ; .             max wait 4 minutes
-@     dbg,,w,200 .
+@     dbg,,w,500 .
 @     gto 0015 .
 @.
 @0020:PC,bcw "del <success>" .                                                         Clean up file

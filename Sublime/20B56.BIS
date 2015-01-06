@@ -124,7 +124,7 @@
 @.    #  Determine if ICEBUILD app and force folder name for drawer F to controllers
 @     ldv <ibld>h1=n .
 @     if <*deflist> eq y . ; gto 0101 .
-@     srh,DEFLIST_,,,0101 'd' 'Cab','icebld' Â¬,<cab>(r),'yes' .
+@     srh,DEFLIST_,,,0101 'd' 'Cab','icebld' ¬,<cab>(r),'yes' .
 @     ldv <ibld>h1=y .
 @.
 @0101:lcv,lin+1 '' <folder> 'PARAM'  ldv <status>=9  gto 0115 .

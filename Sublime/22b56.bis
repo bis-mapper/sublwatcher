@@ -19,8 +19,6 @@
 @.
 @0001:(<TITLE>,<TYPE>,<MSG>) .
 @.
-@     RAR,0,E,2 0199 .                                                          sets-run-abort
-@     RER,0,E,2 0001 .                                                          sets-run-error
 @     RSR,SUBLCOMMON_ configVars_ .
 @.
 @.    #  Display GROWL notification
