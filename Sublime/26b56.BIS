@@ -18,6 +18,7 @@
 @     rar,0,E,2 0199 .                                                          sets-run-abort
 @     rer,0,E,2 0001 .                                                          sets-run-error
 @.
+@.    #  Get revision
 @     lcv 't@' <ctl> ' ' <pos>i3  inc <pos> .
 @     ldv <rev>h5=<ctl>(<pos>-0) .
 @.
@@ -34,9 +35,15 @@
 @     call,SUBLCOMMON_ getCabDrwRpt_ (<run>,<cab>i4,<drw>h1,<rpt>i4) .
 @     pcr,0,I,-0,n,n,0181 <file>  rnm -2 .
 @.
+@.    #  Which build?  External ; SUBLWATCHER
+@     if <cab> ne ECAB$ . ; ldv <appname>s20='sublwatcher' gto 0002 .
+@     call,"BUILD" 0001 (<cab>,<file>,<pth>,<appname>s20,<ver>h16,<bldstatus>h1) .
+@     if <bldstatus> eq 9  gto 0199 . ; .
+@     gto 0100 .
+@.
 @.    #  With each build bump the version number
 @.    #  Details found here: http://semver.org/
-@     fdr,SUBLCONFIG_,,,0185 '' 'Parameter' ¬,'VER'  rln 'Siz','Ty' <vsz>i,<vty>h .
+@0002:fdr,SUBLCONFIG_,,,0185 '' 'Parameter' ¬,'VER'  rln 'Siz','Ty' <vsz>i,<vty>h .
 @     if <rev> eq ''  ldv <rev>='PATCH' .                                          CAN NOT BE SPACES
 @     if <rev> eq 'MAJOR','MINOR','PATCH','NEW' . ; gto 0182 .                  MUST BE ONE OF THESE
 @     if <rev> eq NEW  if <ver> gt '',(0183) . ; .
@@ -118,10 +125,11 @@
 @     pcw,ecab$,aedrw$,27,2 <pth>(p)'SETUP.RUN' .
 @.
 @.    # Build complete message
-@     ldv <msg>s80='Build Complete' .
+@0100:ldv,u <appname> .
+@     ldv <msg>s80='Application: '<appname>(p)'\nBuild: '<ver>(p) .
 @     call,GROWL_ 0001 ('subwatcher: success!','SUCCESS',<msg>) .
 @.
-@.    #  Exist
+@.    #  Exit
 @     gto 0199 .
 @.
 @.    #  Errors
@@ -149,6 +157,9 @@
 @     call,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<msg>) .
 @     gto 0199 .
 @.
-
+@0186:ldv <msg>s80='Unable to build application '<cab> .
+@     call,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<msg>) .
+@     gto 0199 .
+@.
 @.    #  Exit
 @0199:return .

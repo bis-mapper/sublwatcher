@@ -19,8 +19,7 @@
 @.
 @0001:(<FILE>,<INPUT>,<STATUS>) .
 @     LDV <STATUS>=0 .                                                          set flag to ok
-@     RER 0198 .
-@     RAR 0199 .                                                                sets-run-abort
+@     ERROR_ .
 @.
 @     RSR,SUBLCOMMON_ configVars_ .
 @.
@@ -37,8 +36,14 @@
 @     LDV <RUNNAME>=<INPUT>(1-<VPOS>) .                                           Get run name from user input
 @.
 @.    #  Find program in lookup table and execute it
-@0020:FDR,SUBLUTILS_,,,0198 '' 'Util' ¬,<RUNNAME>  RLN 'Rid' <rrid>i .
-@     CALL,EDRW$,<RRID> 0001 (<INPUT>,<FILE>,<RUNNAME>,<STATUS>h1) .
+@0020:FDR,SUBLUTILS_,,,0198 '' 'Util' ¬,<RUNNAME>  RLN 'Cab','Dr','Rid' <rcab>i,<rdrw>h,<rrid>i .
+@.
+@.    # Hook into program in different cab, drw
+@     if <rcab> gt ''  if <rcab> ne ecab$ . ; gto 0025 .
+@     call,<rcab>,<rdrw>,<rrid> 0001 (<INPUT>,<FILE>,<RUNNAME>,<STATUS>h1) .
+@     IF <STATUS> eq 0,' ',(0199) . ; gto 0199 .
+@.
+@0025:CALL,EDRW$,<RRID> 0001 (<INPUT>,<FILE>,<RUNNAME>,<STATUS>h1) .
 @     IF <STATUS> eq 0,' ',(0199) .
 @.
 @.    #  Output Growl error message
