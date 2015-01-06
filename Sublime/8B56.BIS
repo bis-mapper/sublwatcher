@@ -20,6 +20,7 @@
 @.
 @.    #  Get computer name
 @     CALL,SUBLCOMMON_ getCompName_ (<COMPUTER>s30) .
+@.
 @.    #  Get OS level (XP=5,W7=6,...)
 @     CALL,SUBLCOMMON_ getOsVer_ (<OSVER>i1) .
 @     CALL,SUBLCOMMON_ getChgsFile_ (<APPDIR>,<CHGSFILE>s256) .
@@ -31,11 +32,11 @@
  Click ok and browse to sublime_text.exe (usually in program files)//"\
  O,(lin+1),C,(0199) .
 @.
-@. @.    #  Create temp folder
-@. @     LDV,p <DIR>s256=<BTEMP>'\' .
-@. @     LDV,p <FLDR>s256=<APP> .
-@. @     LDV,p <FLDRPATH>s256=<TMPPTH> .
-@. @     CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
+@.    #  Create temp folder
+@     LDV,p <DIR>s256=<BTEMP>'\' .
+@     LDV,p <FLDR>s256=<APP> .
+@     LDV,p <FLDRPATH>s256=<TMPPTH> .
+@     CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
 @.
 @.    #  Create [sublwatcher] folder
 @     LDV,p <DIR>s256=<APPDATA>'\' .
@@ -49,19 +50,19 @@
 @     LDV,p <FLDRPATH>s256=<DATADIR> .
 @     CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
 @.
-@.    #  Create batch file
-@     IF <OSVER> eq 5  \
-        SRH,BATCHTEMP_,,,0000 'dp' 'OS' ¬,'WINDOWS XP' . ; \
-        SRH,BATCHTEMP_,,,0000 'dp' 'OS' ¬,'WINDOWS' .
-@     LZR,-0 ,<CC>I3,<SLN>I7  LOK,-0  LN-,-0,2,<SLN>  ULK .
-@     RNM -1  LZR,-1 ,<CC>I3,<SLN>I7  BRK,0,I .
-@     RDL,-1,<SLN>,lin+3 1-<CC> <BATPRGM>s  INC <SLN> .
-@     XQT <BATPRGM> .
-@     GTO lin-2 .
-@     BRK,0,F .
-@     PCW,-0 <BATFILE> .
+@. @.    #  Create batch file
+@. @     IF <OSVER> eq 5  \
+@.         SRH,BATCHTEMP_,,,0000 'dp' 'OS' ¬,'WINDOWS XP' . ; \
+@.         SRH,BATCHTEMP_,,,0000 'dp' 'OS' ¬,'WINDOWS' .
+@. @     LZR,-0 ,<CC>I3,<SLN>I7  LOK,-0  LN-,-0,2,<SLN>  ULK .
+@. @     RNM -1  LZR,-1 ,<CC>I3,<SLN>I7  BRK,0,I .
+@. @     RDL,-1,<SLN>,lin+3 1-<CC> <BATPRGM>s  INC <SLN> .
+@. @     XQT <BATPRGM> .
+@. @     GTO lin-2 .
+@. @     BRK,0,F .
+@. @     PCW,-0 <BATFILE> .
 @.
-@.    #  Make sure exploere utility is loaded onto machine
+@.    #  Make sure explorer utility is loaded onto machine
 @     LZR,SUBLDEP_ ,,<HLN>i3 .
 @     INC <HLN>  RDL,SUBLDEP_,<HLN>,lin3 'NAME' <DEPNAME>s .
 @     CALL,EDRW$,0006 0001(<DEPNAME>,<PTX>s64,<PRG>s30,<STS>h3) .
@@ -81,12 +82,6 @@
 @     WRL,SUBLPATH_,<LNS>,y 'User ID','Computer Name','App Path' ¬,\
         <USER>,<COMPUTER>,<APPPATH> .
 @     ULK .
-@.
-@.    #  Load watchmedo.exe
-@. @     CALL,EDRW$,0006 0001('WATCHMEDO',<PTX>s64,<PRG>s30,<STS>h3) .
-@.
-@.    #  Load watchmedo-script.py
-@. @     CALL,EDRW$,0006 0001('WATCHMEDO-SCRIPT',<PTX>s64,<PRG>s30,<STS>h3) .
 @.
 @0199:. -------------------------- Termination ---------------------------------
 @.
