@@ -1,4 +1,4 @@
-.Data_Check_Term      Check For Missing/Improper Termination
+.Object Name: Data_Check_Term      Check For Missing/Improper Termination
 .REV: 2.2    DATE: 20120218
 *===============================================================================
 :INCLUDE,ECAB$,B,1 .
