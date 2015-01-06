@@ -1,0 +1,37 @@
+.GIT
+*
+*===================================================================================================
+:INCLUDE,ECAB$,B,1 .                                                                         INCLUDE
+@.
+@.    #---------------------------------------------------------------------------------------------
+@.    #  GIT
+@.    #  Written: 12/17/2014
+@.    #---------------------------------------------------------------------------------------------
+@.
+@.    # Test Setup
+@     LDV <CTL>s80='BDT 24b56' .
+@     LDV <CTL>s80='BDT' .
+@     LDV <FILE>s256='d:\users\winne\sublwatcher\site-d\Umbrella\Umbrella_Test\(Summary)20f832.bis' .
+@     CALL 0001 (<CTL>,<FILE>,'',<STATUS>h1) .
+@     GTO END .
+@.
+@0001:(<CTL>,<FILE>,<RUNNAME>,<STATUS>) .
+@.
+@     RAR,0,E,2 0199 .                                                          sets-run-abort
+@     RER,0,E,2 0001 .                                                          sets-run-error
+@.
+@     CALL,SUBLCOMMON_ getFileName_ (<FILE>,<RUN>s60) .                         Extracts File Name from path
+@     LCV,lin+1 'b99' <RUN> '.bis'/''  GTO lin+4 .                              Remove file type
+@     LDV <MSG>s256='Must be BIS file type' .
+@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@.
+@     CALL,SUBLCOMMON_ getCabDrwRpt_ (<RUN>,<CAB>i4,<DRW>h1,<RID>i4) .
+@.
+@     CALL,"BLD-DEFTABLE" 0001 (<CAB>,<DRW>,<RID>,'SUBL','ALL') .               Re-build define table
+@
+@     LDV <MSG>s256='Defines re-built successfully' .
+@     CALL,GROWL_ 0001 ('subwatcher: success!','SUCCESS',<MSG>) .
+@.
+@.    # Exit
+@0199:RETURN .
