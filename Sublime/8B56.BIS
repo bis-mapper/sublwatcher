@@ -83,10 +83,10 @@
 @     ULK .
 @.
 @.    #  Load watchmedo.exe
-@     CALL,EDRW$,0006 0001('WATCHMEDO',<PTX>s64,<PRG>s30,<STS>h3) .
+@. @     CALL,EDRW$,0006 0001('WATCHMEDO',<PTX>s64,<PRG>s30,<STS>h3) .
 @.
 @.    #  Load watchmedo-script.py
-@     CALL,EDRW$,0006 0001('WATCHMEDO-SCRIPT',<PTX>s64,<PRG>s30,<STS>h3) .
+@. @     CALL,EDRW$,0006 0001('WATCHMEDO-SCRIPT',<PTX>s64,<PRG>s30,<STS>h3) .
 @.
 @0199:. -------------------------- Termination ---------------------------------
 @.
