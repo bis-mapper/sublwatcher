@@ -1,7 +1,7 @@
 .Object Name: GROWL
 *
 *===================================================================================================
-:INCLUDE,ECAB$,B,1 .                                                                         INCLUDE
+:INCLUDE,ecab$,B,1 .                                                                         INCLUDE
 @.
 @.    #---------------------------------------------------------------------------------------------
 @.    #  GROWL
@@ -11,27 +11,32 @@
 @.    #---------------------------------------------------------------------------------------------
 @.
 @.    # Test Setup
-@     LDV <TITLE>s20='subl msg' .
-@     LDV <TYPE>h8='PENDING' .
-@     LDV <MSG>s80='this is a test' .
-@     CALL 0001 (<TITLE>,<TYPE>,<MSG>) .
-@     GTO END .
+@     ldv <msg>s80='Test pending message' .
+@     call,"growl" 0001 ('subwatcher: pending','pending',<msg>) .
 @.
-@0001:(<TITLE>,<TYPE>,<MSG>) .
+@     ldv <msg>s80='Test failure message' .
+@     call,"growl" 0001 ('subwatcher: warning!','failed',<msg>) .
+@.
+@     ldv <msg>s80='Test success message' .
+@     call,"growl" 0001 ('sublwatcher: success!','success',<msg>) .
+@.
+@     rel .
+@.
+@0001:(<title>,<type>,<msg>) .
 @.
 @     ERROR_ .
 @.
-@     RSR,SUBLCOMMON_ configVars_ .
+@     rsr,SUBLCOMMON_ configVars_ .
 @.
 @.    #  Display GROWL notification
-@     FDR,GROWLALERTS_ '' 'Type' ¬,<TYPE> .
-@     RLN 'AlertIcon' <ALERTICON>s .
+@     fdr,GROWLALERTS_ '' 'Type' ¬,<type> .
+@     rln 'AlertIcon' <alerticon>s .
 @.
 @.    #  Load APP exe and paramaters
-@     LDV,p <APPEXE>s256=<APPDIR>'\growlnotify.exe' .
-@     LDV,p <GALERTICON>s256='/i:'<APPDIR>'\'<ALERTICON>(p) .
-@     LDV,p <GTITLE>s256='/t:'<TITLE> .
-@     PC,r "<APPEXE>(p)"' '"<MSG>"' '"<GTITLE>"' '"<GALERTICON>" .
+@     ldv,p <appexe>s256=<appdir>'\growlnotify.exe' .
+@     ldv,p <galerticon>s256='/i:'<appdir>'\'<alerticon>(p) .
+@     ldv,p <gtitle>s256='/t:'<title> .
+@     pc,r "<appexe>(p)"' '"<msg>"' '"<gtitle>"' '"<galerticon>" .
 @.
 @.    # Exit
-@0199:RETURN .
+@0199:return .
