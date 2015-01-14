@@ -5,180 +5,180 @@
 *
 *
 *===============================================================================
-:INCLUDE,ECAB$,B,1 .
+:INCLUDE,ecab$,B,1 .
 @.
-@.    #  Break apart <RUN> into useable <CAB>,<DRW>,<RPT>
-@0001:(<RUN>,<CAB>,<DRW>,<RPT>) .
-@     LCV,lin+1 b1 <RUN> 'a' <ALPHA>i3  GTO 0002 .
-@     LCV,lin+1 b1 <RUN> 'b' <ALPHA>i3  GTO 0002 .
-@     LCV,lin+1 b1 <RUN> 'c' <ALPHA>i3  GTO 0002 .
-@     LCV,lin+1 b1 <RUN> 'd' <ALPHA>i3  GTO 0002 .
-@     LCV,lin+1 b1 <RUN> 'e' <ALPHA>i3  GTO 0002 .
-@     LCV,lin+1 b1 <RUN> 'f' <ALPHA>i3  GTO 0002 .
-@     LCV,lin+1 b1 <RUN> 'g' <ALPHA>i3  GTO 0002 .
-@     LCV,lin+1 b1 <RUN> 'h' <ALPHA>i3  GTO 0002 .
-@     LCV,lin+1 b1 <RUN> 'i' <ALPHA>i3 .
-@0002:LDV <DRW>=<RUN>(<ALPHA>-1)  DEC <ALPHA> .
-@     LDV <RPT>=<RUN>(1-<ALPHA>)  INC,2 <ALPHA> .
-@     LDV <CAB>=<RUN>(<ALPHA>-0) .
+@.    #  Break apart <run> into useable <cab>,<drw>,<rpt>
+@0001:(<run>,<cab>,<drw>,<rpt>) .
+@     lcv,lin+1 b1 <run> 'a' <alpha>i3  gto 0002 .
+@     lcv,lin+1 b1 <run> 'b' <alpha>i3  gto 0002 .
+@     lcv,lin+1 b1 <run> 'c' <alpha>i3  gto 0002 .
+@     lcv,lin+1 b1 <run> 'd' <alpha>i3  gto 0002 .
+@     lcv,lin+1 b1 <run> 'e' <alpha>i3  gto 0002 .
+@     lcv,lin+1 b1 <run> 'f' <alpha>i3  gto 0002 .
+@     lcv,lin+1 b1 <run> 'g' <alpha>i3  gto 0002 .
+@     lcv,lin+1 b1 <run> 'h' <alpha>i3  gto 0002 .
+@     lcv,lin+1 b1 <run> 'i' <alpha>i3 .
+@0002:ldv <drw>=<run>(<alpha>-1)  dec <alpha> .
+@     ldv <rpt>=<run>(1-<alpha>)  inc,2 <alpha> .
+@     ldv <cab>=<run>(<alpha>-0) .
 @     return .
 @.
 @.    #  Load the paramaters from the config table
-@0005:SRH,SUBLCONFIG_ 'dn@' 'Parameter' ¬,@  RNM -1 .
-@     LZR,-0 ,,<HLN>i7  .
-@     DVS,-0 'Value' <T>s  DEF,s <LEN>i3,<T> .
-@0006:INC <HLN> .
-@     RDL,-1,<HLN>,0008 'Parameter','Value','Ty','Siz',\
-        'Opt' <PARAM>s,<VALUE>s,<TY>h,<SIZ>i,<OPT>h .
-@     LDV <'>h1=TIC$ .
-@     LCV,lin+1 '' <VALUE> '$'  LDV <'>h0 .                                     Is Reserve Word?
-@     LCV,lin+1 '' <VALUE> '<'  LDV <'>h0 .                                     Is Variable
-@     XQT '@ ldv'<OPT>(p)' <'<PARAM>(p)'>'<TY><SIZ>(p)'='<'><VALUE><'> .
-@     GTO 0006 .
-@0008:ESR .
+@0005:srh,SUBLCONFIG_ 'dn@' 'Parameter' ¬,@  rnm -1 .
+@     lzr,-0 ,,<hln>i7  .
+@     dvs,-0 'Value' <t>s  def,s <len>i3,<t> .
+@0006:inc <hln> .
+@     rdl,-1,<hln>,0008 'Parameter','Value','Ty','Siz',\
+        'Opt' <param>s,<value>s,<ty>h,<siz>i,<opt>h .
+@     ldv <'>h1=tic$ .
+@     lcv,lin+1 '' <value> '$'  ldv <'>h0 .                                     Is Reserve Word?
+@     lcv,lin+1 '' <value> '<'  ldv <'>h0 .                                     Is Variable
+@     xqt '@ ldv'<opt>(p)' <'<param>(p)'>'<ty><siz>(p)'='<'><VALUE><'> .
+@     gto 0006 .
+@0008:esr .
 @.
 @.    #  Check for ICE Service return Service Title if ICE Enabled site
-@0010:(<CAB>,<DRW>,<RPT>,<SRVS>) .
-@     LDV <SVC>s20 .
-@     IF <RPT> eq 0,(0012) .
-@     RER 0012 .
-@     LDV,l <CAB>  LDV,r <RPT>  LDV <SVC>s20 .
-@     LDV,p <REPORT>h11='1d3950' .
-@     DIR <REPORT> ,,,,,<ACC>h1  IF <ACC> eq '',(0013) .
-@     LZR,3950,d,1,0011 .
-@     FDR,3950,d,1,,,0011 '' 'SvcCab','sd' ¬,<CAB>,<DRW> .
-@     RLN 'cab','dw','rpt' <ICAB>h,<IDW>h,<IRPT>h .
-@     FDR,<ICAB>,<IDW>,<IRPT>,,,0011 '' 'cab','dw','rpt' ¬,<CAB>,<DRW>,<RPT> .
-@     RLN 'service' <SVC>s  GTO 0012 .
-@0011:FDR,<CAB>,<DRW>,<RPT>,2,,0012 'a' 2-12 .,'Object Name:' ,<VLNO>i3 .
-@     RLN 14-20 <SVC>s  GTO 0012 .
-@0012:IF <SVC> eq ' '  LDV,p <SRVS>=<SVC> . ; LDV,p <SRVS>='('<SVC>(p)')' .
-@     RETURN .
+@0010:(<cab>,<drw>,<rpt>,<srvs>) .
+@     ldv <svc>s20 .
+@     if <rpt> eq 0,(0012) .
+@     rer 0012 .
+@     ldv,l <cab>  ldv,r <rpt>  ldv <svc>s20 .
+@     ldv,p <report>h11='1d3950' .
+@     DIR <report> ,,,,,<acc>h1  if <acc> eq '',(0013) .
+@     lzr,3950,d,1,0011 .
+@     fdr,3950,d,1,,,0011 '' 'SvcCab','sd' ¬,<cab>,<drw> .
+@     rln 'cab','dw','rpt' <icab>h,<idw>h,<irpt>h .
+@     fdr,<icab>,<idw>,<irpt>,,,0011 '' 'cab','dw','rpt' ¬,<cab>,<drw>,<rpt> .
+@     rln 'service' <svc>s  gto 0012 .
+@0011:fdr,<cab>,<drw>,<rpt>,2,,0012 'a' 2-12 .,'Object Name:' ,<vlno>i3 .
+@     rln 14-20 <svc>s  gto 0012 .
+@0012:if <svc> eq ' '  ldv,p <srvs>=<svc> . ; ldv,p <srvs>='('<svc>(p)')' .
+@     return .
 @.
 @.    #  Check if folder exists.  If not create it.
-@0015:(<DIR>,<FLDR>,<FLDRPATH>) .
-@     PCR,0,A,-0,n,n,lin+2 <DIR> .
-@     LOC,-0,2,lin+1 afm 2-63 '['<FLDR>']'  GTO lin+2 .
-@     PC,bcw 'MD '"<FLDRPATH>" .
-@     RETURN .
+@0015:(<dir>,<fldr>,<fldrpath>) .
+@     pcr,0,A,-0,n,n,lin+2 <dir> .
+@     loc,-0,2,lin+1 afm 2-63 '['<fldr>']'  gto lin+2 .
+@     pc,bcw 'MD '"<fldrpath>" .
+@     return .
 @.
 @.    #  Get computer name
-@0020:(<COMPUTER>) .
-@     FDR,SUBLCONFIG_ '' 'Parameter' ¬,'BTEMP' .
-@     RLN 'Parameter','Value','Ty','Siz','Opt' \
-        <PARAM>s,<VALUE>s,<TY>h,<SIZ>i,<OPT>h .
-@     LDV <'>h1=TIC$ .
-@     XQT '@ ldv'<OPT>(p)' <'<PARAM>(p)'>'<TY><SIZ>(p)'='<'><VALUE><'> .
+@0020:(<computer>) .
+@     fdr,SUBLCONFIG_ '' 'Parameter' ¬,'BTEMP' .
+@     rln 'Parameter','Value','Ty','Siz','Opt' \
+        <param>s,<value>s,<ty>h,<siz>i,<opt>h .
+@     ldv <'>h1=tic$ .
+@     xqt '@ ldv'<opt>(p)' <'<param>(p)'>'<ty><siz>(p)'='<'><VALUE><'> .
 @.
-@     PCR,0,A,-0,,,lin+1,t <BTEMP>'\hostname.txt'  GTO 0022 .                   File exist
-@     PC,bcw 'HOSTNAME >'<BTEMP>'\hostname.txt' .                               Create and pipe output
-@     PCR,0,A,-0,,,0198,t <BTEMP>'\hostname.txt' .                              Read file
-@0022:RDL,-0,2 1-30 <COMPUTER>s .                                               Get name
-@     RETURN .
+@     pcr,0,A,-0,,,lin+1,t <btemp>'\hostname.txt'  gto 0022 .                   File exist
+@     pc,bcw 'HOSTNAME >'<btemp>'\hostname.txt' .                               Create and pipe output
+@     pcr,0,A,-0,,,0198,t <btemp>'\hostname.txt' .                              Read file
+@0022:rdl,-0,2 1-30 <computer>s .                                               Get name
+@     return .
 @.
 @.    #  Check if program exists already in folder.
 @.    #  If it doesn't exist load <FILE> to default site location
-@.    #  If it does exist load <FILE> to current location
+@.    #  If it does exist load <file> to current location
 @.    #  If multiple are found it makes reference to the last one as the one in
 @.    #  sub folder has higher precedence over one in the default folder.
 @.
 @.    @. #  Find program in folder(s) and return filepath
-@.    @  CALL,SUBLCOMMON_ searchFolders_ (<FOLDER>,<PROGRAM>,<FILE>s256) .
-@0025:(<FLDRPATH>,<PROGRAM>,<FILE>) .
-@     FDR,SUBLCONFIG_ '' 'Parameter' ¬,'BTEMP' .
-@     RLN 'Parameter','Value','Ty','Siz','Opt' \
-        <PARAM>s,<VALUE>s,<TY>h,<SIZ>i,<OPT>h .
-@     LDV <'>h1=TIC$ .
-@     XQT '@ ldv'<OPT>(p)' <'<PARAM>(p)'>'<TY><SIZ>(p)'='<'><VALUE><'> .
-@     PC,cbw "WHERE /r <FLDRPATH>(p) <PROGRAM>(p) ><BTEMP>\where.txt" .
-@     PCR,0,F,-0,,,0198,t <BTEMP>'\where.txt' .                              Read file
-@     LZR,-0 <LNS>i7,,<HLN>i3 .
-@     IF <LNS> gt <HLN> . ; GTO 0029 .
-@     RDL,-0,<LNS> 1-256 <FILE> .
-@0029:RETURN .
+@.    @  CALL,SUBLCOMMON_ searchFolders_ (<folder>,<program>,<file>s256) .
+@0025:(<fldrpath>,<program>,<file>) .
+@     fdr,SUBLCONFIG_ '' 'Parameter' ¬,'BTEMP' .
+@     rln 'Parameter','Value','Ty','Siz','Opt' \
+        <param>s,<value>s,<ty>h,<siz>i,<opt>h .
+@     ldv <'>h1=tic$ .
+@     xqt '@ ldv'<opt>(p)' <'<param>(p)'>'<ty><siz>(p)'='<'><VALUE><'> .
+@     pc,cbw "WHERE /r <fldrpath>(p) <program>(p) ><btemp>\where.txt" .
+@     pcr,0,F,-0,,,0198,t <btemp>'\where.txt' .                              Read file
+@     lzr,-0 <lns>i7,,<hln>i3 .
+@     if <lns> gt <hln> . ; gto 0029 .
+@     rdl,-0,<lns> 1-256 <file> .
+@0029:return .
 @.
 @.    #  Get file name from output file
 @.    #  getFileName_
-@0035:(<FILE>,<RUN>) .
-@     DVS,SUBLOG_ 'File' <TFILE>s  LDV <TFILE>=<FILE> .
-@     LCV 'b99' <TFILE> '\' ,<OCC>i3 .                                          Find last occurance
-@     LCV 'b<occ>' <TFILE> '\' <POS>i3  INC <POS> .                             Last \ pos
-@     LDV,p <RUN>=<TFILE>(<POS>-0) .                                            Load BIS run
-@     LCV,0039 'b1' <RUN> '(' <LPOS>i3 .                                        Find pos
-@     LCV 'b1' <RUN> ')' <RPOS>i3 .                                             Find pos
-@     LDV <RUN>(<LPOS>-<RPOS>)='' .                                             Remove name
+@0035:(<file>,<run>) .
+@     dvs,SUBLOG_ 'File' <tfile>s  ldv <tfile>=<file> .
+@     lcv 'b99' <tfile> '\' ,<occ>i3 .                                          Find last occurance
+@     lcv 'b<occ>' <tfile> '\' <pos>i3  inc <pos> .                             Last \ pos
+@     ldv,p <run>=<tfile>(<pos>-0) .                                            Load BIS run
+@     lcv,0039 'b1' <run> '(' <lpos>i3 .                                        Find pos
+@     lcv 'b1' <run> ')' <rpos>i3 .                                             Find pos
+@     ldv <run>(<lpos>-<rpos>)='' .                                             Remove name
 @0039:.
-@     RETURN .
+@     return .
 @.
 @.    #  Get APPPATH if it exists
 @.    #  appPath_
-@0040:(<USER>,<APPPATH>) .
+@0040:(<user>,<apppath>) .
 @.
 @.    #  Get computer name
-@     CALL,SUBLCOMMON_ getCompName_ (<COMPUTER>s30) .
-@     FDR,SUBLPATH_,,,lin+2 ' ' 'User ID','Computer Name' ¬,<USER>,<COMPUTER> . Get Application Path
-@     RLN 'apppath' <APPPATH>s  GTO 0041 .                                      Sublime.Exe
-@     CALL,SUBLSETUP_ 0001 (<USER>,<APPPATH>s256) .                             Setup
-@0041:RETURN .
+@     call,SUBLCOMMON_ getCompName_ (<computer>s30) .
+@     fdr,SUBLPATH_,,,lin+2 ' ' 'User ID','Computer Name' ¬,<user>,<computer> . Get Application Path
+@     rln 'apppath' <apppath>s  gto 0041 .                                      Sublime.Exe
+@     call,SUBLSETUP_ 0001 (<user>,<apppath>s256) .                             Setup
+@0041:return .
 @.
 @.    #  Get Windows Version
-@0045:(<VER>) .
-@     FDR,SUBLCONFIG_ '' 'Parameter' ¬,'BTEMP' .
-@     RLN 'Parameter','Value','Ty','Siz','Opt' \
-        <PARAM>s,<VALUE>s,<TY>h,<SIZ>i,<OPT>h .
-@     LDV <'>h1=TIC$ .
-@     XQT '@ ldv'<OPT>(p)' <'<PARAM>(p)'>'<TY><SIZ>(p)'='<'><VALUE><'> .
-@     PCR,0,A,-0,,,lin+1,t <BTEMP>'\ver.txt'  GTO 0047 .                        File exist
-@     PC,bcw 'VER >'<BTEMP>'\ver.txt' .                                         Create and pipe output
-@     PCR,0,A,-0,,,0198,t <BTEMP>'\ver.txt' .                                   Read file
-@0047:RDL,-0,3 1-80 <OVER>s .                                                   Read output
-@     LCV,lin+2  'b1' <OVER> '[Version' <VPOS>i3 .                              Locate version
-@     INC,9 <VPOS>  LDV <VER>=<OVER>(<VPOS>-1) .                                Get ver
-@     RETURN .
+@0045:(<ver>) .
+@     fdr,SUBLCONFIG_ '' 'Parameter' ¬,'BTEMP' .
+@     rln 'Parameter','Value','Ty','Siz','Opt' \
+        <param>s,<value>s,<ty>h,<siz>i,<opt>h .
+@     ldv <'>h1=tic$ .
+@     xqt '@ ldv'<opt>(p)' <'<param>(p)'>'<ty><siz>(p)'='<'><VALUE><'> .
+@     pcr,0,A,-0,,,lin+1,t <btemp>'\ver.txt'  gto 0047 .                        File exist
+@     pc,bcw 'VER >'<btemp>'\ver.txt' .                                         Create and pipe output
+@     pcr,0,A,-0,,,0198,t <btemp>'\ver.txt' .                                   Read file
+@0047:rdl,-0,3 1-80 <over>s .                                                   Read output
+@     lcv,lin+2  'b1' <over> '[Version' <vpos>i3 .                              Locate version
+@     inc,9 <vpos>  ldv <ver>=<over>(<vpos>-1) .                                Get ver
+@     return .
 @.
 @.    #  Get CHGSFILE path
-@0050:(<APPDIR>,<CHGSFILE>) .
-@     CALL 0045 (<OSVER>i1) .
-@     LDV <'>h1=TIC$ .
-@     IF <OSVER> eq 5 . ; GTO 0051 .                                            Windows XP
-@     FDR,SUBLCONFIG_ '' 'Parameter' ¬,'BTEMP' .
-@     RLN 'Parameter','Value','Ty','Siz','Opt' \
-        <PARAM>s,<VALUE>s,<TY>h,<SIZ>i,<OPT>h .
-@     XQT '@ ldv'<OPT>(p)' <'<PARAM>(p)'>'<TY><SIZ>(p)'='<'><VALUE><'> .
-@     LDV,p <CHGSFILE>=<BTEMP>\changes.txt .
-@     GTO 0054 .
-@0051:FDR,SUBLCONFIG_ '' 'Parameter' ¬,'CHGSFILE' .
-@     RLN 'Parameter','Value','Ty','Siz','Opt' \
-        <PARAM>s,<VALUE>s,<TY>h,<SIZ>i,<OPT>h .
-@     LCV,lin+1 '' <VALUE> '$'  LDV <'>h0 .                                     Is Reserve Word?
-@     LCV,lin+1 '' <VALUE> '<'  LDV <'>h0 .                                     Is Variable
-@     XQT '@ ldv'<OPT>(p)' <'<PARAM>(p)'>'<TY><SIZ>(p)'='<'><VALUE><'> .
-@0054:RETURN .
+@0050:(<appdir>,<chgsfile>) .
+@     call 0045 (<osver>i1) .
+@     ldv <'>h1=tic$ .
+@     if <osver> eq 5 . ; gto 0051 .                                            Windows XP
+@     fdr,SUBLCONFIG_ '' 'Parameter' ¬,'BTEMP' .
+@     rln 'Parameter','Value','Ty','Siz','Opt' \
+        <param>s,<value>s,<ty>h,<siz>i,<opt>h .
+@     xqt '@ ldv'<opt>(p)' <'<param>(p)'>'<ty><siz>(p)'='<'><VALUE><'> .
+@     ldv,p <chgsfile>=<btemp>\changes.txt .
+@     gto 0054 .
+@0051:fdr,SUBLCONFIG_ '' 'Parameter' ¬,'CHGSFILE' .
+@     rln 'Parameter','Value','Ty','Siz','Opt' \
+        <param>s,<value>s,<ty>h,<siz>i,<opt>h .
+@     lcv,lin+1 '' <value> '$'  ldv <'>h0 .                                     Is Reserve Word?
+@     lcv,lin+1 '' <value> '<'  ldv <'>h0 .                                     Is Variable
+@     xqt '@ ldv'<opt>(p)' <'<param>(p)'>'<ty><siz>(p)'='<'><VALUE><'> .
+@0054:return .
 @.
 @.    #  Replace tab character with special character
 @.    #  Pass 'export' to convert tab to special
 @.    #  Pass 'import' to convert special to tab
-@0055:(<DIRECTION>) .
-@     RNM -1 .
-@     CHG <NS>h1 CHR$254  LZR,-1 ,<CC>i4 .
-@     CHG <NS1>h1 CHR$302 .
-@     LDV <CHAR>h0 .
+@0055:(<direction>) .
+@     rnm -1 .
+@     chg <ns>h1 chr$254  lzr,-1 ,<cc>i4 .
+@     chg <ns1>h1 chr$302 .
+@     ldv <char>h0 .
 @.
-@     IF <DIRECTION> eq export . ; GTO 0056 .
-@     LCH,-1,,lin+1 'af' 1-<CC> <NS1>TAB$/<NS>  RNM -1 .
-@     LCH,-1,,lin+1 'af' 1-<CC> TAB$/<NS>  RNM -1 .
-@     LCH,-1,,lin+1 'af' 1-<CC> <NS1><NS>/<NS>  RNM -1 .
-@. @     LCH,-1,,lin+1 'af' 1-<CC> <NS1>/''   RNM -1 .
-@     GTO 0059 .
+@     if <direction> eq export . ; gto 0056 .
+@     lch,-1,,lin+1 'af' 1-<cc> <ns1>tab$/<ns>  rnm -1 .
+@     lch,-1,,lin+1 'af' 1-<cc> tab$/<ns>  rnm -1 .
+@     lch,-1,,lin+1 'af' 1-<cc> <ns1><ns>/<ns>  rnm -1 .
+@. @     LCH,-1,,lin+1 'af' 1-<cc> <ns1>/''   RNM -1 .
+@     gto 0059 .
 @.
-@0056:IF <DIRECTION> eq import . ; GTO 0059 .
-@     LCH,-1,,lin+1 'af' 1-<CC> <NS1><NS>/TAB$  RNM -1 .
-@     LCH,-1,,lin+1 'af' 1-<CC> <NS1>/''   RNM -1 .
-@     LCH,-1,,lin+1 'af' 1-<CC> <NS>/TAB$  RNM -1 .
+@0056:if <direction> eq import . ; gto 0059 .
+@     lch,-1,,lin+1 'af' 1-<cc> <ns1><ns>/tab$  rnm -1 .
+@     lch,-1,,lin+1 'af' 1-<cc> <ns1>/''   rnm -1 .
+@     lch,-1,,lin+1 'af' 1-<cc> <ns>/tab$  rnm -1 .
 @.
 @0059:return .
 @.
 @.    #  Errrrrrorrrr
 @0198:.
 @.
-@     RETURN .
+@     return .
