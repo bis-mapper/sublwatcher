@@ -172,7 +172,8 @@ If you'd like to make this quickly accessible from the MPC menu add the followin
 '@'RETURN          
 @008:BRK RNM -1 .  
 ```
-
+## Recent changes
+To see what has changed in recent version of SUBLWATCHER, see the [CHANGELOG](https://github.com/bis-mapper/sublwatcher/blob/master/CHANGELOG.md).
 
 ## Thanks
 A big thanks goes out to John Thalhuber and ITRS for allowing me to use portions of their code in this software.  I'm also very appreciative of the SETUP+ package that he created which allows this application to be installed onto other MAPPER systems with very little friction.  
