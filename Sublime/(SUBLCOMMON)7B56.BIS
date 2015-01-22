@@ -24,11 +24,11 @@
 @     return .
 @.
 @.    #  Load the paramaters from the config table
-@0005:srh,SUBLCONFIG_ 'dn@' 'Parameter' ¬,@  rnm -1 .
+@0005:srh,SUBLCONFIG_ 'dn@' 'Parameter' ¬,@ .
 @     lzr,-0 ,,<hln>i7  .
 @     dvs,-0 'Value' <t>s  def,s <len>i3,<t> .
 @0006:inc <hln> .
-@     rdl,-1,<hln>,0008 'Parameter','Value','Ty','Siz',\
+@     rdl,-0,<hln>,0008 'Parameter','Value','Ty','Siz',\
         'Opt' <param>s,<value>s,<ty>h,<siz>i,<opt>h .
 @     ldv <'>h1=tic$ .
 @     lcv,lin+1 '' <value> '$'  ldv <'>h0 .                                     Is Reserve Word?

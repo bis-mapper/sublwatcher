@@ -1,0 +1,79 @@
+.Object Name: SUBLERRDUMP_
+*    Version: 0001
+*===================================================================================================
+@. *** ERROR ENTRY POINT **********************************| *******************
+@0001:.
+:DEFINE RERDDRW_             "ecab$,I"                     | RUN ERROR DUMP DRAWER
+:DEFINE RERDLOG_             "ecab$,I,1"                   | RUN ERROR DUMP LOG
+@     ldv V198S256,V199S256 .
+@     DIAG,RERDDRW_ A,,999  rnm -1 .                       | CREATE ERROR DUMP
+@     lsm,xerr$ V199S256  ldv V199(81-0)='' .              | GET SYSTEM MESSAGE
+@     ldv,l V199(081-12)=run$,\                            | ADD run NAME
+            V199(093-05)=V198,\                            | PAGE OR JUST EMAIL?
+            V199(098-04)=xrid$,\                           | RID
+            V199(102-06)=xline$,\                          | LINE
+            V199(108-04)=xfun$,\                           | COMMAND THAT FAILED
+            V199(112-04)=xerr$,\                           | SYSTEM ERROR NUMBER
+            V199(116-09)='0000     ',\                     | ERROR DUMP LOCATION
+            V199(125-11)=user$,\                           | ACTION IS NOW USER
+            V199(242-06)=date1$,V199(249-08)=time$ .       | ADD DATE AND TIME
+@.                                                         |
+@. *** SAVE TO ERROR DUMP LOG - ADD TO INDEX **************| *******************
+@     dup,-1,RERDDRW_  ldv,r V199(116-4)=stat1$ .          | STORE ERROR DUMP
+@     ldv,l V199(1-80),V198S256=¬V199(242-6)¬V199(81-12)\  | BUILD ERROR  log
+'¬'V199(125-7)¬V199(249-8)¬V199(116-4)¬V199(98-4)¬\        | INDEX RECORD
+V199(102-6)¬V199(108-4)¬V199(1-80)¬  ldv,c V199(1-80) .    | RECENTER
+@     lok,RERDLOG_  ln+,RERDLOG_,,1,,V198  ulk .           | ADD TO ERROR INDEX
+@.                                                         |
+@. *** SCREEN MESSAGE *************************************| *******************
+@     if orstan$ eq 0 . ; gto 0100 .                       | IF FOREGROUND
+@     ldv <msg>s256='An error has occurred in 'RUN$' the details can',\
+          <msg>=<msg>(p)' be found in report 'V199(116-4)'I100' .
+@     call,"GROWL" 0001 ('sublwatcher: warning!','FAILED',<msg>) .
+@.                                                         |
+@. *** SEND EMAIL MESSAGE *********************************| *******************
+@0100:if orstan$ eq 0  ldv V198S21=stnum$ . ; \            | UNIQUE NUMBER
+                       ldv V198S21=orstan$ .               | FOR FILE NAME
+@     ldv V198='C:\TEMP\RER-'V198(P)'.TXT' .               | BODY FILE
+@     rsl,-1  ln-,-0,46,9999999  ln-,-0,3,1 .  NO DIVIDER  | ONLY FIRST XX LINES
+@     ln+,-0,1,1,,'.See full error dump 'V199(116-9) .     | WHERE IS FULL DUMP?
+@     fil,-0,N,Y V198(P) .                                 | SAVE BODY FILE
+@     ldv V199S256='C:\UTIL\BLAT.EXE "'V198(P)'" -subject "' . EMAIL UTILITY
+@     if ecab$ gt 398  ldv V199=V199(P)'TEST -' . ; .      | IS THIS TEST?
+@     ldv V199=V199(P)' IBLD RUN FAILED - 'run$'"',\       | SUBJECT
+          V199=V199(P)' -to ed.winn@northstarmutual.com',\ | EMAIL ADDRESSES
+          V199=V199(P)' -f mapperadmin@northstarmutual.com -noh2',\ FROM
+          V199=V199(P)' -server mail.northstarmutual.com:25' . SERVER AND PORT
+@     os '-f' V199(P) .                                    | SEND THE EMAIL
+@     os '-d -f' 'DEL "'V198'"' .                          | REMOVE TEMP
+@.                                                         |
+@. *** CLEAN UP changes.txt *******************************| *******************
+@     fdr,SUBLCONFIG_ '' 'Parameter' ¬,'appdata'  rln 'value' <appdata>s .
+@     fdr,SUBLCONFIG_ '' 'Parameter' ¬,'app'  rln 'value' <app>s .
+@     ldv,p <appdir>s80=<appdata>(p)'\'<app>(p) .
+@     pc,bcw "del <appdir>\changes.txt" .                       Clean up file
+@.                                                         |
+@. *** END PROGRAM - DISPLAY ERROR ************************| *******************
+@     if orstan$ eq 0  ldv V198I6=2 . ; GTO END .          | BACKGROUND - END
+FKEY,0,'Restart',KEY
+FKEY,1,'Quit',KEY
+FKEY,10,'EXIT',RELEASE
+@     brk  fky,-1 .
+@     dsp,-1,V198,2,,,,'Line'soe$'¬2          Roll'soe$'¬                  '\
+'                      <Run Error Dump>' .
+@     ldv V198=dline$  gto lin-2 .                         |¬LOOP BACK TO DSP
+@     IF FKEY$ EQ 0 . ; .
+@     IF FKEY$ EQ 1,(0199) .
+@.
+@. *** RESTART SUBLWATCHER ********************************| *******************
+@     sys .                                                                     system
+@     fdr,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,user$,'sublwatcher'  gto 0199 .    currently running?
+@     wat 1000 .                                                                pause for first time
+@     run SUBLWATCHER .                                                         start file watcher utility
+@.
+@.                                                         |
+@. *** RAR - ABORT ****************************************| *******************
+@0196:chg <cerr>i4 cerr$ .
+@.                                                         |
+@. *** RER - EXIT  ****************************************| *******************
+@0199:rel .

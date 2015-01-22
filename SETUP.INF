@@ -1,15 +1,16 @@
 
 [DISK]
- Level           = 0.0.10
+ Level           = 0.0.11
 [NAME]
- Name            = SUBLWATCHER
+ Name            = sublwatcher
 [TITLE]
- Title           = BIS File watching utility / IDE envrionment
+ Title           = bis file watching utility / ide envrionment
 [DRAWERS]
  Drawer          = B,132,Sublime
  Drawer          = C,256,Sublime - Tables
  Drawer          = D,132,Sublime - Vendor
  Drawer          = E,132,Sublime - Executables
+ Drawer          = I,256,Sublime - Error Dumps
 [RUNS]
  Run             = SUBLWATCHER,3,,,NYNWN,B
  Run             = SUBL,2,,,NYNWN,B

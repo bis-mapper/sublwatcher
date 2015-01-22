@@ -5,7 +5,7 @@
 *
 *
 *===================================================================================================
-:INCLUDE,ECAB$,B,1 .                                                            INCLUDE
+:INCLUDE,ecab$,B,1 .                                                            INCLUDE
 @.
 @.    #---------------------------------------------------------------------------------------------
 @.    #  BIS_CMD
@@ -13,44 +13,52 @@
 @.    #---------------------------------------------------------------------------------------------
 @.
 @.    #TEST SETUP#
-@     LDV <STATUS>h1=0 .
-@     CALL 0001 (<STATUS>) .
+@     ldv <status>h1=0 .
+@     call 0001 (<status>) .
 @     GTO END .
 @.
-@0001:(<FILE>,<INPUT>,<STATUS>) .
-@     LDV <STATUS>=0 .                                                          set flag to ok
+@0001:(<file>,<input>,<status>) .
+@     gto 0005 .
+@0002:(<file>,<input>,<inp1>,<inp2>,<inp3>,<inp4>,<inp5>,<status>) .
+@.
+@0005:ldv <status>=0 .                                                          set flag to ok
 @     ERROR_ .
 @.
-@     RSR,SUBLCOMMON_ configVars_ .
+@     rsr,SUBLCOMMON_ configVars_ .
 @.
 @.    # Read file name
-@     CALL,SUBLCOMMON_ getFileName_ (<FILE>,<RUN>s60) .                         Extracts File Name from path
+@     call,SUBLCOMMON_ getFileName_ (<file>,<run>s60) .                         Extracts File Name from path
 @.
-@     IF <INPUT> eq ''  GTO 0199 .                                                Nothing entered?
+@     if <input> eq ''  gto 0199 .                                              Nothing entered?
 @.
 @.    # ICE UTILITIES
-@     DVS,SUBLUTILS_ 'Util' <RUNNAME>s .
-@     DEF <TY>i2,<INPUT>(1-1)  IF <TY> eq 1 . ; gto lin+2                         Check numeric
-@     LDV <RUNNAME>='SUBLCTL'  gto 0020 .
-@     LCV 't@' <INPUT> ' ' <VPOS>i3 dec <VPOS> .
-@     LDV <RUNNAME>=<INPUT>(1-<VPOS>) .                                           Get run name from user input
+@     dvs,SUBLUTILS_ 'Util' <runname>s .
+@     def <ty>i2,<input>(1-1)  if <ty> eq 1 . ; gto lin+2 .                     Check numeric
+@     ldv <runname>='SUBLCTL'  gto 0020 .
+@     lcv 't@' <input> ' ' <vpos>i3  dec <vpos> .
+@     ldv <runname>=<input>(1-<vpos>) .                                         Get run name from user input
 @.
 @.    #  Find program in lookup table and execute it
-@0020:FDR,SUBLUTILS_,,,0198 '' 'Util' ¬,<RUNNAME>  RLN 'Cab','Dr','Rid' <rcab>i,<rdrw>h,<rrid>i .
+@0020:fdr,SUBLUTILS_,,,0198 '' 'Util' ¬,<runname>  rln 'Cab','Dr','Rid' <rcab>i,<rdrw>h,<rrid>i .
 @.
-@.    # Hook into program in different cab, drw
+@.    #  Call NON SUBLWATCHER UTILS
 @     if <rcab> gt ''  if <rcab> ne ecab$ . ; gto 0025 .
-@     call,<rcab>,<rdrw>,<rrid> 0001 (<INPUT>,<FILE>,<RUNNAME>,<STATUS>h1) .
-@     IF <STATUS> eq 0,' ',(0199) . ; gto 0199 .
+@     call,<rcab>,<rdrw>,<rrid> 0001 (<input>,<file>,<runname>,<status>h1) .
+@     if <status> eq 0,' ',(0199) . ; gto 0199 .
 @.
-@0025:CALL,EDRW$,<RRID> 0001 (<INPUT>,<FILE>,<RUNNAME>,<STATUS>h1) .
-@     IF <STATUS> eq 0,' ',(0199) .
+@.    #  Call SUBLWATCHER UTILS
+@0025:if <runname> eq 'ibld','icebuild' . ; gto 0030 .
+@     call,edrw$,<rrid> 0001 (<input>,<file>,<runname>,<inp1>,<inp2>,<inp3>,<inp4>,<inp5>,<status>h1) .
+@     if <status> eq 0,' ',(0199) . ; gto 0198 .
+@.
+@0030:call,edrw$,<rrid> 0001 (<input>,<file>,<runname>,<status>h1) .
+@     if <status> eq 0,' ',(0199) . ; gto 0198 .
 @.
 @.    #  Output Growl error message
 @0198:.
-@     CHG <ERR>i4 CERR$  LSM,<ERR> <MSG>s88 .
-@     IF <MSG> eq ' '  LDV <MSG>='That request cannot be processed' .
-@     CALL,GROWL_ 0001 ('BISCMD Failed','FAILED',<MSG>) .
+@     chg <err>i4 cerr$  lsm,<err> <msg>s88 .
+@     if <msg> eq ' '  ldv <msg>='That request cannot be processed' .
+@     call,GROWL_ 0001 ('BISCMD Failed','FAILED',<msg>) .
 @.
 @.    # Close window
-@0199:RETURN .
+@0199:return .

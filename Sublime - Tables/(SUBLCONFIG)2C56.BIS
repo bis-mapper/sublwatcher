@@ -2,26 +2,26 @@
 *            .   .T.   .
 *Parameter   .Siz.y.Opt.Value
 *============.===.=.===.========================================================================================================================================================================================================================================
-¬USER        ¬ 11¬h¬,p ¬USER$
-¬VER         ¬ 11¬h¬   ¬0.0.10
-¬APP         ¬ 11¬h¬,p ¬SUBLWATCHER
-¬APPDESC     ¬ 80¬s¬,p ¬BIS File watching utility / IDE envrionment
-¬SITE        ¬  6¬h¬,po¬site-NETSIT$
-¬BTEMP       ¬256¬s¬,p ¬c:\temp
-¬TMPPTH      ¬256¬s¬,p ¬<BTEMP>\<APP>
+¬user        ¬ 11¬h¬,p ¬user$
+¬ver         ¬ 11¬h¬   ¬0.0.10
+¬app         ¬ 11¬h¬,p ¬sublwatcher
+¬appdesc     ¬ 80¬s¬,p ¬bis file watching utility / ide envrionment
+¬site        ¬  6¬h¬,po¬site-netsit$
+¬btemp       ¬256¬s¬,p ¬c:\temp
+¬tmppth      ¬256¬s¬,p ¬<btemp>\<app>
 ¬APPDATA     ¬256¬s¬,p ¬%USERPROFILE%
-¬APPDIR      ¬256¬s¬,p ¬<APPDATA>\<APP>
-¬BATFILE     ¬256¬s¬,p ¬<APPDIR>\sublwatcher.bat
-¬CHGSFILE    ¬256¬s¬,p ¬<APPDIR>\changes.txt
-¬SRC         ¬256¬s¬,p ¬src
-¬DATADIR     ¬256¬s¬,p ¬<APPDIR>\<SITE>
-¬EXT         ¬  4¬h¬   ¬.BIS
-¬DLN         ¬  8¬i¬   ¬DLINE$
-¬CNT         ¬  2¬i¬   ¬8
-¬DELAY       ¬ 12¬h¬   ¬300
-¬REP         ¬  4¬h¬   ¬SUBL
-¬TST         ¬  1¬h¬   ¬
-¬SUBLWATCHER ¬ 12¬h¬,p ¬<TST>SUBLWATCHER
-¬BISBUG      ¬ 12¬h¬,p ¬<TST>BISBUG
-¬BISCMD      ¬ 12¬h¬,p ¬<TST>BISCMD
-¬SUBL        ¬ 12¬h¬,p ¬<TST>SUBL
+¬appdir      ¬256¬s¬,p ¬<appdata>\<app>
+¬batfile     ¬256¬s¬,p ¬<appdir>\sublwatcher.bat
+¬chgsfile    ¬256¬s¬,p ¬<appdir>\changes.txt
+¬src         ¬256¬s¬,p ¬src
+¬datadir     ¬256¬s¬,p ¬<appdir>\<site>
+¬ext         ¬  4¬h¬   ¬.bis
+¬dln         ¬  8¬i¬   ¬dline$
+¬cnt         ¬  2¬i¬   ¬8
+¬delay       ¬ 12¬h¬   ¬300
+¬rep         ¬  4¬h¬   ¬subl
+¬tst         ¬  1¬h¬   ¬
+¬sublwatcher ¬ 12¬h¬,p ¬<tst>sublwatcher
+¬bisbug      ¬ 12¬h¬,p ¬<tst>bisbug
+¬biscmd      ¬ 12¬h¬,p ¬<tst>biscmd
+¬subl        ¬ 12¬h¬,p ¬<tst>subl

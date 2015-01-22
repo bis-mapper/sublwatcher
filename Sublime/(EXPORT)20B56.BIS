@@ -11,8 +11,8 @@
 @.    #---------------------------------------------------------------------------------------------
 @.
 @.    # Test Setup
-@     ldv <ctl>s80='export f832 -fUmbrella' .
-@     ldv <file>s42='D\Users\winne\sublwatcher\site-d\2f832.bis' .
+@     ldv <ctl>s80='export 832 -fUmbrella' .
+@     ldv <file>s42='D\Users\winne\sublwatcher\site-e\umbrella\umbrella_test\2f832.bis' .
 @     ldv <runname>s12='export' .
 @     call 0001 (<ctl>,<file>,<runname>,<status>h1) .
 @     GTO END .

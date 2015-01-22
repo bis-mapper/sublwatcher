@@ -3,6 +3,7 @@
 *Util        .Cab .r.Rid.Description                                                                                         .
 *============.====.=.===.====================================================================================================.
 ¬SUBL        ¬    ¬ ¬  2¬Used to open up files into SUBL from MAPPER
+¬IBLD        ¬    ¬ ¬ 11¬Hooks into IBLD utility
 ¬SUBLCTL     ¬    ¬ ¬ 17¬Wrapper for calling SUBL to open files from within Sublime
 ¬SBS         ¬    ¬ ¬ 18¬Standardize your run
 ¬EXPORT      ¬    ¬ ¬ 20¬Export files from mapper application

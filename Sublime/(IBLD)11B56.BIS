@@ -1,0 +1,78 @@
+.Object Name: IBLD
+*
+*===================================================================================================
+:INCLUDE,ecab$,B,1 .                                                                         INCLUDE
+@.
+@.    #---------------------------------------------------------------------------------------------
+@.    #  IBLD Wrapper
+@.    #
+@.    #  This program takes the input submitted from sublime and passes it to the IBLD / ICEBUILD
+@.    #  program.
+@.    #
+@.    #  Written: 01/13/2015
+@.    #---------------------------------------------------------------------------------------------
+@.
+@.    # Test Setup (NEED TO BE IN DEPT #2 to run theses tests...)
+@     ldv <ctl>s20='IBLD',<runname>s20='IBLD' .
+@.
+@. @.    # NEW (ICEBUILD,NEW,APP_NAME,400,APPTYPE)
+@. @     ldv <file>s256='d:\users\winne\sublwatcher\site-e\1f2456.bis' .
+@. @     ldv <cmd>s3='new',<appname>s20='wrap_test_app',<cab>i4=2456,<apptype>h3='MVC' .
+@. @     call 0001 (<ctl>,<file>,<runname>,<cmd>,<appname>,<cab>,<apptype>,'',<status>h1) .
+@. @     if <status> eq 0 . ; rel .
+@.
+@.    # GEN RESOURCE (ICEBUILD,GEN,R,400,RESOURCE_NAME)
+@ rdb ldv <file>s256='d:\users\winne\sublwatcher\site-e\1f2456.bis' .
+@     ldv <cmd>s3='gen',<action>h1='r',<cab>i4=2456,<resource>s20='somescreen' .
+@     call 0001 (<ctl>,<file>,<runname>,<cmd>,<action>,<cab>,<resource>,'',<status>h1) .
+@. @.
+@. @.    # GEN RESOURCE (ICEBUILD,GEN,R,400,RESOURCE_NAME)  USING NAME INSTEAD OF CAB
+@. @     ldv <file>s256='d:\users\winne\sublwatcher\site-e\1f2456.bis' .
+@. @     ldv <cmd>s3='gen',<action>h1='r',<appname>s20='wrap_test_app',<resource>s20='somescreen' .
+@. @     call 0001 (<ctl>,<file>,<runname>,<cmd>,<action>,<appname>,<resource>,'',<status>h1) .
+@. @     if <status> eq 0 . ; rel .
+@. @.
+@. @.    # DEL RESOURCE (ICEBUILD,DEL,R,400,RESOURCE_NAME)  USING NAME INSTEAD OF CAB
+@. @     ldv <file>s256='d:\users\winne\sublwatcher\site-e\1f2456.bis' .
+@. @     ldv <cmd>s3='del',<action>h1='r',<appname>s20='wrap_test_app',<resource>s20='somescreen' .
+@. @     call 0001 (<ctl>,<file>,<runname>,<cmd>,<action>,<appname>,<resource>,'',<status>h1) .
+@. @     if <status> eq 0 . ; rel .
+@. @.
+@. @.    # DEL RESOURCE (ICEBUILD,DEL,R,400,RESOURCE_NAME)
+@. @     ldv <file>s256='d:\users\winne\sublwatcher\site-e\1f2456.bis' .
+@. @     ldv <cmd>s3='del',<action>h1='r',<cab>i4=2456,<resource>s20='somescreen' .
+@. @     call 0001 (<ctl>,<file>,<runname>,<cmd>,<action>,<cab>,<resource>,'',<status>h1) .
+@. @.
+@. @.    # DEL (ICEBUILD,DEL,APP_NAME)
+@. @     ldv <file>s256='d:\users\winne\sublwatcher\site-e\1f2456.bis' .
+@. @     ldv <cmd>s3='del',<appname>s20='wrap_test_app' .
+@. @     call 0001 (<ctl>,<file>,<runname>,<cmd>,<appname>,'','','',<status>h1) .
+@.
+@     GTO END .
+@.
+@0001:(<ctl>,<file>,<runname>,<cmd>,<inp2>,<inp3>,<inp4>,<inp5>,<status>) .
+@     ldv <status>=0 .
+@.
+@     ERROR_ .
+@.
+@     call,SUBLCOMMON_ getFileName_ (<file>,<run>s60) .                         Extracts File Name from path
+@     lcv,lin+1 'b99' <run> '.bis'/''  gto lin+4 .                                   Remove file type
+@     ldv <msg>s256='Must be BIS file type' .
+@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@     gto 0199 .
+@.
+@.    #  Check if registered
+@     srh,2,e,2,,,0180 'dhr2-104' 'RUN NAME' ¬,'IBLD' .
+@.
+@.    #  Kick off IBLD run with inputs supplied.  Validation will be handled inside of IBLD
+@.    #  program
+@     lnk IBLD,<cmd>,<inp2>,<inp3>,<inp4>,<inp5> .
+@     gto 0199 .
+@.
+@.    #  Errors
+@0180:ldv <msg>s80='IBLD is not registered on this system' .
+@     call,GROWL_ 0001 ('SUBL Failed','FAILED',<msg>) .
+@     gto 0199 .
+@.
+@.    #  Exit
+@0199:return .

@@ -1,0 +1,202 @@
+.Object Name: SUBLW
+.
+.
+.
+*
+*
+*===============================================================================
+:INCLUDE,ecab$,B,1 .                                                            INCLUDE
+@0001:.
+@     rar 0198 .                                                                Abort label
+@     rer,0,E,2  0001 .
+@     brk  brk,0,I  rnm -2 .                                                    Clear Attrib Result
+@     brk  brk,0,I  rnm -3 .                                                    Read Attrib Result
+@.
+@.    #  Read config table to load in run variables
+@     rsr,SUBLCOMMON_ configVars_ .
+@.
+@.    #  Get application path... If first time run setup
+@     call,SUBLCOMMON_ appPath_ (<user>,<apppath>s256) .
+@     call,SUBLCOMMON_ getChgsFile_ (<appdir>,<chgsfile>s256) .
+@.
+@.    #  Start watchmedo.exe to watch directories
+@0005:.ew   pc,bc 'cmd /C '"<batfile>" .
+@.
+@.    #  Set up animation
+@0010:inc <cnt> .
+@     ldv <prun>s0 .
+@     if <cnt> gt 9  ldv <cnt>i2=1  .
+@     ldv <dsp>h11='          /' .
+@     lcv,lin+1 '' <dsp>(1-<cnt>) ' '/'=' .
+@     brk .
+
+    /               \
+   /  ~~~~     ~~~~  \    SUBL WATCHER
+  /  ______   ______  \   Version: <ver>
+  \    (-)  ^  (-)    /
+   \       /^\       /
+    \     /_^_\     /
+     \             /
+      \ <dsp>(p)
+       \    =    /
+         \ \ / /
+         \ \ / /
+
+  Waiting for changes
+  <chgsfile>
+
+@.
+@     brk .
+@     dsp,-0,,,,Y,,' SUBLWATCHER ' 'date11$' 'time$' .
+@.
+@.    #  Watch for chgs file
+@0034:dbg,,w,<delay>(p) .
+@     pcr,0,I,-0,n,n,0010 <chgsfile> .                                          File Exist?
+@     rnm -5  lzr,-5 <lns>i7,,<lnh>i7 .
+@     if <lns> gt <lnh> . ; gto 0010 .                                          Look for changes
+
+@.    #  Get field sizes for logging
+@     dvs,SUBLOG_ 'Event','File','Object','Input' \
+        <event>s,<file>s,<obj>s,<input>s .
+@.
+@0036:inc <lnh>  rdl,-5,<lnh>,0070 1-256 <data>s .                              Get files
+@     ldv,ql <event>=<data>,0(,),\
+             <file>=<data>,1(,),\
+             <obj>=<data>,2(,),\
+             <input>s40=<data>,3(,),\
+             <inp1>s40=<data>,4(,),\
+             <inp2>s40=<data>,5(,),\
+             <inp3>s40=<data>,6(,),\
+             <inp4>s40=<data>,7(,),\
+             <inp5>s40=<data>,8(,) .
+@.
+@.    #  Start BisBug Debugging Session
+@     lcv,lin+2 '' <file> 'BisBug' ,<occ>i3 .                                   Check for BisBug
+@.    BR <bisbug> .
+@.
+@.    #  Start BisCmd
+@     ldv <biscmd>h1=n .
+@     if <event> eq 'BisCmd' . ; gto 0037 .
+@     ldv <biscmd>h1=y .
+@     if <inp1> gt '' . ; gto lin+3 .
+@     call,BISCMD_ 0002 (<file>,<input>,<inp1>,<inp2>,<inp3>,<inp4>,<inp5>,<status>h1) .
+@     if <status> eq 9,(0036) . ; gto 0037 .
+@.
+@     call,BISCMD_ 0001 (<file>,<input>,<status>h1) .
+@     if <status> eq 9,(0036) .
+@.
+@.    #  Make sure were on the correct site for this file...
+@0037:lcv,0038 'b1' <file> 'site-' <pos>i3 .                                    Find string
+@     inc,5 <pos>  ldv <sl>h1=<file>(<pos>-1) .                                 Read Site Letter from file
+@     if <sl> ne netsit$ . ; gto 0038 .                                         Compare
+@     ldv <msg>s256='Site letters differ... Cannot save file.' .
+@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@     gto 0036 .
+@.
+@0038:.
+@     call,SUBLCOMMON_ getFileName_ (<file>,<run>s60) .                         Extracts File Name from path
+@.
+@.    #  Only .bis files are allowed past this point
+@     lcv,0036 'b99' <run> '.bis'/'' .                                          Remove file type
+@     lcv,lin+1 'b99' <run> '.html'/'' .                                        Remove file type
+@     if <prun> ne '<PRUN>'  if <run> eq <prun>,(0036) .                        Catch duplicates
+@     def,s <psz>i3,<run>  ldv <prun>s<psz>=<run> .
+@     ldv,p <run> .
+@.
+@.    #  Load run location
+@     call,SUBLCOMMON_ getCabDrwRpt_ (<run>,<cab>i4,<drw>h1,<rpt>i4) .
+@.
+@.    #  Logging
+@     DFU SUBLOG_ .
+@     ln+,SUBLOG_,,1  ldv <wln>i7=stat1$ .
+@     wrl,SUBLOG_,<wln>,Y 'Event','Report','User','Date','Time','File','Object' \
+        ¬,<event>,<run>,user$,date11$,time$,<file>,<obj> .
+@     cmu .
+@.
+@     if <biscmd> eq 'y',(0036) .                                               Wait for next event
+@.
+@.    #  Make sure its a valid MAPPER report
+@     ldv <vm>i1=0 .
+@     def <t>i2,<cab>  if <t> eq 1  inc <vm> .                                  Numeric
+@     def <t>i2,<rpt>  if <t> eq 1  inc <vm> .                                  Numeric
+@     def <t>i2,<drw>  if <t> eq 2  inc <vm> .                                  Alpha
+@     if <vm> eq 3,(0047) .                                                     Valid
+@     pc,bnw "del <chgsfile>(p)" .                                              Clean up file
+@.
+@     ldv <msg>s80=<file>': Is not a valid MAPPER report' .
+@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@     gto 0036 .
+@.
+@.    #  Retrieve the file and clear attribute again
+@0047:pcr,0,I,-0,n,n,0034 <file>  gto 0048 .
+@     if stat1$ eq 1 \
+        ldv <msg>s80='The file has been deleted' .
+@     if stat1$ eq 2 \
+        ldv <msg>s80='Binary files are not supported' .
+@     pc,bnw "del <chgsfile>(p)" .                                              Clean up file
+@.ew  MBX,OK,S,'Sublwatcher: Warning!' "<msg>(p)" O,(0036) .
+@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@     gto 0036 .
+@.
+@0048:rnm -4 .
+@     pc,bnw "del <chgsfile>(p)" .                                              Clean up file
+@.
+@.    #  Make sure were not editing this file
+@     if <cab> eq ecab$  if <drw> eq aedrw$  if <rpt> eq erpt$,(0036) . ; .     Cannot modify itself
+@.
+@.    #  Check if brand new report
+@     lzr,<cab>,<drw>,<rpt>,lin+1  ldv <exists>h1='Y'  gto 0050 .
+@     ldv <exists>h1='N',<msg>s256='Can not create brand new file.' .
+@     ldv <msg>=<msg>'This feature isnTIC$t available yet.' .
+@.ew  MBX,OK,S,'Sublwatcher: Warning!' "<msg>(p)" O,(0036) .
+@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@     gto 0036 .
+@.
+@.    #  Check if user matches control line
+@0050:rdl,<cab>,<drw>,<rpt>,1 53-11 <controluser>s .
+@     if user$ ne <controluser> . ; gto 0056 .
+@     ldv <msg>s256='You do not have update control of this report.',\
+          <msg>=<msg>(p)'Waiting for input...' .
+@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@     mbx,YN,Q,'Sublwatcher: Whoa there!' \
+"You do not have update control of this report. //\
+ Run:   <rpt>(p)<drw>(p)<cab>(p)    Name:   <controluser>(p) //\
+ Would you like to take control of this report?//" Y,(lin+1),N,(0036) .
+@0056:lzr,3950,d,1,0061 .                                                       ICE Enabled Site?
+@     srh,3950,d,1,,,0061 'ad' 'SvcCab','sd' ¬,<cab>,<drw> .
+@     lzr,-0 ,,<hln>i7  inc <hln> .
+@     rdl,-0,<hln>,lin+1 'cab','dw','rpt' <icab>h,<idw>h,<irpt>h .
+@     fdr,<icab>,<idw>,<irpt>,,,0061 '' 'cab','dw','rpt' ¬,<cab>,<drw>,<rpt> .
+@     rln,,lin+1 'service' <srvs>s  gto 0061 .
+@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED','Check input message') .
+@     mbx,YN,Q,'What are we doing?' \
+"Do you want to add this as an ice service//" Y,(0019),N,(0061) .
+@.
+@.    #  Load the ¬ character and handle the conversion
+@0061:.
+@     rsl,-4 .
+@     call,SUBLCOMMON_ charReplace_ ('import') .                                Replace tab character
+@     rnm -4 .
+@.
+@     lok,<cab>,<drw>,<rpt>,lin+1  gto 0063 .
+@     ldv <msg>s80='Updating of report '<rpt>(p)<drw>(p)<cab>(p)' is in progress...' .
+@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@     gto 0036 .
+@0063:rep,-4,<cab>,<drw>,<rpt> .
+@     ulk .
+@     gto 0036 .
+@.
+@.    #  Start over and keep re-checking
+@0066:if ws$ eq 0,(lin+2) .
+@     if <exists> eq y  run V,<rpt>,<drw>,<cab> . ; .
+@     GTO END .
+@.
+@.    #  Start over and keep re-checking
+@0070:pcr,0,I,-0,n,n,lin+2 <chgsfile>(p) .                                      File Exist
+@     pc,bnw "del <chgsfile>(p)" .                                              Clean it up
+@     gto 0010 .
+@.
+@.    #  Run was aborted
+@0198:.
+@     rel .
+@.

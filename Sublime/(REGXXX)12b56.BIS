@@ -1,0 +1,184 @@
+.Object Name: REGXXX
+*
+*===================================================================================================
+:INCLUDE,ecab$,B,1 .                                                                         INCLUDE
+@.
+@.    #---------------------------------------------------------------------------------------------
+@.    #  REG - Registers the run as XXX
+@.    #  Written: 01/16/2015
+@.    #---------------------------------------------------------------------------------------------
+@.
+@.    # Test Setup
+@     ldv <ctl>s80='REG',<cab>i4=ecab$,<drw>h1=aedrw$,<rpt>i4=rpt$ .
+@     ldv <file>s256='d:\users\winne\sublwatcher\site-e\sublwatcher\Sublime\(REGXXX)12B56.bis' .
+@     call 0001 (<ctl>,<file>,'',<status>h1) .
+@     rel .
+@.
+@0001:(<ctl>,<file>,<runname>,<status>) .
+@.
+@     ERROR_ .
+@.
+@     call,SUBLCOMMON_ getFileName_ (<file>,<run>s60) .                         Extracts File Name from path
+@     lcv,lin+1 'b99' <run> '.bis'/''  gto lin+4 .                              Remove file type
+@     ldv <msg>s256='Must be BIS file type' .
+@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@     gto 0199 .
+@.
+@     call,SUBLCOMMON_ getCabDrwRpt_ (<run>,<xcab>i4,<xdrw>h1,<xrpt>i4) .
+@     ldv,p <tmp>a6=<xcab>(p)<xdrw>(p),<xcab>,<xrpt>  def,n <numdrw>i6 <tmp> .   get numeric drawer
+@.
+@. --------------------------------------------- . ------- R E R -------
+@     use rerstn=v0190,rermsg=v0191 .
+@     ldv,wc <rerstn>i5=coord$,<rermsg>s77='Unisys Business Information Server' .
+@ .  --------------------------------------------- . ------ I N I T ------
+@     ldv <error>H6='',<ercab>I4=006,<erdrw>H1=G,<errpt>I3=008 .    error report
+@     ldv,wr <adrw>a1,<drw>i6=<numdrw>,<rpt>i4=<xrpt> .         displayed report (d,r)
+@     ldv,p <cabnumber>i4=<xcab>  ldv,r <drwcab>i6=<xdrw><xcab> .
+@     ldv,wl <dline>i6=dline$,<fmt>i1=fmt$  rnm -4 .       displayed report (l,f)
+@     if 0 eq <drw>,<dline>,(lin+1) ; def,a <adrw>,<drw> .         valid display?
+@     chg input$ <input>h4,<xl>i6 .    input option and line number (D-opt only)
+@     ldv <input>=XXX .
+@0009:gto 0011 .
+@     if <input> eq '',x,(0011),?,d,(0031),help,(0071) ; gto lin+1 .  input options?
+@     ldv <error>h6=UREG01  gto 0041 .                       invalid option error
+@ .  --------------------------------------------- . ------ R E G/R E G, X --
+@0011:ldv <found>i1=0,<runtype>h1=' ' .
+@     loc,<xcab>,<drw>,<rpt>,,0005 'afm' 1-1 @ ,<linenumber>i5 . Is it a BIS script?
+@     inc <found> .                                 Found a BIS script, set flag
+@0005:loc,<xcab>,<drw>,<rpt>,,0007 'afmc' 1-80 'function' ,<linenumber>i5 .
+@. @     if <found> eq 1  gto 0080 ; . The report contains both types ask the question?
+@     gto 0020 .          Just a JavaScript script continue.
+@0007:if <found> eq 1  gto 0020 ; gto 0080 .
+@0020:if <adrw> eq '',(0017) ; if <rpt> le 0,(0017) .               display error
+@     lok,runtyp$,depn$,0018  rnm,runtyp$,depn$ -1 .              lock department
+@     fdr,-1,,,0021 '' 'run name(1-11)','user(1-11)' '¬',xxx,user$ .
+@     wrl,-1,line$,y 'drawer','rpt',131-1 '¬',<drwcab>(r),<rpt>,<runtype> .
+@0013:ulk  if <input> eq x,(0015) ; .                              unlock department
+@     rnm,-4 -0 .
+@     gto 0061 .                                                            exit
+@0015:if <drw> eq edrw$  if <rpt> eq erpt$,(0019) ; .                     if not RCR
+@     rnm,-4 -0  run xxx .                                            execute run
+@0017:ldv <error>h6=UREG02  gto 0041 .                              display error
+@0018:ldv <error>h6=UREG03  gto 0041 .                          update lock error
+@0019:ulk  ldv <error>h6=UREG04  gto 0041 .                      execute RCR error
+@ .  --------------------------------------------- . ------- A D D -------
+@0021:dfu,0018 -1 .
+@     lzr,-1 ,,<lin>h1 .                                      find 1st data line
+@     ln+,-1,<lin>,1  inc <lin> .                                   add new line
+@     fdr,usrtyp$,depn$,,,0025 '' 2-11 '¬',user$ .        find user registration
+@     rln 99-12 <resp>a  ldv,l <run>a12=xxx .                 responsible & run
+@     ldv,wl <user>a12=user$,<cabs>s21=A0,<usrgrp>h1=Y .               load data
+@     wrl,-1,<lin> 'run name','user','drawer','rpt','f',\          write new line
+     'cabinets','responsible',131-1,133-1 \
+     tab$,<run>,<user>,<drwcab>(r),<rpt>,Y,<cabs>,<resp>,<runtype>,<usrgrp> .
+@     srr,-1 '' 'run name','user' tab$,1,2d .                     sort & replace
+@0023:cmu  gto 0013 .                                    commit update & continue
+@0025:dcu  ldv <error>h6=UREG05  gto 0041 .                           run erroring
+@ .  --------------------------------------------- . ------ R E G,D ------
+@0031:rnm,runtyp$,depn$ -1 .                                   rename department
+@     fdr,-1,,,0037 '' 'run name(1-11)','user(1-11)' '¬',xxx,user$ .
+@     rln 'drawer','rpt' <xt>i,<xr>i .                               read info
+@     def,x <test>i1,<xt>  if <test> eq 9  gto 0033 . ; ldv,p <xt>=<xt> \
+      def,s <test>i5,<xt>  ldv <xa>a1=<xt>(1-1)  ldv,p <xm>i4=<xt>(2-0) \
+      if <input> eq ?,(0036) ; ldv <xt>=<xa>  gto 0034 .
+@0033:def,m <xm>i4,<xt>  if <input> eq ?,(0035) ; .     octal cabinet/ short display
+@0034:if <xt> eq edrw$  if <xr> eq erpt$,(0019) ; .                display RCR error
+@     lzr,<xm>,<xt>,<xr>,0039 <maxlin>i6 .                         report exist?
+@     if <xl> gt <maxlin>  chg <xl> <maxlin> -18 ; .                line number OK?
+@     if <xl> le 0  ldv <xl>=1 ; dsx,<xm>,<xt>,<xr>,<xl> .          display report
+@0035:ldv,p <xm>,<xr>  def,a <xa>a1,<xt> . pack data
+@0036:brk,fftype$ .
+   REG -    <XXX is registered to execute report <xr><xa><xm>>
+@     brk  dsx,-0 .
+@0037:ldv <error>h6=UREG07  gto 0041 .                          no xxx registered
+@0039:ldv <error>h6=UREG06  gto 0041 .                         no rpt exist error
+@ .  --------------------------------------------- . ------- E R R -------
+@0041:fdr,<ercab>,<erdrw>,<errpt>,2,,0054 '' 82-6  ,<error> ,<LN_NM>i5 .
+@     brk  dlr,-0 .
+@     if <adrw> eq '',(lin+1) ; gto 0053 .                     re-display report?
+@     key  dsm,<ercab>,<erdrw>,<errpt>,<LN_NM> .      ------- D S P -------
+@     if <error>(5-2) eq 01,02,07,(0071) ; gto 0061 .                        exit
+@0053:key  dsm,<ercab>,<erdrw>,<errpt>,<LN_NM>,,,,,-4,<dline>,<fmt> . error output
+@     if <error>(5-2) eq 01,02,07,(0071) ; gto 0061 .                        exit
+@0054:fdr,<ercab>,<erdrw>,<errpt>,2 '' 82-6  ,UTL009 ,<LN_NM>i5 .
+@     key  dsm,<ercab>,<erdrw>,<errpt>,<LN_NM> .
+@     if <error>(5-2) eq 01,02,07,(0071) ; gto 0061 .                        exit
+@ .  --------------------------------------------- . ------ E X I T ------
+@0061:if <adrw> eq ''  gto 0099 .                                        end run
+@     if <input> eq 'd'  dsx,-4 ; .
+@     ldv,p <xr>i4=<rpt>,<xa>a1=<adrw> .                               pack data
+@     def,m <xm>i4,<drw>  ldv,p <xm>  if <fmt> eq 0  ldv <fmt>='' .   def drw & drw
+@     if <runtype> eq ''  ldv,p <type>h12='BIS Script'  gto 0062 ; .
+@     ldv,p <type>h12='JavaScript' .
+@0062:ldv,r <done>s49='('<type>') XXX is registered'  gto 0064 .
+@0063:ldv,r <done>s49='JavaScript is not available on this platform' .
+@0064:ldv <outl>s80='Line'soe$'¬'<dline>'     Roll'soe$'¬      '<done>  .
+@. @     dsx,-4,<dline>,2,<fmt>,,,<outl> .
+@0099:gto 0100 .
+@ .  --------------------------------------------- . ------ H E L P ------
+@0071:brk,fftype$ .                                                 clear output
+    ------------------------------------------------------------------------
+    -----------------------------  H  E  L  P  -----------------------------
+    ------------------------------------------------------------------------
+     Purpose:  To allow coordinators the ability to quickly register a
+               displayed MAPPER run and execute it under the name ''XXX''.
+               The registration will last until another ''REG'' is executed
+               at which time the displayed report becomes the new ''XXX''.
+               The Reg script will try to determine if the script displayed
+               is a BIS or JavaScript script.  If the script type cannot be
+               determined a message box will be displayed.  The message box
+               is a Yes/No response. If you select Yes the script will be
+               registered as a JavaScript script, if you select No the
+               script will be registered as a BIS script.
+    ------------------------------------------------------------------------
+     Calls:    REG       Register Displayed Run as ''XXX'' and Redisplay it.
+               REG,X     Register Displayed Run as ''XXX'' and Execute it.
+               REG,?     Quick Information on ''XXX'' Registration.
+               REG,D,5   Display Run Report registered as ''XXX'' at line # .
+               XXX       Execute Run Report registered as ''XXX''.
+    ------------------------------------------------------------------------
+     Notes: 1. If a run named ''XXX'' is not registered for your USER-ID
+               in your department, then one will be registered for you.
+            2. When a new 'XXX' entry is added, the Run Registration report
+               will be sorted by Run Name and User columns.
+            3. Once registered, future references to the ''XXX'' registration
+               will read/update the ''B'',''drw'' and ''rpt'' fields only.
+            4. Each USER-ID in a given department may have only one ''XXX''
+               run registered for them at any given time.
+    ------------------------------------------------------------------------
+@     brk  dsx,-0,2 . display help
+@ .  --------------------------------------------- . -- U N K N O W N ----
+@0080:if ws$ eq 1  mbx,YN,Q,'Unknown Script Type' \
+     "Will this report contain JavaScript?" N,(0081),Y,(0082) ; .
+@     if ws$ ne 1,(lin+1) ; gto 0099 .  end run
+@.
+tic,";prep,(pr,bac)
+FKEY,8,"Help  ",dsphelp,1
+fld,04,09,11,64,AFB,(pr,boc)
+fld,05,10,09,62,,(pr,bac)
+fld,09,14,,47,,(PR,fc),,\
+"Will this report contain a JavaScript (Y or N)?                       "
+fld,09,62,,01,U,(AO,ts,fc)
+fld,09,66,,01,U,(CO,ts,fc)
+END
+EDIT 1
+ REQD,1
+ LOV "N";"Y"
+END
+HELP    17                                                                     |
+HELP,1
+ Enter Y if you  want to register a JavaScript.
+HELP,999
+@.
+@     brk  rnm -1  sc,-1,,,1 '' .
+@     chg input$ <resp>h1 .
+@     if <resp> eq N,(0081),Y,(0082) ; .
+@.
+@0081:ldv <runtype>h1=' '  gto 0020 .
+@0082:ldv <runtype>h1='J'  gto 0020 .
+@.
+@0100:ldv <msg>s256='REG XXX is registered to execute report '<xrpt>(p)<xdrw>(p)<xcab>(p) .
+@     call,GROWL_ 0001 ('subwatcher: success!','SUCCESS',<msg>) .
+@.
+@.    # Exit
+@0199:return .

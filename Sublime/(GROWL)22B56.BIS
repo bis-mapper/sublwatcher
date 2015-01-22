@@ -24,9 +24,11 @@
 @.
 @0001:(<title>,<type>,<msg>) .
 @.
-@     ERROR_ .
+@     if cerr$ gt 0,'' . ; ERROR_ .
 @.
-@     rsr,SUBLCOMMON_ configVars_ .
+@     fdr,SUBLCONFIG_ '' 'Parameter' ¬,'appdata'  rln 'value' <appdata>s .
+@     fdr,SUBLCONFIG_ '' 'Parameter' ¬,'app'  rln 'value' <app>s .
+@     ldv,p <appdir>s80=<appdata>(p)'\'<app>(p) .
 @.
 @.    #  Display GROWL notification
 @     fdr,GROWLALERTS_ '' 'Type' ¬,<type> .
