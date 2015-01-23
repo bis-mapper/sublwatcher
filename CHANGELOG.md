@@ -4,9 +4,10 @@ Features:
 
   - add support for IBLD within Sublime 
   - add ability to REG run within Sublime
-  - add error dumps category to capture any whoops that may have happened
+  - add new drawer(I) fore error dumps
+  - modified error routine to capture dumps and send email in-house
 
 Documentation:
 
-  - add growl run registraion instead of using DEFINE_
+  - changed Growl to be registered run instead of using DEFINE_
 
