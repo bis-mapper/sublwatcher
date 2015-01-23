@@ -22,7 +22,7 @@
 @.
 @     ldv <status>=0 .
 @.
-@     ERROR_ .
+@     SUBLRER_ .
 @     rsr,SUBLCOMMON_ configVars_ .
 @     call,SUBLCOMMON_ appPath_ (<user>,<apppath>s256) .
 @.

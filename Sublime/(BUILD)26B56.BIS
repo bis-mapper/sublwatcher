@@ -16,7 +16,7 @@
 @.
 @0001:(<ctl>,<file>,<runname>,<status>) .
 @.
-@     ERROR_ .
+@     SUBLRER_ .
 @.
 @.    #  Get revision
 @     lcv 't@' <ctl> ' ' <pos>i3  inc <pos> .

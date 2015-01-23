@@ -15,7 +15,7 @@
 @.    #  Call Entry Point
 @0001:(<USER>,<APPPATH>) .
 @.
-@     ERROR_ .
+@     SUBLRER_ .
 @.
 @.    #  Load config vars
 @     RSR,SUBLCOMMON_ configVars_ .

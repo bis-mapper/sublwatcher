@@ -19,7 +19,7 @@
 :DEFINE GROWLAPPS_           "ECAB$,C,10"           |¬Registered Growl Applications
 :DEFINE GROWLALERTS_         "ECAB$,C,11"           |¬Growl alert types
 :DEFINE DEFLIST_             "400,b,4"              |¬Application Define Registration
-:DEFINE ERROR_               "RER,ECAB$,b,0099 0001  RAR 0196"
+:DEFINE SUBLRER_             "RER,ECAB$,b,0099 0001  RAR,ECAB$,b,0099 0196"
 :DEFINE getCabDrwRpt_        "0001"                 |¬Gets Cab Drw Rpt from Var
 :DEFINE configVars_          "0005"                 |¬Loads config vars
 :DEFINE chkIceSvc_           "0010"                 |¬Check if ICE service

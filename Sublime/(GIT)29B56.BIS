@@ -17,7 +17,7 @@
 @.
 @0001:(<CTL>,<FILE>,<RUNNAME>,<STATUS>) .
 @.
-@     ERROR_ .
+@     SUBLRER_ .
 @.
 @     CALL,SUBLCOMMON_ getFileName_ (<FILE>,<RUN>s60) .                         Extracts File Name from path
 @     LCV,lin+1 'b99' <RUN> '.bis'/''  GTO lin+4 .                              Remove file type

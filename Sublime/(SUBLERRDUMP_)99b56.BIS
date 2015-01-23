@@ -34,40 +34,36 @@ V199(102-6)¬V199(108-4)¬V199(1-80)¬  ldv,c V199(1-80) .    | RECENTER
 @. *** SEND EMAIL MESSAGE *********************************| *******************
 @0100:if orstan$ eq 0  ldv V198S21=stnum$ . ; \            | UNIQUE NUMBER
                        ldv V198S21=orstan$ .               | FOR FILE NAME
-@     ldv V198='C:\TEMP\RER-'V198(P)'.TXT' .               | BODY FILE
 @     rsl,-1  ln-,-0,46,9999999  ln-,-0,3,1 .  NO DIVIDER  | ONLY FIRST XX LINES
-@     ln+,-0,1,1,,'.See full error dump 'V199(116-9) .     | WHERE IS FULL DUMP?
-@     fil,-0,N,Y V198(P) .                                 | SAVE BODY FILE
-@     ldv V199S256='C:\UTIL\BLAT.EXE "'V198(P)'" -subject "' . EMAIL UTILITY
-@     if ecab$ gt 398  ldv V199=V199(P)'TEST -' . ; .      | IS THIS TEST?
-@     ldv V199=V199(P)' IBLD RUN FAILED - 'run$'"',\       | SUBJECT
-          V199=V199(P)' -to ed.winn@northstarmutual.com',\ | EMAIL ADDRESSES
-          V199=V199(P)' -f mapperadmin@northstarmutual.com -noh2',\ FROM
-          V199=V199(P)' -server mail.northstarmutual.com:25' . SERVER AND PORT
-@     os '-f' V199(P) .                                    | SEND THE EMAIL
-@     os '-d -f' 'DEL "'V198'"' .                          | REMOVE TEMP
+@     ldv,p <rpt>i4=V199(116-4) .
+@     ln+,-0,1,1,,'.See full error dump '<rpt>'I'56 .
+@     rnm -1 .
+@     srh,2,e,2,,,0110 'dhr2-104' 'RUN NAME' ¬,'EMAILSUB' .
+@     ldv,p <subject>s256='SUBLWATCHER RUN FAILED - 'RUN$ .
+@     brk,0,f .
+<pre style="font-size: 14px;position:relative;top:-60px">
+@     rdc,-1 1-256 <data>s
+<data>
+</pre>
+@     brk .
+@     dup,-0,0,f  ldv,p <bodyfile>h4=rpt$ .
+@     ldv <to>s40='ed.winn@northstarmutual.com',<emtx>h5='email' .
+@     br emailsub,run$,<to>,<subject>,,<bodyfile>,,,<emtx> .
 @.                                                         |
 @. *** CLEAN UP changes.txt *******************************| *******************
-@     fdr,SUBLCONFIG_ '' 'Parameter' ¬,'appdata'  rln 'value' <appdata>s .
+@0110:fdr,SUBLCONFIG_ '' 'Parameter' ¬,'appdata'  rln 'value' <appdata>s .
 @     fdr,SUBLCONFIG_ '' 'Parameter' ¬,'app'  rln 'value' <app>s .
 @     ldv,p <appdir>s80=<appdata>(p)'\'<app>(p) .
 @     pc,bcw "del <appdir>\changes.txt" .                       Clean up file
 @.                                                         |
 @. *** END PROGRAM - DISPLAY ERROR ************************| *******************
 @     if orstan$ eq 0  ldv V198I6=2 . ; GTO END .          | BACKGROUND - END
-FKEY,0,'Restart',KEY
-FKEY,1,'Quit',KEY
-FKEY,10,'EXIT',RELEASE
-@     brk  fky,-1 .
-@     dsp,-1,V198,2,,,,'Line'soe$'¬2          Roll'soe$'¬                  '\
-'                      <Run Error Dump>' .
-@     ldv V198=dline$  gto lin-2 .                         |¬LOOP BACK TO DSP
-@     IF FKEY$ EQ 0 . ; .
-@     IF FKEY$ EQ 1,(0199) .
 @.
 @. *** RESTART SUBLWATCHER ********************************| *******************
+@     lsm,xerr$ v195s80  ldv,l v195 .
+@     chg <err>i4 cerr$  lsm,<err> <v1>s88 .
 @     sys .                                                                     system
-@     fdr,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,user$,'sublwatcher'  gto 0199 .    currently running?
+@     fdr,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,user$,'SUBLWATCHER'  gto 0199 .    currently running?
 @     wat 1000 .                                                                pause for first time
 @     run SUBLWATCHER .                                                         start file watcher utility
 @.
@@ -76,4 +72,4 @@ FKEY,10,'EXIT',RELEASE
 @0196:chg <cerr>i4 cerr$ .
 @.                                                         |
 @. *** RER - EXIT  ****************************************| *******************
-@0199:rel .
+@0199:return .

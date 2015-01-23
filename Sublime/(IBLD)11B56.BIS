@@ -53,7 +53,7 @@
 @0001:(<ctl>,<file>,<runname>,<cmd>,<inp2>,<inp3>,<inp4>,<inp5>,<status>) .
 @     ldv <status>=0 .
 @.
-@     ERROR_ .
+@     SUBLRER_ .
 @.
 @     call,SUBLCOMMON_ getFileName_ (<file>,<run>s60) .                         Extracts File Name from path
 @     lcv,lin+1 'b99' <run> '.bis'/''  gto lin+4 .                                   Remove file type
@@ -65,7 +65,6 @@
 @     srh,2,e,2,,,0180 'dhr2-104' 'RUN NAME' ¬,'IBLD' .
 @.
 @.    #  Kick off IBLD run with inputs supplied.  Validation will be handled inside of IBLD
-@.    #  program
 @     lnk IBLD,<cmd>,<inp2>,<inp3>,<inp4>,<inp5> .
 @     gto 0199 .
 @.

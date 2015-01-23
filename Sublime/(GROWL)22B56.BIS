@@ -24,7 +24,7 @@
 @.
 @0001:(<title>,<type>,<msg>) .
 @.
-@     if cerr$ gt 0,'' . ; ERROR_ .
+@     if cerr$ gt 0,'' . ; SUBLRER_ .
 @.
 @     fdr,SUBLCONFIG_ '' 'Parameter' ¬,'appdata'  rln 'value' <appdata>s .
 @     fdr,SUBLCONFIG_ '' 'Parameter' ¬,'app'  rln 'value' <app>s .

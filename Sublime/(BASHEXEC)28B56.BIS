@@ -36,7 +36,7 @@ read -p "Press enter to continue"
 @     rnm -1 .
 @     ldv <status>=0 .
 @.
-@     ERROR_ .
+@     SUBLRER_ .
 @.
 @.    #  Add line to file to remove when complete
 @     call 0200 (<file>,<unixfile>s256) .

@@ -13,7 +13,7 @@
 @.
 @0001:(<CTL>,<FILE>,<RUNNAME>,<STATUS>) .
 @.
-@     ERROR_ .
+@     SUBLRER_ .
 @.
 @     RSR,SUBLCOMMON_ configVars_ .
 @     FDR,SUBLUTILS_ '' 'Util' ¬,<RUNNAME>  RLN 'Rid' <RRID>i .

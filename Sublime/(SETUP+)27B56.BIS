@@ -22,7 +22,7 @@
 @     BRK  RNM -8  DLR,-8 .
 @.
 @     LDV <WIN1>i6=0 .
-@     ERROR_ .
+@     SUBLRER_ .
 @.
 @     LDV,p <PRD>h12=SUBLWATCHER . <PRD> contains Product name
 @     LDV <OVR>h1=N .
