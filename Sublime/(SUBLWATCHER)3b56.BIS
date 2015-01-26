@@ -19,15 +19,16 @@
 @     call,SUBLCOMMON_ appPath_ (<user>,<apppath>s256) .
 @     call,SUBLCOMMON_ getChgsFile_ (<appdir>,<chgsfile>s256) .
 @.
-@.    #  Start watchmedo.exe to watch directories
-@0005:.ew   pc,bc 'cmd /C '"<batfile>" .
+@     ldv <dcnt>i2=-1
 @.
 @.    #  Set up animation
-@0010:inc <cnt> .
-@     ldv <prun>s0 .
+@0010:inc <cnt>,<dcnt> .
+@     ldv <dspc>h3='' .
+@     if <dcnt> gt 3  ldv <dcnt>=0 .
+@     if <dcnt> eq 0 . ; lcv,lin1 '' <dspc>(1-<dcnt>) ' '/'.' .
 @     if <cnt> gt 9  ldv <cnt>i2=1  .
 @     ldv <dsp>h11='          /' .
-@     lcv,lin+1 '' <dsp>(1-<cnt>) ' '/'=' .
+@     lcv,lin1 '' <dsp>(1-<cnt>) ' '/'=' .
 @     brk .
 
     /               \
@@ -47,7 +48,8 @@
 
 @.
 @     brk .
-@     dsp,-0,,,,Y,,' SUBLWATCHER ' 'date11$' 'time$' .
+@     ldv,p <thisrun>h11=RUN$ .
+@     dsp,-0,,,,Y,,' '<thisrun>' is watching'<dspc> .
 @.
 @.    #  Watch for chgs file
 @0034:dbg,,w,<delay>(p) .
@@ -76,31 +78,30 @@
 @.
 @.    #  Start BisCmd
 @     ldv <biscmd>h1=n .
-@     if <event> eq 'BisCmd' . ; gto 0037 .
+@     if <event> eq 'BisCmd' . ; gto 0040 .
 @     ldv <biscmd>h1=y .
-@     if <inp1> gt '' . ; gto lin+3 .
+@     if <inp1> gt '' . ; gto 0038 .
+@     if link$ eq 0 . ; clk .
 @     call,BISCMD_ 0002 (<file>,<input>,<inp1>,<inp2>,<inp3>,<inp4>,<inp5>,<status>h1) .
-@     if <status> eq 9,(0036) . ; gto 0037 .
+@     if <status> eq 9,(0036) . ; gto 0040 .
 @.
-@     call,BISCMD_ 0001 (<file>,<input>,<status>h1) .
+@0038:call,BISCMD_ 0001 (<file>,<input>,<status>h1) .
 @     if <status> eq 9,(0036) .
 @.
 @.    #  Make sure were on the correct site for this file...
-@0037:lcv,0038 'b1' <file> 'site-' <pos>i3 .                                    Find string
+@0040:lcv,0042 'b1' <file> 'site-' <pos>i3 .                                    Find string
 @     inc,5 <pos>  ldv <sl>h1=<file>(<pos>-1) .                                 Read Site Letter from file
-@     if <sl> ne netsit$ . ; gto 0038 .                                         Compare
+@     if <sl> ne netsit$ . ; gto 0042 .                                         Compare
 @     ldv <msg>s256='Site letters differ... Cannot save file.' .
 @     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
 @     gto 0036 .
 @.
-@0038:.
+@0042:.
 @     call,SUBLCOMMON_ getFileName_ (<file>,<run>s60) .                         Extracts File Name from path
 @.
 @.    #  Only .bis files are allowed past this point
 @     lcv,0036 'b99' <run> '.bis'/'' .                                          Remove file type
 @     lcv,lin+1 'b99' <run> '.html'/'' .                                        Remove file type
-@     if <prun> ne '<PRUN>'  if <run> eq <prun>,(0036) .                        Catch duplicates
-@     def,s <psz>i3,<run>  ldv <prun>s<psz>=<run> .
 @     ldv,p <run> .
 @.
 @.    #  Load run location

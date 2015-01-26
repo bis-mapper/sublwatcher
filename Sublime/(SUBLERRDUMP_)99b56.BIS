@@ -5,6 +5,7 @@
 @0001:.
 :DEFINE RERDDRW_             "ecab$,I"                     | RUN ERROR DUMP DRAWER
 :DEFINE RERDLOG_             "ecab$,I,1"                   | RUN ERROR DUMP LOG
+:DEFINE FPATH_               "\\excaliber\is\blat-files\"  | EMAIL FILE PATH
 @     ldv V198S256,V199S256 .
 @     DIAG,RERDDRW_ A,,999  rnm -1 .                       | CREATE ERROR DUMP
 @     lsm,xerr$ V199S256  ldv V199(81-0)='' .              | GET SYSTEM MESSAGE
@@ -40,15 +41,14 @@ V199(102-6)¬V199(108-4)¬V199(1-80)¬  ldv,c V199(1-80) .    | RECENTER
 @     rnm -1 .
 @     srh,2,e,2,,,0110 'dhr2-104' 'RUN NAME' ¬,'EMAILSUB' .
 @     ldv,p <subject>s256='SUBLWATCHER RUN FAILED - 'RUN$ .
-@     brk,0,f .
-<pre style="font-size: 14px;position:relative;top:-60px">
-@     rdc,-1 1-256 <data>s
-<data>
-</pre>
-@     brk .
-@     dup,-0,0,f  ldv,p <bodyfile>h4=rpt$ .
+@     ldv,p <fp>s100=FPATH_ .
+@     dc t2=t0(time$) <time>s6 \
+      ldv,p <att>s80=<fp>'SUBLWATCHER DUMP-'date20$'-'<time>'.txt' .
+@     fil,-1,n,n <att> .
 @     ldv <to>s40='ed.winn@northstarmutual.com',<emtx>h5='email' .
-@     br emailsub,run$,<to>,<subject>,,<bodyfile>,,,<emtx> .
+@     br emailsub,run$,<to>,<subject>,,,,<att>,<emtx> .
+@     wat 3000 .
+@     os '-d -f' 'del "'<att>(p)'"' .
 @.                                                         |
 @. *** CLEAN UP changes.txt *******************************| *******************
 @0110:fdr,SUBLCONFIG_ '' 'Parameter' ¬,'appdata'  rln 'value' <appdata>s .
