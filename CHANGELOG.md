@@ -1,3 +1,6 @@
+## 0.0.12
+  - bug fixes
+
 ## 0.0.11
 
 Features:
