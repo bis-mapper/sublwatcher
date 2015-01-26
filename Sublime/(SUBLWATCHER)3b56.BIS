@@ -7,8 +7,8 @@
 *===============================================================================
 :INCLUDE,ecab$,B,1 .                                                            INCLUDE
 @0001:.
+@     SUBLRER_ .
 @     rar 0198 .                                                                Abort label
-@     rer,0,E,2  0001 .
 @     brk  brk,0,I  rnm -2 .                                                    Clear Attrib Result
 @     brk  brk,0,I  rnm -3 .                                                    Read Attrib Result
 @.

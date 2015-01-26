@@ -1,0 +1,34 @@
+.ERROR-LOG
+.
+.
+.
+*      .            .       .        .Comment/                                                                                              .REVIEW.           .
+*Date  .Run-Id      .Action .Time    .Dump/ErrR/ErrLn /ECmd/Error Message                                                                   .DATE  .PROGRAMMER .COMMENTS
+*======.============.=======.========.======================================================================================================.======.===========.================================================================================================
+¬150122¬SUBLWATCHER ¬ED     ¬15:51:16¬   2¬14  ¬28    ¬xxx ¬< This command is unknown to the system. >                                      ¬
+¬150122¬SUBLWATCHER ¬ED     ¬15:58:56¬   3¬14  ¬28    ¬xxx ¬< This command is unknown to the system. >                                      ¬
+¬150123¬SUBLWATCHER ¬ED     ¬08:17:33¬   4¬11  ¬70    ¬lnk ¬< Nested LNK statements cannot be used. >                                       ¬
+¬150123¬SUBLWATCHER ¬ED     ¬08:20:16¬   5¬11  ¬70    ¬lnk ¬< Nested LNK statements cannot be used. >                                       ¬
+¬150123¬SUBLWATCHER ¬ED     ¬08:22:03¬   6¬11  ¬70    ¬lnk ¬< Nested LNK statements cannot be used. >                                       ¬
+¬150123¬SUBLWATCHER ¬ED     ¬08:55:34¬   7¬11  ¬70    ¬lnk ¬< Nested LNK statements cannot be used. >                                       ¬
+¬150123¬SUBLWATCHER ¬ED     ¬08:59:39¬   8¬11  ¬70    ¬lnk ¬< Nested LNK statements cannot be used. >                                       ¬
+¬150123¬SUBLWATCHER ¬ED     ¬09:03:23¬   9¬11  ¬70    ¬lnk ¬< Nested LNK statements cannot be used. >                                       ¬
+¬150123¬SUBLWATCHER ¬ED     ¬09:06:38¬  10¬11  ¬70    ¬lnk ¬< Nested LNK statements cannot be used. >                                       ¬
+¬150123¬SUBLWATCHER ¬ED     ¬09:10:35¬  11¬11  ¬70    ¬lnk ¬< Nested LNK statements cannot be used. >                                       ¬
+¬150123¬SUBLWATCHER ¬ED     ¬09:14:39¬  12¬11  ¬70    ¬lnk ¬< Nested LNK statements cannot be used. >                                       ¬
+¬150123¬SUBLWATCHER ¬ED     ¬09:16:17¬  13¬11  ¬69    ¬clk ¬< The CLK run statement cannot be used in a called subroutine. >                ¬
+¬150123¬SUBLWATCHER ¬ED     ¬09:21:30¬  14¬11  ¬69    ¬clk ¬< The CLK run statement cannot be used in a called subroutine. >                ¬
+¬150123¬SUBLWATCHER ¬ED     ¬09:22:56¬  15¬11  ¬69    ¬lnk ¬< Nested LNK statements cannot be used. >                                       ¬
+¬150123¬SUBLWATCHER ¬ED     ¬09:24:03¬  16¬11  ¬69    ¬lnk ¬< Nested LNK statements cannot be used. >                                       ¬
+¬150123¬SUBLWATCHER ¬ED     ¬09:25:37¬  17¬11  ¬69    ¬lnk ¬< Nested LNK statements cannot be used. >                                       ¬
+¬150123¬SUBLWATCHER ¬ED     ¬11:04:58¬  18¬14  ¬28    ¬xxx ¬< This command is unknown to the system. >                                      ¬
+¬150123¬SUBLW       ¬ED     ¬11:06:51¬  19¬14  ¬28    ¬xxx ¬< This command is unknown to the system. >                                      ¬
+¬150123¬SUBLWATCHER ¬ED     ¬11:26:06¬  20¬14  ¬28    ¬xxx ¬< This command is unknown to the system. >                                      ¬
+¬150123¬SUBLWATCHER ¬ED     ¬11:26:38¬  21¬14  ¬28    ¬xxx ¬< This command is unknown to the system. >                                      ¬
+¬150123¬SUBLWATCHER ¬ED     ¬11:27:59¬  22¬14  ¬28    ¬xxx ¬< This command is unknown to the system. >                                      ¬
+¬150123¬SUBLWATCHER ¬ED     ¬11:30:13¬  23¬24  ¬25    ¬xxx ¬< This command is unknown to the system. >                                      ¬
+¬150123¬SUBLWATCHER ¬ED     ¬14:59:40¬  24¬7   ¬106   ¬lcv ¬< This option cannot be used in the LCV statement. >                            ¬
+¬150123¬SUBLWATCHER ¬ED     ¬14:59:40¬  25¬7   ¬106   ¬lcv ¬< This option cannot be used in the LCV statement. >                            ¬
+¬150123¬SUBLWATCHER ¬ED     ¬16:06:04¬  26¬12  ¬22    ¬xxx ¬< This command is unknown to the system. >                                      ¬
+¬150123¬SUBLWATCHER ¬ED     ¬16:09:18¬  27¬12  ¬22    ¬xxx ¬< This command is unknown to the system. >                                      ¬
+¬150123¬SUBLWATCHER ¬ED     ¬16:12:19¬  28¬14  ¬52    ¬call¬< This variable is not defined properly. >                                      ¬

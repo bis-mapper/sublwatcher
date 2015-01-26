@@ -1,0 +1,26 @@
+.Object Name: TOC
+*    .D.    .      .   .                    .                                                                               .
+*Cab .w.Rpt .Lines .Typ.Name                .Title                                                                          .
+*====.=.====.======.===.====================.===============================================================================.
+	  56 D    0     39 BIS
+	  56 D    1      5 BIS                      Object Name: Table_Define
+	  56 D    2    449 BIS                      Object Name: SBS                  Standardize BIS Script Main Menu
+	  56 D    3    132 BIS                      Object Name: Error_Routine        SBS Error Routine
+	  56 D    4    194 BIS                      Object Name: Service_Help         SBS Help
+	  56 D    5    302 BIS                      Object Name: Table_ResWords       List Of Reserved Words
+	  56 D    6     17 BIS                      Object Name: Table_IF_Operands    @IF Operands
+	  56 D    7    235 BIS                      Object Name: Table_RUN_Commands   Run Statements and characteristics
+	  56 D    8     44 BIS                      Object Name: Table_ICE_Variable
+	  56 D   10     92 BIS                      Object Name: Data_Indent          Indent Logic
+	  56 D   11     75 BIS                      Object Name: Data_IF_Operands     Standardize @IF Statement Operands
+	  56 D   12     78 BIS                      Object Name: Data_linplusminus
+	  56 D   13    188 BIS                      Object Name: Data_RDL_Variables   Remove Variable Size on RDL, RLN, and R
+	  56 D   14     93 BIS                      Object Name: Data_LC_Options      Lowercase Command Options
+	  56 D   15    155 BIS                      Object Name: Data_Double_Space    Double Space Between Commands
+	  56 D   16    156 BIS                      Object Name: Data_Upper_Case      Uppercase Commands
+	  56 D   17    205 BIS                      Object Name: Data_Std_Labels      Standardize Labels
+	  56 D   18    109 BIS                      Object Name: Data_VariableNames   Uppercase Variable Names
+	  56 D   19    253 BIS                      Object Name: Data_Check_Term      Check For Missing/Improper Termination
+	  56 D   20    575 BIS                      Object Name: Data_Line_Wrap       Wrap Wizard
+	  56 D   21      4 BIS                      unction toLower(&value) {
+	  56 D   99     12 BIS                      Object Name: Table_UserPref
