@@ -145,7 +145,7 @@
 @     rln 'Parameter','Value','Ty','Siz','Opt' \
         <param>s,<value>s,<ty>h,<siz>i,<opt>h .
 @     xqt '@ ldv'<opt>(p)' <'<param>(p)'>'<ty><siz>(p)'='<'><VALUE><'> .
-@     ldv,p <chgsfile>=<btemp>\changes.txt .
+@     ldv,p <chgsfile>=<btemp>\site-netsit$\changes.txt .
 @     gto 0054 .
 @0051:fdr,SUBLCONFIG_ '' 'Parameter' ¬,'CHGSFILE' .
 @     rln 'Parameter','Value','Ty','Siz','Opt' \

@@ -12,7 +12,7 @@
 ¬APPDATA     ¬256¬s¬,p ¬%USERPROFILE%
 ¬appdir      ¬256¬s¬,p ¬<appdata>\<app>
 ¬batfile     ¬256¬s¬,p ¬<appdir>\sublwatcher.bat
-¬chgsfile    ¬256¬s¬,p ¬<appdir>\changes.txt
+¬chgsfile    ¬256¬s¬,p ¬<appdir>\site-netsit$\changes.txt
 ¬src         ¬256¬s¬,p ¬src
 ¬datadir     ¬256¬s¬,p ¬<appdir>\<site>
 ¬ext         ¬  4¬h¬   ¬.bis
