@@ -28,6 +28,7 @@
 @     CALL,SUBLCOMMON_ getChgsFile_ (<APPDIR>,<CHGSFILE>s256) .
 @.
 @.    #  Prompt user to find Editor
+@     if <APPPATH> eq ' ' . ; gto 0005 .
 @     MBX,OC,I,'SUBL' \
 "It looks like this is the first time running SUBL. //\
  In order to continue you need to set up your application path. //\
@@ -35,7 +36,7 @@
  O,(lin+1),C,(0199) .
 @.
 @.    #  Create temp folder
-@     LDV,p <DIR>s256=<BTEMP>'\' .
+@0005:LDV,p <DIR>s256=<BTEMP>'\' .
 @     LDV,p <FLDR>s256=<APP> .
 @     LDV,p <FLDRPATH>s256=<TMPPTH> .
 @     CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
@@ -71,6 +72,7 @@
 @     GTO LIN-2 .
 @.
 @.    #  Open windows explorer using MFXFILE.EXE
+@     if <APPPATH> eq ' ' . ; gto 0199 .
 @     LDV <ACT>h4=OPEN .
 @     CALL,EDRW$,0004 0001 (<ACT>,<PTH>s256,<FIL>s64,<SPT>s64,<SFL>h12,<TYP>h1,<STS>h3) .
 @.

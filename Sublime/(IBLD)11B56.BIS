@@ -58,7 +58,7 @@
 @     call,SUBLCOMMON_ getFileName_ (<file>,<run>s60) .                         Extracts File Name from path
 @     lcv,lin+1 'b99' <run> '.bis'/''  gto lin+4 .                                   Remove file type
 @     ldv <msg>s256='Must be BIS file type' .
-@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
 @     gto 0199 .
 @.
 @.    #  Check if registered

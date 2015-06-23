@@ -25,27 +25,66 @@
 @0010:inc <cnt>,<dcnt> .
 @     ldv <dspc>h3='' .
 @     if <dcnt> gt 3  ldv <dcnt>=0 .
+@     HSH <random>I3=MSEC$(6-0),1-100 .
+@     if <random> eq 47,49,51,53 ldv <eye>h3='---' . ; ldv <eye>h3='(-)' .
 @     if <dcnt> eq 0 . ; lcv,lin1 '' <dspc>(1-<dcnt>) ' '/'.' .
-@     if <cnt> gt 9  ldv <cnt>i2=1  .
-@     ldv <dsp>h11='          /' .
-@     lcv,lin1 '' <dsp>(1-<cnt>) ' '/'=' .
+@     if <cnt> gt 18  ldv <cnt>i2=1  .
+@     ldv <dsp>s19='                  |' .
+@     lcv,lin1 '' <dsp>(1-<cnt>) ' '/']' .
 @     brk .
 
-    /               \
-   /  ~~~~     ~~~~  \    SUBL WATCHER
-  /  ______   ______  \   Version: <ver>
-  \    (-)  ^  (-)    /
-   \       /^\       /
-    \     /_^_\     /
-     \             /
-      \ <dsp>(p)
-       \    =    /
-         \ \ / /
-         \ \ / /
+        , , , , ,
+      /`-`-`-`-`-`\      Program: <thisrun>
+     /             \     Version: <ver>
+    /  ~~~     ~~~  \       User: user$
+    | _____   _____ |       Site: netsit$
+   (|  <eye>  ^  <eye>  |)
+    |        \      |    .------------------.
+    \       ._)     /    |<dsp>(p)
+     \ .         . /     +------------------+
+      \ `-------` /
+       \   ...   /       WATCHING FOR CHANGES
+        `\`;`;`/`        <chgsfile>
+          `\;/`
 
-  Waiting for changes
-  <chgsfile>
-
+@.
+@.                                      MMMMMMMMMMMMMMMMMMM.
+@.                                  MMMMMMMM===========MMMMMMMM.
+@.                               MMMMMM=====================MMMMMM
+@.                             MMMMM===========================MMMMM
+@.                           MMMM=================================MMMM
+@.                         .MMM=====================================MMM.
+@.                        MMMM======================================MMMMM
+@.                       MMM==========================================MMMM
+@.                      MMM===MMMMMM====================MMMMMM==========MMM
+@.                     MMM==MMM    MMM===============MMMM    MMMM========MMM
+@.                    MMM==MM     MMMMM=============MM      MMMMMM========MMM
+@.                    MMM=MM     MMMMMMM===========MM       MMMMMMM========MM.
+@.                   MMM=MM       MMMMMMM=========MM         MMMMMMM=======MMM
+@.                  .MM==MM            MM=========MM              MM========MM.
+@.                  MMM==MM            MM=========MM              MM========MMM
+@.                  MMM==MM.           MM=========MM              MM========MMM
+@.                  MM===MMMMMMMMMMMMMMMM=========MMMMMMMMMMMMMMMMMM=========MM.
+@.                  MM=======================================================MM.
+@.                  MM=======================================================MM.
+@.                  MM=======================================================MM.
+@.                  MM=====MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM===========MM.
+@.                  MMM=====MMM                                  MM=========MMM
+@.                  MMM======MM                                   M=========MMM
+@.                  .MM======MM                                   MM========MM.
+@.                   MMM======MM                                  MM=======MMM
+@.                   .MMM=====MM                                  M=======MMM
+@.                    MMM======MM                                MM======MMMM
+@.                     MMM======MM               ::::::         MM=======MMM
+@.                      MMM======MM           ::::::::::::    MMM=======MMM
+@.                       MMM======MMM       :::::::::::::::  MMM=======MMM.
+@.                        MMMMM====MMM     :::::::::::::::MMMM=======MMMM
+@.                          MMMM====MMM   ::::::::::::::MMMM=======MMMM.
+@.                           MMMMM====MMMMM:::::::::MMMMM========MMMMM
+@.                             MMMMM======MMMMMMMMMMMMM========MMMMM
+@.                               MMMMMM=====================MMMMMM
+@.                                  MMMMMMMMM=========MMMMMMMMM.
+@.                                      MMMMMMMMMMMMMMMMMMM
 @.
 @     brk .
 @     ldv,p <thisrun>h11=RUN$ .
@@ -93,7 +132,7 @@
 @     inc,5 <pos>  ldv <sl>h1=<file>(<pos>-1) .                                 Read Site Letter from file
 @     if <sl> ne netsit$ . ; gto 0042 .                                         Compare
 @     ldv <msg>s256='Site letters differ... Cannot save file.' .
-@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
 @     gto 0036 .
 @.
 @0042:.
@@ -125,7 +164,7 @@
 @     pc,bnw "del <chgsfile>(p)" .                                              Clean up file
 @.
 @     ldv <msg>s80=<file>': Is not a valid MAPPER report' .
-@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
 @     gto 0036 .
 @.
 @.    #  Retrieve the file and clear attribute again
@@ -136,7 +175,7 @@
         ldv <msg>s80='Binary files are not supported' .
 @     pc,bnw "del <chgsfile>(p)" .                                              Clean up file
 @.ew  MBX,OK,S,'Sublwatcher: Warning!' "<msg>(p)" O,(0036) .
-@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
 @     gto 0036 .
 @.
 @0048:rnm -4 .
@@ -145,33 +184,73 @@
 @.    #  Make sure were not editing this file
 @     if <cab> eq ecab$  if <drw> eq aedrw$  if <rpt> eq erpt$,(0036) . ; .     Cannot modify itself
 @.
-@.    #  Check if brand new report
-@     lzr,<cab>,<drw>,<rpt>,lin+1  ldv <exists>h1='Y'  gto 0050 .
-@     ldv <exists>h1='N',<msg>s256='Can not create brand new file.' .
-@     ldv <msg>=<msg>'This feature isnTIC$t available yet.' .
-@.ew  MBX,OK,S,'Sublwatcher: Warning!' "<msg>(p)" O,(0036) .
-@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@.
+@.
+@.
+@.    #  Check if report 0, give option to replace...
+@     if <rpt>(p) eq 0 . ; gto 0049 .
+@     ldv,p <canchg>s200='You must be signed in under department 2 in order to change report 0.' .
+@     ldv <msg>s256='Attempt to save over report 0.',\
+          <msg>=<msg>(p)'Waiting for input...' .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','WARNING',<msg>) .
+@     mbx,YN,Q,'Sublwatcher: Whoa there!' \
+"Would you like to replace <rpt>(p)<drw>(p)<cab>(p)? //" Y,(lin+1),N,(0036) .
+
+@     net,,netsit$,mapcoord,2,nslock .
+@     nwr,-4,0,i,-0 .
+@     nrn "@call,SUBLRPTZERO_ 0fd001 ('<cab>','<drw>','<rpt>') . " .
+@     nof .
 @     gto 0036 .
+
+@.
+@.
+@.
+@.    #  Check if brand new report allow option to create...
+@0049:lzr,<cab>,<drw>,<rpt>,lin+1  ldv <exists>h1='Y'  gto 0050 .
+@     ldv <exists>h1='N' .
+@     ldv <msg>s256='This file does not exist in Mapper.',\
+          <msg>=<msg>(p)'Waiting for input...' .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','WARNING',<msg>) .
+@     mbx,YN,Q,'Sublwatcher: Whoa there!' \
+"This run does not currently exist! //\
+ Run:   <rpt>(p)<drw>(p)<cab>(p) //\
+ Would you like to create it? //" Y,(lin+1),N,(0036) .
+@     rep,-4,<cab>,<drw>,<rpt> .
+@     ldv <msg>s256=<rpt>(p)<drw>(p)<cab>(p)' was created.' .
+@     call,GROWL_ 0001 ('Sublwatcher: Success!','SUCCESS',<msg>) .
+@     gto 0056 .
 @.
 @.    #  Check if user matches control line
 @0050:rdl,<cab>,<drw>,<rpt>,1 53-11 <controluser>s .
 @     if user$ ne <controluser> . ; gto 0056 .
 @     ldv <msg>s256='You do not have update control of this report.',\
           <msg>=<msg>(p)'Waiting for input...' .
-@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
 @     mbx,YN,Q,'Sublwatcher: Whoa there!' \
 "You do not have update control of this report. //\
  Run:   <rpt>(p)<drw>(p)<cab>(p)    Name:   <controluser>(p) //\
  Would you like to take control of this report?//" Y,(lin+1),N,(0036) .
-@0056:lzr,3950,d,1,0061 .                                                       ICE Enabled Site?
-@     srh,3950,d,1,,,0061 'ad' 'SvcCab','sd' ¬,<cab>,<drw> .
+@0056:lzr,3950,d,1,0058 .                                                       ICE Enabled Site?
+@     srh,3950,d,1,,,0058 'ad' 'SvcCab','sd' ¬,<cab>,<drw> .
 @     lzr,-0 ,,<hln>i7  inc <hln> .
 @     rdl,-0,<hln>,lin+1 'cab','dw','rpt' <icab>h,<idw>h,<irpt>h .
-@     fdr,<icab>,<idw>,<irpt>,,,0061 '' 'cab','dw','rpt' ¬,<cab>,<drw>,<rpt> .
-@     rln,,lin+1 'service' <srvs>s  gto 0061 .
-@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED','Check input message') .
+@     fdr,<icab>,<idw>,<irpt>,,,0058 '' 'cab','dw','rpt' ¬,<cab>,<drw>,<rpt> .
+@     rln,,lin+1 'service' <srvs>s  gto 0058 .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED','Check input message') .
 @     mbx,YN,Q,'What are we doing?' \
 "Do you want to add this as an ice service//" Y,(0019),N,(0061) .
+@.
+@.
+@.
+@.    #===   NOTIFICATION FOR UPDATES OUT OF REPORT BOUNDS!   ==================
+@0058:lzr,<cab>,<drw>,<rpt> ,<tmax>i3  lzr,-4 <4nl>i6,,<4hl>i6  .
+@     if <tmax> ge 980 gto 0061 . ; .
+@     ldv <bmax>i3=<tmax>  inc,18 <tmax>  .
+@     cal,-4,<4hl>,<4nl> 'acl' <bmax>-18,<tmax>-18 ,a,b if:LIT(a)<>"                  ";
+@     lzr,-0 <0lns>i6,,<0hln>i6  if <0lns> gt <0hln> . ; gto 0061 .
+@.jr     pcw,-0 'c:\ADMIN\rptZERO.txt' .   TESTING WHAT IS OUTPUT
+@     ldv <msg>s80='Warning: updates outside report boundaries have been discarded.' .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','WARNING',<msg>) .
 @.
 @.    #  Load the ¬ character and handle the conversion
 @0061:.
@@ -181,7 +260,7 @@
 @.
 @     lok,<cab>,<drw>,<rpt>,lin+1  gto 0063 .
 @     ldv <msg>s80='Updating of report '<rpt>(p)<drw>(p)<cab>(p)' is in progress...' .
-@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
 @     gto 0036 .
 @0063:rep,-4,<cab>,<drw>,<rpt> .
 @     ulk .

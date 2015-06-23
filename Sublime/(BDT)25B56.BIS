@@ -22,15 +22,55 @@
 @     CALL,SUBLCOMMON_ getFileName_ (<FILE>,<RUN>s60) .                         Extracts File Name from path
 @     LCV,lin+1 'b99' <RUN> '.bis'/''  GTO lin+4 .                                   Remove file type
 @     LDV <MSG>s256='Must be BIS file type' .
-@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
+@     CALL,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<MSG>) .
 @     GTO 0199 .
 @.
 @     CALL,SUBLCOMMON_ getCabDrwRpt_ (<RUN>,<CAB>i4,<DRW>h1,<RID>i4) .
 @.
 @     CALL,"BLD-DEFTABLE" 0001 (<CAB>,<DRW>,<RID>,'SUBL','ALL') .               Re-build define table
+@     WAT 1000 .
+@     LCV '' <cab>(1-3) '000'/'   '  LCV '' <cab>(1-2) '00'/'  '  LCV '' <cab>(1-1) '0'/' '
+@     FDR,SUBLUTILS_ '' 'Util' ¬,'SUBL'  RLN 'Rid' <rrid>i .
+@     FDR,DEFLIST_ '' 'CAB' ¬, <cab>  RLN 'DD','DRID' <ddrw>h,<drid>h .
+@     LDV,p <CTL>h11=<drid>(p)<ddrw>(p)<cab>(p) .
+@     CALL,EDRW$,<RRID> 0001 (<CTL>) .                                                     Call SUBL
+
+@. @     rsr,SUBLCOMMON_ configVars_ .
+@. @     call,SUBLCOMMON_ chkIceSvc_ (<cab>,<drw>,<rid>,<srvs>s30) .               Ice Service?
+@. @     ldv,p <srvs> .
+@. @     ldv <folder>s256=<datadir>(p)'\' .
+@. @     ldv <program>s40=<srvs><rid>(p)<drw>(p)<cab>(p)<ext> .
+@. @     call,SUBLCOMMON_ getOsVer_ (<osver>i1) .
+@. @     if <osver> gt 5 . ; gto 0014 .
+@. @     call,SUBLCOMMON_ searchFolders_ (<folder>,<program>,<file>s256) .
+@. @     if <file> eq ' ' . ; gto 0015 .
+@. @     if <quickopen> eq 'ENABLED',(0014) .
+@. @     ldv <act>h4=DIR,<pth>s256 .
+@. @     call,edrw$,0004 0001 (<act>,<pth>s256,<fil>s256,'','',<typ>h1,<sts>h3) .
+@. @     if <sts> eq OK . ; gto 0199 .
+@. @     ldv <file>s256=<pth>(p)'\'<program> .
+@. @     gto 0015 .
+@. @0014:ldv <file>s256=<folder>(P)<program> .
+@. @0015:ldv,p <file> .
+@. @.
+@. @     rsl,<cab>,<drw>,<rid> .                                                   Get result
+@. @     call,SUBLCOMMON_ charReplace_ ('export') .                                Replace tab character
+@. @     rnm -1 .
+@. @.
+@. @     pcw,-1,2,lin+1 <file>  gto 0020 .                                         Write file
+@. @     ldv <msg>s80='Could not write out '<file> .
+@. @     call,GROWL_ 0001 ('SUBL Failed','FAILED',<msg>) .
+@. @     gto 0199 .
+@. @.
+@. @.    #  Start text editor
+@. @.    #  Refer to "http://www.sublimetext.com/docs/2/osx_command_line.html" for all options
+@. @0020:pc,r '"'<apppath>(p)'" -a' '"'<file>':'<dln>(p)'"' .                      start editor with options
+
+
+
 @
 @     LDV <MSG>s256='Defines re-built successfully' .
-@     CALL,GROWL_ 0001 ('subwatcher: success!','SUCCESS',<MSG>) .
+@     CALL,GROWL_ 0001 ('Sublwatcher: Success!','SUCCESS',<MSG>) .
 @.
 @.    # Exit
 @0199:RETURN .

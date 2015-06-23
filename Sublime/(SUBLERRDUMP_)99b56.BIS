@@ -6,6 +6,7 @@
 :DEFINE RERDDRW_             "ecab$,I"                     | RUN ERROR DUMP DRAWER
 :DEFINE RERDLOG_             "ecab$,I,1"                   | RUN ERROR DUMP LOG
 :DEFINE FPATH_               "\\excaliber\is\blat-files\"  | EMAIL FILE PATH
+:DEFINE GROWL_               "56,b,22"                     | EMAIL FILE PATH
 @     ldv V198S256,V199S256 .
 @     DIAG,RERDDRW_ A,,999  rnm -1 .                       | CREATE ERROR DUMP
 @     lsm,xerr$ V199S256  ldv V199(81-0)='' .              | GET SYSTEM MESSAGE
@@ -29,8 +30,8 @@ V199(102-6)¬V199(108-4)¬V199(1-80)¬  ldv,c V199(1-80) .    | RECENTER
 @. *** SCREEN MESSAGE *************************************| *******************
 @     if orstan$ eq 0 . ; gto 0100 .                       | IF FOREGROUND
 @     ldv <msg>s256='An error has occurred in 'RUN$' the details can',\
-          <msg>=<msg>(p)' be found in report 'V199(116-4)'I100' .
-@     call,"GROWL" 0001 ('sublwatcher: warning!','FAILED',<msg>) .
+          <msg>=<msg>(p)' be found in report 'V199(116-4)'I56' .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
 @.                                                         |
 @. *** SEND EMAIL MESSAGE *********************************| *******************
 @0100:if orstan$ eq 0  ldv V198S21=stnum$ . ; \            | UNIQUE NUMBER
@@ -54,7 +55,9 @@ V199(102-6)¬V199(108-4)¬V199(1-80)¬  ldv,c V199(1-80) .    | RECENTER
 @0110:fdr,SUBLCONFIG_ '' 'Parameter' ¬,'appdata'  rln 'value' <appdata>s .
 @     fdr,SUBLCONFIG_ '' 'Parameter' ¬,'app'  rln 'value' <app>s .
 @     ldv,p <appdir>s80=<appdata>(p)'\'<app>(p) .
-@     pc,bcw "del <appdir>\changes.txt" .                       Clean up file
+@     if netsit$ eq E,F . ; gto lin+2
+@     pc,bcw "del <appdir>\site-netsit$\changes.txt"  gto lin+2 .       Clean up file
+@     pc,bcw "del <appdir>\changes.txt" .                               Clean up file
 @.                                                         |
 @. *** END PROGRAM - DISPLAY ERROR ************************| *******************
 @     if orstan$ eq 0  ldv V198I6=2 . ; GTO END .          | BACKGROUND - END
@@ -62,10 +65,10 @@ V199(102-6)¬V199(108-4)¬V199(1-80)¬  ldv,c V199(1-80) .    | RECENTER
 @. *** RESTART SUBLWATCHER ********************************| *******************
 @     lsm,xerr$ v195s80  ldv,l v195 .
 @     chg <err>i4 cerr$  lsm,<err> <v1>s88 .
-@     sys .                                                                     system
-@     fdr,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,user$,'SUBLWATCHER'  gto 0199 .    currently running?
-@     wat 1000 .                                                                pause for first time
-@     run SUBLWATCHER .                                                         start file watcher utility
+@. @     sys .                                                                     system
+@. @     fdr,-0,,,lin+2 '' 'USERID','RUNNAME' ¬,user$,'SUBLWATCHER' .              currently running?
+@. @     rln 'STANUM' <station>s  kll,'SUBLWATCHER',<station> .                    kill it
+@     run run$ .                                                         start file watcher utility
 @.
 @.                                                         |
 @. *** RAR - ABORT ****************************************| *******************

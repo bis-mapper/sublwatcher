@@ -22,7 +22,7 @@
 @.    #---------------------------------------------------------------------------------------------
 @.
 @.    # Test Setup
-@     ldv,p <file>s256='%USERPROFILE%\sublwatcher\site-e\stripe\app\frontend\test.sh' .
+@ rdb ldv,p <file>s256='%USERPROFILE%\sublwatcher\site-'netsit$'\test.sh' .
 @     brk .
 #! /bin/bash
 cd /d/users/winne/sublwatcher/site-e/stripe/app/frontend
@@ -60,7 +60,7 @@ start "" "%BASH%" --login -i -c "%shellfile%"
 @     pcw,-0,2,0180 <shell> gto 0010 .
 @.
 @.    #  Convert file to unix file path
-@0010:pc,nw '"'<shell>(p)' '<unixfile>'"' .
+@0010:pc,bnw '"'<shell>(p)' '<unixfile>'"' .
 @.
 @.    #  Wait for success.txt file
 @     ldv,p <success>s80='%USERPROFILE%\sublwatcher\'<successfile> .

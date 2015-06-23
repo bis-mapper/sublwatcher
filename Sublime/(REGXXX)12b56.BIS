@@ -21,7 +21,7 @@
 @     call,SUBLCOMMON_ getFileName_ (<file>,<run>s60) .                         Extracts File Name from path
 @     lcv,lin+1 'b99' <run> '.bis'/''  gto lin+4 .                              Remove file type
 @     ldv <msg>s256='Must be BIS file type' .
-@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
 @     gto 0199 .
 @.
 @     call,SUBLCOMMON_ getCabDrwRpt_ (<run>,<xcab>i4,<xdrw>h1,<xrpt>i4) .
@@ -178,7 +178,7 @@ HELP,999
 @0082:ldv <runtype>h1='J'  gto 0020 .
 @.
 @0100:ldv <msg>s256='REG XXX is registered to execute report '<xrpt>(p)<xdrw>(p)<xcab>(p) .
-@     call,GROWL_ 0001 ('subwatcher: success!','SUCCESS',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Success!','SUCCESS',<msg>) .
 @.
 @.    # Exit
 @0199:return .

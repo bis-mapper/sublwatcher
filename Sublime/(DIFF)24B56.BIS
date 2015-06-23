@@ -11,9 +11,9 @@
 @.    #---------------------------------------------------------------------------------------------
 @.
 @.    # Test Setup
-@     LDV <CTL>s80='DIFF' .
+@ rdb LDV <CTL>s80='DIFF' .
 @     LDV <CTL>s80='DIF 24b56' .
-@     LDV <FILE>s132='d:\users\winne\sublwatcher\site-d\Umbrella\Umbrella_Test\(Summary)20f832.bis' .
+@     LDV <FILE>s132='d:\users\winne\sublwatcher\site-e\Umbrella\Umbrella_Test\(Summary)20f832.bis' .
 @     CALL 0001 (<CTL>,<FILE>,'',<STATUS>h1) .
 @     GTO END .
 @.
@@ -24,29 +24,33 @@
 @     RSR,SUBLCOMMON_ configVars_ .
 @.
 @     LCV 't@' <CTL> ' ' <pos>i3  inc <pos> .
-@     LDV <PRUN>h11=<CTL>(<pos>-0) .
-@.
-@.    #  Make sure were on the correct site for this file...
-@     LCV,0005 'b1' <FILE> 'site-' <POS>i3 .                                    Find string
-@     INC,5 <POS>  LDV <SL>h1=<FILE>(<POS>-1) .                                 Read Site Letter from file
-@     IF <SL> ne NETSIT$ . ; GTO 0005 .                                         Compare
-@     LDV <MSG>s256='Site letters differ... Cannot do diff on different site' .
-@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
-@     GTO 0199 .
+@     LDV <PRUN>h18=<CTL>(<pos>-0) .
+
+
+
+@.    #  Check for site flag
+@     lcv,lin+4 '' <PRUN> '-s' <spos>i3 .
+@     inc,2 <spos>  ldv,p <psite>s40=<PRUN>(<spos>-0),<samesite>h1='N' .
+@     dec,3 <spos>  ldv,p <t>s40=<PRUN>(1-<spos>),<PRUN>s40=<t> .           Exclude site option
+@     LCV '' <CTL> '-s' <spos>i3  if <pos> eq <spos> ldv <PRUN>h1=' ' .
+@     if netsit$ eq <psite> ldv <samesite>h1='Y' . ; .
+
+
+
 @.
 @.    Get bis script and make sure has correct extension
 @0005:CALL,SUBLCOMMON_ getFileName_ (<FILE>,<RUN>s60) .                         Extracts File Name from path
 @     LDV <TFILE>s256=<FILE>  LCV '' <TFILE> <RUN>/'' .
 @     LCV,lin+1 'b99' <RUN> '.bis'/''  GTO lin+4 .                                   Remove file type
 @     LDV <MSG>s256='Cannot do diff on non BIS file type' .
-@     CALL,GROWL_ 0001 ('subwatcher: warning!','FAILED',<MSG>) .
+@     CALL,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<MSG>) .
 @     GTO 0199 .
 @.
 @.    #  Make sure files exists
 @     CALL,SUBLCOMMON_ getCabDrwRpt_ (<RUN>,<CAB>i4,<DRW>h1,<RPT>i4) .
 @     PCR,0,I,-0,n,n,lin+1 <FILE>  RNM -2  GTO lin+4 .
 @     LDV <MSG>s256='Could not locate '<FILE> .
-@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
+@     CALL,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<MSG>) .
 @     GTO 0199 .
 @.
 @.    #  Get file attributes date time
@@ -59,10 +63,13 @@
 @     LDV <DTIME>h8=<TIME>':00' .
 @.
 @.    #  Check if run was etnered.  Otherwise just use local copy
-@0010:IF <PRUN> eq ' ' . ; GTO 0015 .
+@0010:IF <PRUN> eq '',' ' . ; GTO 0015 .
+
+@     IF <samesite> eq 'N' gto 0012 . ; .
+
 @     LZR,<CAB>,<DRW>,<RPT>,lin1  GTO LIN+4 .
-@     LDV <MSG>s256='Could not locate '<CAB><DRW><RPT> .
-@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
+@     LDV <MSG>s256='Could not locate '<CAB>(p)<DRW><RPT>(p) .
+@     CALL,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<MSG>) .
 @     GTO 0199 .
 @.
 @     RDL,<CAB>,<DRW>,<RPT>,1 1-80 <INFO>s .                                       Get time and date
@@ -72,13 +79,32 @@
 @     DUP,-1,0,I .
 @     LDV <LOCALRPT>i4=RPT$ .
 @     GTO 0020 .
+
+@0012:
+@     net,,<psite>,user$,depn$ .
+@     nrd,<cab>,<drw>,<rpt>,0,i,,lin+1  gto lin+4.
+@     LDV <MSG>s256='Could not locate remote file '<RPT>(p)<DRW><CAB>(p) .
+@     CALL,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@     nof .
+
+@     RDL,-0,1 1-80 <INFO>s .                                    Get time and date
+@     CALL,SUBLCOMMON_ charReplace_ ('export') .                               Replace tab character
+@     RNM -1 .
+@     DUP,-1,0,I .
+@     LDV <LOCALRPT>i4=RPT$ .
+@     GTO 0020 .
+
 @.
 @.    #  Check if alternate report was entered
 @.    #  This will do a diff from the current report and the report entered.
 @0015:CALL,SUBLCOMMON_ getCabDrwRpt_ (<PRUN>,<PCAB>i4,<PDRW>h1,<PRPT>i4) .
+
+@     IF <samesite> eq 'N' gto 0017 . ; .
+
 @     LZR,<PCAB>,<PDRW>,<PRPT>,lin1  GTO LIN+4 .
-@     LDV <MSG>s256='Could not locate '<PCAB><PDRW><PRPT> .
-@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
+@     LDV <MSG>s256='Could not locate '<PRPT>(p)<PDRW><PCAB>(p) .
+@     CALL,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<MSG>) .
 @     GTO 0199 .
 @.
 @     RDL,<PCAB>,<PDRW>,<PRPT>,1 1-80 <INFO>s .                                    Get time and date
@@ -88,6 +114,24 @@
 @     DUP,-1,0,I .
 @     LDV <LOCALRPT>i4=RPT$ .
 @     GTO 0020 .
+
+@.    #  DIFFERENT SITE DIFF!
+@.    #  This will do a diff from the current report and the report entered.
+@0017:
+@     net,,<psite>,user$,depn$ .
+@     nrd,<pcab>,<pdrw>,<prpt>,0,i,,lin+1  gto lin+4.
+@     LDV <MSG>s256='Could not locate remote file '<PRPT>(p)<PDRW><PCAB>(p) .
+@     CALL,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<MSG>) .
+@     GTO 0199 .
+@     nof .
+
+@     RDL,-0,1 1-80 <INFO>s .                                    Get time and date
+@     CALL,SUBLCOMMON_ charReplace_ ('export') .                               Replace tab character
+@     RNM -1 .
+@     DUP,-1,0,I .
+@     LDV <LOCALRPT>i4=RPT$ .
+
+
 @.
 @.    #  Temporary report to hold external file
 @0020:RSL,-2 .
@@ -118,7 +162,7 @@
 @     LDV <DIFFILE>s256=<BTEMP>(p)'\'<RUN>(p)'.bisdiff' .
 @     PCW,-3,2,lin+1 <DIFFILE>(p)  GTO lin+4 .                                            Write file
 @     LDV <MSG>s256='Could not write diff file' .
-@     CALL,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<MSG>) .
+@     CALL,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<MSG>) .
 @     GTO 0199 .
 @.
 @     CALL,SUBLCOMMON_ appPath_ (<USER>,<APPPATH>s256) .

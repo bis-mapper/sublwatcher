@@ -821,6 +821,9 @@ fkey,10,''Quit  '',KEY
 @.
 @0150:. ------------------------- Install Complete -----------------------------
 @.
+@.    #===   Build DEF Table   =================================================
+@     call,"BLD-DEFTABLE" 0001 (<CAB>,' ','1','XALL','ALL') .
+@.
 @     LDV <STP>i1=8 .
 @.
 @     TXT,"Installation Complete",<MSG1> .
