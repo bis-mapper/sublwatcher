@@ -39,7 +39,7 @@
 @.
 @.    #  Check for ICE Service return Service Title if ICE Enabled site
 @0010:(<cab>,<drw>,<rpt>,<srvs>) .
-@     ldv <svc>s20 .
+@     ldv <svc>s21 .
 @     if <rpt> eq 0,(0012) .
 @     rer 0012 .
 @     ldv,l <cab>  ldv,r <rpt>  ldv <svc>s20 .
@@ -51,7 +51,7 @@
 @     fdr,<icab>,<idw>,<irpt>,,,0011 '' 'cab','dw','rpt' ¬,<cab>,<drw>,<rpt> .
 @     rln 'service' <svc>s  gto 0012 .
 @0011:fdr,<cab>,<drw>,<rpt>,2,,0012 'a' 2-12 .,'Object Name:' ,<vlno>i3 .
-@     rln 14-20 <svc>s  gto 0012 .
+@     rln 14-21 <svc>s  gto 0012 .
 @0012:if <svc> eq ' '  ldv,p <srvs>=<svc> . ; ldv,p <srvs>='('<svc>(p)')' .
 @     return .
 @.

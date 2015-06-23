@@ -8,6 +8,7 @@
 :DEFINE SUBLCONFIG_          "ECAB$,C,2"            |¬SUBL CONFIG VARS
 :DEFINE SUBLPATH_            "ECAB$,C,3"            |¬SUBL EXE PATH
 :DEFINE SUBLDEP_             "ECAB$,C,4"            |¬SUBL DEPENDENCIES
+:DEFINE SUBLRPTZERO_         "ECAB$,B,13"           |¬SUBL REPORT ZERO CALL
 :DEFINE BATCHTEMP_           "ECAB$,C,5"            |¬BATCH FILE TEMPLATE
 :DEFINE SUBLUTILS_           "ECAB$,C,9"            |¬SUBLIME UTILITY TABLE
 :DEFINE SUBLCOMMON_          "ECAB$,B,7"            |¬SUBL EXE PATH
@@ -18,7 +19,7 @@
 :DEFINE GROWL_               "ECAB$,b,22"           |¬Growl
 :DEFINE GROWLAPPS_           "ECAB$,C,10"           |¬Registered Growl Applications
 :DEFINE GROWLALERTS_         "ECAB$,C,11"           |¬Growl alert types
-:DEFINE DEFLIST_             "400,b,4"              |¬Application Define Registration
+:DEFINE DEFLIST_             "200,b,4"              |¬Application Define Registration
 :DEFINE SUBLRER_             "RER,ECAB$,b,0099 0001  RAR,ECAB$,b,0099 0196"
 :DEFINE getCabDrwRpt_        "0001"                 |¬Gets Cab Drw Rpt from Var
 :DEFINE configVars_          "0005"                 |¬Loads config vars

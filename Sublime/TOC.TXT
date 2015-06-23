@@ -3,29 +3,31 @@
 *Cab .w.Rpt .Lines .Typ.Name                .Title                                                                          .
 *====.=.====.======.===.====================.===============================================================================.
 	  56 B    0     39 BIS
-	  56 B    1     34 BIS                      Object Name: DEFINES
-	  56 B    2     93 BIS                      Object Name: SUBL
-	  56 B    3    204 BIS                      Object Name: SUBLW
+	  56 B    1     35 BIS                      Object Name: DEFINES
+	  56 B    2    101 BIS                      Object Name: SUBL
+	  56 B    3    296 BIS                      Object Name: SUBLW
 	  56 B    4    153 BIS                      Object Name: FILESELECT
 	  56 B    5     26 BIS                      Object Name: REPOSPATH
 	  56 B    6     72 BIS                      Object Name: LOADPROG
 	  56 B    7    185 BIS                      Object Name: SUBLCOMMON
-	  56 B    8     91 BIS                      Object Name: SUBLSETUP
+	  56 B    8     93 BIS                      Object Name: SUBLSETUP
 	  56 B    9     52 BIS                      Object Name: DSPWAITMSG
 	  56 B   10    100 BIS                      Object Name: DSPMSGBOX
 	  56 B   11     78 BIS                      Object Name: IBLD
 	  56 B   12    185 BIS                      Object Name: REGXXX
+	  56 B   13     44 BIS                      Object Name: ReportZero
 	  56 B   14     65 BIS                      Object Name: SUBLCMD
 	  56 B   15     55 BIS                      Object Name: SUBLBUG
 	  56 B   17     24 BIS                      Object Name: SUBLCTL
 	  56 B   18     34 BIS                      Object Name: SBS
-	  56 B   20    214 BIS                      Object Name: EXPORT
+	  56 B   20    215 BIS                      Object Name: EXPORT
 	  56 B   22     45 BIS                      Object Name: GROWL
-	  56 B   24    131 BIS                      Object Name: DIFF
-	  56 B   25     37 BIS                      Object Name: BDT
+	  56 B   24    175 BIS                      Object Name: DIFF
+	  56 B   25     77 BIS                      Object Name: BDT
 	  56 B   26    166 BIS                      Object Name: BUILD
-	  56 B   27    995 BIS                      Object Name: SETUP+
+	  56 B   27    998 BIS                      Object Name: SETUP+
 	  56 B   28    102 BIS                      Object Name: BASHEXEC
 	  56 B   29     37 BIS                      Object Name: GIT
-	  56 B   33    204 BIS                      Object Name: SUBLW
-	  56 B   99     76 BIS                      Object Name: SUBLERRDUMP_
+	  56 B   33    296 BIS                      Object Name: SUBLW
+	  56 B   99     79 BIS                      Object Name: SUBLERRDUMP_
+	  56 B  200    104 BIS                      Object Name: TESTER

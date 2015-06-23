@@ -16,10 +16,11 @@
 @.
 @     if <run> eq '<RUN>',(0005) .                                              Normal or Call?
 @     ldv <call>h1=y,<dln>s0 .
+@     lcv,lin+1 '' <run> '-q'/ <qpos>i3  ldv <quick>h1='Y' .
 @     call,SUBLCOMMON_ getCabDrwRpt_ (<run>,<cab>i4,<drw>h1,<rpt>i4) .
 @     ldv,u <cab>,<drw>,<rpt> .
 @     gto 0007 .
-@.
+@.                                                                                                                   Some odhdfhdfhd
 @.    #  Otherwise we get report on display
 @.    #  This happens when user enters SUBL on a given report
 @0005:ldv <cab>i4=cab$,<drw>h1=adrw$,<rpt>i4=rpt$ .                             Get RPT on display
@@ -27,7 +28,7 @@
 @.
 @.    #  Load the application configuration variables from table
 @0007:rsr,SUBLCOMMON_ configVars_ .
-@     if <rpt> eq 0  rel . ; .                                                  No report on display?
+@.ew  if <rpt> eq 0  rel . ; .                                                  No report on display?
 @     call,SUBLCOMMON_ chkIceSvc_ (<cab>,<drw>,<rpt>,<srvs>s30) .               Ice Service?
 @     ldv,p <srvs> .
 @.
@@ -47,6 +48,13 @@
 @     rln 'Quick Open' <quickopen>s .
 @     if <runinput> ne '<RUNINPUT>'  if <runinput>(p) eq 'q'  ldv <quickopen>s7='ENABLED' . ; .
 @.
+@.    Check if report exists, if not notify user and bail out.
+@     lzr,<cab>,<drw>,<rpt>,lin+1  gto 0011 .
+@     ldv <msg>s80='Report '<rpt>(p)<drw><cab>(p)' was not found!' .
+@     call,GROWL_ 0001 ('Sublwatcher: Failed!','FAILED',<msg>) .
+@     gto 0199 .
+@0011:.
+@.
 @.    #  Check if program exists already in folder.
 @.    #  If it doesn't exist load <FILE> to default site location
 @.    #  If it does exist load <file> to current location
@@ -56,7 +64,7 @@
 @     if <osver> gt 5 . ; gto 0014 .
 @     call,SUBLCOMMON_ searchFolders_ (<folder>,<program>,<file>s256) .
 @     if <file> eq ' ' . ; gto 0015 .
-@     if <quickopen> eq 'ENABLED',(0014) .
+@     if <quickopen> eq 'ENABLED',(0014) . ; if <quick> eq 'Y',(0014) . ; .
 @     ldv <act>h4=DIR,<pth>s256 .
 @     call,edrw$,0004 0001 (<act>,<pth>s256,<fil>s256,'','',<typ>h1,<sts>h3) .
 @     if <sts> eq OK . ; gto 0199 .
@@ -78,7 +86,7 @@
 @.    #  Refer to "http://www.sublimetext.com/docs/2/osx_command_line.html" for all options
 @0020:pc,r '"'<apppath>(p)'" -a' '"'<file>':'<dln>(p)'"' .                      start editor with options
 @     sys .                                                                     system
-@0025:fdr,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,user$,<sublwatcher>  gto 0199 .    currently running?
+@0025:fdr,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,user$,run$  gto 0199 .             currently running?
 @     wat 1000 .                                                                pause for first time
 @     RUN <sublwatcher> .                                                       start file watcher utility
 @.

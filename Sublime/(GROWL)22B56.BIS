@@ -4,7 +4,7 @@
 :INCLUDE,ecab$,B,1 .                                                                         INCLUDE
 @.
 @.    #---------------------------------------------------------------------------------------------
-@.    #  GROWL
+@.    #  GROWL   .
 @.    #  TODO Write program description
 @.    #  TODO Include examples and documentations
 @.    #  Written: 08/19/2013
@@ -15,7 +15,7 @@
 @     call,"growl" 0001 ('subwatcher: pending','pending',<msg>) .
 @.
 @     ldv <msg>s80='Test failure message' .
-@     call,"growl" 0001 ('subwatcher: warning!','failed',<msg>) .
+@     call,"growl" 0001 ('Sublwatcher: Warning!','failed',<msg>) .
 @.
 @     ldv <msg>s80='Test success message' .
 @     call,"growl" 0001 ('sublwatcher: success!','success',<msg>) .

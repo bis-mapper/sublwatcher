@@ -32,3 +32,158 @@
 ¬150123¬SUBLWATCHER ¬ED     ¬16:06:04¬  26¬12  ¬22    ¬xxx ¬< This command is unknown to the system. >                                      ¬
 ¬150123¬SUBLWATCHER ¬ED     ¬16:09:18¬  27¬12  ¬22    ¬xxx ¬< This command is unknown to the system. >                                      ¬
 ¬150123¬SUBLWATCHER ¬ED     ¬16:12:19¬  28¬14  ¬52    ¬call¬< This variable is not defined properly. >                                      ¬
+¬150127¬SUBLWATCHER ¬ED     ¬14:09:33¬  29¬20  ¬196   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150127¬SUBLWATCHER ¬ED     ¬14:09:37¬  30¬99  ¬76    ¬retu¬< An invalid @ESR or @RETURN was encountered. >                                 ¬
+¬150210¬SUBLWATCHER ¬ED     ¬10:59:09¬  31¬8   ¬166   ¬call¬< This drawer is not registered for access by this run. >                       ¬
+¬150210¬SUBLWATCHER ¬ED     ¬11:02:32¬  32¬8   ¬166   ¬call¬< This drawer is not registered for access by this run. >                       ¬
+¬150210¬SUBLWATCHER ¬ED     ¬11:02:47¬  33¬8   ¬166   ¬call¬< This drawer is not registered for access by this run. >                       ¬
+¬150210¬SUBLWATCHER ¬ED     ¬11:03:07¬  34¬12  ¬21    ¬IBLD¬< This command is unknown to the system. >                                      ¬
+¬150210¬SUBLWATCHER ¬ED     ¬11:05:00¬  35¬8   ¬166   ¬call¬< This drawer is not registered for access by this run. >                       ¬
+¬150210¬SUBLWATCHER ¬ED     ¬11:05:43¬  36¬8   ¬166   ¬call¬< This drawer is not registered for access by this run. >                       ¬
+¬150210¬SUBLWATCHER ¬ED     ¬11:08:44¬  37¬8   ¬166   ¬call¬< Nesting of registered subroutines is not allowed. >                           ¬
+¬150210¬SUBLWATCHER ¬ED     ¬11:17:52¬  38¬10  ¬46    ¬ln+ ¬< A LOK must be executed prior to this statement. >                             ¬
+¬150210¬SUBLWATCHER ¬ED     ¬11:22:56¬  39¬10  ¬46    ¬ln+ ¬< A LOK must be executed prior to this statement. >                             ¬
+¬150210¬SUBLWATCHER ¬ED     ¬11:28:54¬  40¬10  ¬46    ¬ln+ ¬< A LOK must be executed prior to this statement. >                             ¬
+¬150210¬SUBLWATCHER ¬ED     ¬11:29:34¬  41¬99  ¬69    ¬kll ¬< The Kill function is not allowed for your own station. >                      ¬
+¬150210¬SUBLWATCHER ¬ED     ¬11:29:37¬  42¬99  ¬69    ¬kll ¬< The Kill function is not allowed for your own station. >                      ¬
+¬150210¬SUBLWATCHER ¬ED     ¬11:40:53¬  43¬10  ¬46    ¬ln+ ¬< A LOK must be executed prior to this statement. >                             ¬
+¬150210¬SUBLWATCHER ¬ED     ¬11:41:59¬  44¬10  ¬46    ¬ln+ ¬< A LOK must be executed prior to this statement. >                             ¬
+¬150210¬SUBLWATCHER ¬ED     ¬12:24:32¬  45¬10  ¬46    ¬ln+ ¬< A LOK must be executed prior to this statement. >                             ¬
+¬150210¬SUBLWATCHER ¬ED     ¬12:26:15¬  46¬10  ¬118   ¬fdr ¬< This field name was not found in the report. >                                ¬
+¬150210¬SUBLWATCHER ¬ED     ¬12:28:20¬  47¬12  ¬21    ¬IBLD¬< This command is unknown to the system. >                                      ¬
+¬150210¬SUBLWATCHER ¬ED     ¬13:48:15¬  48¬10  ¬118   ¬fdr ¬< This field name was not found in the report. >                                ¬
+¬150212¬SUBLWATCHER ¬ED     ¬11:32:43¬  49¬20  ¬196   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150226¬SUBLWATCHER ¬ED     ¬10:56:49¬  50¬10  ¬37    ¬ln+ ¬< A LOK must be executed prior to this statement. >                             ¬
+¬150303¬SUBLWATCHER ¬ED     ¬13:12:50¬  51¬99  ¬55    ¬fdr ¬< This drawer is not registered for access by this run. >                       ¬
+¬150303¬SUBLWATCHER ¬ED     ¬13:15:36¬  52¬99  ¬55    ¬fdr ¬< This drawer is not registered for access by this run. >                       ¬
+¬150306¬SUBLWATCHER ¬ED     ¬08:18:31¬  53¬26  ¬32    ¬lcv ¬< There is a syntax error in the LCV statement.  A field may be missing.        ¬
+¬150306¬SUBLWATCHER ¬ED     ¬08:18:31¬  54¬99  ¬44    ¬srh ¬< This drawer is not registered for access by this run. >                       ¬
+¬150306¬SUBLWATCHER ¬ED     ¬10:09:26¬  55¬26  ¬32    ¬lcv ¬< There is a syntax error in the LCV statement.  A field may be missing.        ¬
+¬150306¬SUBLWATCHER ¬ED     ¬10:09:26¬  56¬99  ¬44    ¬srh ¬< This drawer is not registered for access by this run. >                       ¬
+¬150306¬SUBLWATCHER ¬ED     ¬10:10:32¬  57¬26  ¬32    ¬lcv ¬< There is a syntax error in the LCV statement.  A field may be missing.        ¬
+¬150407¬SUBLWATCHER ¬ED     ¬10:21:57¬  58¬20  ¬196   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150416¬SUBLWATCHER ¬JOSH   ¬10:27:11¬  59¬20  ¬196   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150416¬SUBLWATCHER ¬JOSH   ¬10:28:31¬  60¬20  ¬196   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150421¬SUBLWATCHER ¬ED     ¬13:04:30¬  61¬20  ¬196   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150421¬SUBLWATCHER ¬ED     ¬15:11:45¬  62¬20  ¬196   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150421¬SUBLWATCHER ¬ED     ¬15:13:10¬  63¬20  ¬196   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150423¬SUBLWATCHER ¬ED     ¬15:21:12¬  64¬3   ¬57    ¬pcr ¬< Data could not be transferred to or from the remote MAPPER system. >          ¬
+¬150428¬SUBLWATCHER ¬JOSH   ¬15:38:23¬  65¬3   ¬187   ¬rep ¬< This report cannot be replaced or duplicated. >                               ¬
+¬150428¬SUBLWATCHER ¬JOSH   ¬15:44:53¬  66¬3   ¬187   ¬rep ¬< This report cannot be replaced or duplicated. >                               ¬
+¬150428¬SUBLWATCHER ¬JOSH   ¬15:48:25¬  67¬3   ¬187   ¬rep ¬< This report cannot be replaced or duplicated. >                               ¬
+¬150428¬SUBLWATCHER ¬JOSH   ¬15:50:57¬  68¬3   ¬187   ¬rep ¬< This report cannot be replaced or duplicated. >                               ¬
+¬150428¬SUBLWATCHER ¬JOSH   ¬15:52:08¬  69¬3   ¬187   ¬rep ¬< This report cannot be replaced or duplicated. >                               ¬
+¬150428¬SUBLWATCHER ¬JOSH   ¬15:52:42¬  70¬3   ¬187   ¬rep ¬< This report cannot be replaced or duplicated. >                               ¬
+¬150428¬SUBLWATCHER ¬JOSH   ¬16:10:04¬  71¬3   ¬187   ¬rep ¬< This report cannot be replaced or duplicated. >                               ¬
+¬150428¬SUBLWATCHER ¬JOSH   ¬16:10:47¬  72¬3   ¬187   ¬rep ¬< This report cannot be replaced or duplicated. >                               ¬
+¬150428¬SUBLWATCHER ¬JOSH   ¬16:11:42¬  73¬3   ¬187   ¬rep ¬< This report cannot be replaced or duplicated. >                               ¬
+¬150428¬SUBLWATCHER ¬JOSH   ¬16:12:02¬  74¬3   ¬187   ¬rep ¬< This report cannot be replaced or duplicated. >                               ¬
+¬150428¬SUBLWATCHER ¬JOSH   ¬16:12:21¬  75¬3   ¬187   ¬rep ¬< This report cannot be replaced or duplicated. >                               ¬
+¬150428¬SUBLWATCHER ¬JOSH   ¬16:12:49¬  76¬3   ¬187   ¬rep ¬< This report cannot be replaced or duplicated. >                               ¬
+¬150428¬SUBLWATCHER ¬JOSH   ¬16:13:10¬  77¬3   ¬187   ¬rep ¬< This report cannot be replaced or duplicated. >                               ¬
+¬150428¬SUBLWATCHER ¬JOSH   ¬16:13:27¬  78¬3   ¬187   ¬rep ¬< This report cannot be replaced or duplicated. >                               ¬
+¬150428¬SUBL        ¬ED     ¬16:44:10¬  79¬2   ¬69    ¬rsl ¬< Use drawer letters A through I. >                                             ¬
+¬150430¬SUBLWATCHER ¬ED     ¬09:45:53¬  80¬11  ¬66    ¬srh ¬< This drawer is not registered for access by this run. >                       ¬
+¬150430¬SUBLWATCHER ¬ED     ¬09:45:53¬  81¬99  ¬44    ¬srh ¬< This drawer is not registered for access by this run. >                       ¬
+¬150430¬SUBLWATCHER ¬ED     ¬09:45:54¬  82¬99  ¬44    ¬srh ¬< This drawer is not registered for access by this run. >                       ¬
+¬150430¬SUBLWATCHER ¬ED     ¬09:47:31¬  83¬11  ¬66    ¬srh ¬< This drawer is not registered for access by this run. >                       ¬
+¬150430¬SUBLWATCHER ¬ED     ¬09:47:31¬  84¬99  ¬44    ¬srh ¬< This drawer is not registered for access by this run. >                       ¬
+¬150430¬SUBLWATCHER ¬ED     ¬09:47:32¬  85¬99  ¬44    ¬srh ¬< This drawer is not registered for access by this run. >                       ¬
+¬150512¬SUBLW       ¬JOSH   ¬16:14:23¬  86¬7   ¬37    ¬ldv ¬< Put a variable in this field. >                                               ¬
+¬150512¬SUBLWATCHER ¬JOSH   ¬16:14:27¬  87¬7   ¬37    ¬ldv ¬< Put a variable in this field. >                                               ¬
+¬150512¬SUBLWATCHER ¬JOSH   ¬16:14:30¬  88¬7   ¬37    ¬ldv ¬< Put a variable in this field. >                                               ¬
+¬150512¬SUBLWATCHER ¬JOSH   ¬16:14:33¬  89¬7   ¬37    ¬ldv ¬< Put a variable in this field. >                                               ¬
+¬150512¬SUBLWATCHER ¬JOSH   ¬16:15:22¬  90¬7   ¬37    ¬ldv ¬< Put a variable in this field. >                                               ¬
+¬150513¬SUBLWATCHER ¬JOSH   ¬10:10:21¬  91¬20  ¬196   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150513¬SUBLW       ¬JOSH   ¬11:02:33¬  92¬33  ¬57    ¬brk ¬< There is an odd number of apostrophes in this line. >                         ¬
+¬150513¬SUBLW       ¬JOSH   ¬11:03:34¬  93¬33  ¬57    ¬brk ¬< There is an odd number of apostrophes in this line. >                         ¬
+¬150514¬SUBLW       ¬JOSH   ¬10:44:44¬  94¬33  ¬217   ¬lch ¬< The maximum line length has been exceeded. >                                  ¬
+¬150514¬SUBLW       ¬JOSH   ¬10:53:32¬  95¬33  ¬217   ¬lch ¬< The target string is missing. >                                               ¬
+¬150514¬SUBLW       ¬JOSH   ¬11:16:18¬  96¬33  ¬218   ¬lch ¬< The target string is missing. >                                               ¬
+¬150514¬SUBLW       ¬JOSH   ¬11:17:48¬  97¬33  ¬218   ¬lch ¬< This field name was not found in the report. >                                ¬
+¬150514¬SUBLW       ¬JOSH   ¬11:22:24¬  98¬33  ¬218   ¬lch ¬< The target string is missing. >                                               ¬
+¬150514¬SUBLW       ¬JOSH   ¬11:31:25¬  99¬33  ¬218   ¬lch ¬< The target string is missing. >                                               ¬
+¬150514¬SUBLW       ¬JOSH   ¬11:32:35¬ 100¬33  ¬218   ¬lch ¬< The target string is missing. >                                               ¬
+¬150514¬SUBLW       ¬JOSH   ¬11:35:47¬ 101¬33  ¬218   ¬lch ¬< The target string is missing. >                                               ¬
+¬150514¬SUBLW       ¬JOSH   ¬11:52:48¬ 102¬33  ¬219   ¬lsjd¬< This command is unknown to the system. >                                      ¬
+¬150514¬SUBLW       ¬JOSH   ¬13:17:41¬ 103¬33  ¬218   ¬cal ¬< A field was defined containing more than 18 characters. >                     ¬
+¬150514¬SUBLW       ¬JOSH   ¬13:23:05¬ 104¬33  ¬219   ¬cal ¬< A field was defined containing more than 18 characters. >                     ¬
+¬150514¬SUBLW       ¬JOSH   ¬13:43:37¬ 105¬33  ¬219   ¬cal ¬< The specified operator/operand combination is invalid. >                      ¬
+¬150514¬SUBLW       ¬JOSH   ¬13:45:17¬ 106¬33  ¬220   ¬cal ¬< The specified operator/operand combination is invalid. >                      ¬
+¬150514¬SUBLW       ¬JOSH   ¬13:55:06¬ 107¬33  ¬220   ¬cal ¬< The specified operator/operand combination is invalid. >                      ¬
+¬150514¬SUBLW       ¬JOSH   ¬14:03:07¬ 108¬33  ¬220   ¬cal ¬< Only F type variable definitions can contain a decimal point. >               ¬
+¬150514¬SUBLW       ¬JOSH   ¬14:03:49¬ 109¬33  ¬220   ¬cal ¬< The specified operator/operand combination is invalid. >                      ¬
+¬150514¬SUBLW       ¬JOSH   ¬14:06:04¬ 110¬33  ¬220   ¬cal ¬< Expressions are not allowed within subfields. >                               ¬
+¬150514¬SUBLW       ¬JOSH   ¬14:07:12¬ 111¬33  ¬220   ¬cal ¬< The specified operator/operand combination is invalid. >                      ¬
+¬150514¬SUBLW       ¬JOSH   ¬14:25:41¬ 112¬33  ¬220   ¬cal ¬< The specified operator/operand combination is invalid. >                      ¬
+¬150514¬SUBLW       ¬JOSH   ¬14:26:48¬ 113¬33  ¬220   ¬cal ¬< The specified operator/operand combination is invalid. >                      ¬
+¬150514¬SUBLW       ¬JOSH   ¬14:29:49¬ 114¬33  ¬220   ¬cal ¬< The specified operator/operand combination is invalid. >                      ¬
+¬150514¬SUBLW       ¬JOSH   ¬14:42:48¬ 115¬33  ¬220   ¬cal ¬< The equation is missing an equal sign or a comma. >                           ¬
+¬150514¬SUBLW       ¬JOSH   ¬15:07:03¬ 116¬33  ¬220   ¬cal ¬< The specified operator/operand combination is invalid. >                      ¬
+¬150514¬SUBLW       ¬JOSH   ¬15:08:35¬ 117¬33  ¬220   ¬cal ¬< The specified operator/operand combination is invalid. >                      ¬
+¬150515¬SUBLW       ¬JOSH   ¬08:59:32¬ 118¬2   ¬69    ¬rsl ¬< The report number is too large for this drawer. >                             ¬
+¬150518¬SUBLW       ¬JOSH   ¬13:53:42¬ 119¬25  ¬35    ¬call¬< This variable is not defined properly. >                                      ¬
+¬150518¬SUBLWATCHER ¬JOSH   ¬13:53:47¬ 120¬25  ¬35    ¬call¬< This variable is not defined properly. >                                      ¬
+¬150518¬SUBLWATCHER ¬JOSH   ¬13:53:51¬ 121¬25  ¬35    ¬call¬< This variable is not defined properly. >                                      ¬
+¬150518¬SUBLW       ¬JOSH   ¬13:55:15¬ 122¬25  ¬41    ¬call¬< The size of a string variable cannot be changed in a CALL subroutine. >       ¬
+¬150518¬SUBLWATCHER ¬JOSH   ¬13:55:20¬ 123¬25  ¬41    ¬call¬< The size of a string variable cannot be changed in a CALL subroutine. >       ¬
+¬150518¬SUBLW       ¬JOSH   ¬16:24:32¬ 124¬33  ¬218   ¬cal ¬< The maximum line length has been exceeded. >                                  ¬
+¬150519¬SUBLW       ¬JOSH   ¬11:50:43¬ 125¬33  ¬200   ¬sdgs¬< This command is unknown to the system. >                                      ¬
+¬150519¬SUBLW       ¬JOSH   ¬15:28:12¬ 126¬33  ¬205   ¬wrz ¬< Report 0 can only be updated by a user in department 2. >                     ¬
+¬150519¬SUBLW       ¬JOSH   ¬15:34:12¬ 127¬33  ¬204   ¬oord¬< This command is unknown to the system. >                                      ¬
+¬150519¬SUBLW       ¬JOSH   ¬15:35:40¬ 128¬33  ¬207   ¬wrz ¬< Report 0 can only be updated by a user in department 2. >                     ¬
+¬150519¬SUBLW       ¬JOSH   ¬15:59:48¬ 129¬33  ¬204   ¬net ¬< There is no network connection configured for this site. >                    ¬
+¬150519¬SUBLW       ¬JOSH   ¬16:27:51¬ 130¬33  ¬254   ¬cal ¬< No heading divider line (*=) was found in the report. >                       ¬
+¬150520¬INTER_RUN   ¬MAPCOOR¬09:25:41¬ 131¬13  ¬28    ¬ln+ ¬< This field must contain a positive number. >                                  ¬
+¬150520¬INTER_RUN   ¬MAPCOOR¬09:28:27¬ 132¬13  ¬28    ¬ln+ ¬< This field must contain a positive number. >                                  ¬
+¬150520¬INTER_RUN   ¬MAPCOOR¬09:30:16¬ 133¬13  ¬28    ¬ln+ ¬< This field must contain a positive number. >                                  ¬
+¬150520¬INTER_RUN   ¬MAPCOOR¬09:30:54¬ 134¬13  ¬28    ¬ln+ ¬< This field must contain a positive number. >                                  ¬
+¬150520¬SUBLW       ¬JOSH   ¬09:39:02¬ 135¬33  ¬202   ¬nrn ¬< An error has been received from the remote system. >                          ¬
+¬150520¬SUBLW       ¬JOSH   ¬10:43:04¬ 136¬33  ¬246   ¬cal ¬< The maximum line length has been exceeded. >                                  ¬
+¬150520¬SUBLW       ¬JOSH   ¬11:07:26¬ 137¬25  ¬35    ¬RLN ¬< Define the report with an RDL statement before using the RLN statement. >     ¬
+¬150520¬SUBLWATCHER ¬JOSH   ¬11:07:31¬ 138¬25  ¬35    ¬RLN ¬< Define the report with an RDL statement before using the RLN statement. >     ¬
+¬150520¬SUBLWATCHER ¬JOSH   ¬11:07:35¬ 139¬25  ¬35    ¬RLN ¬< Define the report with an RDL statement before using the RLN statement. >     ¬
+¬150520¬SUBLW       ¬JOSH   ¬11:10:22¬ 140¬33  ¬249   ¬inc ¬< This field must be an integer. >                                              ¬
+¬150520¬SUBLW       ¬JOSH   ¬11:11:11¬ 141¬33  ¬249   ¬inc ¬< This field must be an integer. >                                              ¬
+¬150520¬SUBLW       ¬JOSH   ¬11:12:49¬ 142¬33  ¬249   ¬inc ¬< This field must be an integer. >                                              ¬
+¬150520¬SUBLW       ¬JOSH   ¬11:14:20¬ 143¬25  ¬35    ¬RLN ¬< Define the report with an RDL statement before using the RLN statement. >     ¬
+¬150520¬SUBLWATCHER ¬JOSH   ¬11:14:25¬ 144¬25  ¬35    ¬RLN ¬< Define the report with an RDL statement before using the RLN statement. >     ¬
+¬150520¬SUBLW       ¬JOSH   ¬11:57:18¬ 145¬25  ¬33    ¬LCV ¬< Put a variable in this field. >                                               ¬
+¬150520¬SUBLWATCHER ¬JOSH   ¬11:57:23¬ 146¬25  ¬33    ¬LCV ¬< Put a variable in this field. >                                               ¬
+¬150520¬SUBLW       ¬JOSH   ¬12:47:24¬ 147¬25  ¬37    ¬CALL¬< This variable has not been defined yet. >                                     ¬
+¬150520¬SUBLWATCHER ¬JOSH   ¬12:47:28¬ 148¬25  ¬37    ¬CALL¬< This variable has not been defined yet. >                                     ¬
+¬150520¬SUBLW       ¬JOSH   ¬13:02:08¬ 149¬25  ¬34    ¬RLN ¬< Define the report with an RDL statement before using the RLN statement. >     ¬
+¬150520¬SUBLWATCHER ¬JOSH   ¬13:02:13¬ 150¬25  ¬34    ¬RLN ¬< Define the report with an RDL statement before using the RLN statement. >     ¬
+¬150520¬SUBLWATCHER ¬JOSH   ¬13:02:17¬ 151¬25  ¬34    ¬RLN ¬< Define the report with an RDL statement before using the RLN statement. >     ¬
+¬150520¬SUBLWATCHER ¬JOSH   ¬13:02:21¬ 152¬25  ¬34    ¬RLN ¬< Define the report with an RDL statement before using the RLN statement. >     ¬
+¬150520¬SUBLW       ¬JOSH   ¬13:41:24¬ 153¬14  ¬30    ¬sojh¬< This command is unknown to the system. >                                      ¬
+¬150520¬SUBLW       ¬JOSH   ¬13:41:27¬ 154¬14  ¬30    ¬sojh¬< This command is unknown to the system. >                                      ¬
+¬150520¬SUBLW       ¬JOSH   ¬13:41:31¬ 155¬14  ¬30    ¬sojh¬< This command is unknown to the system. >                                      ¬
+¬150520¬SUBLW       ¬JOSH   ¬13:41:35¬ 156¬14  ¬30    ¬sojh¬< This command is unknown to the system. >                                      ¬
+¬150520¬SUBLW       ¬JOSH   ¬13:43:14¬ 157¬14  ¬30    ¬sojh¬< This command is unknown to the system. >                                      ¬
+¬150520¬SUBLW       ¬JOSH   ¬14:22:49¬ 158¬33  ¬190   ¬lzr ¬< This variable has not been defined yet. >                                     ¬
+¬150520¬SUBLW       ¬JOSH   ¬14:36:47¬ 159¬14  ¬30    ¬sojh¬< This command is unknown to the system. >                                      ¬
+¬150521¬SUBLW       ¬JOSH   ¬11:00:41¬ 160¬24  ¬86    ¬CALL¬< This variable is not defined properly. >                                      ¬
+¬150521¬SUBLW       ¬JOSH   ¬11:13:04¬ 161¬24  ¬106   ¬net ¬< This field must be only one character. >                                      ¬
+¬150521¬SUBLW       ¬JOSH   ¬11:22:55¬ 162¬7   ¬24    ¬ldv ¬< The subscript number cannot be used with this variable. >                     ¬
+¬150521¬SUBLW       ¬JOSH   ¬11:32:48¬ 163¬7   ¬24    ¬ldv ¬< The subscript number cannot be used with this variable. >                     ¬
+¬150521¬SUBLW       ¬JOSH   ¬11:35:32¬ 164¬7   ¬24    ¬ldv ¬< The subscript number cannot be used with this variable. >                     ¬
+¬150521¬SUBLW       ¬JOSH   ¬11:39:37¬ 165¬7   ¬24    ¬ldv ¬< The subscript number cannot be used with this variable. >                     ¬
+¬150521¬SUBLW       ¬JOSH   ¬14:22:15¬ 166¬33  ¬236   ¬mbx ¬< An invalid type of message box was requested. >                               ¬
+¬150521¬SUBL        ¬JOSH   ¬14:36:03¬ 167¬2   ¬52    ¬lzr ¬< Use drawer letters A through I. >                                             ¬
+¬150527¬SUBLW       ¬JOSH   ¬11:30:41¬ 168¬20  ¬196   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150527¬SUBLW       ¬JOSH   ¬11:47:22¬ 169¬20  ¬196   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150601¬SUBLW       ¬JOSH   ¬09:29:16¬ 170¬33  ¬263   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150602¬SUBLWATCHER ¬ED     ¬09:32:44¬ 171¬3   ¬250   ¬cal ¬< No heading divider line (*=) was found in the report. >                       ¬
+¬150602¬SUBLWATCHER ¬ED     ¬09:32:54¬ 172¬3   ¬250   ¬cal ¬< No heading divider line (*=) was found in the report. >                       ¬
+¬150602¬SUBLWATCHER ¬ED     ¬10:22:41¬ 173¬20  ¬196   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150611¬SUBLWATCHER ¬ED     ¬16:59:24¬ 174¬7   ¬106   ¬lcv ¬< This option cannot be used in the LCV statement. >                            ¬
+¬150611¬SUBLWATCHER ¬ED     ¬17:01:12¬ 175¬7   ¬106   ¬lcv ¬< This option cannot be used in the LCV statement. >                            ¬
+¬150611¬SUBLWATCHER ¬ED     ¬17:16:25¬ 176¬3   ¬96    ¬pcr ¬< Data could not be transferred to or from the remote MAPPER system. >          ¬
+¬150612¬SUBLWATCHER ¬ED     ¬09:20:52¬ 177¬7   ¬63    ¬pc  ¬< The workstation was unable to start the requested program. >                  ¬
+¬150612¬SUBLWATCHER ¬ED     ¬09:22:16¬ 178¬7   ¬63    ¬pc  ¬< The workstation was unable to start the requested program. >                  ¬
+¬150615¬SUBLW       ¬JOSH   ¬08:11:47¬ 179¬20  ¬196   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150615¬SUBLWATCHER ¬ED     ¬15:22:34¬ 180¬25  ¬35    ¬RLN ¬< Define the report with an RDL statement before using the RLN statement. >     ¬
+¬150615¬SUBLWATCHER ¬ED     ¬15:23:16¬ 181¬25  ¬35    ¬RLN ¬< Define the report with an RDL statement before using the RLN statement. >     ¬
+¬150618¬SUBLWATCHER ¬ED     ¬10:11:27¬ 182¬24  ¬106   ¬LZR ¬< This field should contain a legal report number. >                            ¬
+¬150623¬SUBLWATCHER ¬ED     ¬15:15:02¬ 183¬7   ¬106   ¬lcv ¬< This option cannot be used in the LCV statement. >                            ¬

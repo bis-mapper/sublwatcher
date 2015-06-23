@@ -44,8 +44,8 @@
 @     IF <REV> eq <REX>,(0003) ; .
 @0002:.
 @.
-@     LDV,p <MSG>s64='Loading Object: '<DES> .
-@     CALL,EDRW$,0009 0001('0',<WIN1>,'',<MSG>) .
+@. @     LDV,p <MSG>s64='Loading Object: '<DES> .
+@. @     CALL,EDRW$,0009 0001('0',<WIN1>,'',<MSG>) .
 @.
 @     LZR,ECAB$,E,<RPT>,0180 .
 @     PCW,ECAB$,E,<RPT>,3,0180 <PTX><PRG> .

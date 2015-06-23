@@ -28,7 +28,7 @@
 @.
 @.    Get bis script and make sure has correct extension
 @     call,SUBLCOMMON_ getFileName_ (<file>,<run>s60) .                 Extracts File Name from path
-@     ldv <tfile>s256=<file>  lcv '' <tfile> <run>/'' .
+@     ldv <tfile>s256=<file>  lcv,0180 '' <tfile> <run>/'' .
 @     lcv,0180 'b99' <run> '.bis'/'' .                                              Remove file type
 @.
 @.    #  Make sure files exists
@@ -37,7 +37,7 @@
 @.
 @.    #  Which build?  External ; SUBLWATCHER
 @     if <cab> ne ECAB$ . ; ldv <appname>s20='sublwatcher' gto 0002 .
-@     call,"BUILD" 0001 (<cab>,<file>,<pth>,<appname>s20,<ver>h16,<bldstatus>h1) .
+@     call,"BUILD" 0001 (<cab>,<file>,<pth>,<rev>,<appname>s20,<ver>h16,<bldstatus>h1) .
 @     if <bldstatus> eq 9  gto 0199 . ; .
 @     gto 0100 .
 @.
@@ -127,38 +127,38 @@
 @.    # Build complete message
 @0100:ldv,u <appname> .
 @     ldv <msg>s80='Application: '<appname>(p)'\nBuild: '<ver>(p) .
-@     call,GROWL_ 0001 ('subwatcher: success!','SUCCESS',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Success!','SUCCESS',<msg>) .
 @.
 @.    #  Exit
 @     gto 0199 .
 @.
 @.    #  Errors
 @0180:ldv <msg>s256='Cannot build on non BIS file type' .
-@     call,GROWL_ 0001 ('subwatcher: warning!','FAILED',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
 @     gto 0199 .
 @.
 @0181:ldv <msg>s256='Could not locate '<file> .
-@     call,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
 @     gto 0199 .
 @.
 @0182:ldv <msg>s80='Not a valid revion, options are MAJOR, MINOR, PATCH, or NEW' .
-@     call,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
 @     gto 0199 .
 @.
 @0183:ldv <msg>s80='Version already exists cannot be NEW' .
-@     call,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
 @     gto 0199 .
 @.
 @0184:ldv <msg>s80='Must enter with a version level of NEW' .
-@     call,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
 @     gto 0199 .
 @.
 @0185:ldv <msg>s80='Version not present in SUBLCFG table' .
-@     call,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
 @     gto 0199 .
 @.
 @0186:ldv <msg>s80='Unable to build application '<cab> .
-@     call,GROWL_ 0001 ('sublwatcher: warning!','FAILED',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
 @     gto 0199 .
 @.
 @.    #  Exit

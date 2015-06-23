@@ -128,6 +128,7 @@
 @     ldv <ibld>h1=y .
 @.
 @0101:lcv,lin+1 '' <folder> 'PARAM'  ldv <status>=9  gto 0115 .
+@     lcv,lin+1 '' <folder> 'PAR'  ldv <status>=9  gto 0115 .
 @     if <rtype> eq 1 . ; gto lin+3 .                                           Binary report?
 @     rdl,<cab>,<drw>,<rpt>,2 2-20 <srvs>s .                                    Get name from report
 @     ldv,p <program>=<srvs>  gto lin+3 .
@@ -200,7 +201,7 @@
 @0199:chg <err>i4 cerr$  lsm,<err> <msg>s88 .
 @     if <msg> eq ' ' . ; gto lin+3 .
 @     ldv <msg>s80='Export Complete!',<status>=0 .
-@     call,GROWL_ 0001 ('subwatcher: success!','SUCCESS',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Success!','SUCCESS',<msg>) .
 @.
 @.    # Exit
 @     return .

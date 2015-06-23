@@ -21,7 +21,9 @@
 ¬delay       ¬ 12¬h¬   ¬300
 ¬rep         ¬  4¬h¬   ¬subl
 ¬tst         ¬  1¬h¬   ¬
-¬sublwatcher ¬ 12¬h¬,p ¬<tst>sublwatcher
+¬sublwatcher ¬ 12¬h¬,p ¬sublwatcher
 ¬bisbug      ¬ 12¬h¬,p ¬<tst>bisbug
 ¬biscmd      ¬ 12¬h¬,p ¬<tst>biscmd
 ¬subl        ¬ 12¬h¬,p ¬<tst>subl
+¬appbuilds   ¬256¬s¬,p ¬\\excaliber\is\mapper\appbuilds\
+¬releasefldr ¬ 20¬s¬,p ¬releases

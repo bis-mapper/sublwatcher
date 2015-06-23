@@ -1,0 +1,43 @@
+.Object Name: ReportZero
+.
+.
+.
+*
+*
+*===============================================================================
+:INCLUDE,ecab$,B,1 .                                                            INCLUDE
+@.
+@.    #---------------------------------------------------------------------------------------------
+@.    #  ReportZero
+@.    #  Written: 05/20/2015
+@.    #  @     net,,netsit$,mapcoord,2,nslock,,,lin+5 .
+@.    #  @     nwr,-4,0,i,-4,lin+4 <nmsg>s80 .
+@.    #  @     nrn,lin+3 "@call,SUBLRPTZERO_ (<cab>,<drw>,<rpt>)" <nmsg>s80 .
+@.    #  @     nof .
+@.    #---------------------------------------------------------------------------------------------
+@.
+@0001:(<cab>,<drw>,<rpt>) .
+@     rnm -4 .
+
+@     SUBLRER_ .
+
+@     lzr,<cab>,<drw>,<rpt> ,<cmax>i3 .                                                Get rpt width
+@     ldv <rdln>i6=1,<cmx2>i3=<cmax>  dec <cmx2>  lok,<cab>,<drw>,<rpt> .     Set counter and lock 0
+@     lln,<cab>,<drw>,<rpt> <0lln>i3  lln,-4 <4lln>i3 .
+@     if <4lln> eq <0lln> gto lin+2 . ; .
+@     chg <llndif>i3 <4lln> - <0lln>  ln+,<cab>,<drw>,<rpt>,<0lln>,<llndif> .
+@.    === UNLABELED LOOP for replacement of 0 rid ==============================
+@     inc <rdln>  rdl,-4,<rdln>,lin+3 1-<cmax> <data>s .
+@     wrz,<cab>,<drw>,<rdln> 2-<cmx2> <data>(1-1),<data>(2-<cmx2>)  gto lin-1 .
+@.    === END UNLABELED LOOP ===================================================
+
+
+@   return .
+
+
+
+
+
+@.    #===   ERROR   ===========================================================
+@0180:.
+@     return .

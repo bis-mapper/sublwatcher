@@ -1,0 +1,103 @@
+.Object Name: TESTER
+.
+.
+.
+*
+*
+*===============================================================================
+:INCLUDE,ecab$,B,1 .                                                                         INCLUDE
+@0001:.
+
+
+
+@     dde,"excel",,I,,TEXT,,lin+1 <DDE>i6 ; gto lin+2
+@     pc 'excel.exe \\excaliber\IS\AndrewK\Badger.txt'  gto lin-1 .
+@.wat 1000 .
+@.     dde,"[Open('"'\\excaliber\IS\AndrewK\Test2.csv'"')]",<DDE>,E,,TEXT
+@.     dde,"[Select('"'R1C1'"')]",<DDE>,E,,TEXT .
+@.wat 1000 .
+@.     dde,"[Open('"'\\excaliber\IS\AndrewK\Badger.csv'"')]",<DDE>,E,,TEXT .
+@.     dde,"[Open('"'\\excaliber\IS\AndrewK\Test2.csv'"')]",<DDE>,e,,TEXT .
+@     dde,"[Select('"'R1C1'"')]",<DDE>,E,,TEXT .
+@     dde,"[Column.Width(13)]",<DDE>,E,,TEXT .
+
+@     dde,"[Select('"'R1C2'"')]",<DDE>,E,,TEXT .
+@     dde,"[Column.Width(25)]",<DDE>,E,,TEXT .
+
+@     dde,"[Select('"'R1C3'"')]",<DDE>,E,,TEXT .
+@     dde,"[Column.Width(25)]",<DDE>,E,,TEXT .
+
+@     dde,"[Select('"'R1C4'"')]",<DDE>,E,,TEXT .
+@     dde,"[Column.Width(8)]",<DDE>,E,,TEXT .
+
+@     DDE,"[SAVE.AS('"'\\excaliber\IS\AndrewK\ANDREWBadger.xls'"')]",<DDE>,E,,TEXT .
+
+@. @.    #===   DDE WORD TESTING!   ===================================================================
+@. @     ldv,r <DATE>s25=DATE7$ .
+@. @     ldv,p <NAME>s50='Raskie, Joshua',<ADDRESS>s50='492 Prentice Street',\
+@.             <CITY>s25='Granite Falls',<STATE>h2='MN',<ZIP>h11='56241',\
+@.             <APPTS>s50='Minnesota/Iowa/South Dakota/North Dakota/Nebraska' .
+
+@. @     dde,"winword",,I,,TEXT,,lin+1 <WD>i6 ; gto lin+2
+@. @     pc,B 'winword.exe'  gto lin-1 .
+@. @     dde,"[fileopen .name='"'\\arthur3\COOL_ICE\assets\agencyfiles\Producer_Term_Notice.docx'"']",<WD>,E,,TEXT .
+@. @     dde,"[EditReplace .Find='"'$$DATE$$'"', .Replace='"'<DATE>'"', .ReplaceOne]", <WD>,E,,TEXT .
+@. @     dde,"[EditReplace .Find='"'$$NAME$$'"', .Replace='"'<NAME>'"', .ReplaceOne]", <WD>,E,,TEXT .
+@. @     dde,"[EditReplace .Find='"'$$ADDRESS$$'"', .Replace='"'<ADDRESS>'"', .ReplaceOne]", <WD>,E,,TEXT .
+@. @     dde,"[EditReplace .Find='"'$$CITY$$'"', .Replace='"'<CITY>'"', .ReplaceOne]", <WD>,E,,TEXT .
+@. @     dde,"[EditReplace .Find='"'$$STATE$$'"', .Replace='"'<STATE>'"', .ReplaceOne]", <WD>,E,,TEXT .
+@. @     dde,"[EditReplace .Find='"'$$ZIP$$'"', .Replace='"'<ZIP>'"', .ReplaceOne]", <WD>,E,,TEXT .
+@. @     dde,"[EditReplace .Find='"'$$APPTS$$'"', .Replace='"'<APPTS>'"', .ReplaceOne]", <WD>,E,,TEXT .
+@. @.    #=============================================================================================
+@. @brk,0,i .
+
+@. TEST          ¬TESTING        ¬Badger!
+@. Stuff         ¬Things         ¬Furzy!                 ¬
+@. Stuff         ¬Things         ¬Furzy!                 ¬
+@. Stuff         ¬Things         ¬Furzy!                 ¬
+@. @brk .
+@. @     pcw,-0 'c:\ADMIN\rptZERO.xls' .   TESTING WHAT IS OUTPUT
+
+
+
+@.                                      MMMMMMMMMMMMMMMMMMM.
+@.                                  MMMMMMMM           MMMMMMMM.
+@.                               MMMMMM                     MMMMMM
+@.                             MMMMM                           MMMMM
+@.                           MMMM                                 MMMM
+@.                         .MMM                                     MMM.
+@.                        MMMM                                      MMMMM
+@.                       MMM                                          MMMM
+@.                      MMM   MMMMMM                    MMMMMM          MMM
+@.                     MMM  MMM    MMM               MMMM    MMMM        MMM
+@.                    MMM  MM     MXXXM             MM      MMXXXM        MMM
+@.                    MMM MM     MXXXXMM           MM       MMXXXXM        MM.
+@.                   MMM MM       MMMMMMM         MM         MMMMMMM       MMM
+@.                  .MM  MM            MM         MM              MM        MM.
+@.                  MMM  MM            MM         MM              MM        MMM
+@.                  MMM  MM.           MM         MM              MM        MMM
+@.                  MM   MMMMMMMMMMMMMMMM         MMMMMMMMMMMMMMMMMM         MM.
+@.                  MM                                                       MM.
+@.                  MM                                                       MM.
+@.                  MM                                                       MM.
+@.                  MM     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM           MM.
+@.                  MMM     MMM                                  MM         MMM
+@.                  MMM      MM                                   M         MMM
+@.                  .MM      MM                                   MM        MM.
+@.                   MMM      MM                                  MM       MMM
+@.                   .MMM     MM                                  M       MMM
+@.                    MMM      MM                                MM      MMMM
+@.                     MMM      MM               ::::::         MM       MMM
+@.                      MMM      MM           ::::::::::::    MMM       MMM
+@.                       MMM      MMM       :::::::::::::::  MMM       MMM.
+@.                        MMMMM    MMM     :::::::::::::::MMMM       MMMM
+@.                          MMMM    MMM   ::::::::::::::MMMM       MMMM.
+@.                           MMMMM    MMMMM:::::::::MMMMM        MMMMM
+@.                             MMMMM      MMMMMMMMMMMMM        MMMMM
+@.                               MMMMMM                     MMMMMM
+@.                                  MMMMMMMMM         MMMMMMMMM.
+@.                                      MMMMMMMMMMMMMMMMMMM
+@.
+
+@     GTO END .
+@.
