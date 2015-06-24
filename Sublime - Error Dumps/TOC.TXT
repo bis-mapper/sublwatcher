@@ -3,4 +3,8 @@
 *Cab .w.Rpt .Lines .Typ.Name                .Title                                                                          .
 *====.=.====.======.===.====================.===============================================================================.
 	  56 I    0     39 BIS
-	  56 I    1      8 BIS                      ERROR-LOG
+	  56 I    1     12 BIS                      ERROR-LOG
+	  56 I    2    462 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
+	  56 I    3    421 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
+	  56 I    4    462 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
+	  56 I    5    421 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03

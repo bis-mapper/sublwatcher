@@ -1,5 +1,5 @@
 
-[DISK]
+[REVISION]
  Level           = 0.0.13
 [NAME]
  Name            = sublwatcher
@@ -14,6 +14,6 @@
 [RUNS]
  Run             = SUBLWATCHER,3,,,NYNWN,B
  Run             = SUBL,2,,,NYNWN,B
-[DATABASE]
- Report          = 56,C,3,56,C,14
- Report          = 56,C,8,56,C,13
+[DATABASES]
+ Location        = 3,C,56,SUBLPATH
+ Location        = 8,C,56,SUBL-LOG
