@@ -5,6 +5,9 @@
  Name            = sublwatcher
 [TITLE]
  Title           = bis file watching utility / ide envrionment
+[CONFIG]
+ IBldApp         = n
+ AppImage        =
 [DRAWERS]
  Drawer          = B,132,Sublime
  Drawer          = C,256,Sublime - Tables
