@@ -86,7 +86,7 @@
 @.    #  Refer to "http://www.sublimetext.com/docs/2/osx_command_line.html" for all options
 @0020:pc,r '"'<apppath>(p)'" -a' '"'<file>':'<dln>(p)'"' .                      start editor with options
 @     sys .                                                                     system
-@0025:fdr,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,user$,run$  gto 0199 .             currently running?
+@0025:fdr,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,user$,<sublwatcher>  gto 0199 .             currently running?
 @     wat 1000 .                                                                pause for first time
 @     RUN <sublwatcher> .                                                       start file watcher utility
 @.
