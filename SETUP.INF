@@ -1,13 +1,10 @@
 
-[REVISION]
- Level           = 0.0.13
+[DISK]
+ Level           = 1.0.2
 [NAME]
  Name            = sublwatcher
 [TITLE]
  Title           = bis file watching utility / ide envrionment
-[CONFIG]
- IBldApp         = n
- AppImage        =
 [DRAWERS]
  Drawer          = B,132,Sublime
  Drawer          = C,256,Sublime - Tables
@@ -17,6 +14,6 @@
 [RUNS]
  Run             = SUBLWATCHER,3,,,NYNWN,B
  Run             = SUBL,2,,,NYNWN,B
-[DATABASES]
- Location        = 3,C,56,SUBLPATH
- Location        = 8,C,56,SUBL-LOG
+[DATABASE]
+ Report          = 56,C,3,56,C,14
+ Report          = 56,C,8,56,C,13

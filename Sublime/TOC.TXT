@@ -3,9 +3,9 @@
 *Cab .w.Rpt .Lines .Typ.Name                .Title                                                                          .
 *====.=.====.======.===.====================.===============================================================================.
 	  56 B    0     39 BIS
-	  56 B    1     35 BIS                      Object Name: DEFINES
+	  56 B    1     40 BIS                      Object Name: DEFINES
 	  56 B    2    101 BIS                      Object Name: SUBL
-	  56 B    3    296 BIS                      Object Name: SUBLW
+	  56 B    3    297 BIS                      Object Name: SUBLWATCHER
 	  56 B    4    153 BIS                      Object Name: FILESELECT
 	  56 B    5     26 BIS                      Object Name: REPOSPATH
 	  56 B    6     72 BIS                      Object Name: LOADPROG
@@ -28,6 +28,6 @@
 	  56 B   27    998 BIS                      Object Name: SETUP+
 	  56 B   28    102 BIS                      Object Name: BASHEXEC
 	  56 B   29     37 BIS                      Object Name: GIT
-	  56 B   33    296 BIS                      Object Name: SUBLW
-	  56 B   99     79 BIS                      Object Name: SUBLERRDUMP_
+	  56 B   33    297 BIS                      Object Name: SUBLW
+	  56 B   99     77 BIS                      Object Name: SUBLERRDUMP_
 	  56 B  200    104 BIS                      Object Name: TESTER
