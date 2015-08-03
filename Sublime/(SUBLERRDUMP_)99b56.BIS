@@ -55,9 +55,7 @@ V199(102-6)¬V199(108-4)¬V199(1-80)¬  ldv,c V199(1-80) .    | RECENTER
 @0110:fdr,SUBLCONFIG_ '' 'Parameter' ¬,'appdata'  rln 'value' <appdata>s .
 @     fdr,SUBLCONFIG_ '' 'Parameter' ¬,'app'  rln 'value' <app>s .
 @     ldv,p <appdir>s80=<appdata>(p)'\'<app>(p) .
-@     if netsit$ eq E,F . ; gto lin+2
-@     pc,bcw "del <appdir>\site-netsit$\changes.txt"  gto lin+2 .       Clean up file
-@     pc,bcw "del <appdir>\changes.txt" .                               Clean up file
+@     pc,bcw "del <appdir>\site-netsit$\changes.txt" .
 @.                                                         |
 @. *** END PROGRAM - DISPLAY ERROR ************************| *******************
 @     if orstan$ eq 0  ldv V198I6=2 . ; GTO END .          | BACKGROUND - END
