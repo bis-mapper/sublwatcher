@@ -104,7 +104,7 @@
 @     ldv,ql <event>=<data>,0(,),\
              <file>=<data>,1(,),\
              <obj>=<data>,2(,),\
-             <input>s40=<data>,3(,),\
+             <input>s80=<data>,3(,),\
              <inp1>s40=<data>,4(,),\
              <inp2>s40=<data>,5(,),\
              <inp3>s40=<data>,6(,),\
@@ -184,29 +184,34 @@
 @.    #  Make sure were not editing this file
 @     if <cab> eq ecab$  if <drw> eq aedrw$  if <rpt> eq erpt$,(0036) . ; .     Cannot modify itself
 @.
+@.    #=============================================================================================
+@.    #===   CHECK IF RID IS LOCKED FOR EITHER READ OR WRITE, IF SO PROMPT BEFORE CONTINUE   =======
+@     lzr,<cab>,<drw>,<rpt> ,,,,,,,<vrpw>h6,<vwpw>h6 .
+@     if 'LOCKED' eq <vrpw>,<vwpw> . ; gto 0051 .
+@     ldv <msg>s256='This rid contains either a read or write password. ',\
+          <msg>=<msg>(p)' Waiting for input...' .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','WARNING',<msg>) .
+@     mbx,YN,Q,'Sublwatcher: Whoa there!' \
+"Would you like to continue working with protected rid <rpt>(p)<drw>(p)<cab>(p)? //" Y,(lin+1),N,(0036) .
 @.
-@.
-@.
-@.    #  Check if report 0, give option to replace...
-@     if <rpt>(p) eq 0 . ; gto 0049 .
+@.    #=============================================================================================
+@.    #===   CHECK IF REPORT 0, GIVE OPTION TO REPLACE   ===========================================
+@0051:if <rpt>(p) eq 0 . ; gto 0053 .
 @     ldv,p <canchg>s200='You must be signed in under department 2 in order to change report 0.' .
 @     ldv <msg>s256='Attempt to save over report 0.',\
           <msg>=<msg>(p)'Waiting for input...' .
 @     call,GROWL_ 0001 ('Sublwatcher: Warning!','WARNING',<msg>) .
 @     mbx,YN,Q,'Sublwatcher: Whoa there!' \
 "Would you like to replace <rpt>(p)<drw>(p)<cab>(p)? //" Y,(lin+1),N,(0036) .
-
 @     net,,netsit$,mapcoord,2,nslock .
 @     nwr,-4,0,i,-0 .
 @     nrn "@call,SUBLRPTZERO_ 0fd001 ('<cab>','<drw>','<rpt>') . " .
 @     nof .
 @     gto 0036 .
-
 @.
-@.
-@.
-@.    #  Check if brand new report allow option to create...
-@0049:lzr,<cab>,<drw>,<rpt>,lin+1  ldv <exists>h1='Y'  gto 0050 .
+@.    #=============================================================================================
+@.    #=== CHECK IF NEW MAPPER RID, ALLOW RID TO BE CREATED   ======================================
+@0053:lzr,<cab>,<drw>,<rpt>,lin+1  ldv <exists>h1='Y'  gto 0055 .
 @     ldv <exists>h1='N' .
 @     ldv <msg>s256='This file does not exist in Mapper.',\
           <msg>=<msg>(p)'Waiting for input...' .
@@ -220,16 +225,18 @@
 @     call,GROWL_ 0001 ('Sublwatcher: Success!','SUCCESS',<msg>) .
 @     gto 0056 .
 @.
-@.    #  Check if user matches control line
-@0050:rdl,<cab>,<drw>,<rpt>,1 53-11 <controluser>s .
+@.    #=============================================================================================
+@.    #=== CHECK IF USER HAS UPDATE CONTROL, ALLOW TO TAKE CONTROL   ===============================
+@0055:rdl,<cab>,<drw>,<rpt>,1 53-11 <controluser>s .
 @     if user$ ne <controluser> . ; gto 0056 .
 @     ldv <msg>s256='You do not have update control of this report.',\
           <msg>=<msg>(p)'Waiting for input...' .
-@     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
-@     mbx,YN,Q,'Sublwatcher: Whoa there!' \
+@     call,GROWL_ 0001 ('Sublwatcher: Action Needed!','PENDING',<msg>) .
+@     mbx,YNC,Q,'Sublwatcher: Whoa there!' \
 "You do not have update control of this report. //\
- Run:   <rpt>(p)<drw>(p)<cab>(p)    Name:   <controluser>(p) //\
- Would you like to take control of this report?//" Y,(lin+1),N,(0036) .
+ Site:   netsit$    Run:   <rpt>(p)<drw>(p)<cab>(p)    Name:   <controluser>(p)  //\
+ (Press CANCEL to perform a DIFF on the file)  //\
+ Would you like to take control of this report?//" Y,(lin+1),N,(0036),C,(0057) .
 @0056:lzr,3950,d,1,0058 .                                                       ICE Enabled Site?
 @     srh,3950,d,1,,,0058 'ad' 'SvcCab','sd' ¬,<cab>,<drw> .
 @     lzr,-0 ,,<hln>i7  inc <hln> .
@@ -239,18 +246,25 @@
 @     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED','Check input message') .
 @     mbx,YN,Q,'What are we doing?' \
 "Do you want to add this as an ice service//" Y,(0019),N,(0061) .
+@     gto 0058 .
+@0057:
+@     ldv,p <diffCmd>s40='DIFF '<rpt>(p)<drw>(p)<cab>(p)
+@     call,BISCMD_ 0001 (<file>,<diffCmd>,<status>h1) .
+@     gto 0055 .
 @.
-@.
-@.
-@.    #===   NOTIFICATION FOR UPDATES OUT OF REPORT BOUNDS!   ==================
+@.    #=============================================================================================
+@.    #===   NOTIFICATION FOR UPDATES OUT OF REPORT BOUNDS!   ======================================
 @0058:lzr,<cab>,<drw>,<rpt> ,<tmax>i3  lzr,-4 <4nl>i6,,<4hl>i6  .
 @     if <tmax> ge 980 gto 0061 . ; .
-@     ldv <bmax>i3=<tmax>  inc,18 <tmax>  .
-@     cal,-4,<4hl>,<4nl> 'acl' <bmax>-18,<tmax>-18 ,a,b if:LIT(a)<>"                  ";
+@     inc <tmax>  ldv <bmax>i3=<tmax>  inc,18 <tmax>  .
+@     cal,-4,<4hl>,<4nl> 'acl' <bmax>-18 ,a if:LIT(a)<>"                  ";
 @     lzr,-0 <0lns>i6,,<0hln>i6  if <0lns> gt <0hln> . ; gto 0061 .
-@.jr     pcw,-0 'c:\ADMIN\rptZERO.txt' .   TESTING WHAT IS OUTPUT
-@     ldv <msg>s80='Warning: updates outside report boundaries have been discarded.' .
+@     pcw,-0 <datadir>'\ExceededBoundaries.txt' .   TESTING WHAT IS OUTPUT
+@     ldv <msg>s150='Warning: updates outside report boundaries have been discarded.',\
+          <msg>=<msg>(p)'See ExceededBoundaries.txt for which lines are being cut off.' .
 @     call,GROWL_ 0001 ('Sublwatcher: Warning!','WARNING',<msg>) .
+@.
+@.
 @.
 @.    #  Load the ¬ character and handle the conversion
 @0061:.

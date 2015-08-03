@@ -41,7 +41,7 @@
 @0010:(<cab>,<drw>,<rpt>,<srvs>) .
 @     ldv <svc>s21 .
 @     if <rpt> eq 0,(0012) .
-@     rer 0012 .
+@.ew  rer 0012 .
 @     ldv,l <cab>  ldv,r <rpt>  ldv <svc>s20 .
 @     ldv,p <report>h11='1d3950' .
 @     DIR <report> ,,,,,<acc>h1  if <acc> eq '',(0013) .

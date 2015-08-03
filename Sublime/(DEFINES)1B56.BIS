@@ -32,3 +32,8 @@
 :DEFINE getOsVer_            "0045"                 |¬Get OS Version
 :DEFINE getChgsFile_         "0050"                 |¬Get OS Version
 :DEFINE charReplace_         "0055"                 |¬Tab character replacement
+:DEFINE IMDELEGATE_          "94,C,11"              |¬Routes to other processors
+:DEFINE imDeploy_            "0001"                 |¬Deploy Label
+:DEFINE imBuild_             "0010"                 |¬Build Label
+:DEFINE imResGen_            "0015"                 |¬Resource Generated Label
+:DEFINE imAppGen_            "0020"                 |¬Application Generation Label

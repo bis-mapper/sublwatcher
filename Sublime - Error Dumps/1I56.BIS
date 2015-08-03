@@ -5,3 +5,38 @@
 *      .            .       .        .Comment/                                                                                              .REVIEW.           .
 *Date  .Run-Id      .Action .Time    .Dump/ErrR/ErrLn /ECmd/Error Message                                                                   .DATE  .PROGRAMMER .COMMENTS
 *======.============.=======.========.======================================================================================================.======.===========.================================================================================================
+¬150624¬SUBLWATCHER ¬JOSH   ¬08:41:43¬   2¬10  ¬25    ¬SUBL¬< This command is unknown to the system. >                                      ¬
+¬150624¬SUBLWATCHER ¬JOSH   ¬08:41:46¬   3¬99  ¬56    ¬fdr ¬< This drawer is not registered for access by this run. >                       ¬
+¬150624¬SUBLWATCHER ¬JOSH   ¬08:49:18¬   4¬10  ¬25    ¬SUBL¬< This command is unknown to the system. >                                      ¬
+¬150624¬SUBLWATCHER ¬JOSH   ¬08:49:21¬   5¬99  ¬56    ¬fdr ¬< This drawer is not registered for access by this run. >                       ¬
+¬150626¬SUBLWATCHER ¬JOSH   ¬11:32:14¬   6¬3   ¬96    ¬pcr ¬< Data could not be transferred to or from the remote MAPPER system. >          ¬
+¬150701¬SUBLWATCHER ¬JOSH   ¬13:58:42¬   7¬11  ¬33    ¬call¬JS0070: Error attempting to read a JavaScript application.
+SyntaxError 1110: Exp¬
+¬150701¬SUBLWATCHER ¬JOSH   ¬14:04:07¬   8¬4   ¬60    ¬WRL ¬< The input data exceeds the column width specified. >                          ¬
+¬150701¬SUBLWATCHER ¬JOSH   ¬14:04:34¬   9¬4   ¬60    ¬WRL ¬< The input data exceeds the column width specified. >                          ¬
+¬150701¬SUBLWATCHER ¬JOSH   ¬14:07:58¬  10¬4   ¬60    ¬WRL ¬< The input data exceeds the column width specified. >                          ¬
+¬150701¬SUBLWATCHER ¬JOSH   ¬14:10:27¬  11¬4   ¬60    ¬WRL ¬< The input data exceeds the column width specified. >                          ¬
+¬150701¬SUBLWATCHER ¬JOSH   ¬14:12:08¬  12¬4   ¬60    ¬WRL ¬< The input data exceeds the column width specified. >                          ¬
+¬150701¬SUBLWATCHER ¬JOSH   ¬14:12:58¬  13¬4   ¬60    ¬WRL ¬< The input data exceeds the column width specified. >                          ¬
+¬150706¬SUBLWATCHER ¬JOSH   ¬10:13:07¬  14¬20  ¬197   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150706¬SUBLWATCHER ¬JOSH   ¬10:14:49¬  15¬20  ¬198   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150708¬SUBLWATCHER ¬JOSH   ¬16:17:32¬  16¬3   ¬321   ¬call¬JS0070: Error attempting to read a JavaScript application.
+SyntaxError 1110: Exp¬
+¬150708¬SUBLWATCHER ¬JOSH   ¬16:18:30¬  17¬3   ¬321   ¬call¬JS0070: Error attempting to read a JavaScript application.
+SyntaxError 1110: Exp¬
+¬150709¬SUBLWATCHER ¬ED     ¬16:04:11¬  18¬7   ¬52    ¬fdr ¬< This field name was not found in the report. >                                ¬
+¬150710¬SUBLWATCHER ¬JOSH   ¬11:30:58¬  19¬3   ¬96    ¬pcr ¬< Data could not be transferred to or from the remote MAPPER system. >          ¬
+¬150721¬SUBLWATCHER ¬ED     ¬14:24:47¬  20¬26  ¬146   ¬call¬< This variable is not defined properly. >                                      ¬
+¬150727¬SUBLWATCHER ¬JAN    ¬13:49:00¬  21¬20  ¬89    ¬call¬< This variable is not defined properly. >                                      ¬
+¬150727¬SUBLWATCHER ¬ED     ¬13:56:51¬  22¬26  ¬133   ¬call¬< This drawer is not registered for access by this run. >                       ¬
+¬150727¬SUBLWATCHER ¬JAN    ¬14:00:42¬  23¬20  ¬197   ¬pcw ¬< The data transfer failed. >                                                   ¬
+¬150729¬SUBL        ¬BRIAN  ¬07:40:45¬  24¬2   ¬53    ¬lzr ¬< Use drawer letters A through I. >                                             ¬
+¬150729¬SUBLWATCHER ¬KIM    ¬08:52:26¬  25¬3   ¬261   ¬cal ¬< No heading divider line (*=) was found in the report. >                       ¬
+¬150729¬SUBLWATCHER ¬ED     ¬12:38:09¬  26¬3   ¬96    ¬pcr ¬< Data could not be transferred to or from the remote MAPPER system. >          ¬
+¬150803¬SUBLWATCHER ¬JOSH   ¬07:20:38¬  27¬3   ¬96    ¬pcr ¬< Data could not be transferred to or from the remote MAPPER system. >          ¬
+¬150803¬SUBLWATCHER ¬ED     ¬14:44:13¬  28¬20  ¬37    ¬call¬< This drawer is not registered for access by this run. >                       ¬
+¬150803¬SUBLWATCHER ¬ED     ¬14:44:38¬  29¬20  ¬37    ¬call¬< This drawer is not registered for access by this run. >                       ¬
+¬150803¬SUBLWATCHER ¬ED     ¬14:45:20¬  30¬20  ¬37    ¬call¬< This drawer is not registered for access by this run. >                       ¬
+¬150803¬SUBLWATCHER ¬ED     ¬15:46:03¬  31¬20  ¬37    ¬call¬< This drawer is not registered for access by this run. >                       ¬
+¬150803¬SUBLWATCHER ¬ED     ¬15:46:51¬  32¬20  ¬37    ¬call¬< This drawer is not registered for access by this run. >                       ¬
+¬150803¬SUBLWATCHER ¬ED     ¬15:47:39¬  33¬20  ¬37    ¬call¬< This drawer is not registered for access by this run. >                       ¬

@@ -259,8 +259,9 @@
 @     inc <tmax>  ldv <bmax>i3=<tmax>  inc,18 <tmax>  .
 @     cal,-4,<4hl>,<4nl> 'acl' <bmax>-18 ,a if:LIT(a)<>"                  ";
 @     lzr,-0 <0lns>i6,,<0hln>i6  if <0lns> gt <0hln> . ; gto 0061 .
-@     pcw,-0 'c:\ADMIN\rptZERO.txt' .   TESTING WHAT IS OUTPUT
-@     ldv <msg>s80='Warning: updates outside report boundaries have been discarded.' .
+@     pcw,-0 <datadir>'\ExceededBoundaries.txt' .   TESTING WHAT IS OUTPUT
+@     ldv <msg>s150='Warning: updates outside report boundaries have been discarded.',\
+          <msg>=<msg>(p)'See ExceededBoundaries.txt for which lines are being cut off.' .
 @     call,GROWL_ 0001 ('Sublwatcher: Warning!','WARNING',<msg>) .
 @.
 @.

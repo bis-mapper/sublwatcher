@@ -10,10 +10,12 @@
 ¬JAN        ¬WIN7-31                       ¬ENABLED¬C:\Program Files\Sublime Text 3\sublime_text.exe                                                    ¬
 ¬KIM        ¬WIN7-33                       ¬ENABLED¬C:\Program Files\Sublime Text 3\sublime_text.exe                                                    ¬
 ¬LOU        ¬WIN7-23                       ¬ENABLED¬C:\Program Files\Sublime Text 3\sublime_text.exe                                                    ¬
-¬BRIAN       WIN7-15                        ENABLED C:\Program Files\Sublime Text 3\sublime_text.exe
-¬KEVIN       WIN7-27                        ENABLED C:\Program Files\Sublime Text 3\sublime_text.exe
-¬AUSTIN      WIN7-26                        ENABLED C:\Program Files\Sublime Text 3\sublime_text.exe
-¬JEFF        WIN7-30                        ENABLED C:\Program Files\Sublime Text 3\sublime_text.exe
-¬APRIL       WIN7-9                         ENABLED C:\Program Files\Sublime Text 3\sublime_text.exe
-¬ED          WIN7-16                                C:\Program Files\Sublime Text 3\sublime_text.exe
-¬JOSH        WIN7-35                                C:\Program Files\Sublime Text 3\sublime_text.exe
+¬BRIAN      ¬WIN7-15                       ¬ENABLED¬C:\Program Files\Sublime Text 3\sublime_text.exe
+¬KEVIN      ¬WIN7-27                       ¬ENABLED¬C:\Program Files\Sublime Text 3\sublime_text.exe
+¬AUSTIN     ¬WIN7-26                       ¬ENABLED¬C:\Program Files\Sublime Text 3\sublime_text.exe
+¬JEFF       ¬WIN7-30                       ¬ENABLED¬C:\Program Files\Sublime Text 3\sublime_text.exe
+¬APRIL      ¬WIN7-9                        ¬ENABLED¬C:\Program Files\Sublime Text 3\sublime_text.exe
+¬ED         ¬WIN7-16                       ¬       ¬C:\Program Files\Sublime Text 3\sublime_text.exe
+¬JOSH       ¬WIN7-35                       ¬       ¬C:\Program Files\Sublime Text 3\sublime_text.exe
+¬ANDREW     ¬WIN7-36                       ¬       ¬C:\Program Files\Sublime Text 3\sublime_text.exe
+¬MAPCOORD    WIN7-35                                C:\Program Files\Sublime Text 3\sublime_text.exe
