@@ -22,6 +22,7 @@
 @     BRK  RNM -8  DLR,-8 .
 @.
 @     LDV <WIN1>i6=0 .
+@     CSR .
 @     RSR,0,E,2  0100 .
 @     RER,0,E,2  0001 .
 @.
@@ -215,7 +216,7 @@
 @     LDV,rq <LLP>i5=<DAT>(<COL>-0),3(,) .
 @     LDV,lq <FLG>h5=<DAT>(<COL>-0),4(,) .
 @     LDV,lq <RDRW>h4=<DAT>(<COL>-0),5(,) .
-	<RUN>	<RPT>	<IOS>	<LLP>	<FLG>	<RDRW>	
+	<RUN>	<RPT>	<IOS>	<LLP>	<FLG>	<RDRW>
 @     GTO 0027 .
 @0028:.
 @     BRK  RNM -4 .
@@ -234,7 +235,7 @@
 @     LDV,qr <RCAB>i4=<DAT>(<COL>-0),3(,),\
              <RDRW>h1=<DAT>(<COL>-0),4(,),\
              <RRPT>i4=<DAT>(<COL>-0),5(,) .
-	<ECAB>	<EDRW>	<ERPT>	<RCAB>	<RDRW>	<RRPT>	
+	<ECAB>	<EDRW>	<ERPT>	<RCAB>	<RDRW>	<RRPT>
 @     GTO 0128 .
 @0129:BRK  RNM -7 .
 @     IF <STP> eq 2,(0029) ; .

@@ -22,7 +22,9 @@
 @     BRK  RNM -8  DLR,-8 .
 @.
 @     LDV <WIN1>i6=0 .
-@     SUBLRER_ .
+@     CSR .
+@     RSR,0,E,2  0100 .
+@     RER,0,E,2  0001 .
 @.
 @     LDV,p <PRD>h12=SUBLWATCHER . <PRD> contains Product name
 @     LDV <OVR>h1=N .
