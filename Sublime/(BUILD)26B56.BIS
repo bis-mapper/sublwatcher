@@ -63,12 +63,20 @@
 @.
 @.    #  Start SETUP.INF result
 @     brk .
-[DISK]
+[REVISION]
  Level           = <ver>
 [NAME]
  Name            = <app>
 [TITLE]
  Title           = <appdesc>
+[CONFIG]
+ IceEnabled      = n
+ IBldApp         = n
+ AppImage        =
+ AppCab          = ecab$
+[DATABSES]
+ Location        = 8,c,56,Log DB
+ Location        = 3,c,56,Users DB
 [DRAWERS]
 @     rnm -1 .
 @.

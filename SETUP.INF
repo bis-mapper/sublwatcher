@@ -1,10 +1,18 @@
 
-[DISK]
+[REVISION]
  Level           = 1.0.2
 [NAME]
  Name            = sublwatcher
 [TITLE]
  Title           = bis file watching utility / ide envrionment
+[CONFIG]
+ IceEnabled      = n
+ IBldApp         = n
+ AppImage        =
+ AppCab          =   56
+[DATABSES]
+ Location        = 8,c,56,Log DB
+ Location        = 3,c,56,Users DB
 [DRAWERS]
  Drawer          = B,132,Sublime
  Drawer          = C,256,Sublime - Tables
