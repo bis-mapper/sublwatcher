@@ -55,11 +55,11 @@
 @     inc <vpos1>  dec <mnsz>  ldv <minor>I3=<ver>(<vpos1>-<mnsz>) .       GET MINOR REVESION NUMBER
 @     dec <vpos1>  ldv <major>I3=<ver>(1-<vpos1>)  inc <vpos1> .           GET MAJOR REVESION NUMBER
 @     inc <vpos2>  ldv <patch>I3=<ver>(<vpos2>-0) .                        GET PATCH REVESION NUMBER
-@     if <rev> eq MAJOR  inc <major>  ldv <minor>=0,<patch>=0 .
-@     if <rev> eq MINOR  inc <minor>  ldv <patch>=0 .
-@     if <rev> eq PATCH  inc <patch> .
-@     ldv,p <newver>h16=<major>(P)'.'<minor>(P)'.'<patch>(P) .      SAVE THE NEW VERSION NUMBER
-@     ldv,p <ver>h16=<newver> .
+@. @     if <rev> eq MAJOR  inc <major>  ldv <minor>=0,<patch>=0 .
+@. @     if <rev> eq MINOR  inc <minor>  ldv <patch>=0 .
+@. @     if <rev> eq PATCH  inc <patch> .
+@. @     ldv,p <newver>h16=<major>(P)'.'<minor>(P)'.'<patch>(P) .      SAVE THE NEW VERSION NUMBER
+@. @     ldv,p <ver>h16=<newver> .
 @.
 @.    #  Start SETUP.INF result
 @     brk .
