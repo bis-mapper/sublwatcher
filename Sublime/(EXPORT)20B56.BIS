@@ -11,8 +11,8 @@
 @.    #---------------------------------------------------------------------------------------------
 @.
 @.    # Test Setup
-@     ldv <ctl>s80='export 832 -fUmbrella' .
-@     ldv <file>s42='D\Users\winne\sublwatcher\site-e\umbrella\umbrella_test\2f832.bis' .
+@ rdb ldv <appname>s20='icebuild',<ctl>s80='export 100 -f '<appname> .
+@     ldv <file>s42='%USERPROFILE%\sublwatcher\site-'netsit$'\'<appname>'\'<appname>'\0f100.bis' .
 @     ldv <runname>s12='export' .
 @     call 0001 (<ctl>,<file>,<runname>,<status>h1) .
 @     GTO END .
@@ -55,6 +55,7 @@
 @     ldv <drawer>h11='0'<drw><cab>  call 0200 (<drawer>,<exist>h1) .
 @     if <exist> eq 0 . ; gto 0005 .
 @     drw,<cab>,<drw>,0005 ,,,,,<vhirptd>i4,,,,,,<folder>s26 .                  Drawer exist?
+@     if <folder> eq ' ' gto 0180 . ; .
 @     ldv <rpt>i4=-1 .
 @0007:inc <rpt>  if <rpt> gt <vhirptd>,(0005) .
 @     call 0100 (<pth>,<cab>,<drw>,<rpt>,<folder>,<program>s40,<epath>s256,<status>h1) .
@@ -129,6 +130,7 @@
 @.
 @0101:lcv,lin+1 '' <folder> 'PARAM'  ldv <status>=9  gto 0115 .
 @     lcv,lin+1 '' <folder> 'PAR'  ldv <status>=9  gto 0115 .
+@     lcv,lin+1 '' <folder> 'DUMPS'  ldv <status>=9  gto 0115 .
 @     if <rtype> eq 1 . ; gto lin+3 .                                           Binary report?
 @     rdl,<cab>,<drw>,<rpt>,2 2-20 <srvs>s .                                    Get name from report
 @     ldv,p <program>=<srvs>  gto lin+3 .
@@ -196,6 +198,11 @@
 @     pcw,-0,2 <file> .                                                         Write file
 @     return .
 @.
+@.
+@.    #  Error messages
+@0180:ldv <status>=9,<msg>s80='Cabinet drawer table 3g6 has blank description for cab: '<cab> .
+@     call,GROWL_ 0001 ('Sublwatcher: Error!','FAILED',<msg>) .
+@     return .
 @.
 @.    #  Show success message
 @0199:chg <err>i4 cerr$  lsm,<err> <msg>s88 .

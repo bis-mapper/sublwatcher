@@ -12,4 +12,4 @@
 	  56 E    9     27 PNG                      SUBLIME_TEXT.PNG
 	  56 E   10     26 png                      success.png
 	  56 E   11     23 png                      warning.png
-	  56 E   12   4478 exe                      7zip.exe
+	  56 E   12   4455 exe                      7zip.exe

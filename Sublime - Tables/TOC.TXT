@@ -4,11 +4,11 @@
 *====.=.====.======.===.====================.===============================================================================.
 	  56 C    0     39 BIS
 	  56 C    1     16 BIS
-	  56 C    2     30 BIS                      Object Name: SUBLCONFIG
-	  56 C    3     22 BIS                      Object Name: SUBLPATH
+	  56 C    2     29 BIS                      Object Name: SUBLCONFIG
+	  56 C    3     23 BIS                      Object Name: SUBLPATH
 	  56 C    4     14 BIS                      Object Name: BIN-FILES
 	  56 C    6    403 BIS                      Object Name: MESSAGES
-	  56 C    8  32430 BIS                      Object Name: SUBL-LOG
+	  56 C    8  35728 BIS                      Object Name: SUBL-LOG
 	  56 C    9     19 BIS                      Object Name: SUBLUTILS
 	  56 C   10      8 BIS                      Object Name: GROWL-APPS
 	  56 C   11     10 BIS                      Object Name: GROWL-ALERTS

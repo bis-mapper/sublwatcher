@@ -3,7 +3,7 @@
 *Cab .w.Rpt .Lines .Typ.Name                .Title                                                                          .
 *====.=.====.======.===.====================.===============================================================================.
 	  56 I    0     39 BIS
-	  56 I    1     40 BIS                      ERROR-LOG
+	  56 I    1     68 BIS                      ERROR-LOG
 	  56 I    2    462 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
 	  56 I    3    421 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
 	  56 I    4    462 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
@@ -36,3 +36,31 @@
 	  56 I   31    512 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
 	  56 I   32    512 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
 	  56 I   33    512 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
+	  56 I   34    548 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
+	  56 I   35    544 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
+	  56 I   36    544 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
+	  56 I   37   1017 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
+	  56 I   38   1202 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
+	  56 I   39    777 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
+	  56 I   40    439 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
+	  56 I   41    795 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
+	  56 I   42    604 BIS                      DIAG Options: A                           (ERROR CAPTURE)        REV: 11.1.0.03
+	  56 I   43    491 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   44    697 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   45    515 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   46    766 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   47    592 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   48    587 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   49   1157 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   50    457 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   51    457 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   52    417 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   53    417 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   54    417 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   55    417 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   56    417 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   57    417 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   58    417 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   59    439 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   60    588 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07
+	  56 I   61    589 BIS                      DIAG Options: A                            (ERROR CAPTURE)       REV: 12.2.0.07

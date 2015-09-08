@@ -5,7 +5,7 @@
 	  56 B    0     39 BIS
 	  56 B    1     40 BIS                      Object Name: DEFINES
 	  56 B    2    101 BIS                      Object Name: SUBL
-	  56 B    3    297 BIS                      Object Name: SUBLWATCHER
+	  56 B    3    299 BIS                      Object Name: SUBLWATCHER
 	  56 B    4    153 BIS                      Object Name: FILESELECT
 	  56 B    5     26 BIS                      Object Name: REPOSPATH
 	  56 B    6     72 BIS                      Object Name: LOADPROG
@@ -20,13 +20,13 @@
 	  56 B   15     55 BIS                      Object Name: SUBLBUG
 	  56 B   17     24 BIS                      Object Name: SUBLCTL
 	  56 B   18     34 BIS                      Object Name: SBS
-	  56 B   20    215 BIS                      Object Name: EXPORT
+	  56 B   20    222 BIS                      Object Name: EXPORT
 	  56 B   22     45 BIS                      Object Name: GROWL
 	  56 B   24    175 BIS                      Object Name: DIFF
 	  56 B   25     77 BIS                      Object Name: BDT
 	  56 B   26    166 BIS                      Object Name: BUILD
-	  56 B   27    998 BIS                      Object Name: SETUP+
-	  56 B   28    102 BIS                      Object Name: BASHEXEC
+	  56 B   27    999 BIS                      Object Name: SETUP+
+	  56 B   28    143 BIS                      Object Name: BASHEXEC
 	  56 B   29     37 BIS                      Object Name: GIT
 	  56 B   33    297 BIS                      Object Name: SUBLW
 	  56 B   99     77 BIS                      Object Name: SUBLERRDUMP_

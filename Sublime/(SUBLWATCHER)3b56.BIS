@@ -278,6 +278,8 @@
 @     gto 0036 .
 @0063:rep,-4,<cab>,<drw>,<rpt> .
 @     ulk .
+@     ldv <msg>s80='File: '<rpt>(p)<drw>(p)<cab>(p)' saved. Site: 'SITE$ .
+@     call,GROWL_ 0001 ('Sublwatcher: Success!','SUCCESS',<msg>) .
 @     gto 0036 .
 @.
 @.    #  Start over and keep re-checking

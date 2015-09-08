@@ -21,16 +21,52 @@
 @.    #
 @.    #---------------------------------------------------------------------------------------------
 @.
-@.    # Test Setup
-@ rdb ldv,p <file>s256='%USERPROFILE%\sublwatcher\site-'netsit$'\test.sh' .
+@.    #  Read the remote origin
+@     ldv <file>s256='%USERPROFILE%\sublwatcher\site-'NETSIT$'\icebuild\1f100.BIS' .
+@     call,100,f,8 0050 (<file>,<repopath>s256,<status>h1)  .
+@     call,100,f,8 0065 (<repopath>,<unixappdir>s256) .
+@. @ rdb .  <unixappdir> <repopath>
 @     brk .
 #! /bin/bash
-cd /d/users/winne/sublwatcher/site-e/stripe/app/frontend
-git status
-read -p "Press enter to continue"
+echo ""
+echo "Read remote"
+echo ""
+cd <unixappdir>(p)
+git remote -v > stdout.txt
 @     brk .
-@     call 0001 (<file>,<status>h1) .
-@     gto end .
+@     ldv <batchfile>s256='%USERPROFILE%\sublwatcher\remote.bat' .
+@     call 0001 (<batchfile>,<status>h1) .
+@     if <status> eq 9  gto end . ; .
+@.
+@.    #  Read the stdout.txt from the output of the command above
+@     ldv <stdout>s256=<repopath>'\stdout.txt' .
+@     call,100,f,8 0070 (<stdout>,<status>h1) .  Read std out
+@.
+@. @.    # Test Setup (Git clone example)
+@. @ rdb ldv,p <file>s256='%USERPROFILE%\sublwatcher\site-'netsit$'\test.sh' .
+@. @     ldv,p <appname>s20=sublwatcher,<version>s16='1.0.0-beta' .
+@. @     brk .
+@. #! /bin/bash
+@. DIRECTORY=//MACH$/AppBuilds/USER$
+@. APPNAME=<appname>
+@. echo "Does $DIRECTORY/$APPNAME exist?"
+@. if [ ! -d "$DIRECTORY/$APPNAME" ]; then
+@.   cd $DIRECTORY
+@.   echo "Creating $DIRECTORY/$APPNAME"
+@.   git clone git@gitlab.galaxy.local:utilities/sublwatcher.git
+@. else
+@.   echo "It exists!"
+@. fi
+@. cd $DIRECTORY/$APPNAME
+@. echo "Fetching the latest changes"
+@. git fetch
+@. echo "Checking out $APPNAME branch: master"
+@. git checkout master -q
+@. @. cp -R <unixappdir>(p)/app/frontend/dist/<appname>(p)/* "//<server>(p)/assets/<appname>(p)"
+@. read -p "Press enter to continue"
+@. @     brk .
+@. @     call 0001 (<file>,<status>h1) .
+@. @     gto end .
 @.
 @0001:(<file>,<status>) .
 @     rnm -1 .
@@ -66,7 +102,7 @@ start "" "%BASH%" --login -i -c "%shellfile%"
 @     ldv,p <success>s80='%USERPROFILE%\sublwatcher\'<successfile> .
 @     ldv <time>i3 .
 @0015:pcr,0,f,-0,,,lin+1 <success>  gto 0020 .
-@     inc <time>  if <time> gt 480  ldv <status> eq 9  gto 0020 . ; .             max wait 4 minutes
+@     inc <time>  if <time> gt 60 gto 0182 . ; .             max wait 30 seconds
 @     dbg,,w,500 .
 @     gto 0015 .
 @.
@@ -79,8 +115,13 @@ start "" "%BASH%" --login -i -c "%shellfile%"
 @     call,GROWL_ 0001 ('sublwatcher: ultimate fail!','FAILED',<msg>) .
 @     gto 0199 .
 @.
-@0181:ldv <status>=9,<msg>s256='File '<file>' could not be written.' .
+@0181:ldv <status>=9,<msg>s256='File "'<file>(p)'" could not be written.' .
 @     call,GROWL_ 0001 ('sublwatcher: ultimate fail!','FAILED',<msg>) .
+@     gto 0199 .
+@.
+@0182:ldv <status>=9,<msg>s256='Could not read stdout.txt file... Gave up after 30 seconds...' .
+@     PC,bcw "del <success>" .                                                         Clean up file
+@     call,GROWL_ 0001 ('sublwatcher: fail!','FAILED',<msg>) .
 @     gto 0199 .
 @.
 @.    # Exit

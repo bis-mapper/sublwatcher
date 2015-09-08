@@ -12,15 +12,15 @@
 @.
 @.    # Test Setup
 @     ldv <msg>s80='Test pending message' .
-@     call,"growl" 0001 ('subwatcher: pending','pending',<msg>) .
+@     call,GROWL_ 0001 ('subwatcher: pending','pending',<msg>) .
 @.
 @     ldv <msg>s80='Test failure message' .
-@     call,"growl" 0001 ('Sublwatcher: Warning!','failed',<msg>) .
+@     call,GROWL_ 0001 ('Sublwatcher: Warning!','failed',<msg>) .
 @.
 @     ldv <msg>s80='Test success message' .
-@     call,"growl" 0001 ('sublwatcher: success!','success',<msg>) .
+@     call,GROWL_ 0001 ('sublwatcher: success!','success',<msg>) .
 @.
-@     rel .
+@     gto end .
 @.
 @0001:(<title>,<type>,<msg>) .
 @.

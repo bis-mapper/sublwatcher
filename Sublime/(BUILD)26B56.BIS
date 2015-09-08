@@ -126,7 +126,7 @@
 @.
 @.    # Build complete message
 @0100:ldv,u <appname> .
-@     ldv <msg>s80='Application: '<appname>(p)'\nBuild: '<ver>(p) .
+@     ldv <status>=0,<msg>s80='Application: '<appname>(p)'\nBuild: '<ver>(p) .
 @     call,GROWL_ 0001 ('Sublwatcher: Success!','SUCCESS',<msg>) .
 @.
 @.    #  Exit
