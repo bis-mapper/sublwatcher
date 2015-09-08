@@ -1,3 +1,13 @@
+## 1.0.2(BETA)
+  - Growl notification on save
+  - Bug fix with error routine not defined
+  - Removed config param <appbuilds>
+  - Lowered BASHEXEC_ timeout
+  - Fixed bug with error message in BASHEXEC_
+  - When exporting WARN if drawer description is blank
+  - Skip drawers with DUMPS in the description
+  - Change growl to use DEFINE instead of registered run.
+
 ## 1.0.0(BETA)
   - Allows DIFFs across different sites
   - No longer crashes when doing DIFF on non-existent file
