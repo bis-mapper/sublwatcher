@@ -25,7 +25,7 @@
 	  56 B   24    175 BIS                      Object Name: DIFF
 	  56 B   25     77 BIS                      Object Name: BDT
 	  56 B   26    174 BIS                      Object Name: BUILD
-	  56 B   27    999 BIS                      Object Name: SETUP+
+	  56 B   27   1006 BIS                      Object Name: SETUP+
 	  56 B   28    143 BIS                      Object Name: BASHEXEC
 	  56 B   29     37 BIS                      Object Name: GIT
 	  56 B   33    297 BIS                      Object Name: SUBLW

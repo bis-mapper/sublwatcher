@@ -111,6 +111,7 @@
 @     BRK  TXT,-0,2,2,<WIN1>,03,23,02,40,bla/whi <TXT3>i6 .
 @     FON,t,'Arial',09,pd .
 @     BRK,0,A .
+
  - Seamlessly edit MAPPER files in Sublime Text.
  - Modern programming environment compared to MPC.
  - Blazing fast file editing that doesn''t get in your way.
@@ -119,6 +120,7 @@
  This wizard will guide you through the steps
  required to install <PRD> on your system.
  To continue, click Next.
+
 @     BRK  TXT,-0,2,99,<WIN1>,08,23,09,62,bla/whi <TXT4>i6 .
 @     FON,t .
 @.
@@ -216,7 +218,7 @@
 @     LDV,rq <LLP>i5=<DAT>(<COL>-0),3(,) .
 @     LDV,lq <FLG>h5=<DAT>(<COL>-0),4(,) .
 @     LDV,lq <RDRW>h4=<DAT>(<COL>-0),5(,) .
-	<RUN>	<RPT>	<IOS>	<LLP>	<FLG>	<RDRW>
+	<RUN>	<RPT>	<IOS>	<LLP>	<FLG>	<RDRW>	
 @     GTO 0027 .
 @0028:.
 @     BRK  RNM -4 .
@@ -235,7 +237,7 @@
 @     LDV,qr <RCAB>i4=<DAT>(<COL>-0),3(,),\
              <RDRW>h1=<DAT>(<COL>-0),4(,),\
              <RRPT>i4=<DAT>(<COL>-0),5(,) .
-	<ECAB>	<EDRW>	<ERPT>	<RCAB>	<RDRW>	<RRPT>
+	<ECAB>	<EDRW>	<ERPT>	<RCAB>	<RDRW>	<RRPT>	
 @     GTO 0128 .
 @0129:BRK  RNM -7 .
 @     IF <STP> eq 2,(0029) ; .
@@ -253,12 +255,15 @@
 @     TXT,"Do you accept this Software License Agreement?",<MSG2> .
 @.
 @     BRK,0,A .
+
  IMPORTANT!  Please read the following information carefully.
  You must check the Accept box to continue; doing so means you
  agree to all terms stated in this Software License Agreement.
+
 @     BRK  TXT,-0,2,99,<TXTH> .
 @.
 @     BRK,0,A .
+
  Software License Agreement
  --------------------------
  Portions copyright © IT Resource Solutions (ITRS)
@@ -281,6 +286,7 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
+
 @     BRK  RNM -1 .
 @.
 @     FON,t,'Arial',08,pd .
@@ -397,7 +403,7 @@ fkey,10,''Quit  '',KEY
 @     LDV,p <DRN> .
 @     IF <DEF> eq 1  DEF,m <CAB>a4,<DRN>  DEF,a <DRW>h1,<DRN> ; .
 @     IF <DEF> eq 3  LDV <CAB>a4=<DRN>(2-0),<DRW>h1=<DRN>(1-1) ; .
-@     DRW,<CAB>,<DRW>,0044 <CHR>i3  IF <CHR> ne <CPL>,(0044) ; .
+@. @     DRW,<CAB>,<DRW>,0044 <CHR>i3  IF <CHR> ne <CPL>,(0044) ; .
 @.
 @     LDV,p <CAB> .
 @     MBX,YN,Q,'Confirmation' "/\
@@ -477,7 +483,7 @@ fkey,10,''Quit  '',KEY
 @     IF <DRW> ge 'B' & le 'I' . ; GTO 0192 .
 @     IF SYSNAM$(1-1) ne 'M'  DRW,<CAB>,<DRW>,0057 <CHR>i3 ; .
 @     IF SYSNAM$(1-1) eq 'M'  DRW,<CAB>,<DRW>,0057 <CHR>i3,<CS>i1 ; .
-@     IF <CHR> ne <CPL>,(0191) ; .
+@. @     IF <CHR> ne <CPL>,(0191) ; .
 @     IF SYSNAM$(1-1) eq 'M'  IF <CS> ne 1,(0192) ; .
 @     IF STAT1$ eq 0,(0056) ; .
 @.
