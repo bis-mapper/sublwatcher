@@ -258,7 +258,7 @@
 @     if <tmax> ge 980 gto 0061 . ; .
 @     inc <tmax>  ldv <bmax>i3=<tmax>  inc,18 <tmax>  .
 @.    #---   Test for heading divider line (*=) - Usually BINARY if none   -----
-@     fdr,-4,,0061 'A' 1-2 ,'*=' .
+@     fnd,-4,,0061 '' 2-2 *,'==' .
 @.
 @     cal,-4,<4hl>,<4nl> 'acl' <bmax>-18 ,a if:LIT(a)<>"                  ";
 @     lzr,-0 <0lns>i6,,<0hln>i6  if <0lns> gt <0hln> . ; gto 0061 .
