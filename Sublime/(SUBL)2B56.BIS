@@ -25,6 +25,14 @@
 @.    #  This happens when user enters SUBL on a given report
 @0005:ldv <cab>i4=cab$,<drw>h1=adrw$,<rpt>i4=rpt$ .                             Get RPT on display
 @     chg input$ <cmd>s100 .
+@     if <cab> eq 0,''  if <rpt> eq 0,'' . ; gto 0007 .
+@     brk,0,a .
+   #----------------------------------------------------------------#
+   #                                                                #
+   #     The SUBL command can only be used on an actual report.     #
+   #                                                                #
+   #----------------------------------------------------------------#
+@     if <call> eq y  return . ; gto end .
 @.
 @.    #  Load the application configuration variables from table
 @0007:rsr,SUBLCOMMON_ configVars_ .
