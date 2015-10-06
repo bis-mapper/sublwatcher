@@ -9,14 +9,41 @@
 @.    #  TODO Include examples and documentations
 @.    #  Written: 08/15/2013
 @.    #---------------------------------------------------------------------------------------------
+@. @.
+@. @.    # Test Setup
+@. @ rdb ldv <appname>s20='icebuild',<ctl>s80='export 100 -f '<appname> .
+@. @     ldv <file>s42='%USERPROFILE%\sublwatcher\site-'netsit$'\'<appname>'\'<appname>'\0f100.bis' .
+@. @     ldv <runname>s12='export' .
+@. @     call 0001 (<ctl>,<file>,<runname>,<status>h1) .
+@. @     GTO END .
+@. @.
 @.
-@.    # Test Setup
-@     ldv <ctl>s80='export 832 -fUmbrella' .
-@     ldv <file>s42='D\Users\winne\sublwatcher\site-e\umbrella\umbrella_test\2f832.bis' .
+@.    #===   Manual entrance   ===
+@     ldv <mcab>i4=cab$,<mdrw>h1=adrw$,<mrpt>i4=rpt$ .                            Get RPT on display
+@     if <mrpt>(p) eq '-0' gto lin+2 . ; .
+@     if <mcab> eq 0,''  if <mrpt> eq 0,'' . ; gto lin+6 .
+@     brk,0,a .
+#------------------------------------------------------------------------------#
+#          The EXPORT command can only be used on an actual report.            #
+#------------------------------------------------------------------------------#
+@     gto end .
+@.
+@     ldv <ctl>s80='export',<file>s30='(dummyfilename)'<mrpt>(p)<mdrw>(p)<mcab>(p)'.BIS' .
 @     ldv <runname>s12='export' .
 @     call 0001 (<ctl>,<file>,<runname>,<status>h1) .
-@     GTO END .
+@     if <status> eq 9 ldv <msg>s65='Cabinet drawer table 3g6 has blank description for cab: '<cab> .
+@     if <status> eq 8 ldv <msg>s65='FILE MISSING BIS EXTENSION!' .
+@     if <status> eq 7 ldv <msg>s65='Simple Export failed, more parameters needed!' .
+@     if <status> eq 0 ldv <msg>s65='Export Successful!' .
+@     brk,0,a .
+   #     <msg>(p)     #
+@     gto end .
 @.
+@.
+@.
+@.
+@.
+@.    #  Call entry point
 @0001:(<ctl>,<file>,<runname>,<status>) .
 @     rnm -1 .
 @.
@@ -34,6 +61,21 @@
 @     lzr,DEFLIST_,0004 .
 @     dvs,DEFLIST_,0004 'Define','Category' <def>s,<cat>s .
 @     ldv <*deflist>=y .
+@.
+@.
+@.
+@.    #=== Dis Dat NEW NEW ===
+@     if <ctl>(p) eq 'export','EXPORT','Export' . ; gto 0004 .
+@     def,s <sz>i3,<file>  dec,13 <sz>  .
+@     ldv,p <tmpa>s998=<file>  lcv,0181 '' <tmpa> '.BIS'/''  ldv,p <tmpa>,<tmpb>h9=<tmpa>(0-9) .
+@     lcv,lin+1 '' <tmpb> ')' <vpos>i2  inc <vpos>  ldv,p <tmpc>h9=<tmpb>(<vpos>-0),<tmpb>h9=<tmpc>
+@     call,SUBLCOMMON_ getCabDrwRpt_ (<tmpb>,<cab>i4,<drw>h1,<rpt>i4) .
+@     ldv,u <cab>,<drw>,<rpt> .
+@     fnd,200,b,4,,0182 '' 'CAB' ¬,<cab> ,<rln>i6 .
+@     rdl,200,b,4,<rln> 'CATEGORY' <catname>s .
+@     ldv <ctl>s80='export '<cab>(p)' -f '<catname> .
+@.
+@.
 @.
 @.    #  Read in <ctl> Control Line Input for what to Export
 @0004:lcv,0199 't@' <ctl> ' ' <vpos>i3  inc <vpos> .
@@ -55,6 +97,7 @@
 @     ldv <drawer>h11='0'<drw><cab>  call 0200 (<drawer>,<exist>h1) .
 @     if <exist> eq 0 . ; gto 0005 .
 @     drw,<cab>,<drw>,0005 ,,,,,<vhirptd>i4,,,,,,<folder>s26 .                  Drawer exist?
+@     if <folder> eq ' ' gto 0180 . ; .
 @     ldv <rpt>i4=-1 .
 @0007:inc <rpt>  if <rpt> gt <vhirptd>,(0005) .
 @     call 0100 (<pth>,<cab>,<drw>,<rpt>,<folder>,<program>s40,<epath>s256,<status>h1) .
@@ -129,6 +172,7 @@
 @.
 @0101:lcv,lin+1 '' <folder> 'PARAM'  ldv <status>=9  gto 0115 .
 @     lcv,lin+1 '' <folder> 'PAR'  ldv <status>=9  gto 0115 .
+@     lcv,lin+1 '' <folder> 'DUMPS'  ldv <status>=9  gto 0115 .
 @     if <rtype> eq 1 . ; gto lin+3 .                                           Binary report?
 @     rdl,<cab>,<drw>,<rpt>,2 2-20 <srvs>s .                                    Get name from report
 @     ldv,p <program>=<srvs>  gto lin+3 .
@@ -196,6 +240,19 @@
 @     pcw,-0,2 <file> .                                                         Write file
 @     return .
 @.
+@.
+@.    #  Error messages
+@0180:ldv <status>=9,<msg>s80='Cabinet drawer table 3g6 has blank description for cab: '<cab> .
+@     call,GROWL_ 0001 ('Sublwatcher: Error!','FAILED',<msg>) .
+@     return .
+@.
+@0181:ldv <status>=8,<msg>s80='FILE MISSING BIS EXTENSION!' .
+@     call,GROWL_ 0001 ('Sublwatcher: Error!','FAILED',<msg>) .
+@     return .
+@.
+@0182:ldv <status>=7,<msg>s80='Simple Export failed, more parameters needed!' .
+@     call,GROWL_ 0001 ('Sublwatcher: Error!','FAILED',<msg>) .
+@     return .
 @.
 @.    #  Show success message
 @0199:chg <err>i4 cerr$  lsm,<err> <msg>s88 .
