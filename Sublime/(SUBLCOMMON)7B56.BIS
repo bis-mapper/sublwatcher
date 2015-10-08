@@ -113,12 +113,10 @@
 @.    #  Get APPPATH if it exists
 @.    #  appPath_
 @0040:(<user>,<apppath>) .
-@.
-@.    #  Get computer name
-@     call,SUBLCOMMON_ getCompName_ (<computer>s30) .
-@     fdr,SUBLPATH_,,,lin+2 ' ' 'User ID','Computer Name' ¬,<user>,<computer> . Get Application Path
-@     rln 'apppath' <apppath>s  gto 0041 .                                      Sublime.Exe
-@     call,SUBLSETUP_ 0001 (<user>,<apppath>s256) .                             Setup
+@     pcr,0,i,-0,,,lin+1,t '%USERPROFILE%\sublwatcher\SUBLCONFIG.INF'  gto lin+3 .       File exist?
+@     call,SUBLSETUP_ 0001 (<user>,<apppath>s256) .                                   No? goto Setup
+@     gto lin-2 .
+@     call,SUBLCOMMON_ readConfigInf_ ('CONFIG','apppath',<apppath>s80) .
 @0041:return .
 @.
 @.    #  Get Windows Version
@@ -177,6 +175,48 @@
 @     lch,-1,,lin+1 'af' 1-<cc> <ns>/tab$  rnm -1 .
 @.
 @0059:return .
+@.
+@.    #---------------------------------------------------------------------------------------------
+@.    #  Read setup.inf data.
+@.    #
+@.    #  readConfigInf_
+@.    #
+@.    #  @     call,SUBLCOMMON_ readConfigInf_ (<key>,<nestedkey>,<value>s20) .
+@.    #
+@.    #  <key>        'revision'
+@.    #  <nestedkey>  'level'
+@.    #  <value>      '0.0.1'
+@.    #
+@.    #  [revision]
+@.    #  level=0.0.1
+@.    #  [name]
+@.    #  name=sample
+@.    #  [title]
+@.    #  title=
+@.    #  [drawers]
+@.    #  drawer=b,998,tables
+@.    #  drawer=c,132,lib
+@.    #  drawer=d,998,lib_tables
+@.    #  drawer=e,256,schema
+@.    #  drawer=f,132,sample
+@.    #  drawer=g,256,params
+@.    #  drawer=h,132,views
+@.    #  drawer=i,132,models
+@.    #
+@.    #---------------------------------------------------------------------------------------------
+@0060:(<key>,<nestedkey>,<value>) .
+@     ln+,-0,1,1  wrl,-0,2 2-1 *,= .
+@     def,p <keysz>i3,<key> .
+@     srh,-0,,,0061 dp 2-<keysz> [,<key>(p)] .
+@     loc,-0,4,0061 afm 1-79 <nestedkey> ,<lin>i4  dec,1 <lin> .
+@     inc <lin>  rdl,-0,<lin> 1-100 <dat>s .
+@     lcv,0061 '' <dat> '=' <col>i2  inc <col> .
+@     ldv <value>=<dat>(<col>-0) .
+@0061:return .
+@.
+@.
+@.
+@.
 @.
 @.    #  Errrrrrorrrr
 @0198:.

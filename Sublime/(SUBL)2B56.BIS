@@ -54,9 +54,10 @@
 @     call,SUBLCOMMON_ chkMkDir_ (<dir>,<fldr>,<fldrpath>) .
 @.
 @.    #  Read quick open flag
-@     call,SUBLCOMMON_ getCompName_ (<computer>s30) .
-@     fdr,SUBLPATH_,,,lin+2 ' ' 'User ID','Computer Name' ¬,<user>,<computer> . Get Application Path
-@     rln 'Quick Open' <quickopen>s .
+@     pcr,0,i,-0,,,lin+1,t '%USERPROFILE%\sublwatcher\SUBLCONFIG.INF'  gto lin+3 .       File exist?
+@     call,SUBLSETUP_ 0001 (<user>,<apppath>s256) .                                   No? goto Setup
+@     gto lin-2 .
+@     call,SUBLCOMMON_ readConfigInf_ ('CONFIG','quickopen',<quickopen>s8) .
 @     if <runinput> ne '<RUNINPUT>'  if <runinput>(p) eq 'q'  ldv <quickopen>s7='ENABLED' . ; .
 @.
 @.    Check if report exists, if not notify user and bail out.
