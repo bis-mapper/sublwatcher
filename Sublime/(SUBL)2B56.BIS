@@ -17,6 +17,7 @@
 @     if <run> eq '<RUN>',(0005) .                                              Normal or Call?
 @     ldv <call>h1=y,<dln>s0 .
 @     lcv,lin+1 '' <run> '-q'/ <qpos>i3  ldv <quick>h1='Y' .
+@     lcv,lin+1 '' <run> ' .'/ <qpos>i3  ldv <foldview>h1='Y' .
 @     call,SUBLCOMMON_ getCabDrwRpt_ (<run>,<cab>i4,<drw>h1,<rpt>i4) .
 @     ldv,u <cab>,<drw>,<rpt> .
 @     gto 0007 .
@@ -59,6 +60,7 @@
 @     gto lin-2 .
 @     call,SUBLCOMMON_ readConfigInf_ ('CONFIG','quickopen',<quickopen>s8) .
 @     if <runinput> ne '<RUNINPUT>'  if <runinput>(p) eq 'q'  ldv <quickopen>s7='ENABLED' . ; .
+@     if <runinput> ne '<RUNINPUT>'  if <runinput>(p) eq '.'  ldv <foldview>h1='Y' . ; .
 @.
 @.    Check if report exists, if not notify user and bail out.
 @     lzr,<cab>,<drw>,<rpt>,lin+1  gto 0011 .
@@ -83,9 +85,12 @@
 @     ldv <file>s256=<pth>(p)'\'<program> .
 @     gto 0015 .
 @0014:ldv <file>s256=<folder>(P)<program> .
-@0015:ldv,p <file> .
+@0015:ldv,p <file>,<fvpath>s998=<file> .
 @.
-@     rsl,<cab>,<drw>,<rpt> .                                                   Get result
+@     if <foldview> eq 'Y' lcv,0016 'B6' <fvpath> '\' <subpos>i3  . ; gto 0016 .
+@     pc,r "<apppath>(p) -a" "<fvpath>(1-<subpos>) " .
+@.
+@0016:rsl,<cab>,<drw>,<rpt> .                                                   Get result
 @     call,SUBLCOMMON_ charReplace_ ('export') .                                Replace tab character
 @     rnm -1 .
 @.
