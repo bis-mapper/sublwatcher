@@ -270,7 +270,7 @@
 @     if <tmax> ge 980 gto 0061 . ; .
 @     inc <tmax>  ldv <bmax>i3=<tmax>  inc,18 <tmax>  .
 @.    #---   Test for heading divider line (*=) - Usually BINARY if none   -----
-@     fnd,-4,,0061 '' 2-2 *,'==' ..
+@     fnd,-4,,0061 '' 2-1 *,'=' .
 @.
 @     cal,-4,<4hl>,<4nl> 'acl' <bmax>-18 ,a if:LIT(a)<>"                  ";
 @     lzr,-0 <0lns>i6,,<0hln>i6  if <0lns> gt <0hln> . ; gto 0061 .
@@ -302,6 +302,7 @@
 @.
 @0064:rep,-4,<cab>,<drw>,<rpt> .
 @     ulk .
+<<<<<<< HEAD
 @.
 @     if <event> eq 'added' . ; gto lin+4 .
 @     ldv <msg>s80='NEW File: '<rpt>(p)<drw>(p)<cab>(p)' added. Site: 'SITE$ .
@@ -310,6 +311,10 @@
 @.
 @     ldv <msg>s80='File: '<rpt>(p)<drw>(p)<cab>(p)' saved. Site: 'SITE$ .
 @     call,GROWL_ 0001 ('File Saved','SUCCESS',<msg>) .
+=======
+@     ldv <msg>s80='File: '<rpt>(p)<drw>(p)<cab>(p)' saved. Site: 'SITE$ .
+@     call,GROWL_ 0001 ('Sublwatcher: Success!','SUCCESS',<msg>) .
+>>>>>>> be654798bc66a8ac102dbd14e17b2daefd1cc524
 @     gto 0036 .
 @.
 @.    #  Start over and keep re-checking

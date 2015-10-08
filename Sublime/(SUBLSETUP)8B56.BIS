@@ -29,6 +29,9 @@
 @.
 @.    #  Prompt user to find Editor
 @     if <APPPATH> eq ' ' . ; gto 0005 .
+@     ldv,p <checkfile>s998='C:\Program Files\Sublime Text 3\sublime_text.exe' .
+@     pcf,s <checkfile>  if STAT1$ eq 0  . ; ldv <isdefault>h1='Y' .
+@     if <isdefault> eq 'Y'  gto 0005 . ; .
 @     MBX,OC,I,'SUBL' \
 "It looks like this is the first time running SUBL. //\
  In order to continue you need to set up your application path. //\
@@ -71,22 +74,32 @@
 @     CALL,EDRW$,0006 0001(<DEPNAME>,<PTX>s64,<PRG>s30,<STS>h3) .
 @     GTO LIN-2 .
 @.
+@     if <isdefault> eq 'Y'  LDV,p <APPPATH>=<checkfile> gto 0010 . ; .
 @.    #  Open windows explorer using MFXFILE.EXE
 @     if <APPPATH> eq ' ' . ; gto 0199 .
 @     LDV <ACT>h4=OPEN .
 @     CALL,EDRW$,0004 0001 (<ACT>,<PTH>s256,<FIL>s64,<SPT>s64,<SFL>h12,<TYP>h1,<STS>h3) .
 @.
 @     IF <STS> ne 'OK ',(0199) .
-@.
-@.    #  Save programe .exe path to SUBLPATH table
 @     LDV,p <APPPATH>=<PTH>(p)'\'<FIL>(p) .
-@     FDR,SUBLPATH_ '' 'User ID','Computer Name' ¬,<USER>,<COMPUTER> ,<LNS>i3 .
-@     LOK,SUBLPATH_ .
-@     IF <LNS> gt 0 . ; LN+,SUBLPATH_,,1  LDV <LNS>i7=STAT1$ .
-@     WRL,SUBLPATH_,<LNS>,y 'User ID','Computer Name','App Path' ¬,\
-        <USER>,<COMPUTER>,<APPPATH> .
-@     ULK .
+@.
+@0010:brk,0,a  .                                                               CREATE SUBLCONFIG.INF
+[CONFIG]
+ quickopen = DISABLED
+ apppath   = <APPPATH>
+@     brk  rnm -6 .
+@     pcw,-6,2 '%USERPROFILE%\sublwatcher\SUBLCONFIG.INF' .
 @.
 @0199:. -------------------------- Termination ---------------------------------
 @.
 @     RETURN .
+
+
+@.
+@.
+@.
+@.
+@0100:(<USER>,<APPPATH>) .                                                      Delete, remake file!
+@     pc,bcw "del %USERPROFILE%\sublwatcher\SUBLCONFIG.INF" .
+@     CALL 0001(<USER>,<APPPATH>s256) .
+@     return .

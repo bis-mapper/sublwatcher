@@ -60,7 +60,9 @@
 @     RDL,-0,7,lin1  1-10,13-5 <DATE>h,<TIME>h  GTO lin+2 .
 @     LDV <DTIME>h0,<D2DATE>h0  GTO 0010 .
 @     DC D2=D16(<DATE>) <D2DATE>h9 .
-@     LDV <DTIME>h8=<TIME>':00' .
+@     if time$ lt 12:00:00 <addhours>i1=0 . ; <addhours>i2=12 .
+@     CHG <hrs>i2 <TIME>(1-2) + <addhours> .
+@     LDV <DTIME>h8=<hrs>(z)<TIME>(3-0)':00' .
 @.
 @.    #  Check if run was etnered.  Otherwise just use local copy
 @0010:IF <PRUN> eq '',' ' . ; GTO 0015 .
@@ -82,13 +84,23 @@
 
 @0012:
 @     net,,<psite>,user$,depn$ .
-@     nrd,<cab>,<drw>,<rpt>,0,i,,lin+1  gto lin+4.
+@     nrd,<cab>,<drw>,<rpt>,0,i,-15,lin+1  gto lin+4.
 @     LDV <MSG>s256='Could not locate remote file '<RPT>(p)<DRW><CAB>(p) .
 @     CALL,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<MSG>) .
 @     GTO 0199 .
+@.    #--- Get HeaderLine
+@     ldv,p <vinfo>h12='<info>s80',<vdata>h12='<info>' .
+@     nrn "@brk,0,a   rdl,<cab>,<drw>,<rpt>,1 1-80 <vinfo>"  <neterror>s160 .
+@     nrn,0099 "<vdata>" .
+@     nrn,0099 "@brk" .
+@     nrd,0,a,-0,0,a,-16,lin+1  gto lin+4 .     read result back to local system
+@     LDV <MSG>s256='Failed to read headline from '<PRPT>(p)<PDRW><PCAB>(p) .
+@     CALL,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<MSG>) .
+@     GTO 0199 .
 @     nof .
+@     rsl,-15 .
 
-@     RDL,-0,1 1-80 <INFO>s .                                    Get time and date
+@     RDL,-16,2 1-80 <INFO>s .                                                     Get time and date
 @     CALL,SUBLCOMMON_ charReplace_ ('export') .                               Replace tab character
 @     RNM -1 .
 @     DUP,-1,0,I .
@@ -119,13 +131,23 @@
 @.    #  This will do a diff from the current report and the report entered.
 @0017:
 @     net,,<psite>,user$,depn$ .
-@     nrd,<pcab>,<pdrw>,<prpt>,0,i,,lin+1  gto lin+4.
+@     nrd,<pcab>,<pdrw>,<prpt>,0,i,-15,lin+1  gto lin+4.
 @     LDV <MSG>s256='Could not locate remote file '<PRPT>(p)<PDRW><PCAB>(p) .
 @     CALL,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<MSG>) .
 @     GTO 0199 .
+@.    #--- Get HeaderLine
+@     ldv,p <vinfo>h12='<info>s80',<vdata>h12='<info>' .
+@     nrn "@brk,0,a   rdl,<cab>,<drw>,<rpt>,1 1-80 <vinfo>"  <neterror>s160 .
+@     nrn,0099 "<vdata>" .
+@     nrn,0099 "@brk" .
+@     nrd,0,a,-0,0,a,-16,lin+1  gto lin+4 .     read result back to local system
+@     LDV <MSG>s256='Failed to read headline from '<PRPT>(p)<PDRW><PCAB>(p) .
+@     CALL,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<MSG>) .
+@     GTO 0199 .
 @     nof .
+@     rsl,-15 .
 
-@     RDL,-0,1 1-80 <INFO>s .                                    Get time and date
+@     RDL,-16,2 1-80 <INFO>s .                                                     Get time and date
 @     CALL,SUBLCOMMON_ charReplace_ ('export') .                               Replace tab character
 @     RNM -1 .
 @     DUP,-1,0,I .
@@ -150,8 +172,8 @@
 @     FDR,-3,<TLN> '' 2-4 .,'DATE' ,<DLN2>i3 .
 @     CHG <TLN>i3 <DLN2> + 1 .
 @     FDR,-3,<TLN> '' 2-4 .,'DATE' ,<DLN3>i3 .
-@     WRL,-3,<DLN2> 20-8,34-4,38-1,42-9 .,<DTIME>,<RPT>,<DRW>(U),<D2DATE> .
-@     WRL,-3,<DLN3> 1-80 .,<INFO> .
+@     WRL,-3,<DLN2> 1-80 .,<INFO> .
+@     WRL,-3,<DLN3> 20-8,34-4,38-1,42-9 .,<DTIME>,<RPT>,<DRW>(U),<D2DATE> ..
 @.
 @.    #  Clean up temp files
 @     DLR,0,I,<LOCALRPT> .
