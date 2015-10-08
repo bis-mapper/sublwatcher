@@ -93,7 +93,7 @@
 @.    #  Watch for chgs file
 @0034:dbg,,w,<delay>(p) .
 @     pcr,0,I,-0,n,n,0010 <chgsfile> .                                          File Exist?
-@     rnm -5  lzr,-5 <lns>i7,,<lnh>i7 .
+@     rnm -5  lzr,-5 <lns>i7,<icc>i4,<lnh>i7 .
 @     if <lns> gt <lnh> . ; gto 0010 .                                          Look for changes
 
 @.    #  Get field sizes for logging
@@ -111,12 +111,18 @@
              <inp4>s40=<data>,7(,),\
              <inp5>s40=<data>,8(,) .
 @.
-@.    #  Start BisBug Debugging Session
-@     lcv,lin+2 '' <file> 'BisBug' ,<occ>i3 .                                   Check for BisBug
-@.    BR <bisbug> .
+@.    #  Git Hooks Section
+@.    #  Will take hook result and convert it into CSV format
+@.    #  Give user option to load programs or skip
+@.    #  Status 0 eq loop back up and load programs
+@.    #  Status 9 cancel action and delete changes file
+@     rdl,-5,2 1-11 <gitinput>s .
+@     if <gitinput> eq 'BISGITHOOKS' . ; gto 0037 .
+@     call,SUBLGITHOOKS_ 0001 (<status>h1) .
+@     if <status> eq 0  rnm -5  lzr,-5 <lns>i7,,<lnh>i7  gto 0036 . ; gto 0070 .
 @.
 @.    #  Start BisCmd
-@     ldv <biscmd>h1=n .
+@0037:ldv <biscmd>h1=n .
 @     if <event> eq 'BisCmd' . ; gto 0040 .
 @     ldv <biscmd>h1=y .
 @     if <inp1> gt '' . ; gto 0038 .
@@ -147,10 +153,11 @@
 @     call,SUBLCOMMON_ getCabDrwRpt_ (<run>,<cab>i4,<drw>h1,<rpt>i4) .
 @.
 @.    #  Logging
+@     if <input> eq '<input>'  ldv <input>s0 . ; .
 @     DFU SUBLOG_ .
 @     ln+,SUBLOG_,,1  ldv <wln>i7=stat1$ .
-@     wrl,SUBLOG_,<wln>,Y 'Event','Report','User','Date','Time','File','Object' \
-        ¬,<event>,<run>,user$,date11$,time$,<file>,<obj> .
+@     wrl,SUBLOG_,<wln>,Y 'Event','Report','User','Date','Time','File','Object','Input' \
+        ¬,<event>,<run>,user$,date11$,time$,<file>,<obj>,<input>(p) .
 @     cmu .
 @.
 @     if <biscmd> eq 'y',(0036) .                                               Wait for next event
@@ -168,7 +175,8 @@
 @     gto 0036 .
 @.
 @.    #  Retrieve the file and clear attribute again
-@0047:pcr,0,I,-0,n,n,0034 <file>  gto 0048 .
+@0047:if <input> eq 'git-hook'  if <event> eq 'deleted'  gto 0049 . ; .
+@     pcr,0,I,-0,n,n,0034 <file>  gto 0048 .
 @     if stat1$ eq 1 \
         ldv <msg>s80='The file has been deleted' .
 @     if stat1$ eq 2 \
@@ -186,7 +194,7 @@
 @.
 @.    #=============================================================================================
 @.    #===   CHECK IF RID IS LOCKED FOR EITHER READ OR WRITE, IF SO PROMPT BEFORE CONTINUE   =======
-@     lzr,<cab>,<drw>,<rpt> ,,,,,,,<vrpw>h6,<vwpw>h6 .
+@0049:lzr,<cab>,<drw>,<rpt> ,,,,,,,<vrpw>h6,<vwpw>h6 .
 @     if 'LOCKED' eq <vrpw>,<vwpw> . ; gto 0051 .
 @     ldv <msg>s256='This rid contains either a read or write password. ',\
           <msg>=<msg>(p)' Waiting for input...' .
@@ -211,7 +219,8 @@
 @.
 @.    #=============================================================================================
 @.    #=== CHECK IF NEW MAPPER RID, ALLOW RID TO BE CREATED   ======================================
-@0053:lzr,<cab>,<drw>,<rpt>,lin+1  ldv <exists>h1='Y'  gto 0055 .
+@0053:if <input> eq 'git-hook'  if <event> eq 'added'  gto 0061 . ; .
+@     lzr,<cab>,<drw>,<rpt>,lin+1  ldv <exists>h1='Y'  gto 0055 .
 @     ldv <exists>h1='N' .
 @     ldv <msg>s256='This file does not exist in Mapper.',\
           <msg>=<msg>(p)'Waiting for input...' .
@@ -252,11 +261,17 @@
 @     call,BISCMD_ 0001 (<file>,<diffCmd>,<status>h1) .
 @     gto 0055 .
 @.
+@.    #  Skip ahead for git-hooks
+@0058:if <input> eq 'git-hook'  if <event> eq 'deleted'  gto 0063 . ; .
+@.
 @.    #=============================================================================================
 @.    #===   NOTIFICATION FOR UPDATES OUT OF REPORT BOUNDS!   ======================================
-@0058:lzr,<cab>,<drw>,<rpt> ,<tmax>i3  lzr,-4 <4nl>i6,,<4hl>i6  .
+@     lzr,<cab>,<drw>,<rpt> ,<tmax>i3  lzr,-4 <4nl>i6,,<4hl>i6  .
 @     if <tmax> ge 980 gto 0061 . ; .
 @     inc <tmax>  ldv <bmax>i3=<tmax>  inc,18 <tmax>  .
+@.    #---   Test for heading divider line (*=) - Usually BINARY if none   -----
+@     fnd,-4,,0061 '' 2-2 *,'==' ..
+@.
 @     cal,-4,<4hl>,<4nl> 'acl' <bmax>-18 ,a if:LIT(a)<>"                  ";
 @     lzr,-0 <0lns>i6,,<0hln>i6  if <0lns> gt <0hln> . ; gto 0061 .
 @     pcw,-0 <datadir>'\ExceededBoundaries.txt' .   TESTING WHAT IS OUTPUT
@@ -276,8 +291,25 @@
 @     ldv <msg>s80='Updating of report '<rpt>(p)<drw>(p)<cab>(p)' is in progress...' .
 @     call,GROWL_ 0001 ('Sublwatcher: Warning!','FAILED',<msg>) .
 @     gto 0036 .
-@0063:rep,-4,<cab>,<drw>,<rpt> .
+@.
+@.
+@0063:if <event> eq 'deleted' . ; gto 0064 .
+@     dlr,<cab>,<drw>,<rpt> .
 @     ulk .
+@     ldv <msg>s80='File: '<rpt>(p)<drw>(p)<cab>(p)' deleted. Site: 'SITE$ .
+@     call,GROWL_ 0001 ('File Deleted','DELETED',<msg>) .
+@     gto 0036 .
+@.
+@0064:rep,-4,<cab>,<drw>,<rpt> .
+@     ulk .
+@.
+@     if <event> eq 'added' . ; gto lin+4 .
+@     ldv <msg>s80='NEW File: '<rpt>(p)<drw>(p)<cab>(p)' added. Site: 'SITE$ .
+@     call,GROWL_ 0001 ('New File Saved','SUCCESS',<msg>) .
+@     gto 0036 .
+@.
+@     ldv <msg>s80='File: '<rpt>(p)<drw>(p)<cab>(p)' saved. Site: 'SITE$ .
+@     call,GROWL_ 0001 ('File Saved','SUCCESS',<msg>) .
 @     gto 0036 .
 @.
 @.    #  Start over and keep re-checking

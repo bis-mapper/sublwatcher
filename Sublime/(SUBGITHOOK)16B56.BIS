@@ -1,0 +1,118 @@
+.Object Name: SUBGITHOOK
+.
+.
+.
+*
+*
+*===================================================================================================
+:INCLUDE,ecab$,B,1 .                                                            INCLUDE
+@.
+@.    #---------------------------------------------------------------------------------------------
+@.    #  SUBLGITHOOK
+@.    #  Written: 10/02/2015
+@.    #---------------------------------------------------------------------------------------------
+@.
+@.    #TEST SETUP#
+@     brk .
+BISGITHOOKS
+post-checkout
+d:/Users/winne/sublwatcher/site-x/edgitapp
+*=
+M¬app/models/(ContactForm)3I80.BIS
+@     brk .
+@     rdl,-0,2 1-11 <var>s .
+@     if <var> eq 'BISGITHOOKS' . ; gto lin+2 .
+@     call 0001 (<status>h1) .
+@     dsp,-0 .
+@     gto end .
+@.
+@0001:(<status>) .
+@     rnm -1 .
+@.
+@     SUBLRER_ .
+@.
+@     rsr,SUBLCOMMON_ configVars_ .
+@     call,SUBLCOMMON_ getChgsFile_ (<appdir>,<chgsfile>s256) .
+@.
+@     lzr,-1 ,<cc>i4 .
+@     rdl,-1,3 1-80 <hooktype>s .
+@     rdl,-1,4 1-100 <repopath>s .
+@     ldv,p <repopath> .
+@     fdr,-1,,,lin1 '' 2-1 *,= ,<fln>i7  inc <fln> .
+@.
+@.    #
+@.    #  The following output is generated when a post-checkout hook occurs.
+@.    #  Within the .git/hooks/post-checkout program it does the following:
+@.    #
+@.    #  git diff --name-status $refPrevHEAD $refNewHEAD
+@.    #
+@.    #  The outcome of this statement generates a result of the files that changed from the
+@.    #  branch you were on to the branch you're switching too.
+@.    #
+@.    #  Some possible outcomes are
+@.    #  M¬filepath/filename.BIS
+@.    #  D¬filepath/filename.BIS
+@.    #  A¬filepath/filename.BIS
+@.    #
+@.    #  The first column is the status indicator.  It signifies whether the file was
+@.    #  (A) added, (M) modified, or (D) removed.
+@.    #
+@     if <hooktype> eq 'post-checkout','post-merge' . ; gto 0000 .
+@     brk,0,f .
+*s.
+*t.file
+*=.=================================================================================================
+@     rdc,-1,<fln> 1-<cc> <cmdoutput>s .
+¬<cmdoutput>
+@     brk .
+@     rnm -2 .
+@.
+@.    # We need to convert the git diff output from above into a CSV string so SUBLWATCHER can
+@.    # pick up the contents and change the files if we choose to.
+@.    #
+@.    # Example SUBLWATCHER CSV string
+@.    # modified,D:\Users\winne\sublwatcher\site-x\sublwatcher\Sublime\(SUBLGITHOOK)16B56.bis, file, BisSaveBuild
+@.    #
+@     brk,0,f .  brk .
+@     rnm -3 .
+@.
+@     lzr,-2 ,,<ghln>i7 .
+@0005:inc <ghln>  rdl,-2,<ghln>,0010 'st','file' <gitstatus>h,<gitfile>s .
+@     ldv,p <file>s256=<repopath>'/'<gitfile> .                                  Load full file path
+@     lcv '' <file> '/'/'\' .
+@     if <gitstatus> eq 'A','M','D' . ; gto xxx .
+@     if <gitstatus> eq 'A'  ldv,p <fstatus>s20='added' . ; .
+@     if <gitstatus> eq 'M'  ldv,p <fstatus>s20='modified' . ; .
+@     if <gitstatus> eq 'D'  ldv,p <fstatus>s20='deleted' . ; .
+@     ldv,p <sublstring>s998=<fstatus>','<file>', file, git-hook' .
+@     ln+,-3,,1,,<sublstring> .
+@     gto 0005 .
+@.
+@0010:pc,bnw "del <chgsfile>(p)" .                                              Clean up file
+@     ldv <msg>s256=<hooktype>(p)' hook detected!  Please verify if you want to sync the changes' .
+@     call,GROWL_ 0001 ('GIT HOOK','PENDING',<msg>) .
+@     lzr,-2 ,,<ghln>i7 .
+@     mbx,YN,Q,'GIT HOOK WAS DETECTED' \
+"A git <hooktype>(p) hook was detected. //\
+ Site:   netsit$  //\
+ Repository: <repopath>(p) //\
+ File changes within the local git directory were detected. //\
+ Please refer to Git <hooktype>(p) hook output for //\
+ files that will be (A)added, (M)modified, or (D)deleted. //\
+ // \
+ Sync these changes within BIS?//" Y,(lin1),N,(0197) .
+@     ldv <status>=0 .
+@     gto 0199 .
+@.
+@0197:ldv <status>=9 .
+@     gto 0199 .
+@.
+@.    #  Output Growl error message
+@0198:.
+@     chg <err>i4 cerr$  lsm,<err> <msg>s88 .
+@     if <msg> eq ' '  ldv <msg>='That request cannot be processed' .
+@     call,GROWL_ 0001 ('BISCMD Failed','FAILED',<msg>) .
+@.
+@.    # Close window
+@0199:rsl,-3 .
+@     return .
