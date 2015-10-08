@@ -259,6 +259,7 @@
 @     if <msg> eq ' ' . ; gto lin+3 .
 @     ldv <msg>s80='Export Complete!',<status>=0 .
 @     call,GROWL_ 0001 ('Sublwatcher: Success!','SUCCESS',<msg>) .
+@     pc,r "<apppath>(p) -a" "<datadir>\<catname> " .
 @.
 @.    # Exit
 @     return .
