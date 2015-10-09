@@ -1,33 +1,34 @@
 .Object Name: TOC
-*    .D.    .      .   .                    .                                                                               .
-*Cab .w.Rpt .Lines .Typ.Name                .Title                                                                          .
-*====.=.====.======.===.====================.===============================================================================.
+*    .D.    .      .   .                    .                                                                               .Update   .Update  .Replace  .Last       .
+*Cab .w.Rpt .Lines .Typ.Name                .Title                                                                          .Date     .Time    .Date     .User       .
+*====.=.====.======.===.====================.===============================================================================.=========.========.=========.===========.
 	  56 B    0     39 BIS
-	  56 B    1     40 BIS                      Object Name: DEFINES
-	  56 B    2    101 BIS                      Object Name: SUBL
-	  56 B    3    299 BIS                      Object Name: SUBLWATCHER
-	  56 B    4    153 BIS                      Object Name: FILESELECT
-	  56 B    5     26 BIS                      Object Name: REPOSPATH
-	  56 B    6     72 BIS                      Object Name: LOADPROG
-	  56 B    7    185 BIS                      Object Name: SUBLCOMMON
-	  56 B    8     93 BIS                      Object Name: SUBLSETUP
-	  56 B    9     52 BIS                      Object Name: DSPWAITMSG
-	  56 B   10    100 BIS                      Object Name: DSPMSGBOX
-	  56 B   11     78 BIS                      Object Name: IBLD
-	  56 B   12    185 BIS                      Object Name: REGXXX
-	  56 B   13     44 BIS                      Object Name: ReportZero
-	  56 B   14     65 BIS                      Object Name: SUBLCMD
-	  56 B   15     55 BIS                      Object Name: SUBLBUG
-	  56 B   17     24 BIS                      Object Name: SUBLCTL
-	  56 B   18     34 BIS                      Object Name: SBS
-	  56 B   20    222 BIS                      Object Name: EXPORT
-	  56 B   22     45 BIS                      Object Name: GROWL
-	  56 B   24    175 BIS                      Object Name: DIFF
-	  56 B   25     77 BIS                      Object Name: BDT
-	  56 B   26    174 BIS                      Object Name: BUILD
-	  56 B   27   1006 BIS                      Object Name: SETUP+
-	  56 B   28    143 BIS                      Object Name: BASHEXEC
-	  56 B   29     37 BIS                      Object Name: GIT
-	  56 B   33    297 BIS                      Object Name: SUBLW
-	  56 B   99     77 BIS                      Object Name: SUBLERRDUMP_
-	  56 B  200    104 BIS                      Object Name: TESTER
+	  56 B    1     41 BIS                                                                                                                10:38:14 09 OCT 15 ED
+	  56 B    2    118 BIS SUBL                 SUBL                                                                                      08:02:13 08 OCT 15 JOSH
+	  56 B    3    329 BIS SUBLWATCHER          SUBLWATCHER                                                                     06 OCT 15 13:16:38 06 OCT 15 ED
+	  56 B    4    153 BIS FILESELECT           FILESELECT                                                                                11:04:19 23 JAN 15 ED
+	  56 B    5     26 BIS REPOSPATH            REPOSPATH                                                                                 16:05:20 06 JAN 15 ED
+	  56 B    6     72 BIS LOADPROG             LOADPROG                                                                                  13:08:33 23 JUN 15 ED
+	  56 B    7    225 BIS SUBLCOMMON           SUBLCOMMON                                                                                16:21:08 07 OCT 15 JOSH
+	  56 B    8    106 BIS SUBLSETUP            SUBLSETUP                                                                                 16:22:31 07 OCT 15 JOSH
+	  56 B    9     52 BIS DSPWAITMSG           DSPWAITMSG                                                                                11:04:21 23 JAN 15 ED
+	  56 B   10    100 BIS DSPMSGBOX            DSPMSGBOX                                                                                 08:56:08 13 MAY 15 ED
+	  56 B   11     78 BIS IBLD                 IBLD                                                                                      10:17:18 18 MAY 15 JOSH
+	  56 B   12    185 BIS REGXXX               REGXXX                                                                                    10:17:36 18 MAY 15 JOSH
+	  56 B   13     44 BIS ReportZero           ReportZero                                                                                09:32:58 20 MAY 15 JOSH
+	  56 B   14     65 BIS SUBLCMD              SUBLCMD                                                                                   09:36:53 02 OCT 15 ED
+	  56 B   15     55 BIS SUBLBUG              SUBLBUG                                                                                   10:13:01 18 MAY 15 JOSH
+	  56 B   16    119 BIS SUBGITHOOK           SUBGITHOOK                                                                                14:38:28 06 OCT 15 ED
+	  56 B   17     24 BIS SUBLCTL              SUBLCTL                                                                                   11:03:54 23 JAN 15 ED
+	  56 B   18     34 BIS SBS                  SBS                                                                                       11:04:05 23 JAN 15 ED
+	  56 B   20    273 BIS EXPORT               EXPORT                                                                                    10:04:34 08 OCT 15 JOSH
+	  56 B   22     45 BIS GROWL                GROWL                                                                                     10:20:08 04 SEP 15 ED
+	  56 B   24    197 BIS DIFF                 DIFF                                                                                      08:13:29 08 OCT 15 JOSH
+	  56 B   25     77 BIS BDT                  BDT                                                                                       13:30:24 20 MAY 15 JOSH
+	  56 B   26    171 BIS BUILD                BUILD                                                                                     10:15:47 09 OCT 15 ED
+	  56 B   27   1006 BIS SETUP+               SETUP+                                                                                    16:53:17 08 SEP 15 ED
+	  56 B   28    143 BIS BASHEXEC             BASHEXEC                                                                                  12:15:46 04 SEP 15 ED
+	  56 B   29     37 BIS GIT                  GIT                                                                                       10:17:14 18 MAY 15 JOSH
+	  56 B   33    329 BIS SUBLW                SUBLW                                                                           06 OCT 15 13:16:49 06 OCT 15 ED
+	  56 B   99     77 BIS SUBLERRDUMP_         SUBLERRDUMP_                                                                              10:34:43 06 JUL 15 ED
+	  56 B  200    104 BIS TESTER               TESTER                                                                                    11:43:01 29 MAY 15 JOSH

@@ -1,17 +1,16 @@
 .Object Name: TOC
-*    .D.    .      .   .                    .                                                                               .
-*Cab .w.Rpt .Lines .Typ.Name                .Title                                                                          .
-*====.=.====.======.===.====================.===============================================================================.
-	  56 C    0     39 BIS
-	  56 C    1     16 BIS
-	  56 C    2     29 BIS                      Object Name: SUBLCONFIG
-	  56 C    3     23 BIS                      Object Name: SUBLPATH
-	  56 C    4     14 BIS                      Object Name: BIN-FILES
-	  56 C    6    403 BIS                      Object Name: MESSAGES
-	  56 C    8  35754 BIS                      Object Name: SUBL-LOG
-	  56 C    9     19 BIS                      Object Name: SUBLUTILS
-	  56 C   10      8 BIS                      Object Name: GROWL-APPS
-	  56 C   11     10 BIS                      Object Name: GROWL-ALERTS
-	  56 C   12      5 BIS                      Object Name: TOC
-	  56 C   13      8 BIS                      Object Name: SUBL-LOG-TEMP
-	  56 C   14      6 BIS                      Object Name: SUBLPATH-TEMP
+*    .D.    .      .   .                    .                                                                               .Update   .Update  .Replace  .Last       .
+*Cab .w.Rpt .Lines .Typ.Name                .Title                                                                          .Date     .Time    .Date     .User       .
+*====.=.====.======.===.====================.===============================================================================.=========.========.=========.===========.
+	56   C    0     39 BIS
+	56   C    1     16 BIS                                                                                                      21 MAY 14 14:32:49 21 MAY 14 MAPCOORD
+	56   C    2     29 BIS SUBLCONFIG           SUBLCONFIG                                                                                16:56:06 08 SEP 15 ED
+	56   C    4     15 BIS BIN-FILES            BIN-FILES                                                                       05 OCT 15 15:08:54 14 MAY 15 ED
+	56   C    6    403 BIS MESSAGES             MESSAGES                                                                                  16:29:09 06 JAN 15 ED
+	56   C    8  37262 BIS SUBL-LOG             SUBL-LOG                                                                        09 OCT 15 10:38:10 06 JAN 15 ED
+	56   C    9     19 BIS SUBLUTILS            SUBLUTILS                                                                       16 JAN 15 15:24:34 13 JAN 15 ED
+	56   C   10      8 BIS GROWL-APPS           GROWL-APPS                                                                                16:26:31 06 JAN 15 ED
+	56   C   11     11 BIS GROWL-ALERTS         GROWL-ALERTS                                                                    05 OCT 15 15:09:19 14 MAY 15 ED
+	56   C   12      5 BIS TOC                  TOC                                                                                       16:26:55 06 JAN 15 ED
+	56   C   13      8 BIS SUBL-LOG-TEMP        SUBL-LOG-TEMP                                                                             16:27:48 06 JAN 15 ED
+	56   C   14      6 BIS SUBLPATH-TEMP        SUBLPATH-TEMP                                                                             16:27:52 06 JAN 15 ED

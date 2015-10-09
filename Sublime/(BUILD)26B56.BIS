@@ -36,7 +36,7 @@
 @     pcr,0,I,-0,n,n,0181 <file>  rnm -2 .
 @.
 @.    #  Which build?  External ; SUBLWATCHER
-@     if <cab> ne ECAB$ . ; ldv <appname>s20='sublwatcher' gto 0002 .
+@     if <cab> ne ECAB$ . ; ldv <appname>s20='sublwatcher' .      gto 0002 .
 @     call,"BUILD" 0001 (<cab>,<file>,<pth>,<rev>,<appname>s20,<ver>h16,<bldstatus>h1) .
 @     if <bldstatus> eq 9  gto 0199 . ; .
 @     gto 0100 .
@@ -55,11 +55,11 @@
 @     inc <vpos1>  dec <mnsz>  ldv <minor>I3=<ver>(<vpos1>-<mnsz>) .       GET MINOR REVESION NUMBER
 @     dec <vpos1>  ldv <major>I3=<ver>(1-<vpos1>)  inc <vpos1> .           GET MAJOR REVESION NUMBER
 @     inc <vpos2>  ldv <patch>I3=<ver>(<vpos2>-0) .                        GET PATCH REVESION NUMBER
-@. @     if <rev> eq MAJOR  inc <major>  ldv <minor>=0,<patch>=0 .
-@. @     if <rev> eq MINOR  inc <minor>  ldv <patch>=0 .
-@. @     if <rev> eq PATCH  inc <patch> .
-@. @     ldv,p <newver>h16=<major>(P)'.'<minor>(P)'.'<patch>(P) .      SAVE THE NEW VERSION NUMBER
-@. @     ldv,p <ver>h16=<newver> .
+@     if <rev> eq MAJOR  inc <major>  ldv <minor>=0,<patch>=0 .
+@     if <rev> eq MINOR  inc <minor>  ldv <patch>=0 .
+@     if <rev> eq PATCH  inc <patch> .
+@     ldv,p <newver>h16=<major>(P)'.'<minor>(P)'.'<patch>(P) .      SAVE THE NEW VERSION NUMBER
+@     ldv,p <ver>h16=<newver> .
 @.
 @.    #  Start SETUP.INF result
 @     brk .
@@ -123,9 +123,6 @@
 [RUNS]
  Run             = SUBLWATCHER,3,,,NYNWN,B
  Run             = SUBL,2,,,NYNWN,B
-[DATABASE]
- Report          = 56,C,3,56,C,14
- Report          = 56,C,8,56,C,13
 @     brk .
 @     add,-0,-1 .
 @     rnm -1 .

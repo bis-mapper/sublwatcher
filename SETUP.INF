@@ -1,27 +1,17 @@
-
 [REVISION]
- Level           = 1.0.3
+ Level           = 1.0.11
 [NAME]
  Name            = sublwatcher
 [TITLE]
  Title           = bis file watching utility / ide envrionment
 [CONFIG]
- IceEnabled      = n
+ IceEnabled      = N
  IBldApp         = n
  AppImage        =
- AppCab          =   56
-[DATABSES]
- Location        = 8,c,56,Log DB
- Location        = 3,c,56,Users DB
+ AppCab          = 56
 [DRAWERS]
  Drawer          = B,132,Sublime
  Drawer          = C,256,Sublime - Tables
  Drawer          = D,132,Sublime - Vendor
  Drawer          = E,132,Sublime - Executables
  Drawer          = I,256,Sublime - Error Dumps
-[RUNS]
- Run             = SUBLWATCHER,3,,,NYNWN,B
- Run             = SUBL,2,,,NYNWN,B
-[DATABASE]
- Report          = 56,C,3,56,C,14
- Report          = 56,C,8,56,C,13

@@ -1,4 +1,4 @@
-.Object Name: SETUP+
+.Object Name: SETUP.RUN
 .REV: 1.0    DATE: 20140415
 *===============================================================================
 *  SETUP+ Installation Package                                                 *
@@ -10,996 +10,929 @@
 *  will assume no liability for defects or problems resulting from its use.    *
 *===============================================================================
 @.
-@     RER,0,E,2 0001  RAR 0196 .
-@.dbg LDV <*PTH>s256='D:\users\winne\sublwatcher\site-e\sublwatcher\setup.run' .
-@     CALL 0001() .
-@     IF CDRW$ ne 0  ESR ; IF LINK$ ne 0,(END) ; REL .
+@     rer,0,E,2 0001  rar 0196 .
+@. @     ldv <*PTH>s256='D:\users\winne\sublwatcher\site-e\admin\setup.run' .
+@     call 0001() .
+@     if cdrw$ ne 0  esr ; if link$ ne 0,(END) ; rel .
 @.
 @0001:() .
-@.
+@     gto lin+3 .
+@0002:(<pth>,<deploy>,<cab>) .
+@     ldv,pu <*pth>s256=<pth>,<*deploy>h1=<deploy>  ldv <*cab>i4=<cab> .
 @. -------------------------- Module Initialization ----------------------------
 @.
-@     BRK  RNM -8  DLR,-8 .
+@. @     rdb,progtested .
+@     brk  rnm -8  dlr,-8 .
 @.
-@     LDV <WIN1>i6=0 .
-@     CSR .
-@     RSR,0,E,2  0100 .
-@     RER,0,E,2  0001 .
+@     ldv <win1>i6=0 .
+@     rer,56,b,0099 0001 .
 @.
-@     LDV,p <PRD>h12=SUBLWATCHER . <PRD> contains Product name
-@     LDV <OVR>h1=N .
-@     LDV <GEN>h1=Y .
-@     LDV <PTQ>h1=Y .
-@     LDV <PTH>s256 .
-@     LDV,pw <DPT>a4=MSTRD$ .
+@     ldv,p <app>s20='' .
+@     ldv,u <app>(1-1) .
+@     ldv <ovr>h1=N .
+@     ldv <gen>h1=Y .
+@     ldv <ptq>h1=Y .
+@     ldv <pth>s256 .
+@     ldv,pw <dpt>a4=mstrd$ .
 @.
 @. ----------------------- Check System & Level Info ---------------------------
 @.
-@     IF WS$ eq 0,(0180) ; .
-@     IF DWCAP$(9-1) ne 1,(0181) ; .
-@     IF SYSNAM$(1-1) eq 'M'  IF MAPER$(1-2) lt 37,(0181) ; .
-@     IF CPRIV$ eq 0,(0182) ; .
-@     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+3 .
-@     FDR,USRDRW$,DEPN$,,,0183 '' 'USER' 	,USER$ .
-@     RLN 46-1 <X>h  IF <X> ne '',(0183) ; .
+@     if <*deploy> eq 'y'  ldv <stp>i1=2  gto 0009 . ; .
+@     if ws$ eq 0,(0180) ; .
+@     if dwcap$(9-1) ne 1,(0181) ; .
+@     if sysnam$(1-1) eq 'M'  if maper$(1-2) lt 37,(0181) ; .
+@     if cpriv$ eq 0,(0182) ; .
+@     if sysnam$(1-1) eq 'M' . ; gto lin+3 .
+@     fdr,usrdrw$,depn$,,,0183 '' 'USER' 	,user$ .
+@     rln 46-1 <x>h  if <x> ne '',(0183) ; .
 @.
 @. --------------------------- Initialize Screen -------------------------------
 @.
-@     LDV <STP>i1=0 .
-@     SC q cs .
-@     MNU,t MENUBAR,"",,'' .
+@     ldv <stp>i1=0 .
+@     sc q cs .
+@     mnu,t MENUBAR,"",,'' .
 @     HID .
-@     FON,r .
-@     IF DWCAP$(12-1) eq 0 . ; GTO lin+2 .
-@     FON,r,'Terminal',11,pd .
-@     IF DWCAP$(12-1) eq 1 . ; GTO lin+3 .
-@     FON,r,'Terminal',11,p,lin+1  GTO lin+2 .
-@     FON,r,'MAPPER Standard',11,pd .
-@     FON,t .
-@     WIN,,01,01,01,01,,h '' <WIN1>i6  CLS,<WIN1>  LDV <WIN1>=0 .
+@     fon,r .
+@     if dwcap$(12-1) eq 0 . ; gto lin+2 .
+@     fon,r,'Terminal',11,pd .
+@     if dwcap$(12-1) eq 1 . ; gto lin+3 .
+@     fon,r,'Terminal',11,p,lin+1  gto lin+2 .
+@     fon,r,'MAPPER Standard',11,pd .
+@     fon,t .
+@     win,,01,01,01,01,,h '' <win1>i6  cls,<win1>  ldv <win1>=0 .
 @.
 @. -------------------------- Display Wizard Screen ----------------------------
 @.
-@     LDV,p <B>h1=b,<3>h1  IF DWCAP$(13-1) eq 1  LDV <B>h1=3,<3>h1=3 ; .
-@     LDV <WID>i3=62,<HGT>i2=30 .
-@     IF SCNV$ lt <HGT> . ; GTO lin+5 .
-@     MBX,OK,E,'Recommendation' "/\
+@     ldv,p <b>h1=b,<3>h1  if dwcap$(13-1) eq 1  ldv <b>h1=3,<3>h1=3 ; .
+@     ldv <wid>i3=62,<hgt>i2=30 .
+@     if scnv$ lt <hgt> . ; gto lin+5 .
+@     mbx,OK,E,'Recommendation' "/\
  Please maximize your window to/\
  better utilize this installation wizard." \
       O,(lin+1) .
-@     CHG <ROW>i3 SCNV$ - <HGT> // 2  IF <ROW> lt 2  LDV <ROW>=2 ; .
-@     CHG <COL>i3 SCNH$ - <WID> // 2 + 1 .
-@     WIN,,<ROW>,<COL>,<HGT>,<WID>,lgra,bc <PRD>' Setup Wizard' <WIN1>i6 .
-@     TXT,"",<WIN1>,01,01,05,62,bla/whi,b<3> .
-@     FON,t,'Arial',09,pdb .
-@     TXT,"",<WIN1>,02,04,01,80,bla/whi <MSG1>i6 .
-@     FON,t,'Arial',09,pd .
-@     TXT,"",<WIN1>,04,06,01,80,bla/whi <MSG2>i6 .
-@     FON,t,'Arial',08,pd .
-@     TXT,"SETUP+ Installation Tools",<WIN1>,29,01,02,32,gra/lgra,c .
-@     TXT,"(c) John Thalhuber Associates",<WIN1>,30,01,02,32,gra/lgra,c .
-@     FON,t,'Arial',08,pdb .
-@     BTN,<WIN1>,28,24,02,08 'Read Me' <READ>i6  HID,<READ> .
-@     BTN,<WIN1>,28,34,02,08 '< Back' <BACK>i6 .
-@     BTN,<WIN1>,28,42,02,08 'Next >' <NEXT>i6 .
-@     BTN,<WIN1>,28,52,02,08 'Quit'   <EXIT>i6 .
-@     TIP," View the README file ",<READ> .
-@     TIP," Go back to the previous step ",<BACK> .
-@     TIP," Proceed with the installation process ",<NEXT> .
-@     TIP," Exit without installing this product ",<EXIT> .
+@     chg <row>i3 scnv$ - <hgt> // 2  if <row> lt 2  ldv <row>=2 ; .
+@     chg <col>i3 scnh$ - <wid> // 2 + 1 .
+@     win,,<row>,<col>,<hgt>,<wid>,lgra,bc <app>' Setup Wizard' <win1>i6 .
+@     txt,"",<win1>,01,01,05,62,bla/whi,b<3> .
+@     fon,t,'Arial',09,pdb .
+@     txt,"",<win1>,02,04,01,80,bla/whi <msg1>i6 .
+@     fon,t,'Arial',09,pd .
+@     txt,"",<win1>,04,06,01,80,bla/whi <msg2>i6 .
+@     fon,t,'Arial',08,pd .
+@     txt,"SETUP+ Installation Tools",<win1>,29,01,02,32,gra/lgra,c .
+@     txt,"(c) John Thalhuber Associates",<win1>,30,01,02,32,gra/lgra,c .
+@     fon,t,'Arial',08,pdb .
+@     btn,<win1>,28,24,02,08 'Read Me' <read>i6  hid,<read> .
+@     btn,<win1>,28,34,02,08 '< Back' <back>i6 .
+@     btn,<win1>,28,42,02,08 'Next >' <next>i6 .
+@     btn,<win1>,28,52,02,08 'Quit'   <exit>i6 .
+@     tip," View the README file ",<read> .
+@     tip," Go back to the previous step ",<back> .
+@     tip," Proceed with the installation process ",<next> .
+@     tip," Exit without installing this product ",<exit> .
 @.
-@     BRK,0,A  BRK  LN+,-0,1,1 .
-@     FON,t,'Arial',09,pd .
-@     TXT,-0,2,99,<WIN1>,07,06,16,85,bla/lgra <TXTH>i6 .
-@     FON,t .
+@     brk,0,A  brk  ln+,-0,1,1 .
+@     fon,t,'Arial',09,pd .
+@     txt,-0,2,99,<win1>,07,06,16,85,bla/lgra <txth>i6 .
+@     fon,t .
 @.
-@     IF <*PTH> ne '<*PTH>'  LDV,p <PTX>s256=<*PTH>  GTO 0024 ; .
+@0009:if <*PTH> ne '<*PTH>'  ldv,p <ptx>s256=<*PTH>  gto 0024 ; .
 @.
 @0010:. ------------------------ Welcome Screen --------------------------------
 @.
-@     LDV <STP>i1=1 .
+@     ldv <stp>i1=1 .
 @.
-@     TXT,"",<WIN1>,01,01,25,62,bla/whi,<B> <TXT1>i6 .
-@     TXT,"",<WIN1>,01,01,25,20,bla <TXT2>i6 .
-@     LDV <PIC1>i6=0 .
-@     IF <PTX> ne '<PTX>'  IF <PTX> gt ' ' . ; GTO lin+2 .
-@     PIC,,,,,<PTX>'\DOCS\IMAGES\SUBLIME.JPG',<WIN1>,05,05,-1,-1 '' <PIC1>i6 .
-@     FON,t,'Arial',14,pd .
-@     BRK,0,A .
- Welcome to the <PRD>
- Setup Wizard
-@     BRK  TXT,-0,2,2,<WIN1>,03,23,02,40,bla/whi <TXT3>i6 .
-@     FON,t,'Arial',09,pd .
-@     BRK,0,A .
-
- - Seamlessly edit MAPPER files in Sublime Text.
- - Modern programming environment compared to MPC.
- - Blazing fast file editing that doesn''t get in your way.
- - Easily extend, customize, and configure.
- _____________________________________________
+@     txt,"",<win1>,01,01,25,62,bla/whi,<b> <txt1>i6 .
+@     txt,"",<win1>,01,01,25,20,bla <txt2>i6 .
+@     ldv <pic1>i6=0 .
+@     if <ptx> ne '<PTX>'  if <ptx> gt ' ' . ; gto lin+2 .
+@     lzr,-0 .
+@     fon,t,'Arial',14,pd .
+@     brk,0,A .
+ Welcome to the <app>
+ Package Manager
+@     brk  txt,-0,2,2,<win1>,03,23,02,40,bla/whi <txt3>i6 .
+@     fon,t,'Arial',09,pd .
+@     brk,0,A ._
  This wizard will guide you through the steps
- required to install <PRD> on your system.
+ required to install <app> on your system.
  To continue, click Next.
-
-@     BRK  TXT,-0,2,99,<WIN1>,08,23,09,62,bla/whi <TXT4>i6 .
-@     FON,t .
+@     brk  txt,-0,2,99,<win1>,08,23,09,62,bla/whi <txt4>i6 .
+@     fon,t .
 @.
-@     IF <PTH> ne ''  SHW,<READ> . ; HID,<READ> .
-@     BTN,<BACK>,,,,,,g '< Back' .
-@     BTN,<NEXT> 'Next >' .
-@     LDV <FOC>i6=<NEXT> .
+@     if <pth> ne ''  shw,<read> . ; hid,<read> .
+@     btn,<back>,,,,,,g '< Back' .
+@     btn,<next> 'Next >' .
+@     ldv <foc>i6=<next> .
 @0011:.
-@     INP,<FOC>,,<WIN1> .
-@     IF ACTINP$ eq <NEXT>,(0012) ; .
-@     IF ACTINP$ eq <READ>  PC,bcw "START <PTH>\readme.txt" ; .
-@     IF ACTINP$ eq <EXIT>,(0198) ; .
-@     GTO 0011 .
+@     inp,<foc>,,<win1> .
+@     if actinp$ eq <next>,(0012) ; .
+@     if actinp$ eq <read>  pc,bcw "START <pth>\readme.txt" ; .
+@     if actinp$ eq <exit>,(0198) ; .
+@     gto 0011 .
 @0012:.
-@     CLS,<PIC1>,<TXT1>,<TXT2>,<TXT3>,<TXT4> .
+@     cls,<pic1>,<txt1>,<txt2>,<txt3>,<txt4> .
 @.
-@     IF <PTQ> eq 'N',(0030) ; .
+@     if <ptq> eq 'N',(0040) ; .
 @.
 @0020:. ------------------- Specify Installation Path --------------------------
 @.
-@     LDV <STP>i1=2 .
+@     ldv <stp>i1=2 .
 @.
-@     LDV,p <PTX>s256=<PTH>  IF <PTX> eq ''  LDV,p <PTX>s3='D:\' ; .
-@     TXT,"Installation Path",<MSG1> .
-@     TXT,"Where are you loading the product from?",<MSG2> .
+@     ldv,p <ptx>s256=<pth>  if <ptx> eq ''  ldv,p <ptx>s3='D:\' ; .
+@     txt,"Installation Path",<msg1> .
+@     txt,"Where are you loading the product from?",<msg2> .
 @.
-@     BRK,0,A .
+@     brk,0,A .
  You must specify the drive or directory containing
- the <PRD> product software ( i.e., D:\ ).
+ the <app> product software ( i.e., D:\ ).
  To continue, click Next.
-@     BRK  TXT,-0,2,99,<TXTH> .
+@     brk  txt,-0,2,99,<txth> .
 @.
-@     TXT,"",<WIN1>,14,08,07,47,lgra,<B> <TXT1>i6 .
-@     FON,t,'Arial',08,pd .
-@     TXT,"Installation Media Path",<WIN1>,16,11,01,24,bla/lgra <TXT2>i6 .
-@     FON,t .
-@     EDT,"<PTX>",<WIN1>,17,11,01,41,bla/whi,b<3>h <EDT1>i6 .
+@     txt,"",<win1>,14,08,07,47,lgra,<b> <txt1>i6 .
+@     fon,t,'Arial',08,pd .
+@     txt,"Installation Media Path",<win1>,16,11,01,24,bla/lgra <txt2>i6 .
+@     fon,t .
+@     edt,"<ptx>",<win1>,17,11,01,41,bla/whi,b<3>h <edt1>i6 .
 @.
-@     BTN,<BACK> '< Back' .
-@     BTN,<NEXT> 'Next >' .
-@     LDV <FOC>i6=<EDT1> .
+@     btn,<back> '< Back' .
+@     btn,<next> 'Next >' .
+@     ldv <foc>i6=<edt1> .
 @0021:.
-@     INP,<FOC>,,<WIN1> .
-@     IF ACTINP$ eq <NEXT>,(0023) ; .
-@     IF ACTINP$ eq <EDT1>,(0023) ; .
-@     IF ACTINP$ eq <BACK>,(0022) ; .
-@     IF ACTINP$ eq <EXIT>,(0198) ; .
-@     GTO 0021 .
+@     inp,<foc>,,<win1> .
+@     if actinp$ eq <next>,(0023) ; .
+@     if actinp$ eq <edt1>,(0023) ; .
+@     if actinp$ eq <back>,(0022) ; .
+@     if actinp$ eq <exit>,(0198) ; .
+@     gto 0021 .
 @0022:.
-@     CLS,<TXT1>,<TXT2>,<EDT1> .
-@     GTO 0010 .
+@     cls,<txt1>,<txt2>,<edt1> .
+@     gto 0010 .
 @0023:.
-@     INP,<EDT1>,Y .
-@     CHG INPUT$ <PTX>s256  LDV,p <PTX> .
+@     inp,<edt1>,Y .
+@     chg input$ <ptx>s256  ldv,p <ptx> .
 @0024:.
-@     SYS .
-@     SRH,-0,,,lin+1 '' 'RUNNAME' 	,<PRD>  GTO 0195 .                   running?
-@     DEF,s <SIZ>i3,<PTX>  IF <SIZ> ge 9 . ; GTO lin+2 .
-@     IF <PTX>(0-9) eq 'SETUP.RUN'  LDV <PTX>(0-9)=''  LDV,p <PTX> ; .
-@     IF <PTX> ne ''  IF <PTX>(0-1) eq '\'  LDV <PTX>(0-1)=''  LDV,p <PTX> ; .
-@     IF <PTX> eq '',(0184) ; .
-@     LDV <X>h7='/*?"<>|'  DEF,s <N>i3,<X> .
-@     LCV,0184 n <PTX> <X>(<N>-1)  DEC <N>  IF <N> gt 0,(lin-0) ; .
-@     DEF,s <SIZ>i3,<PTX>  IF <SIZ> gt 1,(lin+2) ; .
-@     IF <PTX> ge 'A' & le 'Z'  LDV <DRV>h1=<PTX>,<PTX>h2=<DRV>':' ; .
-@     PCR,0,A,-0,,,0185 <PTX>'\'  RNM -1 .
-@     FND,-1,,0185 a 2-11 S,ETUP.INF .
-@     PCR,0,A,-0,,,0185 <PTX>'\'SETUP.INF  RNM -2 .
-@     LN+,-2,1,1  WRL,-2,2 2-1 *,= .
-@     SRH,-2,,,0185 dp 2-8 [,DRAWERS] .
-@     SRH,-0,,,0185 dp 2-6 ,Drawer <DCNT>i2 .
-@     RNM -6 .
-@     IF <DRWA> eq '<DRWA>'  LDA <DRWA>h1[<DCNT>]  LDV <CNT>i2=0 . ; .
-@     LOC,-0,4,0185 afm 2-79 Drawer ,<LIN>i4  DEC,2 <LIN> .
-@0025:INC <LIN>,<CNT>  RDL,-6,<LIN>,0026 1-80 <DAT>s .
-@     LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
-@     LDV,lq <DDRW>h1=<DAT>(<COL>-0),0(,),\
-             <CPL>i3=<DAT>(<COL>-0),1(,),\
-             <DNM>s26=<DAT>(<COL>-0),2(,) .
-@     LDA <DRWA>[<CNT>]=<DDRW> .
-@     PCR,0,F,-0,,,0185 <PTX>'\'<DNM>(p)'\TOC.TXT' .
-@     GTO 0025 .
+@     def,s <siz>i3,<ptx>  if <siz> ge 9 . ; gto lin+2 .
+@     if <ptx>(0-9) eq 'SETUP.RUN'  ldv <ptx>(0-9)=''  ldv,p <ptx> ; .
+@     if <ptx> ne ''  if <ptx>(0-1) eq '\'  ldv <ptx>(0-1)=''  ldv,p <ptx> ; .
+@     if <ptx> eq '',(0184) ; .
+@     ldv <x>h7='/*?"<>|'  DEF,s <n>i3,<x> .
+@     lcv,0184 n <ptx> <x>(<n>-1)  dec <n>  if <n> gt 0,(lin-0) ; .
+@     def,s <siz>i3,<ptx>  if <siz> gt 1,(lin+2) ; .
+@     if <ptx> ge 'A' & le 'Z'  ldv <drv>h1=<ptx>,<ptx>h2=<drv>':' ; .
+@     if <*deploy> eq 'Y' \
+        ret,0,a,n,n,0185 <ptx>'\'SETUP.INF . ; \
+        pcr,0,f,-0,,,0185 <ptx>'\'SETUP.INF .
+@     rnm -2 .
+@     ln+,-2,1,1  wrl,-2,2 2-1 *,= .
+@     srh,-2,,,0185 dp 2-8 [,DRAWERS] .
+@     srh,-0,,,0185 dp 2-6 ,Drawer <dcnt>i2 .
+@     rnm -6 .
+@     rsl,-2  call 0170 ('CONFIG','IBldApp',<ibldapp>h4) .
+@     rsl,-2  call 0170 ('CONFIG','IceEnabled',<iceapp>h4) .
+@     rsl,-2  call 0170 ('CONFIG','AppCab',<appcab>i4) .
+@     ldv,p <ibldapp>,<iceapp> .
+@     if <drwa> eq '<DRWA>'  lda <drwa>h1[<dcnt>]  ldv <cnt>i2=0 . ; .
+@     loc,-6,4,0185 afm 2-79 Drawer ,<lin>i4  dec,2 <lin> .
+@0025:inc <lin>,<cnt>  rdl,-6,<lin>,0026 1-80 <dat>s .
+@     lcv,0185 '' <dat> '=' <col>i2  inc <col> .
+@     ldv,lq <ddrw>h1=<dat>(<col>-0),0(,),\
+             <cpl>i3=<dat>(<col>-0),1(,),\
+             <dnm>s26=<dat>(<col>-0),2(,) .
+@     lda <drwa>[<cnt>]=<ddrw> .
+@     if <ddrw> eq 'G'  gto 0025 . ; .
+@.
+@.    #  ICE BUILD Applications
+@     if <ibldapp> eq y . ; gto 0125 .
+@     if <ddrw> eq 'B'  ldv,p <appfolder>s20='db',<subfolder>s20='tables' . ; .
+@     if <ddrw> eq 'C'  ldv,p <appfolder>s20='lib',<subfolder>s20='internal' . ; .
+@     if <ddrw> eq 'D'  ldv,p <appfolder>s20='lib',<subfolder>s20='tables' . ; .
+@     if <ddrw> eq 'E'  ldv,p <appfolder>s20='db',<subfolder>s20='schema' . ; .
+@     if <ddrw> eq 'F'  ldv,p <appfolder>s20='app',<subfolder>s20='controllers' . ; .
+@     if <ddrw> eq 'H'  ldv,p <appfolder>s20='app',<subfolder>s20='views' . ; .
+@     if <ddrw> eq 'I'  ldv,p <appfolder>s20='app',<subfolder>s20='models' . ; .
+@     if <*deploy> eq 'y' \
+        ret,0,f,n,n,0185 <ptx>'\'<appfolder>'\'<subfolder>'\TOC.TXT' . ; \
+        pcr,0,F,-0,,,0185 <ptx>'\'<appfolder>'\'<subfolder>'\TOC.TXT' .
+@     gto 0025 .
+@.
+@.    #  Standard applications
+@0125:if <*deploy> eq 'y' \
+        ret,0,f,n,n,0185 <ptx>'\'<dnm>(p)'\TOC.TXT' . . ; \
+        pcr,0,f,-0,,,0185 <ptx>'\'<dnm>(p)'\TOC.TXT' .
+@     gto 0025 .
 @0026:.
-@     BRK,0,A .
+@     if <iceapp> eq 'N' gto 0126 . ; .
+@     if <*deploy> eq 'y' \
+        ret,0,f,n,n,0178 <ptx>'\SVCTBL.TXT' \
+        ret,0,f,n,n,0179 <ptx>'\CTGTBL.TXT' . ; \
+        pcr,0,F,-0,,,0178 <ptx>'\SVCTBL.TXT' \
+        pcr,0,F,-0,,,0179 <ptx>'\CTGTBL.TXT' .
+@0126:ldv,p <pth>s256=<ptx> .
+@     brk,0,A .
 .
 *
 * Run Name   .Rpt .I/O  .LLP   1MDNF.RDRW.
 *============.====.=====.=====.=====.====.
-@     SRH,-2,,,0028 dp 2-8 [,RUNS]  LDV <LIN>i6=3 .
-@0027:INC <LIN>  LOC,-0,<LIN>,0028 afm 2-79  RUN ,<LIN> .
-@     RDL,-0,<LIN> 1-80 <DAT>s  LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
-@     LDV,lq <RUN>h12=<DAT>(<COL>-0),0(,) .
-@     LDV,rq <RPT>i4=<DAT>(<COL>-0),1(,) .
-@     LDV,rq <IOS>i5=<DAT>(<COL>-0),2(,) .
-@     LDV,rq <LLP>i5=<DAT>(<COL>-0),3(,) .
-@     LDV,lq <FLG>h5=<DAT>(<COL>-0),4(,) .
-@     LDV,lq <RDRW>h4=<DAT>(<COL>-0),5(,) .
-	<RUN>	<RPT>	<IOS>	<LLP>	<FLG>	<RDRW>	
-@     GTO 0027 .
+@     srh,-2,,,0028 dp 2-8 [,RUNS]  ldv <lin>i6=3 .
+@0027:inc <lin>  loc,-0,<lin>,0028 afm 2-79  run ,<lin> .
+@     rdl,-0,<lin> 1-80 <dat>s  lcv,0185 '' <dat> '=' <col>i2  inc <col> .
+@     ldv,lq <run>h12=<dat>(<col>-0),0(,) .
+@     ldv,rq <rpt>i4=<dat>(<col>-0),1(,) .
+@     ldv,rq <ios>i5=<dat>(<col>-0),2(,) .
+@     ldv,rq <llp>i5=<dat>(<col>-0),3(,) .
+@     ldv,lq <flg>h5=<dat>(<col>-0),4(,) .
+@     ldv,lq <rdrw>h4=<dat>(<col>-0),5(,) .
+	<run>	<rpt>	<ios>	<llp>	<flg>	<rdrw>	
+@     gto 0027 .
+@     brk  rnm -4 .
 @0028:.
-@     BRK  RNM -4 .
-@     LDV,p <PTH>s256=<PTX> .
-@     BRK,0,A .
+@     brk,0,A .
 .
-*     E.    .    .R.    .
-*ECab d.ERpt.RCab.d.RRpt.
-*====.=.====.====.=.====.
-@     SRH,-2,,,0129 dp 2-8 [,DATABASE]  LDV <LIN>i6=3 .
-@0128:INC <LIN>  LOC,-0,<LIN>,0129 afm 2-79 Report ,<LIN> .
-@     RDL,-0,<LIN>,0129 1-80 <DAT>s  LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
-@     LDV,qr <ECAB>i4=<DAT>(<COL>-0),0(,),\
-             <EDRW>h1=<DAT>(<COL>-0),1(,),\
-             <ERPT>i4=<DAT>(<COL>-0),2(,) .
-@     LDV,qr <RCAB>i4=<DAT>(<COL>-0),3(,),\
-             <RDRW>h1=<DAT>(<COL>-0),4(,),\
-             <RRPT>i4=<DAT>(<COL>-0),5(,) .
-	<ECAB>	<EDRW>	<ERPT>	<RCAB>	<RDRW>	<RRPT>	
-@     GTO 0128 .
-@0129:BRK  RNM -7 .
-@     IF <STP> eq 2,(0029) ; .
-@     LDV <PTQ>h1=N .
-@     GTO 0010 .
+*     d.    .    .
+*Cab  r.BRpt.ERpt.
+*====.=.====.====.
+@     srh,-2,,,0129 dp 2-8 [,DATABASES]  ldv <lin>i6=3 .
+@0128:inc <lin>  loc,-0,<lin>,0129 afm 2-79 Location ,<lin> .
+@     rdl,-0,<lin>,0129 1-80 <dat>s  lcv,0185 '' <dat> '=' <col>i2  inc <col> .
+@     ldv,lq <dbrpts>h11=<dat>(<col>-0),0(,),\
+             <dbdrw>h1=<dat>(<col>-0),1(,),\
+             <dbcab>i4=<dat>(<col>-0),2(,),\
+             <dbdesc>s40=<dat>(<col>-0),3(,) .
+@     lcv,lin1 'b1' <dbrpts> '-' <dpos>i3  ldv <mult>h1='Y'  gto lin+2 .
+@     ldv <mult>h1='N' .
+@     if <mult> eq 'N' \
+        ldv <begrpt>i4=<dbrpts>,<endrpt>i4=<dbrpts> . ; \
+        dec <dpos>    ldv <begrpt>i4=<dbrpts>(1-<dpos>) \
+        inc,2 <dpos>  ldv <endrpt>i4=<dbrpts>(<dpos>-0) .
+	<dbcab>(r)	<dbdrw>	<begrpt>	<endrpt>	
+@     gto 0128 .
+@0129:brk  rnm -7 .
+@     if <stp> eq 2,(0029) ; .
+@     ldv <ptq>h1=N .
+@     gto 0010 .
 @0029:.
 @.
-@     CLS,<TXT1>,<TXT2>,<EDT1> .
+@     if <*deploy> eq 'y' . ; cls,<txt1>,<txt2>,<edt1> .
 @.
-@0030:. --------------------- Display License Agreement ------------------------
+@0040:. ------------------- Ice Registration Info ------------------------------
 @.
-@     LDV <STP>i1=3 .
+@     if <iceapp> eq 'N'  ldv <cab>i4=<appcab>  gto lin+3 . ; .
+@     fdr,3950,d,1,,,0044 '' 'Category' 	,<app>  rln 'SvcCab' <cab>i .
+@     ldv,p <cab> .
 @.
-@     TXT,"Software License Agreement",<MSG1> .
-@     TXT,"Do you accept this Software License Agreement?",<MSG2> .
-@.
-@     BRK,0,A .
-
- IMPORTANT!  Please read the following information carefully.
- You must check the Accept box to continue; doing so means you
- agree to all terms stated in this Software License Agreement.
-
-@     BRK  TXT,-0,2,99,<TXTH> .
-@.
-@     BRK,0,A .
-
- Software License Agreement
- --------------------------
- Portions copyright © IT Resource Solutions (ITRS)
- Permission has been granted by ITRS for use of their software in this package.
- Copying or reuse of that software is prohibited without the expressed consent
- of ITRS.
- The MIT License (MIT)
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
-
-@     BRK  RNM -1 .
-@.
-@     FON,t,'Arial',08,pd .
-@     LDV <CLR>h3=whi  IF DWCAP$(13-1) eq 1  LDV <CLR>h6=E8E8E8 ; .
-@     WIN,<WIN1>,12,06,09,52,<CLR>,c '' <WIN2>i6 .
-@     FON,t,'Arial',08,pdb .
-@     LST,-1,5,Y,license.txt,<WIN2>,01,01,00,00,dblu/<CLR>,m '' .
-@     BTN,<WIN1>,23,50,02,08 'Display' <BTN1>i6 .
-@     BTN,<WIN1>,23,06,02,32,bla/lgra,ac(0) \
-      'Accept Software License Agreement' <CHK1>i6 .
-@     FON,t .
-@     IF DWCAP$(12-1) eq 1 . ; GTO lin+2 .
-@     TIP," Display license agreement text as a result ",<BTN1> .
-@.
-@     SHW,<READ> .
-@     BTN,<BACK> '< Back' .
-@     BTN,<NEXT>,,,,,,g 'Next >' .
-@     LDV <FOC>i6=<BTN1> .
-@0031:.
-@     INP,<FOC>,,<WIN1> .
-@     IF ACTINP$ eq <CHK1>,(0033) ; .
-@     IF ACTINP$ eq <NEXT>,(0035) ; .
-@     IF ACTINP$ eq <BTN1>,(0034) ; .
-@     IF ACTINP$ eq <BACK>,(0032) ; .
-@     IF ACTINP$ eq <READ>  PC,bcw "START <PTH>\README.MD" ; .
-@     IF ACTINP$ eq <EXIT>,(0198) ; .
-@     GTO 0031 .
-@0032:.
-@     CLS,<WIN2>,<CHK1>,<BTN1>,<PIC1> .
-@     TXT," ",<MSG1> .
-@     TXT," ",<MSG2> .
-@     HID,<READ> .
-@     IF <PTQ> eq 'Y',(0020) ; GTO 0010 .
-@0033:.
-@     IF INPUT$ eq 0 . ; GTO lin+3 .
-@     BTN,<NEXT>,,,,,,g 'Next >' .
-@     LDV <FOC>i6=<CHK1> .
-@     IF INPUT$ ne 0 . ; GTO lin+3 .
-@     BTN,<NEXT> 'Next >' .
-@     LDV <FOC>i6=<NEXT> .
-@     GTO 0031 .
-@0034:.
-@     BRK,0,A .
-fkey,01,''      '',KEY
-fkey,04,''Return'',KEY
-fkey,10,''Quit  '',KEY
-@     BRK  FKY,-0 .
-@     SC q CS .
-@     HID .
-@     DSP,-1 .
-@     SC q CS .
-@     SHW .
-@     FKY .
-@     IF FKEY$ eq 10,(0198) ; .
-@     GTO 0031 .
-@0035:.
-@     CLS,<WIN2>,<CHK1>,<BTN1> .
-@.
-@0040:. ------------------- Run Registration Info ------------------------------
-@.
-@     LZR,-4 <LNS>i4  IF <LNS> lt 6,(0050) ; .
-@     RDL,-4,6 'Run' <RUN>h .
-@.
-@     LDV <STP>i1=4 .
-@.
-@     TXT,"Run Registration Parameters",<MSG1> .
-@     TXT,"Designate who will be allowed to execute <PRD>",<MSG2> .
-@     LDV,pw <USR>h12=USER$,<MST>a4=MSTRD$ .
-@     BRK,0,A .
- Run script(s) need to be registered.  Specify the department and
- user(s) to register them for.  Use the Master department (<MST>)
- to permit access by all users (recommended).
-@     BRK  TXT,-0,2,99,<TXTH> .
-@.
-@     TXT,"",<WIN1>,13,15,07,34,lgra,<B> <TXT1>i6 .
-@     FON,t,'Arial',08,pd .
-@     TXT,"Department",<WIN1>,15,18,01,12,bla/lgra <TXT2>i6 .
-@     FON,t .
-@     EDT,"<DPT>",<WIN1>,16,19,01,04,bla/whi,b<3>n <EDT1>i6 .
-@     FON,t,'Arial',08,pdb .
-@     BTN,<WIN1>,15,28,01,20,bla/lgra,ar(1) \
-      'All Users in Department' <RAD1>i6 .
-@     BTN,<WIN1>,17,28,01,20,bla/lgra,ar(0) \
-      'User '<USR>' Only'       <RAD2>i6 .
-@     FON,t .
-@.
-@     BTN,<BACK> '< Back' .
-@     BTN,<NEXT> 'Next >' .
-@     LDV <FOC>i6=<NEXT> .
-@0041:.
-@     INP,<FOC>,,<WIN1> .
-@     IF ACTINP$ eq <NEXT>,(0043) ; .
-@     IF ACTINP$ eq <EDT1>,(0043) ; .
-@     IF ACTINP$ eq <BACK>,(0042) ; .
-@     IF ACTINP$ eq <READ>  PC,bcw "START <PTH>\readme.txt" ; .
-@     IF ACTINP$ eq <EXIT>,(0198) ; .
-@     GTO 0041 .
-@0042:.
-@     CLS,<TXT1>,<TXT2>,<EDT1>,<RAD1>,<RAD2> .
-@     GTO 0030 .
-@0043:.
-@     INP,<EDT1>,<RAD1> .
-@     CHG INPUT$ <DPT>a4,<ALL>i1  LDV,p <DPT> .
-@     DEF <N>i1,<DPT>  IF <N> ne 1,(0186) ; .
-@     LCV,0186 n <DPT> '-'  LCV,0186 n <DPT> '+'  LCV,0186 n <DPT> '.' .
-@     IF <DPT> ge 1 & le 2000 . ; GTO 0186 .
-@     LZR,RUNDRW$,<DPT>,0186 .
-@     DVS,RUNDRW$,<DPT>,0186 'Run' .
-@     FDR,RUNDRW$,<DPT>,,,0044 '' 'Run' 	,<RUN> .
-@.
-@     IF SYSNAM$(1-1) eq 'M'  RLN 'TYPE','RID' <DRN>a,<RPT>i ; .
-@     IF SYSNAM$(1-1) ne 'M'  RLN 'Drawer','Rpt' <DRN>a,<RPT>i ; .
-@     DEF <DEF>i1,<DRN>  IF <DEF> eq 1,3 . ; GTO 0044 .
-@     LDV,p <DRN> .
-@     IF <DEF> eq 1  DEF,m <CAB>a4,<DRN>  DEF,a <DRW>h1,<DRN> ; .
-@     IF <DEF> eq 3  LDV <CAB>a4=<DRN>(2-0),<DRW>h1=<DRN>(1-1) ; .
-@. @     DRW,<CAB>,<DRW>,0044 <CHR>i3  IF <CHR> ne <CPL>,(0044) ; .
-@.
-@     LDV,p <CAB> .
-@     MBX,YN,Q,'Confirmation' "/\
+@     if <*deploy> eq 'Y' gto 0043 . ; .
+@     mbx,YN,Q,'Confirmation' "/\
  A prior installation was detected.//\
- The <RUN> run script is already/\
- installed in Cabinet <CAB>, Drawer <DRW>.//\
+ Application <app> is already/\
+ installed in Cabinet <cab>.//\
  Do you want to overlay the existing version?" \
       N,(0044) .
-@     LDV <OVR>h1=Y,<GEN>h1=N .
-@     GTO 0045 .
+@0043:ldv <ovr>h1=Y,<gen>h1=N .
+@     gto 0045 .
 @0044:.
-@     LDV <OVR>h1=N,<GEN>h1=Y .
+@     ldv <ovr>h1=N,<gen>h1=Y .
 @0045:.
-@     CLS,<TXT1>,<TXT2>,<EDT1>,<RAD1>,<RAD2> .
 @.
-@     IF <OVR> eq 'Y',(0070) ; .
+@     if <*deploy> eq 'Y'  ldv <cab>i4=<*cab>  gto 0080 . ; .
+@     if <ovr> eq 'Y',(0070) ; .
 @.
 @0050:. -------------------- Specify Empty Drawer ------------------------------
 @.
-@     LDV <STP>i1=5 .
+@     ldv <stp>i1=5 .
 @.
-@     LDV <GEN>h1=Y .
-@     LDV <CAB>i4=20,<DRW>h1=B  IF SYSNAM$(1-1) eq 'M'  LDV <CAB>=2 ; .
-@     DEF,q <LGTH>i2,<DRWA>  LDV <CNT>i2=0 .
-@0051:INC <CNT>  IF <CNT> gt <LGTH>,(0052) .
-@     LDV <CHKDRW>h1=<DRWA>[<CNT>] .
-@     DRW,<CAB>,<CHKDRW>,0051  LDV <CNT>i2=0 .
-@     INC,2 <CAB>  IF <CAB> le MAXCAB$,(0051) ; GTO 0187 .
-@0052:LDV,p <CAB> .
-@     TXT,"Drawer Location",<MSG1> .
-@     TXT,"Designate drawer to contain <PRD> software.",<MSG2> .
-@     BRK,0,A .
- Specify an empty cabinet to load the <PRD> package into.
- The first available cabinet on your system is: <CAB>.
-@     BRK  TXT,-0,2,99,<TXTH> .
+@     ldv <gen>h1=Y .
+@     ldv <cab>i4=200,<drw>h1=B  if sysnam$(1-1) eq 'M'  ldv <cab>=2 ; .
+@     def,q <lgth>i2,<drwa>  ldv <cnt>i2=0 .
+@0051:inc <cnt>  if <cnt> gt <lgth>,(0052) .
+@     ldv <chkdrw>h1=<drwa>[<cnt>] .
+@     drw,<cab>,<chkdrw>,0051  ldv <cnt>i2=0 .
+@     inc,2 <cab>  if <cab> le maxcab$,(0051) ; gto 0187 .
+@0052:ldv,p <cab> .
+@     txt,"Cabinet Location",<msg1> .
+@     txt,"Designate cabinet to contain <app>.",<msg2> .
+@     brk,0,A .
+ Specify an empty cabinet to load the <app> package into.
+ The first available cabinet on your system is: <cab>.
+@     brk  txt,-0,2,99,<txth> .
 @.
-@     TXT,"",<WIN1>,13,15,07,34,lgra,<B> <TXT1>i6 .
-@     FON,t,'Arial',08,pd .
-@     TXT,"Cabinet",<WIN1>,15,27,01,12,bla/lgra <TXT2>i6 .
-@     TXT,"Drawer",<WIN1>,15,33,01,12,bla/lgra <TXT3>i6 .
-@     FON,t .
-@     EDT,"<CAB>",<WIN1>,16,27,01,04,bla/whi,b<3>n <EDT1>i6 .
-@     LDV <ABC>h1=B  LCV '' <ABC> <DRW> <HL>i1 .
-@     BRK,0,A  LDV <N>i1=1 .
-<ABC>(<N>-1)
-@     INC <N>  IF <N> le 1,(lin-1) ; .
-@     BRK .
-@     IF DWCAP$(12-1) eq 1 . ; GTO lin+2 .
-@     CBX,-0,2,Y,combobox.dat,<WIN1>,16,33,08,01,bla/whi,p,<HL> <EDT2>i6 .
-@     IF DWCAP$(12-1) ne 1 . ; GTO lin+2 .
-@     EDT,-0,2,8,<WIN1>,16,33,10,02,bla/whi,bad(<HL>) <EDT2>i6 .
+@     txt,"",<win1>,13,15,07,34,lgra,<b> <txt1>i6 .
+@     fon,t,'Arial',08,pd .
+@     txt,"Cabinet",<win1>,15,27,01,12,bla/lgra <txt2>i6 .
+@     fon,t .
+@     edt,"<cab>",<win1>,16,27,01,04,bla/whi,b<3>n <edt1>i6 .
 @.
-@     BTN,<BACK> '< Back' .
-@     BTN,<NEXT> 'Next >' .
-@     LDV <FOC>i6=<EDT1> .
+@     btn,<back> '< Back' .
+@     btn,<next> 'Next >' .
+@     ldv <foc>i6=<edt1> .
 @0053:.
-@     INP,<FOC>,,<WIN1> .
-@     IF ACTINP$ eq <NEXT>,(0055) ; .
-@     IF ACTINP$ eq <EDT1>,(0055) ; .
-@     IF ACTINP$ eq <EDT2>,(0055) ; .
-@     IF ACTINP$ eq <BACK>,(0054) ; .
-@     IF ACTINP$ eq <READ>  PC,bcw "START <PTH>\readme.txt" ; .
-@     IF ACTINP$ eq <EXIT>,(0198) ; .
-@     GTO 0053 .
+@     inp,<foc>,,<win1> .
+@     if actinp$ eq <next>,(0055) ; .
+@     if actinp$ eq <edt1>,(0055) ; .
+@     if actinp$ eq <back>,(0054) ; .
+@     if actinp$ eq <read>  pc,bcw "START <pth>\readme.md" ; .
+@     if actinp$ eq <exit>,(0198) ; .
+@     gto 0053 .
 @0054:.
-@     CLS,<TXT1>,<TXT2>,<TXT3>,<EDT1>,<EDT2> .
-@     LZR,-4 <LNS>i4  IF <LNS> lt 6,(0030) ; GTO 0040 .
-@0055:.
-@     INP,<EDT1>,<EDT2> .
-@     CHG INPUT$ <CAB>a4,<DRW>h1  LDV,p <CAB>  LDV,u <DRW> .
-@     DEF <N>i1,<CAB>  IF <N> ne 1,(0188) ; .
-@     LCV,0188 n <CAB> '-'  LCV,0188 n <CAB> '+'  LCV,0188 n <CAB> '.' .
-@     LDV,r <CAX>a4=<CAB>  IF <CAX>(0-1) eq 1,3,5,7,9,(0188) ; .
-@     IF SYSNAM$(1-1) eq 'M' . ; IF <CAB> ge 16 & le MAXCAB$ . ; GTO 0189 .
-@     IF SYSNAM$(1-1) ne 'M' . ; IF <CAB> ge 2 & le MAXCAB$ . ; GTO 0190 .
-@     IF SYSNAM$(1-1) ne 'M' . ; IF <CAB> ge 200 & le 250,(0191) ; .
-@     IF <DRW> ge 'B' & le 'I' . ; GTO 0192 .
-@     IF SYSNAM$(1-1) ne 'M'  DRW,<CAB>,<DRW>,0057 <CHR>i3 ; .
-@     IF SYSNAM$(1-1) eq 'M'  DRW,<CAB>,<DRW>,0057 <CHR>i3,<CS>i1 ; .
-@. @     IF <CHR> ne <CPL>,(0191) ; .
-@     IF SYSNAM$(1-1) eq 'M'  IF <CS> ne 1,(0192) ; .
-@     IF STAT1$ eq 0,(0056) ; .
+@     cls,<txt1>,<txt2>,<edt1> .
+@0055:chg input$ <cab>a4  ldv,p <cab> .
+@     def <n>i1,<cab>  if <n> ne 1,(0188) ; .
+@     lcv,0188 n <cab> '-'  lcv,0188 n <cab> '+'  lcv,0188 n <cab> '.' .
+@     ldv,r <cax>a4=<cab>  if <cax>(0-1) eq 1,3,5,7,9,(0188) ; .
+@     if sysnam$(1-1) eq 'M' . ; if <cab> ge 16 & le maxcab$ . ; gto 0189 .
+@     if sysnam$(1-1) ne 'M' . ; if <cab> ge 2 & le maxcab$ . ; gto 0190 .
+@     if sysnam$(1-1) ne 'M' . ; if <cab> ge 200 & le 250,(0191) ; .
 @.
-@     MBX,YN,Q,'Confirmation' "/\
+@     mbx,YN,Q,'Confirmation' "/\
  The drawer you specified already exists.//\
  Are you sure you want to overlay the existing/\
- reports in Cabinet <CAB> Drawer <DRW>?" \
+ reports in Cabinet <cab> Drawer <drw>?" \
       N,(0053) .
 @0056:.
-@     LDV <GEN>h1=N .
+@     ldv <gen>h1=N .
 @0057:.
-@     CLS,<TXT1>,<TXT2>,<TXT3>,<EDT1>,<EDT2> .
+@     cls,<txt1>,<txt2>,<edt1> .
 @.
-@     IF SYSNAM$(1-1) eq 'M'  IF <GEN> eq 'Y',(0060) ; GTO 0070 .
-@.
-@0060:. ----------------------- Database File (2200) ---------------------------
-@.
-@     LDV <STP>i1=6 .
-@.
-@     LDV,pw <MXF>i4=MAXFIL$ .
-@     TXT,"Drawer Generation",<MSG1> .
-@     TXT,"Designate Database File",<MSG2> .
-@     BRK,0,A .
- Specify the MAPERn database file for the new drawer.
- Available files are 3-<MXF>.
-@     BRK  TXT,-0,2,99,<TXTH> .
-@.
-@     TXT,"",<WIN1>,13,15,07,34,lgra,<B> <TXT1>i6 .
-@     FON,t,'Arial',08,pd .
-@     TXT,"Database File",<WIN1>,15,28,01,16,bla/lgra <TXT2>i6 .
-@     FON,t .
-@     EDT,"3",<WIN1>,16,30,01,04,bla/whi,b<3>n <EDT1>i6 .
-@.
-@     BTN,<BACK> '< Back' .
-@     BTN,<NEXT> 'Next >' .
-@     LDV <FOC>i6=<EDT1> .
-@0061:.
-@     INP,<FOC>,,<WIN1> .
-@     IF ACTINP$ eq <NEXT>,(0063) ; .
-@     IF ACTINP$ eq <EDT1>,(0063) ; .
-@     IF ACTINP$ eq <BACK>,(0062) ; .
-@     IF ACTINP$ eq <READ>  PC,bcw "START <PTH>\readme.txt" ; .
-@     IF ACTINP$ eq <EXIT>,(0198) ; .
-@     GTO 0061 .
-@0062:.
-@     CLS,<TXT1>,<TXT2>,<EDT1> .
-@     GTO 0050 .
-@0063:.
-@     INP,<EDT1>,Y .
-@     CHG INPUT$ <FIL>i4 .
-@     DEF <N>i1,<FIL>  IF <N> ne 1,(0193) ; .
-@     LCV,0193 n <FIL> '-'  LCV,0193 n <FIL> '+'  LCV,0193 n <FIL> '.' .
-@     IF <FIL> ge 3 & le MAXFIL$ . ; GTO 0193 .
-@.
-@     CLS,<TXT1>,<TXT2>,<EDT1> .
+@     if sysnam$(1-1) eq 'M'  if <gen> eq 'Y',(0060) ; gto 0070 .
 @.
 @0070:. ---------------------- Final Verification ------------------------------
 @.
-@     LDV <STP>i1=7 .
+@     ldv <stp>i1=7 .
 @.
-@     TXT,"Installation Confirmation",<MSG1> .
-@     TXT,"Is this information correct?",<MSG2> .
+@     txt,"Installation Confirmation",<msg1> .
+@     txt,"Is this information correct?",<msg2> .
 @.
-@     BRK,0,A .
+@     brk,0,A .
  Examine the following installation information carefully.
  Click Back if you need to modify options or selections.
  If correct, click Install to perform the installation.
  [Destination]
-@     IF <GEN> eq 'N' . ; GTO 0071 .
-@     SRH,-2,,,0185 dp 2-8 [,DRAWERS] <DCNT>i2 .
-@     SRH,-0,,,0185 dp 2-6 ,Drawer <DCNT>i2 .
-@     LOC,-0,4,0185 afm 2-79 Drawer ,<LIN>i4  DEC,2 <LIN> .
-@     INC <LIN>,<CNT>  RDL,-0,<LIN>,0073 1-80 <DAT>s .
-@     LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
-@     LDV,lq <DDRW>h1=<DAT>(<COL>-0),0(,) .
-  Drawer <DDRW><CAB> - Existing drawer will be overwritten
-@     GTO lin-4 .
-@0071:IF <GEN> eq 'Y' . ; GTO 0072 .
-@     SRH,-2,,,0185 dp 2-8 [,DRAWERS] .
-@     SRH,-0,,,0185 dp 2-6 ,Drawer <DCNT>i2 .
-@     LOC,-0,4,0185 afm 2-79 Drawer ,<LIN>i4  DEC,2 <LIN> .
-@     INC <LIN>,<CNT>  RDL,-0,<LIN>,0073 1-80 <DAT>s .
-@     LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
-@     LDV,lq <DDRW>h1=<DAT>(<COL>-0),0(,) .
-  Drawer <DDRW><CAB> - New drawer will be generated
-@     GTO lin-4 .
-@0072:IF <GEN> eq 'Y'  IF SYSNAM$(1-1) eq 'M' . ; GTO 0073 .
-  Database file <FIL> will be used
-@0073:LZR,-4 <LNS>i4  IF <LNS> lt 6,(0074) ; .
+@     if <gen> eq 'N' . ; gto 0071 .
+@     srh,-2,,,0185 dp 2-8 [,DRAWERS] <dcnt>i2 .
+@     srh,-0,,,0185 dp 2-6 ,Drawer <dcnt>i2 .
+@     loc,-0,4,0185 afm 2-79 Drawer ,<lin>i4  dec,2 <lin> .
+@     inc <lin>,<cnt>  rdl,-0,<lin>,0073 1-80 <dat>s .
+@     lcv,0185 '' <dat> '=' <col>i2  inc <col> .
+@     ldv,lq <ddrw>h1=<dat>(<col>-0),0(,) .
+  Drawer <ddrw><cab> - Existing drawer will be overwritten
+@     gto lin-4 .
+@0071:if <gen> eq 'Y' . ; gto 0072 .
+@     srh,-2,,,0185 dp 2-8 [,DRAWERS] .
+@     srh,-0,,,0185 dp 2-6 ,Drawer <dcnt>i2 .
+@     loc,-0,4,0185 afm 2-79 Drawer ,<lin>i4  dec,2 <lin> .
+@     inc <lin>,<cnt>  rdl,-0,<lin>,0073 1-80 <dat>s .
+@     lcv,0185 '' <dat> '=' <col>i2  inc <col> .
+@     ldv,lq <ddrw>h1=<dat>(<col>-0),0(,) .
+  Drawer <ddrw><cab> - New drawer will be generated
+@     gto lin-4 .
+@0072:if <gen> eq 'Y'  if sysnam$(1-1) eq 'M' . ; gto 0073 .
+  Database file <fil> will be used
+@0073:lzr,-4 <lns>i4  if <lns> lt 6,(0074) ; .
  [Run Registration]
-@     LDV,w <USR>h12=USER$  IF <ALL> eq 1  LDV <USR>=All ; .
-  Department: <DPT>    User(s): <USR>
-@0074:BRK  TXT,-0,2,99,<TXTH> .
+@     ldv,w <usr>h12=user$  if <all> eq 1  ldv <usr>=All ; .
+  Department: <dpt>    User(s): <usr>
+@0074:brk  txt,-0,2,99,<txth> .
 @.
-@     BTN,<BACK> '< Back' .
-@     BTN,<NEXT> 'Install' .
-@     LDV <FOC>i6=<NEXT> .
+@     btn,<back> '< Back' .
+@     btn,<next> 'Install' .
+@     ldv <foc>i6=<next> .
 @0075:.
-@     INP,<FOC>,,<WIN1> .
-@     IF ACTINP$ eq <NEXT>,(0077) ; .
-@     IF ACTINP$ eq <BACK>,(0076) ; .
-@     IF ACTINP$ eq <READ>  PC,bcw "START <PTH>\readme.txt" ; .
-@     IF ACTINP$ eq <EXIT>,(0198) ; .
-@     GTO 0075 .
+@     inp,<foc>,,<win1> .
+@     if actinp$ eq <next>,(0077) ; .
+@     if actinp$ eq <back>,(0076) ; .
+@     if actinp$ eq <read>  pc,bcw "START <pth>\readme.txt" ; .
+@     if actinp$ eq <exit>,(0198) ; .
+@     gto 0075 .
 @0076:.
-@     IF SYSNAM$(1-1) eq 'M'  IF <GEN> eq 'Y',(0060) ; .
-@     IF <OVR> eq 'N',(0050) ; .
-@     LZR,-4 <LNS>i4  IF <LNS> lt 6,(0030) ; GTO 0040 .
+@     if sysnam$(1-1) eq 'M'  if <gen> eq 'Y',(0060) ; .
+@     if <ovr> eq 'N',(0050) ; .
+@     lzr,-4 <lns>i4  if <lns> lt 6,(0050) ; gto 0040 .
 @0077:.
-@     CLS,<READ>,<BACK>,<NEXT>,<EXIT> .
-@     LDV <STP>i1=0 .
+@     cls,<read>,<back>,<next>,<exit> .
+@     ldv <stp>i1=0 .
 @.
 @0080:. ------------------------ Drawer Setup ----------------------------------
 @.
 @. Get List of Drawers
 @.
-@     LZR,-6 ,,<DLIN>i4 .
-@0081:INC <DLIN> .
-@     RDL,-6,<DLIN>,0098 1-80 <DAT>s  LCV,0185 '' <DAT> '=' <COL>i2  INC <COL> .
-@     LDV,lq <DRW>h1=<DAT>(<COL>-0),0(,),\
-             <CPL>i3=<DAT>(<COL>-0),1(,),\
-             <DNM>s26=<DAT>(<COL>-0),2(,) .
+@.    #  Will contain a list of services that couldn't be found...
+@.    #  Somethine will show up in this list if it's in the TOC.TXT but
+@.    #  hasnt been commited to version control yet.
+@     brk .
+*    .D.    .      .   .                    .Replace  .Last       .
+*Cab .w.Rpt .Lines .Typ.Name                .Date     .User       .
+*====.=.====.======.===.====================.=========.===========.
+@     brk rnm -8 .
 @.
-@     IF <GEN> eq 'N',(0082) ; .
+@     lzr,-6 ,,<dlin>i4 .
+@0081:inc <dlin> .
+@     rdl,-6,<dlin>,0098 1-80 <dat>s  lcv,0185 '' <dat> '=' <col>i2  inc <col> .
+@     ldv,lq <drw>h1=<dat>(<col>-0),0(,),\
+             <cpl>i3=<dat>(<col>-0),1(,),\
+             <dnm>s26=<dat>(<col>-0),2(,) .
+@.
+@     drw,<cab>,<drw>,lin1 <chr>i3  gto 0082 .
+@.
+@.    if <chr> ne <cpl> ...
+@. TODO if sizes are different, we should REGEN the drawer...
 @.
 @. Generate Drawer
 @.
-@     TXT,"Drawer Generation",<MSG1> .
-@     TXT,"... Please Wait ...",<MSG2> .
-@     BRK,0,A .
- Drawer <DRW><CAB> is now being generated ...
-@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@     if <*deploy> eq 'Y'  gto 0085 . ; .
+@     txt,"Drawer Generation",<msg1> .
+@     txt,"... Please Wait ...",<msg2> .
+@     brk,0,A .
+ Drawer: <dnm>(p)  <drw><cab> is now being generated ...
+@     brk  txt,-0,2,99,<txth>,,,,,,s .
 @.
-@     WAT 1000 .
+@     wat 1000 .
 @.
-@     IF SYSNAM$(1-1) eq 'M' . ; GTO lin+2 .
-@     GEN,<CAB>,<DRW> <FIL>,<CPL>,F,,,,<TTL>(1-24),USER$ .
-@     IF SYSNAM$(1-1) ne 'M' . ; GTO lin+2 .
-@     GEN,<CAB>,<DRW>,<CPL> .
+@0085:if sysnam$(1-1) eq 'M' . ; gto lin+2 .
+@     gen,<cab>,<drw> <fil>,<cpl>,F,,,,<ttl>(1-24),user$ .
+@     if sysnam$(1-1) ne 'M' . ; gto lin+2 .
+@     gen,<cab>,<drw>,<cpl> .
 @.
 @0082:. Update Drawer Permission Report
 @.
-@     TXT,"Drawer Registration",<MSG1> .
-@     TXT,"... Please Wait ...",<MSG2> .
-@     BRK,0,A .
+@     if <*deploy> eq 'Y'  gto 0086 . ; .
+@     txt,"Drawer Registration: <dnm>(p)",<msg1> .
+@     txt,"... Please Wait ...",<msg2> .
+@     brk,0,A .
  Updating Drawer Permissions report ...
-@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@     brk  txt,-0,2,99,<txth>,,,,,,s .
 @.
-@     WAT 1000 .
+@     wat 1000 .
 @.
-@     IF 0 eq SECDRW$,SECRPT$,SECGRP$,(0084) ; .
-@     DFU SECDRW$,SECRPT$ .
-@     LDV <LIN>i6=5 .
-@     INC <LIN>  RDL,SECDRW$,SECRPT$,<LIN>,0083 1-1,29-9 <LT>h,<DC>a .
-@     IF <LT> ne 	,(lin-1) ; .
-@     LDV,l <DC>  IF <DC>(2-0) eq <CAB>  IF <DC>(1-1) eq <DRW> . ; GTO lin-2 .
-@     LN-,SECDRW$,SECRPT$,<LIN>,1 .
+@0086:if 0 eq secdrw$,secrpt$,secgrp$,(0084) ; .
+@     DFU secdrw$,secrpt$ .
+@     ldv <lin>i6=5 .
+@     inc <lin>  rdl,secdrw$,secrpt$,<lin>,0083 1-1,29-9 <lt>h,<dc>a .
+@     if <lt> ne 	,(lin-1) ; .
+@     ldv,l <dc>  if <dc>(2-0) eq <cab>  if <dc>(1-1) eq <drw> . ; gto lin-2 .
+@     ln-,secdrw$,secrpt$,<lin>,1 .
 @0083:.
-@     LDV,r <DRC>h6=<DRW><CAB> .
-@     IF SYSNAM$(1-1) eq 'M' \
-      LDV,rz <ZCB>a4=<CAB>  LDV <DRC>h6=<DRW>' '<ZCB> ; .
-@     LDV <SOR>i1=0 .
-@     BFN,SECDRW$,SECRPT$,,lin+1 k 2-26 	,k  LDV <SOR>=1  GTO lin+2 .
-@     BFN,SECDRW$,SECRPT$,,lin+1 kf'2,1' 34-4,32-1 	,k,k  LDV <SOR>=2 .
-@     FDR,SECDRW$,SECRPT$ '' 2-1 *,= ,<LIN>i6 .
-@     LN+,SECDRW$,SECRPT$,<LIN>,1  INC <LIN> .
-@     CHG <CLM>i3 56 + SECGRP$ .
-@     WRL,SECDRW$,SECRPT$,<LIN> 2-26,32-6,<CLM>-1 	,<DNM>,<DRC>,W .
-@     WRL,SECDRW$,SECRPT$,<LIN> 28-1,38-1,56-1 	,	,	,	 .
-@     IF <SOR> eq 1  SRR,SECDRW$,SECRPT$ '' 2-26,29-9 	,1,2 ; .
-@     IF <SOR> eq 2  SRR,SECDRW$,SECRPT$ '' 34-4,32-1 	,2n,1 ; .
-@     CMU .
+@     ldv,r <drc>h6=<drw><cab>(p) .
+@     if sysnam$(1-1) eq 'M' \
+      ldv,rz <zcb>a4=<cab>  ldv <drc>h6=<drw>' '<zcb> ; .
+@     ldv <sor>i1=0 .
+@     bfn,secdrw$,secrpt$,,lin+1 k 2-26 	,k  ldv <sor>=1  gto lin+2 .
+@     bfn,secdrw$,secrpt$,,lin+1 kf'2,1' 34-4,32-1 	,k,k  ldv <sor>=2 .
+@     fdr,secdrw$,secrpt$ '' 2-1 *,= ,<lin>i6 .
+@     ln+,secdrw$,secrpt$,<lin>,1  inc <lin> .
+@     chg <clm>i3 56 + secgrp$ .
+@     wrl,secdrw$,secrpt$,<lin> 2-26,32-6,<clm>-1 	,<dnm>,<drc>,W .
+@     wrl,secdrw$,secrpt$,<lin> 28-1,38-1,56-1 	,	,	,	 .
+@     if <sor> eq 1  srr,secdrw$,secrpt$ '' 2-26,29-9 	,1,2 ; .
+@     if <sor> eq 2  srr,secdrw$,secrpt$ '' 34-4,32-1 	,2n,1 ; .
+@     srr,secdrw$,secrpt$ '' 2-26,29-9 	,1,2 ; .
+@     cmu .
 @.
 @0084:. Update Drawer Description
 @.
-@     TXT,"Drawer Description",<MSG1> .
-@     TXT,"... Please Wait ...",<MSG2> .
-@     BRK,0,A .
+@     if <*deploy> eq 'Y'  gto 0087 . ; .
+@     txt,"Drawer Description: <dnm>(p)",<msg1> .
+@     txt,"... Please Wait ...",<msg2> .
+@     brk,0,A .
  Updating Cabinet Table of Contents report ...
-@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@     brk  txt,-0,2,99,<txth>,,,,,,s .
 @.
-@     WAT 1000 .
+@     wat 1000 .
 @.
-@     LDV <ROW>i1=1,<COL>i2=4 .
-@     IF SYSNAM$(1-1) ne 'M'  IF <DRW> eq 'F','G','H','I'  LDV <COL>=39 ; .
-@     IF SYSNAM$(1-1) eq 'M'  IF <DRW> eq 'F','G','H','I'  LDV <COL>=38 ; .
-@     IF <DRW> eq 'C','G'  LDV <ROW>=2 ; .
-@     IF <DRW> eq 'D','H'  LDV <ROW>=3 ; .
-@     IF <DRW> eq 'E','I'  LDV <ROW>=4 ; .
-@     IF SYSNAM$(1-1) ne 'M'  CHG <LIN>i6 <CAB> // 2 * 6 + 18 + <ROW> ; .
-@     IF SYSNAM$(1-1) eq 'M'  CHG <LIN>i6 <CAB> // 2 * 15 + 21 + <ROW> ; .
-@     LOK,TYPDRW$,TYPRD$ .
-@     LDV <SIZ>i2=26  IF SYSNAM$(1-1) eq 'M'  LDV <SIZ>=24 ; .
-@     WRL,TYPDRW$,TYPRD$,<LIN> <COL>-<SIZ> ' ',<DNM>(1-<SIZ>) .
-@     ULK .
+@0087:ldv <row>i1=1,<col>i2=4 .
+@     if sysnam$(1-1) ne 'M'  if <drw> eq 'F','G','H','I'  ldv <col>=39 ; .
+@     if sysnam$(1-1) eq 'M'  if <drw> eq 'F','G','H','I'  ldv <col>=38 ; .
+@     if <drw> eq 'C','G'  ldv <row>=2 ; .
+@     if <drw> eq 'D','H'  ldv <row>=3 ; .
+@     if <drw> eq 'E','I'  ldv <row>=4 ; .
+@     if sysnam$(1-1) ne 'M'  chg <lin>i6 <cab> // 2 * 6 + 18 + <row> ; .
+@     if sysnam$(1-1) eq 'M'  chg <lin>i6 <cab> // 2 * 15 + 21 + <row> ; .
+@     lok,typdrw$,typrd$ .
+@     ldv <siz>i2=26  if sysnam$(1-1) eq 'M'  ldv <siz>=24 ; .
+@     wrl,typdrw$,typrd$,<lin> <col>-<siz> ' ',<dnm>(1-<siz>) .
+@     ulk .
 @.
 @0090:. ---------------------- Load Runs & Data --------------------------------
 @.
-@     PCR,0,F,-0,,,0185 <PTX>'\'<DNM>(p)'\TOC.TXT'  RNM -3 .
-@     TOT,-3 '' 'Lines' '	',+ <TLN>i12 .
+@.    #  ICE BUILD Applications
+@     if <drw> eq 'G'  gto 0081 .
+@     lcv,lin1 '' <dnm> 'dumps'  gto 0081 . ; .                Skip error dumps
+@     if <ibldapp> eq y . ; gto 0105 .
+@     if <drw> eq 'B'  ldv,p <appfolder>s20='db',<subfolder>s20='tables' . ; .
+@     if <drw> eq 'C'  ldv,p <appfolder>s20='lib',<subfolder>s20='internal' . ; .
+@     if <drw> eq 'D'  ldv,p <appfolder>s20='lib',<subfolder>s20='tables' . ; .
+@     if <drw> eq 'E'  ldv,p <appfolder>s20='db',<subfolder>s20='schema' . ; .
+@     if <drw> eq 'F'  ldv,p <appfolder>s20='app',<subfolder>s20='controllers' . ; .
+@     if <drw> eq 'H'  ldv,p <appfolder>s20='app',<subfolder>s20='views' . ; .
+@     if <drw> eq 'I'  ldv,p <appfolder>s20='app',<subfolder>s20='models' . ; .
+@     if <*deploy> eq 'y' \
+        ret,0,f,n,n,0185 <ptx>'\'<appfolder>'\'<subfolder>'\TOC.TXT' . ; \
+        pcr,0,f,-0,,,0185 <ptx>'\'<appfolder>'\'<subfolder>'\TOC.TXT' .
+@     rnm -3 .
+@     gto 0106 .
 @.
-@     TXT,"Software Modules",<MSG1> .
-@     TXT,"... Please Wait ...",<MSG2> .
-@     BRK,0,A .
- Loading <PRD> code modules, tables and other reports ...
-@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@.    #  Standard applications
+@0105:if <*deploy> eq 'y' \
+        ret,0,f,n,n,0185 <ptx>'\'<dnm>(p)'\TOC.TXT' . ; \
+        pcr,0,f,-0,,,0185 <ptx>'\'<dnm>(p)'\TOC.TXT' .
+@     rnm -3 .
 @.
-@     TXT,"",<WIN1>,15,13,08,37,lgra,<B> <TXT1>i6 .
-@     FON,t,'Arial',08,pd .
-@     TXT,"Completion Status",<WIN1>,14,14,01,18,bla/lgra,c <TXT2>i6 .
-@     TXT,"",<WIN1>,21,24,01,24,bla/lgra,c <TXT3>i6 .
-@     FON,t .
-@     TXT,"",<WIN1>,17,19,03,25,whi,<B> <TXT4>i6 .
-@     TXT,"",<WIN1>,17,19,03,25,whi,<B> <TXT5>i6 .
-@     TXT,"",<WIN1>,18,29,01,05,dblu/whi,cs <TXT6>i6 .
-@     JUV,r <CAB> .
+@0106:tot,-3 '' 'Lines' '	',+ <tln>i12 .
 @.
-@     LDV <XLN>i12=0,<QTY>a4=0 .
-@     LZR,-3 ,,<RLIN>i4 .
-@0091:INC <RLIN>  RDL,-3,<RLIN>,0097 'Cab','Dw','Rpt','Lines','Typ','Name',\
-        'Title' <TCAB>i,<TDRW>h,<RPT>a,<RLN>i,<EXT>h,<SVCNME>s,<TTL>s .
+@     if <*deploy> eq 'Y' gto 0109 . ; .
+@     txt,"Software Modules",<msg1> .
+@     txt,"... Please Wait ...",<msg2> .
+@     brk,0,A .
+ Loading <app> code modules, tables and other reports ...
+@     brk  txt,-0,2,99,<txth>,,,,,,s .
 @.
-@     INC <QTY>  INC,<RLN> <XLN>  JUV,r <RPT>  LDV,l <RID>h5=<RPT><DRW> .
-@     TXT,"Loading Report: <RID>",<TXT3> .
-@     LDV,pu <REPORT>s20=<RPT>(p)<TDRW><TCAB>(p)'.'<EXT> .
-@     LDV <BIN>h1=N .
-@     IF <EXT> eq 'BMP','PCX','JPG','BIN','EXE','PNG'  LDV <BIN>h1=Y ; .
-@     IF <BIN> eq Y  LDV,p <REPORT>s79=<TTL> .
+@     txt,"",<win1>,15,13,08,37,lgra,<b> <txt1>i6 .
+@     fon,t,'Arial',08,pd .
+@     txt,"Completion Status",<win1>,14,14,01,18,bla/lgra,c <txt2>i6 .
+@     txt,"",<win1>,21,24,01,24,bla/lgra,c <txt3>i6 .
+@     fon,t .
+@     txt,"",<win1>,17,19,03,25,whi,<b> <txt4>i6 .
+@     txt,"",<win1>,17,19,03,25,whi,<b> <txt5>i6 .
+@     txt,"",<win1>,18,29,01,05,dblu/whi,cs <txt6>i6 .
+@     juv,r <cab> .
 @.
-@.    #  Database rids
-@     FDR,-7,,,0092 '' 'Ecab','Ed','Erpt' 	,<TCAB>,<TDRW>,<RPT> .
-@     RLN 'RCab','Rd','RRpt' <RCAB>i,<RDRW>h,<RRPT>a .
-@     LZR,<TCAB>,<TDRW>,<RPT>,0092  ,<TCC>i3,<THLN>i3  DEC <THLN> .
-@     PCR,<CAB>,<DRW>,-0,<BIN> <PTH>'\'<DNM>(p)'\'<SVCNME>(p)<REPORT> .
-@     RNM -8  LZR,-8 ,<CC>i3,<HLN>i3  DEC <HLN> .
-@     BRK,0,I  RDC,-8,2,<HLN> 1-<CC> <HDGS>s .
-<HDGS>
-@     BRK  RNM -8 .
-@     BRK,0,I  RDC,<TCAB>,<TDRW>,<RPT>,2,<HLN> 1-<TCC> <HDGS>s .
-<HDGS>
-@     BRK .
-@     DIF,-0,-8 ' ' .
-@     LZR,-0 <LNS>i7,,<HLN>i3  LDV <DIF>h1=N  IF <LNS> eq <HLN>,(0092) .
-@     INC,4 <HLN>  LOC,-0,<HLN> afm 2-79 DATE ,<LIN>I4  INC <LIN> .
-@     LOC,-0,<LIN>,lin+1 afm 2-2 '>+'  LDV <DIF>=Y .
-@     LOC,-0,<LIN>,lin+1 afm 2-2 '<-'  LDV <DIF>=Y .
+@0109:ldv <xln>i12=0,<qty>a4=0 .
+@     lzr,-3 ,,<rlin>i4 .
+@0091:inc <rlin>  rdl,-3,<rlin>,0097 'Cab','Dw','Rpt','Lines','Typ','Name',\
+        'Title','UpdateDate','UpdateTime','ReplaceDate','LastUser' \
+        <tcab>i,<tdrw>h,<rpt>a,<rln>i,<ext>h,<svcnme>s,<ttl>s,\
+        <upddate>h,<updtime>h,<repdate>h,<duser>h .
 @.
-@.    #  Replace headings if new
-@     IF <DIF> eq Y . ; GTO 0092 .
-@     LOK,<TCAB>,<TDRW>,<RPT> .
-@     ADD,<TCAB>,<TDRW>,<RPT>,-8 .
-@     REP,<TCAB>,<TDRW>,<RPT> .
-@     ULK .
+@     inc <qty>  inc,<rln> <xln>  juv,r <rpt>  ldv,l <rid>h5=<rpt><drw> .
+@     if <*deploy> eq 'Y' . ; txt,"Loading Report: <rid>",<txt3> .
+@     ldv,pu <report>s20=<rpt>(p)<tdrw>(p)<tcab>(p)'.'<ext>(p) .
+@     ldv <bin>h1=N .
+@     if <ext> eq 'BMP','PCX','JPG','BIN','EXE','PNG'  ldv <bin>h1=Y ; .
+@     if <bin> eq Y  ldv,p <report>s79=<ttl> .
 @.
-@0092:PCR,<CAB>,<DRW>,<RPT>,<BIN> <PTH>'\'<DNM>(p)'\'<SVCNME>(p)<REPORT> .
+@     if <svcnme> eq '' \
+        ldv,p <svc>s40=<report> . ; \
+        ldv,p <svc>s40='('<svcnme>(p)')'<report> .
+@     if <bin> eq 'Y'  ldv,p <svc>s40=<report> . ; .
+@.
+@.    #  Database rids (Replace if new otherwise don't touch again)
+*     d.    .    .
+*Cab  r.BRpt.ERpt.
+*====.=.====.====.
+@     fdr,-7,,,0092 '' 'Cab','Dr','BRpt' 	,<tcab>,<tdrw>,<rpt> .
+@     lzr,<tcab>,<tdrw>,<rpt>,0092   gto 0091 .
+@. @     pcr,<cab>,<drw>,-0,<bin> <pth>'\'<dnm>(p)'\'<svcnme>(p)<report> .
+@. @     rnm -8  lzr,-8 ,<cc>i3,<hln>i3  dec <hln> .
+@. @     brk,0,I  rdc,-8,2,<hln> 1-<cc> <hdgs>s .
+@. <hdgs>
+@. @     brk  rnm -8 .
+@. @     brk,0,I  rdc,<tcab>,<tdrw>,<rpt>,2,<hln> 1-<tcc> <hdgs>s .
+@. <hdgs>
+@. @     brk .
+@. @     dif,-0,-8 ' ' .
+@. @     lzr,-0 <lns>i7,,<hln>i3  ldv <dif>h1=N  if <lns> eq <hln>,(0092) .
+@. @     inc,4 <hln>  loc,-0,<hln> afm 2-79 DATE ,<lin>I4  inc <lin> .
+@. @     loc,-0,<lin>,lin+1 afm 2-2 '>+'  ldv <dif>=Y .
+@. @     loc,-0,<lin>,lin+1 afm 2-2 '<-'  ldv <dif>=Y .
+@. @.
+@. @.    #  Replace headings if new
+@. @     if <dif> eq Y . ; gto 0092 .
+@. @     lok,<tcab>,<tdrw>,<rpt> .
+@. @     add,<tcab>,<tdrw>,<rpt>,-8 .
+@. @     rep,<tcab>,<tdrw>,<rpt> .
+@. @     ulk .
+@.
+@0092:if <ibldapp> eq 'y' . ; gto 0107 .
+@     if <drw> eq 'H'  if <rpt> gt 999  \
+        ldv,p <tpth>s998=<pth>'\'<appfolder>'\'<subfolder>'\shared' . ; \
+        ldv,p <tpth>s998=<pth>'\'<appfolder>'\'<subfolder> .
+@     if <*deploy> eq 'Y' \
+        ret,<cab>,<drw>,<bin>,n,lin1 <tpth>'\'<svc>  gto 0108 . ; \
+        pcr,<cab>,<drw>,-0,<bin>,,lin1 <tpth>'\'<svc>  gto 0108 .
+@     brk .
+	<tcab>	<tdrw>	<rpt>	<rln>	<ext>	<svcnme>	<repdate>	<duser>	
+@     brk  add,-0,-8  rnm -8 .
+@     gto 0091 .
+@.
+@0107:if <*deploy> eq 'Y' \
+        ret,<cab>,<drw>,<bin>,n,lin1 <pth>'\'<dnm>(p)'\'<svc>(p)  gto 0108 . ; \
+        pcr,<cab>,<drw>,-0,<bin>,,lin1 <pth>'\'<dnm>(p)'\'<svc>(p)  gto 0108 .
+@     brk .
+	<tcab>	<tdrw>	<rpt>	<rln>	<ext>	<svcnme>	<repdate>	<duser>	
+@     brk  add,-0,-8  rnm -8 .
+@     gto 0091 .
 @.
 @.    #  Handle character replacement
-@     IF <RPT> eq 0,(0093) .
-@     IF <BIN> eq y,(0093) .
-@     RSL,<CAB>,<DRW>,<RPT> .
-@     CHG <NS>h1 CHR$254  LZR,-0 ,<CC>i4 .
-@     CHG <NS1>h1 CHR$302 .
-@     LDV <CHAR>h0 .
-@     LCH,-0,,lin+1 'af' 1-<CC> <NS1><NS>/TAB$ .
-@     LCH,-0,,lin+1 'af' 1-<CC> <NS1>/'' .
-@     LCH,-0,,lin+1 'af' 1-<CC> <NS>/TAB$ .
-@     REP,<CAB>,<DRW>,<RPT> .
+@0108:if <rpt> eq 0,(0093) .
+@     if <bin> eq y,(0093) .
 @.
-@0093:CHG <PC>i4 <XLN> / <TLN> * 100  CHG <WID>i4 <PC> * 25 / 100 .
-@     IF <WID> gt 0  TXT,"",<TXT5>,17,19,03,<WID>,dblu ; .
-@     LDV,p <PC>  TXT,"<PC>%",<TXT6>,,,,,,s .
-@     IF <RPT> eq 0,(0094) ; .
-@     LOK,<CAB>,<DRW>,<RPT>  WRL,<CAB>,<DRW>,<RPT>,2 2-79 .,<TTL>  ULK .
-@     GTO 0091 .
+@.    #  Check if we need to replace this file.  This is here to help performance when
+@.    #  replacing files in an entire application.
+@.    #  Will read the time stamps from the TOC.TXT files and then reference them agains the local rpt
+@.    #  If the TOC.TXT timestamps are newer than the local files we'll replace ther report.
+@. @     lzr,<cab>,<drw>,<rpt>,0110 .
+@. @     rdl,<cab>,<drw>,<rpt>,1,0036 9-9,20-8,42-9,53-11 <lupddt>h,<lupdtm>h,\
+@.         <lrepdt>h,<luserpt>h .
+@. @     if <lupddt>  EQ ''  ldv <lupddt>=<lrepdt> ; .
+@. @     if <upddate> EQ ''  ldv <upddate>=<repdate> ; .
+@. @     if <luserpt> ne USER$  gto 0110 . ; .
+@. @     if,d2 <upddate> GT <lupddt>  gto 0110 . ; .
+@. @     if,d2 <upddate> EQ <lupddt>  if <upddate> GT <lupdtm>  gto 0110 . ; .
+@. @     gto 0091 .
+@.
+@0110:chg <ns>h1 chr$254  lzr,-0 ,<cc>i4 .
+@     chg <ns1>h1 chr$302 .
+@     ldv <char>h0 .
+@     lch,-0,,lin+1 'af' 1-<cc> <ns1><ns>/tab$ .
+@     lch,-0,,lin+1 'af' 1-<cc> <ns1>/'' .
+@     lch,-0,,lin+1 'af' 1-<cc> <ns>/tab$ .
+@     rep,<cab>,<drw>,<rpt> .
+@.
+@0093:chg <pc>i4 <xln> / <tln> * 100  chg <wid>i4 <pc> * 25 / 100 .
+@     if <*deploy> eq 'Y'  gto 0091 . ; .
+@     if <wid> gt 0  txt,"",<txt5>,17,19,03,<wid>,dblu ; .
+@     ldv,p <pc>  txt,"<pc>%",<txt6>,,,,,,s .
+@     if <rpt> eq 0,(0094) ; .
+@.ew  lok,<cab>,<drw>,<rpt>  wrl,<cab>,<drw>,<rpt>,2 2-79 .,<ttl>  ulk .
+@     gto 0091 .
 @0094:.
-@     RNM -5 .
-@     DRW,<CAB>,<DRW> <CPL>i3 .
-@     LOK,<CAB>,<DRW>,0 .
-@     LDV <ZLN>i6=1 .
-@0095:INC <ZLN>  RDL,-5,<ZLN>,0096 1-<CPL> <DAT>s .
-@     CHG <WID>i3 <CPL> - 1 .
-@     IF <DAT>(1-1) eq '.'  IF <WID> gt 79  LDV <WID>=79 ; .
-@     WRZ,<CAB>,<DRW>,<ZLN> 2-<WID> <DAT>(1-1),<DAT>(2-<WID>) .
-@     GTO 0095 .
+@     rnm -5 .
+@     drw,<cab>,<drw> <cpl>i3 .
+@     lok,<cab>,<drw>,0 .
+@     ldv <zln>i6=1 .
+@0095:inc <zln>  rdl,-5,<zln>,0096 1-<cpl> <dat>s .
+@     chg <wid>i3 <cpl> - 1 .
+@     if <dat>(1-1) eq '.'  if <wid> gt 79  ldv <wid>=79 ; .
+@     wrz,<cab>,<drw>,<zln> 2-<wid> <dat>(1-1),<dat>(2-<wid>) .
+@     gto 0095 .
 @0096:.
-@     ULK .
-@     GTO 0091 .
+@     ulk .
+@     gto 0091 .
 @0097:.
-@     GTO 0081 .                                        Get next drawer and runs
-@0098:CLS,<TXT1>,<TXT2>,<TXT3>,<TXT4>,<TXT5>,<TXT6> .
+@     gto 0081 .                                        Get next drawer and runs
+@. @0098:cls,<txt1>,<txt2>,<txt3>,<txt4>,<txt5>,<txt6> .
+@0098:if <*deploy> eq 'Y'  gto 0100 . ; .
+@     cls,<txt1>,<txt2>,<txt3>,<txt4> .
 @.
-@0099:. -------------------- Update Run Registration ---------------------------
+@0099:. -------------------- ICE Registration ---------------------------
 @.
-@     TXT,"Run Script Registration",<MSG1> .
-@     TXT,"... Please Wait ...",<MSG2> .
-@     BRK,0,A .
- Registering run script(s) in Department <DPT> ...
-@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@     if <iceapp> eq 'N'  gto 0150 . ; .
+@     txt,"ICE Registration",<msg1> .
+@     txt,"... Please Wait ...",<msg2> .
+@     brk,0,A .
+ Registering ice categorie(s) and services(s) ...
+@     brk  txt,-0,2,99,<txth>,,,,,,s .
 @.
-@     WAT 1000 .
+@     wat 1000 .
 @.
-@     DFU RUNDRW$,<DPT> .
-@     LDV <SOR>h1=N  BFN,RUNDRW$,<DPT>,,lin+1 k 'RUN' 	,k  LDV <SOR>=Y .
-@     MAU,-4,RUNDRW$,<DPT>,0101 dm 'Run' 	,1 'Run' 	,1 .
-@     DEL .
-@0101:.
-@     IF SYSNAM$(1-1) ne 'M',(0102) ; .
-@     DVS,RUNDRW$,<DPT> \
-      'RUN','USER','TYPE','RID','F','I/O','LINE','MODE','1MDNF' \
-      <RUN>h,<USR>h,<DRN>a,<RPT>i,<F>h,<IOS>a,<LLP>a,<CBS>s,<FLG>h .
-@     GTO 0103 .
-@0102:.
-@     DVS,RUNDRW$,<DPT> \
-      'Run','User','Drawer','Rpt','F','I/O','Line','Cab','1MDNF' \
-      <RUN>h,<USR>h,<DRN>a,<RPT>i,<F>h,<IOS>a,<LLP>a,<CBS>s,<FLG>h .
-@0103:.
-@     LDV,lw <USR>=USER$  IF <ALL> eq 1  LDV <USR>='' ; .
-@     LDV <F>=Y,<CBS>=ALL .
-@     LZR,-4 <LNQ>i3  DEC,5 <LNQ> .
-@     LZR,RUNDRW$,<DPT> ,,<LIN>i6 .
-@     LN+,RUNDRW$,<DPT>,<LIN>,<LNQ> .
-@     LDV <RLN>i4=5 .
-@0104:INC <RLN>,<LIN> .
-@     RDL,-4,<RLN>,0106 'Run','Rpt','I/O','LLP','1MDNF','RDRW' \
-      <RUN>,<RPT>,<IOS>,<LLP>,<FLG>,<RDRW> .
-@     LDV,p <RDRW> .
-@     IF SYSNAM$(1-1) ne 'M',(0105) ; .
-@     LDV <DRC>a6=<CAB><RDRW>  DEF,n <DRN>,<DRC> .
-@     WRL,RUNDRW$,<DPT>,<LIN> \
-      'RUN','USER','TYPE','RID','F','I/O','LINE','MODE','1MDNF','VAR','LAB' \
-      	,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG>,499,499 .
-@     GTO 0104 .
-@0105:.
-@     LDV,r <DRN>(0-5)=<RDRW><CAB> .
-@     WRL,RUNDRW$,<DPT>,<LIN> \
-      'Run','User','Drawer','Rpt','F','I/O','Line','Cab','1MDNF','VAR','LAB' \
-      	,<RUN>,<USR>,<DRN>,<RPT>,<F>,<IOS>,<LLP>,<CBS>,<FLG>,499,499 .
-@     GTO 0104 .
-@0106:.
-@     IF <SOR> eq Y  SRR,RUNDRW$,<DPT> '' 'RUN','USER' 	,1,2d ; .
-@     CMU .
-@     GTO 0150 .
+@0100:if <iceapp> eq 'N' gto 0150 . ; .
+@     if <*deploy> eq 'y' \
+        ret,0,f,n,n,0178 <ptx>'\CTGTBL.TXT' . ; \
+        pcr,0,F,-0,,,0178 <ptx>'\CTGTBL.TXT' .
+@     rnm -4 .
+@     if <*deploy> eq 'y' \
+        ret,0,f,n,n,0179 <ptx>'\SVCTBL.TXT' . ; \
+        pcr,0,F,-0,,,0179 <ptx>'\SVCTBL.TXT' .
+@     rnm -5 .
+@.
+@     fdr,3950,d,1,,,lin+1 '' 'Category' 	,<app>  gto 0101 .
+@.
+@.    #  NEW!
+@.    #  Place new services report in D3950
+@     dup,-5,3950,D  ldv <srpt>i4=stat1$ .
+@     dfu 3950,d,1 .
+@.
+@.    #  Add category to 1D3950 updating location of services report
+@     fdr,-4 '' 'Category' 	,<app> ,<fln>i3 .
+@     wrl,-4,<fln>,y 'Rpt' 	,<srpt> .
+@     add,-4,3950,d,1 .
+@     sor,-0 '' 'Category' 	,1 .
+@     rep,3950,d,1 .
+@.
+@     gto 0103 .
+@.
+@.    #  UPDATE!
+@0101:rln 'Rpt','SvcCab' <srpt>i,<scab>i .
+@     dfu 3950,d,1,3950,d,<srpt> .
+@.
+@.    #  Replace services table with new
+@     rep,-5,3950,d,<srpt> .
+@.
+@.    #  Update svc cab if different
+@     if <scab> ne <cab> . ; gto 0103
+@     fdr,3950,d,1 '' 'Category' 	,<app> ,<fln>i3 .
+@     wrl,3950,d,1,<fln>,y 'SvcCab' 	,<cab> .
+@.
+@0103:cmu .
+@     gto 0150 .
 @.
 @0150:. ------------------------- Install Complete -----------------------------
 @.
 @.    #===   Build DEF Table   =================================================
-@     call,"BLD-DEFTABLE" 0001 (<CAB>,' ','1','XALL','ALL') .
+@     juv,d <cab> .
+@     if <cab> eq 100,56  gto lin+3 .
+@     call,"BLD-DEFTABLE" 0001 (<cab>,' ','1','XALL','ALL') .
+@     juv,d <cab> .
 @.
-@     LDV <STP>i1=8 .
+@.    #  Update version on DEFLIST_
+@     dvs,200,b,4 'Version' <ver>h .
+@     rsl,-2  call 0170 ('REVISION','Level',<ver>) .
+@     ldv,l <ver> .
+@     lok,200,b,4 .
+@     fdr,200,b,4 '' 'Cab' 	,<cab> ,<fln>i3 .
+@     wrl,200,b,4,<fln>,y 'Version' 	,<ver> .
+@     ulk .
 @.
-@     TXT,"Installation Complete",<MSG1> .
-@     TXT,"Press Finish to display Installation Notes",<MSG2> .
-@     BRK,0,A .
-  <PRD> successfully loaded into Cabinet <CAB>.
-@     LZR,-4 <LNS>i4  IF <LNS> lt 6,(lin+2) ; .
-  Run script(s) were registered in Department <DPT>.
-@     BRK  TXT,-0,2,99,<TXTH>,,,,,,s .
+@     ldv <stp>i1=8 .
 @.
-@     FON,t,'Courier New',08,pd  .
-@     BRK,0,A .
-@     LDV <CLR>h3=whi  IF DWCAP$(13-1) eq 1  LDV <CLR>h6=E8E8E8 ; .
-@     BRK .
-@     FON,t .
+@     if <*deploy> eq 'Y'  gto 0152 . ; .
+@     txt,"Installation Complete",<msg1> .
+@     txt,"Press Finish to display Installation Notes",<msg2> .
 @.
-@     FON,t,'Arial',08,pdb .
-@     BTN,<WIN1>,28,52,02,08 'Finish' <EXIT>i6 .
-@     FON,t .
-@     INP,<EXIT> .
+@     brk,0,A .
+  <app> successfully loaded into Cabinet <cab>.
+@     lzr,-4 <lns>i4  if <lns> lt 6,(lin+2) ; .
+  Run script(s) were registered in Department <dpt>.
+@     brk  txt,-0,2,99,<txth>,,,,,,s .
+@.
+@     fon,t,'Courier New',08,pd  .
+@     brk,0,A .
+@     ldv <clr>h3=whi  if dwcap$(13-1) eq 1  ldv <clr>h6=E8E8E8 ; .
+@     brk .
+@     fon,t .
+@.
+@     fon,t,'Arial',08,pdb .
+@     btn,<win1>,28,52,02,08 'Finish' <exit>i6 .
+@     fon,t .
+@     inp,<exit> .
 @0151:.
-@     CLS,<WIN1>  LDV <WIN1>=0 .
-@     FON,r  FON,t .
-@     WIN,,01,01,01,01,,h '' <WIN1>i6  CLS,<WIN1>  LDV <WIN1>=0 .
+@     cls,<win1>  ldv <win1>=0 .
+@     fon,r  fon,t .
+@     win,,01,01,01,01,,h '' <win1>i6  cls,<win1>  ldv <win1>=0 .
 @.
-@     BRK,0,A .
+@0152:brk,0,A .
 .Installation Notes
 *===============================================================================
- <PRD> has been successfully installed in Cabinet <CAB>.
+ <app> has been successfully installed in Cabinet <cab>.
  Please sign off as MAPCOORD and sign on as yourself.
- You can then open up a report in Sublime by typing SUBL on the control line.
- Additional instructions and documentation can be found here:
- https://github.com/bis-mapper/sublwatcher
 
-@     LDV <RUN>h12  RDL,-4,6,0152 'Run' <RUN> .
+@     lzr,-8 <tlns>i5,<tcc>i3,<thln>i3  if <thln> eq <tlns>  gto 0153 . ; .
+ The app apears to have been installed successfully, but a few reports were
+ skipped in the process.
+@     rdc,-8 1-80 <tocrslt>s .
+<tocrslt>
+
+
+@. @     ldv <run>h12  rdl,-4,6,0152 'Run' <run> .
+@. @.
+@. @     if <dpt> ne mstrd$,(lin+2) ; .
+@.  The following runs have been globally registered for all users:
+@. @     if <dpt> eq mstrd$,(lin+2) ; .
+@.  The following runs have been registered for all users in department <dpt>:
+@.  Run Name
+@.  --------
+@. @     rdc,-4,6 'Run' <v1>h .
+@.  <v1>
+@. @0152:.
+@0153:brk  rnm -8 .
 @.
-@     IF <DPT> ne MSTRD$,(lin+2) ; .
- The following runs have been globally registered for all users:
-@     IF <DPT> eq MSTRD$,(lin+2) ; .
- The following runs have been registered for all users in department <DPT>:
- Run Name
- --------
-@     RDC,-4,6 'Run' <V1>h .
- <V1>
-@0152:.
-@     BRK  RNM -8 .
-@.
-@     IF <RUN> eq '',(lin+3) ; .
-@     IF <DPT> eq MSTRD$ . ; IF <DPT> eq DEPN$ . ; GTO lin+2 .
+@     if <*deploy> eq 'Y'  gto 0199 . ; .
+@     if <run> eq '',(lin+3) ; .
+@     if <dpt> eq mstrd$ . ; if <dpt> eq depn$ . ; gto lin+2 .
 fkey,01,''Quit  '',KEY
-@     BRK  FKY,-0 .
-@     DSP,-8 .
+@     brk  fky,-0 .
+@     dsp,-8 .
 @     FKY .
-@     IF <RUN> eq '',(0199) ; .
-@     IF FKEY$ eq 1,(0199) ; .
+@     if <run> eq '',(0199) ; .
+@     if fkey$ eq 1,(0199) ; .
 @.    BRK  DLR,-0 .
 @.    SC q prep .
-@.    IF <DPT> eq MSTRD$  RUN <RUN> . ; IF <DPT> eq DEPN$  RUN <RUN> . ; .
-@.    CLS,<WIN1>  LDV <WIN1>=0 .
-@     GTO 0199 .
+@.    IF <dpt> eq mstrd$  RUN <run> . ; IF <dpt> eq depn$  RUN <run> . ; .
+@.    CLS,<win1>  LDV <win1>=0 .
+@     gto 0199 .
+@.
+@.
+@.    #  Subroutine:  Read SETUP.INF values
+@0170:(<key>,<nestedkey>,<value>) .
+@     ln+,-0,1,1  wrl,-0,2 2-1 *,= .
+@     def,p <keysz>i3,<key> .
+@     srh,-0,,,0173 dp 2-<keysz> [,<key>(p)] .
+@     loc,-0,4,0173 afm 1-79 <nestedkey> ,<lin>i4  dec,1 <lin> .
+@     inc <lin>  rdl,-0,<lin> 1-100 <dat>s .
+@     lcv,0173 '' <dat> '=' <col>i2  inc <col> .
+@     ldv <value>=<dat>(<col>-0) .
+@0173:return  .
 @.
 @. --------------------------------- Errors ------------------------------------
 @.
+@0178:.
+@     mbx,OK,S,'Could not locate SVCTBL.TXT' "/\
+ Must BUILD application b4 implementing" \
+      O,(0199) .
+@0179:.
+@     mbx,OK,S,'Could not locate CTGTBL.TXT' "/\
+ Must BUILD application b4 implementing" \
+      O,(0199) .
 @0180:.
-@     SC '' \
- CS;MSG,1,e,,TIC$'<Installation requires a Graphical Workstation>'TIC$ .
-@     REL .
+@     sc '' \
+ CS;msg,1,e,,tic$'<Installation requires a Graphical Workstation>'tic$ .
+@     rel .
 @0181:.
-@     MBX,OK,s,'Restriction' "/\
+@     mbx,OK,s,'Restriction' "/\
  Your Graphical Workstation or BIS level does not support SBS" \
       O,(0199) .
 @0182:.
-@     MBX,OK,S,'Insufficient Privileges' "/\
+@     mbx,OK,S,'Insufficient Privileges' "/\
  You must have coordinator privileges to perform this installation." \
       O,(0199) .
 @0183:.
-@     MBX,OK,S,'Insufficient Privileges' "/\
+@     mbx,OK,S,'Insufficient Privileges' "/\
  Your user-id is not permitted to generate a new drawer." \
       O,(0199) .
 @0184:.
-@     IF <STP> eq 0,(0010) ; .
-@     LDV <FOC>=<EDT1> .
-@     MBX,OK,S,'Invalid Entry' "/\
+@     if <stp> eq 0,(0010) ; .
+@     ldv <foc>=<edt1> .
+@     mbx,OK,S,'Invalid Entry' "/\
  Path name contains invalid characters." \
       O,(0021) .
 @0185:.
-@     IF <STP> eq 0,(0010) ; .
-@     LDV <FOC>=<EDT1> .
-@     MBX,OK,S,'Invalid Installation File(s)' "/\
+@     if <stp> eq 0,(0010) ; .
+@     ldv <foc>=<edt1> .
+@     mbx,OK,S,'Invalid Installation File(s)' "/\
  Installation file(s) not found in the path specified or are corrupt.//\
  Please verify the path name." \
       O,(0021) .
 @0186:.
-@     LDV <FOC>=<EDT1> .
-@     MBX,OK,S,'Invalid Entry' "/\
+@     ldv <foc>=<edt1> .
+@     mbx,OK,S,'Invalid Entry' "/\
  Invalid run registration department number." \
       O,(0041) .
 @0187:.
-@     MBX,OK,S,'Insufficient Database Space' "/\
+@     mbx,OK,S,'Insufficient Database Space' "/\
  No empty drawers available this system." \
       O,(0199) .
 @0188:.
-@     LDV <FOC>=<EDT1> .
-@     MBX,OK,S,'Invalid Entry' "/\
+@     ldv <foc>=<edt1> .
+@     mbx,OK,S,'Invalid Entry' "/\
  You must specify an even-numbered cabinet." \
       O,(0053) .
 @0189:.
-@     LDV <FOC>=<EDT1> .
-@     MBX,OK,S,'Invalid Entry' "/\
- Cabinet must be 16 through MAXCAB$." \
+@     ldv <foc>=<edt1> .
+@     mbx,OK,S,'Invalid Entry' "/\
+ Cabinet must be 16 through maxcab$." \
       O,(0053) .
 @0190:.
-@     LDV <FOC>=<EDT1> .
-@     MBX,OK,S,'Invalid Entry' "/\
- Cabinet must be 2 through MAXCAB$." \
+@     ldv <foc>=<edt1> .
+@     mbx,OK,S,'Invalid Entry' "/\
+ Cabinet must be 2 through maxcab$." \
       O,(0053) .
 @0191:.
-@     LDV <FOC>=<EDT1> .
-@     MBX,OK,S,'System Restriction' "/\
+@     ldv <foc>=<edt1> .
+@     mbx,OK,S,'System Restriction' "/\
  Cabinets 200 through 250 are reserved and may not be used." \
       O,(0053) .
 @0192:.
-@     LDV <FOC>=<EDT2> .
-@     MBX,OK,S,'Invalid Entry' "/\
+@     ldv <foc>=<edt2> .
+@     mbx,OK,S,'Invalid Entry' "/\
  Invalid Drawer letter." \
       O,(0053) .
 @0193:.
-@     LDV <FOC>=<EDT1> .
-@     MBX,OK,S,'Invalid Entry' "/\
- Database file number must be 3 through 'MAXFIL$" \
+@     ldv <foc>=<edt1> .
+@     mbx,OK,S,'Invalid Entry' "/\
+ Database file number must be 3 through 'maxfil$" \
       O,(0061) .
 @0194:.
-@     IF <STP> eq 0,(0010) ; .
-@     LDV <FOC>=<EDT1> .
-@     MBX,OK,S,'Invalid Installation File(s)' "/\
+@     if <stp> eq 0,(0010) ; .
+@     ldv <foc>=<edt1> .
+@     mbx,OK,S,'Invalid Installation File(s)' "/\
  Run drawer was not specified in SETUP.INF file.//\
  Please specify and try again." \
       O,(0021) .
-@0195:.
-@     MBX,OK,S,<PRD>' is already running' "/\
- Please close all current instances of <PRD>." \
-      O,(0199) .
 @.
 @. ------------------------------- Termination ---------------------------------
 @.
 @0196:. Abort
 @.
-@     IF SYSNAM$(1-1) ne 'M'  CHG <ERR>i4 CERR$ ; .
-@     IF SYSNAM$(1-1) eq 'M'  SC x EEL';'rsm ; .
-@     RAR 0196 .
+@     if sysnam$(1-1) ne 'M'  chg <err>i4 cerr$ ; .
+@     if sysnam$(1-1) eq 'M'  sc x EEL';'rsm ; .
+@     rar 0196 .
 @.
 @0198:. Quit
 @.
-@     IF <STP> ge 1 & le 7 . ; GTO lin+4 .
-@     MBX,YN,Q,'Confirmation' "/\
+@     if <stp> ge 1 & le 7 . ; gto lin+4 .
+@     mbx,YN,Q,'Confirmation' "/\
  Are you sure you want to abandon this installation?" \
       N,(lin+1),Y,(0199) .
-@     IF <STP> eq 1,(0011) ; .
-@     IF <STP> eq 2,(0021) ; .
-@     IF <STP> eq 3,(0031) ; .
-@     IF <STP> eq 4,(0041) ; .
-@     IF <STP> eq 5,(0053) ; .
-@     IF <STP> eq 6,(0061) ; .
-@     IF <STP> eq 7,(0075) ; .
-@     IF <STP> eq 8,(0151) ; .
-@     GTO 0199 .
+@     if <stp> eq 1,(0011) ; .
+@     if <stp> eq 2,(0021) ; .
+@     if <stp> eq 3,(0031) ; .
+@     if <stp> eq 4,(0041) ; .
+@     if <stp> eq 5,(0053) ; .
+@     if <stp> eq 6,(0061) ; .
+@     if <stp> eq 7,(0075) ; .
+@     if <stp> eq 8,(0151) ; .
+@     gto 0199 .
 @.
 @0199:. Exit
 @.
-@     CLS,<WIN1> .
-@     IF DRW8$ ne 0  LZR,-8,lin+1  DSX,-8 ; .
+@     if <*deploy> eq 'Y'  return . ; cls,<win1> .
+@     if drw8$ ne 0  lzr,-8,lin+1  dsx,-8 ; .
