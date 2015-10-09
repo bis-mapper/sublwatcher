@@ -1,16 +1,16 @@
 .Object Name: TOC
-*    .D.    .      .   .                    .                                                                               .Update   .Update  .Replace  .Last       .
-*Cab .w.Rpt .Lines .Typ.Name                .Title                                                                          .Date     .Time    .Date     .User       .
-*====.=.====.======.===.====================.===============================================================================.=========.========.=========.===========.
-	56   E    0     39 BIS
-	56   E    1     16 BIS INDEX                INDEX                                                                                     16:30:27 06 JAN 15 ED
-	56   E    2    141 png                      trash.png                                                                       05 OCT 15 15:08:18 05 OCT 15 ED
-	56   E    3    406 exe                      mfxfile.exe                                                                     21 MAY 14 14:32:54 21 MAY 14 MAPCOORD
-	56   E    5    557 EXE                      GROWLNOTIFY.EXE                                                                 21 MAY 14 14:32:54 21 MAY 14 MAPCOORD
-	56   E    6     10 jpg                      cmd.jpg                                                                         21 MAY 14 14:32:54 21 MAY 14 MAPCOORD
-	56   E    7     33 png                      failed.png                                                                      21 MAY 14 14:32:54 21 MAY 14 MAPCOORD
-	56   E    8     25 png                      pending.png                                                                     21 MAY 14 14:32:54 21 MAY 14 MAPCOORD
-	56   E    9     27 PNG                      SUBLIME_TEXT.PNG                                                                21 MAY 14 14:32:54 21 MAY 14 MAPCOORD
-	56   E   10     26 png                      success.png                                                                     21 MAY 14 14:32:54 21 MAY 14 MAPCOORD
-	56   E   11     23 png                      warning.png                                                                     14 MAY 15 15:37:45 14 MAY 15 JOSH
-	56   E   12   4455 exe                      7zip.exe                                                                                  12:00:29 23 JUN 15 ED
+*    .D.    .   .                    .                                                                               .
+*Cab .w.Rpt .Typ.Name                .Title                                                                          .
+*====.=.====.===.====================.===============================================================================.
+	56   E    0 BIS
+	56   E    1 BIS INDEX                INDEX
+	56   E    2 png                      trash.png
+	56   E    3 exe                      mfxfile.exe
+	56   E    5 EXE                      GROWLNOTIFY.EXE
+	56   E    6 jpg                      cmd.jpg
+	56   E    7 png                      failed.png
+	56   E    8 png                      pending.png
+	56   E    9 PNG                      SUBLIME_TEXT.PNG
+	56   E   10 png                      success.png
+	56   E   11 png                      warning.png
+	56   E   12 exe                      7zip.exe
