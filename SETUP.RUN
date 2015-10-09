@@ -27,7 +27,7 @@
 @     ldv <win1>i6=0 .
 @     rer,56,b,0099 0001 .
 @.
-@     ldv,p <app>s20='' .
+@     ldv,p <app>s20='sublwatcher         ' .
 @     ldv,u <app>(1-1) .
 @     ldv <ovr>h1=N .
 @     ldv <gen>h1=Y .
