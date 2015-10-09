@@ -562,11 +562,12 @@
 @.
 @. @     inc <qty>  inc,<rln> <xln>  juv,r <rpt>  ldv,l <rid>h5=<rpt><drw> .
 @     juv,r <rpt>  ldv,l <rid>h5=<rpt><drw> .
+@     ldv <retflag>h1=N .
 @     if <*deploy> eq 'Y' . ; txt,"Loading Report: <rid>",<txt3> .
 @     ldv,pu <report>s20=<rpt>(p)<tdrw>(p)<tcab>(p)'.'<ext>(p) .
-@     ldv <bin>h1=N .
+@     ldv <bin>h1=N,<retfmt>h1=N .
 @     if <ext> eq 'BMP','PCX','JPG','BIN','EXE','PNG'  ldv <bin>h1=Y ; .
-@     if <bin> eq Y  ldv,p <report>s79=<ttl> .
+@     if <bin> eq Y  ldv,p <report>s79=<ttl>,<retfmt>h1=B .
 @.
 @     if <svcnme> eq '' \
         ldv,p <svc>s40=<report> . ; \
@@ -605,7 +606,7 @@
         ldv,p <tpth>s998=<pth>'\'<appfolder>'\'<subfolder>'\shared' . ; \
         ldv,p <tpth>s998=<pth>'\'<appfolder>'\'<subfolder> .
 @     if <*deploy> eq 'Y' \
-        ret,<cab>,<drw>,<bin>,n,lin1 <tpth>'\'<svc>  gto 0108 . ; \
+        ret,<cab>,<drw>,<retfmt>,n,lin1 <tpth>'\'<svc>  gto 0108 . ; \
         pcr,<cab>,<drw>,-0,<bin>,,lin1 <tpth>'\'<svc>  gto 0108 .
 @     brk .
 	<tcab>	<tdrw>	<rpt>	<ext>	<svcnme>	
@@ -613,7 +614,7 @@
 @     gto 0091 .
 @.
 @0107:if <*deploy> eq 'Y' \
-        ret,<cab>,<drw>,<bin>,n,lin1 <pth>'\'<dnm>(p)'\'<svc>(p)  gto 0108 . ; \
+        ret,<cab>,<drw>,<retfmt>,n,lin1 <pth>'\'<dnm>(p)'\'<svc>(p)  gto 0108 . ; \
         pcr,<cab>,<drw>,-0,<bin>,,lin1 <pth>'\'<dnm>(p)'\'<svc>(p)  gto 0108 .
 @     brk .
 	<tcab>	<tdrw>	<rpt>	<ext>	<svcnme>	
