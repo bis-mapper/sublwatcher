@@ -302,7 +302,6 @@
 @.
 @0064:rep,-4,<cab>,<drw>,<rpt> .
 @     ulk .
-<<<<<<< HEAD
 @.
 @     if <event> eq 'added' . ; gto lin+4 .
 @     ldv <msg>s80='NEW File: '<rpt>(p)<drw>(p)<cab>(p)' added. Site: 'SITE$ .
@@ -311,10 +310,6 @@
 @.
 @     ldv <msg>s80='File: '<rpt>(p)<drw>(p)<cab>(p)' saved. Site: 'SITE$ .
 @     call,GROWL_ 0001 ('File Saved','SUCCESS',<msg>) .
-=======
-@     ldv <msg>s80='File: '<rpt>(p)<drw>(p)<cab>(p)' saved. Site: 'SITE$ .
-@     call,GROWL_ 0001 ('Sublwatcher: Success!','SUCCESS',<msg>) .
->>>>>>> be654798bc66a8ac102dbd14e17b2daefd1cc524
 @     gto 0036 .
 @.
 @.    #  Start over and keep re-checking
