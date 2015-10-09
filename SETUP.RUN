@@ -419,9 +419,9 @@
 @.    #  Somethine will show up in this list if it's in the TOC.TXT but
 @.    #  hasnt been commited to version control yet.
 @     brk .
-*    .D.    .      .   .                    .Replace  .Last       .
-*Cab .w.Rpt .Lines .Typ.Name                .Date     .User       .
-*====.=.====.======.===.====================.=========.===========.
+*    .D.    .   .                    .
+*Cab .w.Rpt .Typ.Name                .
+*====.=.====.===.====================.
 @     brk rnm -8 .
 @.
 @     lzr,-6 ,,<dlin>i4 .
@@ -536,7 +536,7 @@
         pcr,0,f,-0,,,0185 <ptx>'\'<dnm>(p)'\TOC.TXT' .
 @     rnm -3 .
 @.
-@0106:tot,-3 '' 'Lines' '	',+ <tln>i12 .
+@0106:. tot,-3 '' 'Lines' '	',+ <tln>i12 .
 @.
 @     if <*deploy> eq 'Y' gto 0109 . ; .
 @     txt,"Software Modules",<msg1> .
@@ -555,14 +555,13 @@
 @     txt,"",<win1>,18,29,01,05,dblu/whi,cs <txt6>i6 .
 @     juv,r <cab> .
 @.
-@0109:ldv <xln>i12=0,<qty>a4=0 .
+@0109:.
 @     lzr,-3 ,,<rlin>i4 .
-@0091:inc <rlin>  rdl,-3,<rlin>,0097 'Cab','Dw','Rpt','Lines','Typ','Name',\
-        'Title','UpdateDate','UpdateTime','ReplaceDate','LastUser' \
-        <tcab>i,<tdrw>h,<rpt>a,<rln>i,<ext>h,<svcnme>s,<ttl>s,\
-        <upddate>h,<updtime>h,<repdate>h,<duser>h .
+@0091:inc <rlin>  rdl,-3,<rlin>,0097 'Cab','Dw','Rpt','Typ','Name','Title' \
+        <tcab>i,<tdrw>h,<rpt>a,<ext>h,<svcnme>s,<ttl>s .
 @.
-@     inc <qty>  inc,<rln> <xln>  juv,r <rpt>  ldv,l <rid>h5=<rpt><drw> .
+@. @     inc <qty>  inc,<rln> <xln>  juv,r <rpt>  ldv,l <rid>h5=<rpt><drw> .
+@     juv,r <rpt>  ldv,l <rid>h5=<rpt><drw> .
 @     if <*deploy> eq 'Y' . ; txt,"Loading Report: <rid>",<txt3> .
 @     ldv,pu <report>s20=<rpt>(p)<tdrw>(p)<tcab>(p)'.'<ext>(p) .
 @     ldv <bin>h1=N .
@@ -609,7 +608,7 @@
         ret,<cab>,<drw>,<bin>,n,lin1 <tpth>'\'<svc>  gto 0108 . ; \
         pcr,<cab>,<drw>,-0,<bin>,,lin1 <tpth>'\'<svc>  gto 0108 .
 @     brk .
-	<tcab>	<tdrw>	<rpt>	<rln>	<ext>	<svcnme>	<repdate>	<duser>	
+	<tcab>	<tdrw>	<rpt>	<ext>	<svcnme>	
 @     brk  add,-0,-8  rnm -8 .
 @     gto 0091 .
 @.
@@ -617,7 +616,7 @@
         ret,<cab>,<drw>,<bin>,n,lin1 <pth>'\'<dnm>(p)'\'<svc>(p)  gto 0108 . ; \
         pcr,<cab>,<drw>,-0,<bin>,,lin1 <pth>'\'<dnm>(p)'\'<svc>(p)  gto 0108 .
 @     brk .
-	<tcab>	<tdrw>	<rpt>	<rln>	<ext>	<svcnme>	<repdate>	<duser>	
+	<tcab>	<tdrw>	<rpt>	<ext>	<svcnme>	
 @     brk  add,-0,-8  rnm -8 .
 @     gto 0091 .
 @.
@@ -647,10 +646,10 @@
 @     lch,-0,,lin+1 'af' 1-<cc> <ns>/tab$ .
 @     rep,<cab>,<drw>,<rpt> .
 @.
-@0093:chg <pc>i4 <xln> / <tln> * 100  chg <wid>i4 <pc> * 25 / 100 .
+@0093:. chg <pc>i4 <xln> / <tln> * 100  chg <wid>i4 <pc> * 25 / 100 .
 @     if <*deploy> eq 'Y'  gto 0091 . ; .
-@     if <wid> gt 0  txt,"",<txt5>,17,19,03,<wid>,dblu ; .
-@     ldv,p <pc>  txt,"<pc>%",<txt6>,,,,,,s .
+@. @     if <wid> gt 0  txt,"",<txt5>,17,19,03,<wid>,dblu ; .
+@. @     ldv,p <pc>  txt,"<pc>%",<txt6>,,,,,,s .
 @     if <rpt> eq 0,(0094) ; .
 @.ew  lok,<cab>,<drw>,<rpt>  wrl,<cab>,<drw>,<rpt>,2 2-79 .,<ttl>  ulk .
 @     gto 0091 .
