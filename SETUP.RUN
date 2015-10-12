@@ -770,13 +770,13 @@
       <run>,<rpt>,<ios>,<llp>,<flg>,<rdrw> .
 @     ldv,p <rdrw> .
 @     if sysnam$(1-1) ne 'm',(0122) ; .
-@     ldv <drc>a6=<cab><rdrw>  def,n <drn>,<drc> .
+@     ldv <drc>a6=<cab>(p)<rdrw>(p)  def,n <drn>,<drc> .
 @     wrl,rundrw$,<dpt>,<lin> \
       'run','user','type','rid','f','i/o','line','mode','1mdnf','var','lab' \
       	,<run>,<usr>,<drn>,<rpt>,<f>,<ios>,<llp>,<cbs>,<flg>,499,499 .
 @     gto 0121 .
 @0122:.
-@     ldv,r <drn>(0-5)=<rdrw><cab> .
+@     ldv,r <drn>(0-5)=<rdrw>(p)<cab>(p) .
 @     wrl,rundrw$,<dpt>,<lin> \
       'run','user','drawer','rpt','f','i/o','line','cab','1mdnf','var','lab' \
       	,<run>,<usr>,<drn>,<rpt>,<f>,<ios>,<llp>,<cbs>,<flg>,499,499 .
