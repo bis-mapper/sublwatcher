@@ -235,7 +235,7 @@
 * Run Name   .Rpt .I/O  .LLP   1MDNF.RDRW.
 *============.====.=====.=====.=====.====.
 @     srh,-2,,,0028 dp 2-8 [,RUNS]  ldv <lin>i6=3 .
-@0027:inc <lin>  loc,-0,<lin>,0028 afm 2-79  run ,<lin> .
+@0027:inc <lin>  loc,-0,<lin>,0127 afm 2-79  run ,<lin> .
 @     rdl,-0,<lin> 1-80 <dat>s  lcv,0185 '' <dat> '=' <col>i2  inc <col> .
 @     ldv,lq <run>h12=<dat>(<col>-0),0(,) .
 @     ldv,rq <rpt>i4=<dat>(<col>-0),1(,) .
@@ -245,7 +245,7 @@
 @     ldv,lq <rdrw>h4=<dat>(<col>-0),5(,) .
 	<run>	<rpt>	<ios>	<llp>	<flg>	<rdrw>	
 @     gto 0027 .
-@     brk  rnm -4 .
+@0127:brk  rnm -10 .
 @0028:.
 @     brk,0,A .
 .
@@ -259,10 +259,11 @@
              <dbdrw>h1=<dat>(<col>-0),1(,),\
              <dbcab>i4=<dat>(<col>-0),2(,),\
              <dbdesc>s40=<dat>(<col>-0),3(,) .
+@     if <dbrpts> eq ''  ldv <dbrpts>='1-5000' . ; .
 @     lcv,lin1 'b1' <dbrpts> '-' <dpos>i3  ldv <mult>h1='Y'  gto lin+2 .
 @     ldv <mult>h1='N' .
 @     if <mult> eq 'N' \
-        ldv <begrpt>i4=<dbrpts>,<endrpt>i4=<dbrpts> . ; \
+        ldv <begrpt>i4=<dbrpts>,<endrpt>i4='' . ; \
         dec <dpos>    ldv <begrpt>i4=<dbrpts>(1-<dpos>) \
         inc,2 <dpos>  ldv <endrpt>i4=<dbrpts>(<dpos>-0) .
 	<dbcab>(r)	<dbdrw>	<begrpt>	<endrpt>	
@@ -578,8 +579,14 @@
 *     d.    .    .
 *Cab  r.BRpt.ERpt.
 *====.=.====.====.
-@     fdr,-7,,,0092 '' 'Cab','Dr','BRpt' 	,<tcab>,<tdrw>,<rpt> .
-@     lzr,<tcab>,<tdrw>,<rpt>,0092   gto 0091 .
+@     srh,-7,,,0092 'd' 'Cab','Dr' 	,<tcab>,<tdrw> .
+@     lzr,-0 ,,<dhln>i3  inc <dhln> .
+@     rdl,-0,<dhln> 'Brpt','ERpt' <begrpt>i,<endrpt>i .
+@     if <endrpt> eq '' . ; gto lin+3 .
+@     fdr,-0,,,0092 '' 'Cab','Dr','BRpt' 	,<tcab>,<tdrw>,<rpt> . ;
+@     lzr,<tcab>,<tdrw>,<rpt>,0092   gto 0091 .                   already exist?
+@.
+@     if <rpt> ge <begrpt>  if <rpt> le <endrpt>  gto 0091 . ; .
 @. @     pcr,<cab>,<drw>,-0,<bin> <pth>'\'<dnm>(p)'\'<svcnme>(p)<report> .
 @. @     rnm -8  lzr,-8 ,<cc>i3,<hln>i3  dec <hln> .
 @. @     brk,0,I  rdc,-8,2,<hln> 1-<cc> <hdgs>s .
@@ -675,7 +682,7 @@
 @.
 @0099:. -------------------- ICE Registration ---------------------------
 @.
-@     if <iceapp> eq 'N'  gto 0150 . ; .
+@     if <iceapp> eq 'N'  gto 0115 . ; .
 @     txt,"ICE Registration",<msg1> .
 @     txt,"... Please Wait ...",<msg2> .
 @     brk,0,A .
@@ -684,7 +691,7 @@
 @.
 @     wat 1000 .
 @.
-@0100:if <iceapp> eq 'N' gto 0150 . ; .
+@0100:if <iceapp> eq 'N' gto 0115 . ; .
 @     if <*deploy> eq 'y' \
         ret,0,f,n,n,0178 <ptx>'\CTGTBL.TXT' . ; \
         pcr,0,F,-0,,,0178 <ptx>'\CTGTBL.TXT' .
@@ -723,10 +730,62 @@
 @     wrl,3950,d,1,<fln>,y 'SvcCab' 	,<cab> .
 @.
 @0103:cmu .
-@     gto 0150 .
 @.
-@0150:. ------------------------- Install Complete -----------------------------
 @.
+@0115:. -------------------- Update Run Registration ---------------------------
+@.
+@     if <*deploy> eq 'y'  gto 0116 . ; .
+@     txt,"run script registration",<msg1> .
+@     txt,"... please wait ...",<msg2> .
+@     brk,0,a .
+ registering run script(s) in department <dpt> ...
+@     brk  txt,-0,2,99,<txth>,,,,,,s .
+@.
+@     wat 1000 .
+@.
+@0116:dfu rundrw$,<dpt> .
+@     ldv <sor>h1=n  bfn,rundrw$,<dpt>,,lin+1 k 'run' 	,k  ldv <sor>=y .
+@     mau,-10,rundrw$,<dpt>,0117 dm 'run' 	,1 'run' 	,1 .
+@     del .
+@0117:.
+@     if sysnam$(1-1) ne 'm',(0119) ; .
+@     dvs,rundrw$,<dpt> \
+      'run','user','type','rid','f','i/o','line','mode','1mdnf' \
+      <run>h,<usr>h,<drn>a,<rpt>i,<f>h,<ios>a,<llp>a,<cbs>s,<flg>h .
+@     gto 0120 .
+@0119:.
+@     dvs,rundrw$,<dpt> \
+      'run','user','drawer','rpt','f','i/o','line','cab','1mdnf' \
+      <run>h,<usr>h,<drn>a,<rpt>i,<f>h,<ios>a,<llp>a,<cbs>s,<flg>h .
+@0120:.
+@     ldv,lw <usr>=user$  if <all> eq 1  ldv <usr>='' ; .
+@     ldv <f>=y,<cbs>=all .
+@     lzr,-10 <lnq>i3  dec,5 <lnq> .
+@     lzr,rundrw$,<dpt> ,,<lin>i6 .
+@     ln+,rundrw$,<dpt>,<lin>,<lnq> .
+@     ldv <rln>i4=5 .
+@0121:inc <rln>,<lin> .
+@     rdl,-10,<rln>,0123 'run','rpt','i/o','llp','1mdnf','rdrw' \
+      <run>,<rpt>,<ios>,<llp>,<flg>,<rdrw> .
+@     ldv,p <rdrw> .
+@     if sysnam$(1-1) ne 'm',(0122) ; .
+@     ldv <drc>a6=<cab><rdrw>  def,n <drn>,<drc> .
+@     wrl,rundrw$,<dpt>,<lin> \
+      'run','user','type','rid','f','i/o','line','mode','1mdnf','var','lab' \
+      	,<run>,<usr>,<drn>,<rpt>,<f>,<ios>,<llp>,<cbs>,<flg>,499,499 .
+@     gto 0121 .
+@0122:.
+@     ldv,r <drn>(0-5)=<rdrw><cab> .
+@     wrl,rundrw$,<dpt>,<lin> \
+      'run','user','drawer','rpt','f','i/o','line','cab','1mdnf','var','lab' \
+      	,<run>,<usr>,<drn>,<rpt>,<f>,<ios>,<llp>,<cbs>,<flg>,499,499 .
+@     gto 0121 .
+@0123:.
+@     if <sor> eq y  srr,rundrw$,<dpt> '' 'run','user' 	,1,2d ; .
+@     cmu .
+@.
+@. ------------------------- Install Complete -----------------------------
+@0150:.
 @.    #===   Build DEF Table   =================================================
 @     juv,d <cab> .
 @     if <cab> eq 100,56  gto lin+3 .
