@@ -15,3 +15,10 @@
  Drawer          = D,132,Sublime - Vendor
  Drawer          = E,132,Sublime - Executables
  Drawer          = I,256,Sublime - Error Dumps
+[DATABASES]
+ Location        = 8,c,56,Log
+ Location        = 1,i,56,ErrorLog DB
+ Location        = 2-5000,i,56,ErrorDumps DB
+[RUNS]
+ Run             = SUBLWATCHER,3,,,NYNWN,B
+ Run             = SUBL,2,,,NYNWN,B
