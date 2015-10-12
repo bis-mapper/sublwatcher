@@ -35,9 +35,16 @@
 @     ldv <pth>s256 .
 @     ldv,pw <dpt>a4=mstrd$ .
 @.
+@.    #  Kill SUBLWATCHER before updating.
+@     if <appname> eq 'SUBLWATCHER' . ; gto 0005 .
+@     sys .
+@     srh,-0,,,0005 'd' 'RUNNAME' 	,'SUBLWATCHER'/	,'SUBLW' .
+@     kll,'SUBLWATCHER' .
+@     kll,'SUBLW' .
+@.
 @. ----------------------- Check System & Level Info ---------------------------
 @.
-@     if <*deploy> eq 'y'  ldv <stp>i1=2  gto 0009 . ; .
+@0005:if <*deploy> eq 'y'  ldv <stp>i1=2  gto 0009 . ; .
 @     if ws$ eq 0,(0180) ; .
 @     if dwcap$(9-1) ne 1,(0181) ; .
 @     if sysnam$(1-1) eq 'M'  if maper$(1-2) lt 37,(0181) ; .
