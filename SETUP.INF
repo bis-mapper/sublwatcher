@@ -21,4 +21,5 @@
  Location        = 2-5000,i,56,ErrorDumps DB
 [RUNS]
  Run             = SUBLWATCHER,3,,,NYNWN,B
+ Run             = SUBLW,33,,,NYNWN,B
  Run             = SUBL,2,,,NYNWN,B
