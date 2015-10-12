@@ -758,6 +758,7 @@
       'run','user','drawer','rpt','f','i/o','line','cab','1mdnf' \
       <run>h,<usr>h,<drn>a,<rpt>i,<f>h,<ios>a,<llp>a,<cbs>s,<flg>h .
 @0120:.
+@     ldv <all>h1=1 .
 @     ldv,lw <usr>=user$  if <all> eq 1  ldv <usr>='' ; .
 @     ldv <f>=y,<cbs>=all .
 @     lzr,-10 <lnq>i3  dec,5 <lnq> .
@@ -781,7 +782,7 @@
       	,<run>,<usr>,<drn>,<rpt>,<f>,<ios>,<llp>,<cbs>,<flg>,499,499 .
 @     gto 0121 .
 @0123:.
-@     if <sor> eq y  srr,rundrw$,<dpt> '' 'run','user' 	,1,2d ; .
+@     srr,rundrw$,<dpt> '' 'run','user' 	,1,2d ; .
 @     cmu .
 @.
 @. ------------------------- Install Complete -----------------------------
