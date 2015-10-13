@@ -87,6 +87,7 @@
 [CONFIG]
  quickopen = DISABLED
  apppath   = <APPPATH>
+ folderexport = site
 @     brk  rnm -6 .
 @     pcw,-6,2 '%USERPROFILE%\sublwatcher\SUBLCONFIG.INF' .
 @.
@@ -102,4 +103,31 @@
 @0100:(<USER>,<APPPATH>) .                                                      Delete, remake file!
 @     pc,bcw "del %USERPROFILE%\sublwatcher\SUBLCONFIG.INF" .
 @     CALL 0001(<USER>,<APPPATH>s256) .
+@     return .
+
+
+
+@.    #=== ADD MISSING PIECES! ===
+@0101:() .
+@     ldv,p <filepath>s100='%USERPROFILE%\sublwatcher\SUBLCONFIG.INF'
+@     pcr,0,i,-0,,,lin+1,t <filepath>  gto lin+2 .                                       File exist?
+@     LDV <USER>h11=USER$  call 0001 (<user>,<apppath>s256) .                         No? goto Setup
+@     rnm -6 .
+@.
+@.    #--- apppath ---
+@     loc,-6,,lin+1 'AFO' 1-80 ,'apppath'  gto lin+3 .
+@     LDV <USER>h11=USER$  call 0100 (<user>,<apppath>s256) .                         No? goto Setup
+@     rnm -6 .
+@.
+@.    #--- quickopen ---
+@     loc,-6,,lin+1 'AFO' 1-80 ,'quickopen'  gto lin+2 .
+@     ln+,-6,,1,,' quickopen = DISABLED' .
+@.
+@.    #--- folderexport ---
+@     loc,-6,,lin+1 'AFO' 1-80 ,'folderexport'  gto lin+2 .
+@     ln+,-6,,1,,' folderexport = site' .
+@.
+@.
+@.
+@     pcw,-6,2 <filepath> .
 @     return .

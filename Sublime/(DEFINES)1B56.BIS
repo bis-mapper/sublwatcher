@@ -21,6 +21,7 @@
 :DEFINE DEFLIST_             "200,b,4"              |¬Application Define Registration
 :DEFINE SUBLRER_             "RER,ECAB$,b,0099 0001  RAR,ECAB$,b,0099 0196"
 :DEFINE SUBLGITHOOKS_        "ECAB$,b,16"           |¬Parse Git Hooks
+:DEFINE EXPORT_              "ECAB$,B,20"           |¬Export routine
 :DEFINE getCabDrwRpt_        "0001"                 |¬Gets Cab Drw Rpt from Var
 :DEFINE configVars_          "0005"                 |¬Loads config vars
 :DEFINE chkIceSvc_           "0010"                 |¬Check if ICE service

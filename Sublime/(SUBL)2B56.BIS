@@ -54,11 +54,10 @@
 @     ldv,p <fldrpath>s256=<datadir> .
 @     call,SUBLCOMMON_ chkMkDir_ (<dir>,<fldr>,<fldrpath>) .
 @.
-@.    #  Read quick open flag
-@     pcr,0,i,-0,,,lin+1,t '%USERPROFILE%\sublwatcher\SUBLCONFIG.INF'  gto lin+3 .       File exist?
-@     call,SUBLSETUP_ 0001 (<user>,<apppath>s256) .                                   No? goto Setup
+@.    #===   READ quickopen FROM SUBLCONFIG.INF
+@     call,SUBLCOMMON_ readConfigInf_ ('CONFIG','quickopen',<value>s100) .
+@     if <value>(p) eq ''  call,SUBLSETUP_ 0101 () . ; ldv,p <quickopen>h18=<value>  gto lin+2 .
 @     gto lin-2 .
-@     call,SUBLCOMMON_ readConfigInf_ ('CONFIG','quickopen',<quickopen>s8) .
 @     if <runinput> ne '<RUNINPUT>'  if <runinput>(p) eq 'q'  ldv <quickopen>s7='ENABLED' . ; .
 @     if <runinput> ne '<RUNINPUT>'  if <runinput>(p) eq '.'  ldv <foldview>h1='Y' . ; .
 @.
@@ -87,7 +86,12 @@
 @0014:ldv <file>s256=<folder>(P)<program> .
 @0015:ldv,p <file>,<fvpath>s998=<file> .
 @.
-@     if <foldview> eq 'Y' lcv,0016 'B6' <fvpath> '\' <subpos>i3  . ; gto 0016 .
+@     if <foldview> eq 'Y' . ; gto 0016 .
+@     call,SUBLCOMMON_ readConfigInf_ ('CONFIG','folderexport',<value>s100) .
+@     if <value>(p) eq ''  call,SUBLSETUP_ 0101 () . ; ldv,p <prjfld>h18=<value>  gto lin+2 .
+@     gto lin-2 .
+@     if <prjfld> eq 'site'  lcv,0016 'B5' <fvpath> '\' <subpos>i3  . ; .
+@     if <prjfld> eq 'project'  lcv,0016 'B6' <fvpath> '\' <subpos>i3  . ; .
 @     pc,r "<apppath>(p) -a" "<fvpath>(1-<subpos>) " .
 @.
 @0016:rsl,<cab>,<drw>,<rpt> .                                                   Get result
