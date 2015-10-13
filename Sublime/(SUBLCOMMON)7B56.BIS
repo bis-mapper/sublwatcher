@@ -218,7 +218,15 @@
 @0061:return .
 @.
 @.
-@.
+@.    #  Split apart version number for comparison
+@0065:(<ver>,<major>,<minor>,<patch>) .
+@     lcv 'b1' <ver> '.' <vpos1>I3 .
+@     lcv 'b2' <ver> '.' <vpos2>I3 .
+@     chg <mnsz>i2 <vpos2> - <vpos1> .                                       GET MINOR REVISION SIZE
+@     inc <vpos1>  dec <mnsz>  ldv <minor>=<ver>(<vpos1>-<mnsz>) .         GET MINOR REVESION NUMBER
+@     dec <vpos1>  ldv <major>=<ver>(1-<vpos1>)  inc <vpos1> .             GET MAJOR REVESION NUMBER
+@     inc <vpos2>  ldv <patch>=<ver>(<vpos2>-0) .                          GET PATCH REVESION NUMBER
+@     return .
 @.
 @.
 @.    #  Errrrrrorrrr

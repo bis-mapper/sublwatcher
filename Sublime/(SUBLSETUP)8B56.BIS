@@ -21,11 +21,11 @@
 @     RSR,SUBLCOMMON_ configVars_ .
 @.
 @.    #  Get computer name
-@     CALL,SUBLCOMMON_ getCompName_ (<COMPUTER>s30) .
+@. @     CALL,SUBLCOMMON_ getCompName_ (<COMPUTER>s30) .
 @.
 @.    #  Get OS level (XP=5,W7=6,...)
-@     CALL,SUBLCOMMON_ getOsVer_ (<OSVER>i1) .
-@     CALL,SUBLCOMMON_ getChgsFile_ (<APPDIR>,<CHGSFILE>s256) .
+@. @     CALL,SUBLCOMMON_ getOsVer_ (<OSVER>i1) .
+@. @     CALL,SUBLCOMMON_ getChgsFile_ (<APPDIR>,<CHGSFILE>s256) .
 @.
 @.    #  Prompt user to find Editor
 @     if <APPPATH> eq ' ' . ; gto 0005 .
@@ -55,18 +55,6 @@
 @     LDV,p <FLDR>s256=<SITE> .
 @     LDV,p <FLDRPATH>s256=<DATADIR> .
 @     CALL,SUBLCOMMON_ chkMkDir_ (<DIR>,<FLDR>,<FLDRPATH>) .
-@.
-@. @.    #  Create batch file
-@. @     IF <OSVER> eq 5  \
-@.         SRH,BATCHTEMP_,,,0000 'dp' 'OS' ¬,'WINDOWS XP' . ; \
-@.         SRH,BATCHTEMP_,,,0000 'dp' 'OS' ¬,'WINDOWS' .
-@. @     LZR,-0 ,<CC>I3,<SLN>I7  LOK,-0  LN-,-0,2,<SLN>  ULK .
-@. @     RNM -1  LZR,-1 ,<CC>I3,<SLN>I7  BRK,0,I .
-@. @     RDL,-1,<SLN>,lin+3 1-<CC> <BATPRGM>s  INC <SLN> .
-@. @     XQT <BATPRGM> .
-@. @     GTO lin-2 .
-@. @     BRK,0,F .
-@. @     PCW,-0 <BATFILE> .
 @.
 @.    #  Make sure explorer utility is loaded onto machine
 @     LZR,SUBLDEP_ ,,<HLN>i3 .
@@ -110,7 +98,7 @@
 @.    #=== ADD MISSING PIECES! ===
 @0101:() .
 @     ldv,p <filepath>s100='%USERPROFILE%\sublwatcher\SUBLCONFIG.INF'
-@     pcr,0,i,-0,,,lin+1,t <filepath>  gto lin+2 .                                       File exist?
+@. @     pcr,0,i,-0,,,lin+1,t <filepath>  gto lin+2 .                                       File exist?
 @     LDV <USER>h11=USER$  call 0001 (<user>,<apppath>s256) .                         No? goto Setup
 @     rnm -6 .
 @.
@@ -127,7 +115,11 @@
 @     loc,-6,,lin+1 'AFO' 1-80 ,'folderexport'  gto lin+2 .
 @     ln+,-6,,1,,' folderexport = site' .
 @.
-@.
+@.    #--- version ---
+@     fdr,SUBLCONFIG_ '' 'Parameter' ¬,'ver'  rln 'value' <ver>s .
+@     ldv,p <ver> .
+@     loc,-6,,lin+1 'AFO' 1-80 ,'version'  gto lin+2 .
+@     ln+,-6,,1,,' version = '<ver> .
 @.
 @     pcw,-6,2 <filepath> .
 @     return .

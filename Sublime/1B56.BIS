@@ -34,6 +34,7 @@
 :DEFINE getChgsFile_         "0050"                 |¬Get OS Version
 :DEFINE charReplace_         "0055"                 |¬Tab character replacement
 :DEFINE readConfigInf_       "0060"                 |¬Parse Data From INF
+:DEFINE parseVersion_        "0065"                 |¬Parse version numbers
 :DEFINE IMDELEGATE_          "94,C,11"              |¬Routes to other processors
 :DEFINE imDeploy_            "0001"                 |¬Deploy Label
 :DEFINE imBuild_             "0010"                 |¬Build Label

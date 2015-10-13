@@ -21,6 +21,7 @@
 	  56 B   16 BIS SUBGITHOOK           SUBGITHOOK
 	  56 B   17 BIS SUBLCTL              SUBLCTL
 	  56 B   18 BIS SBS                  SBS
+	  56 B   19 BIS MANUALEXPORT_        MANUALEXPORT_
 	  56 B   20 BIS EXPORT               EXPORT
 	  56 B   22 BIS GROWL                GROWL
 	  56 B   24 BIS DIFF                 DIFF

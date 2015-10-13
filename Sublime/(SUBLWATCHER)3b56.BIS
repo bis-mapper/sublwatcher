@@ -19,7 +19,18 @@
 @     call,SUBLCOMMON_ appPath_ (<user>,<apppath>s256) .
 @     call,SUBLCOMMON_ getChgsFile_ (<appdir>,<chgsfile>s256) .
 @.
-@     ldv <dcnt>i2=-1
+@.    #  Compare version of user to version of SUBLWATCHER.
+@     call,SUBLCOMMON_ readConfigInf_ ('CONFIG','version',<cfgver>s100) .
+@     ldv,p <cfgver> .
+@     if <cfgver> eq ''  gto 0004 . ; .
+@     call,SUBLCOMMON_ parseVersion_ (<ver>,<major>h16,<minor>h16,<patch>h16) .
+@     call,SUBLCOMMON_ parseVersion_ (<cfgver>,<cfgmajor>h16,<cfgminor>h16,<cfgpatch>h16) .
+@     if <cfgmajor> eq <major> \
+        if <cfgminor> eq <minor> \
+          if <cfgpatch> eq <patch>  gto 0005 . ; .
+@0004:call,SUBLSETUP_ 0101 () .
+@.
+@0005:ldv <dcnt>i2=-1
 @.
 @.    #  Set up animation
 @0010:inc <cnt>,<dcnt> .
