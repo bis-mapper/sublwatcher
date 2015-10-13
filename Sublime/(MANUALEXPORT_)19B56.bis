@@ -1,0 +1,46 @@
+.Object Name: MANUALEXPORT_
+*
+*===================================================================================================
+:INCLUDE,ecab$,B,1 .                                                                         INCLUDE
+@.
+@.    #---------------------------------------------------------------------------------------------
+@.    #  EXPORT
+@.    #  TODO Write program description
+@.    #  TODO Include examples and documentations
+@.    #  Written: 10/12/2015
+@.    #---------------------------------------------------------------------------------------------
+@.
+@.
+@.
+@     chg input$ <runinput>s20 .
+@     ldv <mcab>i4=cab$,<mdrw>h1=adrw$,<mrpt>i4=rpt$ .                            Get RPT on display
+@     if <mrpt>(p) eq '-0' gto lin+2 . ; .
+@     if <mcab> eq 0,''  if <mrpt> eq 0,'' . ; gto lin+6 .
+@     brk,0,a .
+#------------------------------------------------------------------------------#
+#          The EXPORT command can only be used on an actual report.            #
+#------------------------------------------------------------------------------#
+@     gto end .
+@.
+@.
+@.
+@     rsr,SUBLCOMMON_ configVars_ .
+@.
+@     ldv <runname>s12='export',<file>s30='(dummyfilename)'<mrpt>(p)<mdrw>(p)<mcab>(p)'.BIS' .
+@     if <runinput> ne '<RUNINPUT>'  ldv <ctl>s80='export '<runinput> . ; ldv <ctl>s80='export' .
+@     call,EXPORT_ 0001 (<ctl>,<file>,<runname>,<status>h1) .
+@     if <status> eq 9 ldv <msg>s65='Cabinet drawer table 3g6 has blank description for cab: '<cab> .
+@     if <status> eq 8 ldv <msg>s65='FILE MISSING BIS EXTENSION!' .
+@     if <status> eq 7 ldv <msg>s65='Simple Export failed, more parameters needed!' .
+@     if <status> eq 0 ldv <gtype>h7='SUCCESS',<msg>s65='Export Successful!' . ; ldv <gtype>h6='FAILED' .
+@     call,GROWL_ 0001 (<gtype>,<gtype>,<msg>) .
+@.    #=== OPEN SUBLWATCHER IF NOT OPEN ALREADY! ===================================================
+@     sys .                                                                                   system
+@     fdr,-0,,,lin+1 '' 'USERID','RUNNAME' ¬,user$,<sublwatcher>  gto lin+3 .     currently running?
+@     wat 1000 .                                                                pause for first time
+@     RUN <sublwatcher> .                                                 start file watcher utility
+@.
+@.
+@.
+@     gto end .
+@.
