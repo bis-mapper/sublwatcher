@@ -36,7 +36,7 @@
 @     ldv,pw <dpt>a4=mstrd$ .
 @.
 @.    #  Kill SUBLWATCHER before updating.
-@     if <appname> eq 'SUBLWATCHER' . ; gto 0005 .
+@     if <app> eq 'SUBLWATCHER' . ; gto 0005 .
 @     sys .
 @     srh,-0,,,0005 'd' 'RUNNAME' 	,'SUBLWATCHER'/	,'SUBLW' .
 @     kll,'SUBLWATCHER' .
@@ -553,14 +553,14 @@
  Loading <app> code modules, tables and other reports ...
 @     brk  txt,-0,2,99,<txth>,,,,,,s .
 @.
-@     txt,"",<win1>,15,13,08,37,lgra,<b> <txt1>i6 .
-@     fon,t,'Arial',08,pd .
-@     txt,"Completion Status",<win1>,14,14,01,18,bla/lgra,c <txt2>i6 .
-@     txt,"",<win1>,21,24,01,24,bla/lgra,c <txt3>i6 .
-@     fon,t .
-@     txt,"",<win1>,17,19,03,25,whi,<b> <txt4>i6 .
-@     txt,"",<win1>,17,19,03,25,whi,<b> <txt5>i6 .
-@     txt,"",<win1>,18,29,01,05,dblu/whi,cs <txt6>i6 .
+@. @     txt,"",<win1>,15,13,08,37,lgra,<b> <txt1>i6 .
+@. @     fon,t,'Arial',08,pd .
+@. @     txt,"Completion Status",<win1>,14,14,01,18,bla/lgra,c <txt2>i6 .
+@. @     txt,"",<win1>,21,24,01,24,bla/lgra,c <txt3>i6 .
+@. @     fon,t .
+@. @     txt,"",<win1>,17,19,03,25,whi,<b> <txt4>i6 .
+@. @     txt,"",<win1>,17,19,03,25,whi,<b> <txt5>i6 .
+@. @     txt,"",<win1>,18,29,01,05,dblu/whi,cs <txt6>i6 .
 @     juv,r <cab> .
 @.
 @0109:.
@@ -594,28 +594,9 @@
 @     lzr,<tcab>,<tdrw>,<rpt>,0092   gto 0091 .                   already exist?
 @.
 @     if <rpt> ge <begrpt>  if <rpt> le <endrpt>  gto 0091 . ; .
-@. @     pcr,<cab>,<drw>,-0,<bin> <pth>'\'<dnm>(p)'\'<svcnme>(p)<report> .
-@. @     rnm -8  lzr,-8 ,<cc>i3,<hln>i3  dec <hln> .
-@. @     brk,0,I  rdc,-8,2,<hln> 1-<cc> <hdgs>s .
-@. <hdgs>
-@. @     brk  rnm -8 .
-@. @     brk,0,I  rdc,<tcab>,<tdrw>,<rpt>,2,<hln> 1-<tcc> <hdgs>s .
-@. <hdgs>
-@. @     brk .
-@. @     dif,-0,-8 ' ' .
-@. @     lzr,-0 <lns>i7,,<hln>i3  ldv <dif>h1=N  if <lns> eq <hln>,(0092) .
-@. @     inc,4 <hln>  loc,-0,<hln> afm 2-79 DATE ,<lin>I4  inc <lin> .
-@. @     loc,-0,<lin>,lin+1 afm 2-2 '>+'  ldv <dif>=Y .
-@. @     loc,-0,<lin>,lin+1 afm 2-2 '<-'  ldv <dif>=Y .
-@. @.
-@. @.    #  Replace headings if new
-@. @     if <dif> eq Y . ; gto 0092 .
-@. @     lok,<tcab>,<tdrw>,<rpt> .
-@. @     add,<tcab>,<tdrw>,<rpt>,-8 .
-@. @     rep,<tcab>,<tdrw>,<rpt> .
-@. @     ulk .
 @.
-@0092:if <ibldapp> eq 'y' . ; gto 0107 .
+@0092:ldv,p <dnm>,<svc> .
+@     if <ibldapp> eq 'y' . ; gto 0107 .
 @     if <drw> eq 'H'  if <rpt> gt 999  \
         ldv,p <tpth>s998=<pth>'\'<appfolder>'\'<subfolder>'\shared' . ; \
         ldv,p <tpth>s998=<pth>'\'<appfolder>'\'<subfolder> .
@@ -628,8 +609,8 @@
 @     gto 0091 .
 @.
 @0107:if <*deploy> eq 'Y' \
-        ret,<cab>,<drw>,<retfmt>,n,lin1 <pth>'\'<dnm>(p)'\'<svc>(p)  gto 0108 . ; \
-        pcr,<cab>,<drw>,-0,<bin>,,lin1 <pth>'\'<dnm>(p)'\'<svc>(p)  gto 0108 .
+        ret,<cab>,<drw>,<retfmt>,n,lin1 <pth>'\'<dnm>'\'<svc>  gto 0108 . ; \
+        pcr,<cab>,<drw>,-0,<bin>,,lin1 <pth>'\'<dnm>'\'<svc>  gto 0108 .
 @     brk .
 	<tcab>	<tdrw>	<rpt>	<ext>	<svcnme>	
 @     brk  add,-0,-8  rnm -8 .
@@ -637,21 +618,7 @@
 @.
 @.    #  Handle character replacement
 @0108:if <rpt> eq 0,(0093) .
-@     if <bin> eq y,(0093) .
-@.
-@.    #  Check if we need to replace this file.  This is here to help performance when
-@.    #  replacing files in an entire application.
-@.    #  Will read the time stamps from the TOC.TXT files and then reference them agains the local rpt
-@.    #  If the TOC.TXT timestamps are newer than the local files we'll replace ther report.
-@. @     lzr,<cab>,<drw>,<rpt>,0110 .
-@. @     rdl,<cab>,<drw>,<rpt>,1,0036 9-9,20-8,42-9,53-11 <lupddt>h,<lupdtm>h,\
-@.         <lrepdt>h,<luserpt>h .
-@. @     if <lupddt>  EQ ''  ldv <lupddt>=<lrepdt> ; .
-@. @     if <upddate> EQ ''  ldv <upddate>=<repdate> ; .
-@. @     if <luserpt> ne USER$  gto 0110 . ; .
-@. @     if,d2 <upddate> GT <lupddt>  gto 0110 . ; .
-@. @     if,d2 <upddate> EQ <lupddt>  if <upddate> GT <lupdtm>  gto 0110 . ; .
-@. @     gto 0091 .
+@     if <bin> eq y,(0111) .
 @.
 @0110:chg <ns>h1 chr$254  lzr,-0 ,<cc>i4 .
 @     chg <ns1>h1 chr$302 .
@@ -659,14 +626,10 @@
 @     lch,-0,,lin+1 'af' 1-<cc> <ns1><ns>/tab$ .
 @     lch,-0,,lin+1 'af' 1-<cc> <ns1>/'' .
 @     lch,-0,,lin+1 'af' 1-<cc> <ns>/tab$ .
-@     rep,<cab>,<drw>,<rpt> .
+@0111:rep,<cab>,<drw>,<rpt> .
 @.
-@0093:. chg <pc>i4 <xln> / <tln> * 100  chg <wid>i4 <pc> * 25 / 100 .
-@     if <*deploy> eq 'Y'  gto 0091 . ; .
-@. @     if <wid> gt 0  txt,"",<txt5>,17,19,03,<wid>,dblu ; .
-@. @     ldv,p <pc>  txt,"<pc>%",<txt6>,,,,,,s .
-@     if <rpt> eq 0,(0094) ; .
-@.ew  lok,<cab>,<drw>,<rpt>  wrl,<cab>,<drw>,<rpt>,2 2-79 .,<ttl>  ulk .
+@0093:if <rpt> eq 0,(0094) ; .
+@     if <bin> eq Y  lok,<cab>,<drw>,<rpt>  wrl,<cab>,<drw>,<rpt>,2 2-79 .,<ttl>  ulk . ; .
 @     gto 0091 .
 @0094:.
 @     rnm -5 .
