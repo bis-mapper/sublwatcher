@@ -6,7 +6,7 @@
 *  Execution of this program without a valid software license, or reuse        *
 *  of this program code without expressed consent of ITRS, is prohibited.      *
 *==============================================================================*
-:L1=22,196=44,199=50
+:INCLUDE,ECAB$,B,1 .
 @.
 @. ------------------------------- Test Setup ----------------------------------
 @.
