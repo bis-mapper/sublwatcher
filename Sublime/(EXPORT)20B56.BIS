@@ -9,39 +9,13 @@
 @.    #  TODO Include examples and documentations
 @.    #  Written: 08/15/2013
 @.    #---------------------------------------------------------------------------------------------
-@. @.
-@. @.    # Test Setup
-@. @ rdb ldv <appname>s20='icebuild',<ctl>s80='export 100 -f '<appname> .
-@. @     ldv <file>s42='%USERPROFILE%\sublwatcher\site-'netsit$'\'<appname>'\'<appname>'\0f100.bis' .
-@. @     ldv <runname>s12='export' .
-@. @     call 0001 (<ctl>,<file>,<runname>,<status>h1) .
-@. @     GTO END .
-@. @.
 @.
-@.    #===   Manual entrance   ===
-@     ldv <mcab>i4=cab$,<mdrw>h1=adrw$,<mrpt>i4=rpt$ .                            Get RPT on display
-@     if <mrpt>(p) eq '-0' gto lin+2 . ; .
-@     if <mcab> eq 0,''  if <mrpt> eq 0,'' . ; gto lin+6 .
-@     brk,0,a .
-#------------------------------------------------------------------------------#
-#          The EXPORT command can only be used on an actual report.            #
-#------------------------------------------------------------------------------#
-@     gto end .
-@.
-@     ldv <ctl>s80='export',<file>s30='(dummyfilename)'<mrpt>(p)<mdrw>(p)<mcab>(p)'.BIS' .
+@.    # Test Setup
+@ rdb ldv <appname>s20='icebuild',<ctl>s80='export 100 -f '<appname> .
+@     ldv <file>s42='%USERPROFILE%\sublwatcher\site-'netsit$'\'<appname>'\'<appname>'\0f100.bis' .
 @     ldv <runname>s12='export' .
 @     call 0001 (<ctl>,<file>,<runname>,<status>h1) .
-@     if <status> eq 9 ldv <msg>s65='Cabinet drawer table 3g6 has blank description for cab: '<cab> .
-@     if <status> eq 8 ldv <msg>s65='FILE MISSING BIS EXTENSION!' .
-@     if <status> eq 7 ldv <msg>s65='Simple Export failed, more parameters needed!' .
-@     if <status> eq 0 ldv <msg>s65='Export Successful!' .
-@     brk,0,a .
-   #     <msg>(p)     #
-@     gto end .
-@.
-@.
-@.
-@.
+@     GTO END .
 @.
 @.    #  Call entry point
 @0001:(<ctl>,<file>,<runname>,<status>) .
@@ -64,7 +38,13 @@
 @.
 @.
 @.
-@.    #=== Dis Dat NEW NEW ===
+@.    #=== Dis Dat NEW NEW =========================================================================
+@.    #===   READ folderexport FROM SUBLCONFIG.INF
+@     call,SUBLCOMMON_ readConfigInf_ ('CONFIG','folderexport',<value>s100) .
+@     if <value>(p) eq ''  call,SUBLSETUP_ 0101 () . ; ldv,p <prjfld>h18=<value>  gto lin+2 .
+@     gto lin-2 .
+@     lcv,lin+1 '' <ctl> 'site'/''  ldv <prjfld>h4='site' .
+@     lcv,lin+1 '' <ctl> 'project'/''  ldv <prjfld>h7='project' .
 @     if <ctl>(p) eq 'export','EXPORT','Export' . ; gto 0004 .
 @     def,s <sz>i3,<file>  dec,13 <sz>  .
 @     ldv,p <tmpa>s998=<file>  lcv,0181 '' <tmpa> '.BIS'/''  ldv,p <tmpa>,<tmpb>h9=<tmpa>(0-9) .
@@ -259,7 +239,8 @@
 @     if <msg> eq ' ' . ; gto lin+3 .
 @     ldv <msg>s80='Export Complete!',<status>=0 .
 @     call,GROWL_ 0001 ('Sublwatcher: Success!','SUCCESS',<msg>) .
-@     pc,r "<apppath>(p) -a" "<datadir>\<catname> " .
+@     if <prjfld> eq 'site'  pc,r "<apppath>(p) -a" "<datadir>\" . ; .
+@     if <prjfld> eq 'project'  pc,r "<apppath>(p) -a" "<datadir>\<catname>" . ; .
 @.
 @.    # Exit
 @     return .
