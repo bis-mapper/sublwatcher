@@ -110,21 +110,21 @@
 @     ldv <stp>i1=1 .
 @.
 @     txt,"",<win1>,01,01,25,62,bla/whi,<b> <txt1>i6 .
-@     txt,"",<win1>,01,01,25,20,bla <txt2>i6 .
+@     txt,"",<win1>,01,01,25,25,bla <txt2>i6 .
 @     ldv <pic1>i6=0 .
 @     if <ptx> ne '<PTX>'  if <ptx> gt ' ' . ; gto lin+2 .
-@     lzr,-0 .
+@     PIC,,,,,<ptx>\sublime.jpg,<win1>,05,05,-1,-1 '' <pic1>i6 .
 @     fon,t,'Arial',14,pd .
 @     brk,0,A .
  Welcome to the <app>
  Package Manager
-@     brk  txt,-0,2,2,<win1>,03,23,02,40,bla/whi <txt3>i6 .
+@     brk  txt,-0,2,2,<win1>,03,27,02,40,bla/whi <txt3>i6 .
 @     fon,t,'Arial',09,pd .
 @     brk,0,A ._
  This wizard will guide you through the steps
  required to install <app> on your system.
  To continue, click Next.
-@     brk  txt,-0,2,99,<win1>,08,23,09,62,bla/whi <txt4>i6 .
+@     brk  txt,-0,2,99,<win1>,08,27,09,62,bla/whi <txt4>i6 .
 @     fon,t .
 @.
 @     if <pth> ne ''  shw,<read> . ; hid,<read> .
@@ -287,13 +287,13 @@
 @.
 @     if <iceapp> eq 'N'  ldv <cab>i4=<appcab>  gto lin+3 . ; .
 @     fdr,3950,d,1,,,0044 '' 'Category' 	,<app>  rln 'SvcCab' <cab>i .
-@     ldv,p <cab> .
+@. @     ldv,p <cab> .
 @.
 @     if <*deploy> eq 'Y' gto 0043 . ; .
 @     mbx,YN,Q,'Confirmation' "/\
  A prior installation was detected.//\
  Application <app> is already/\
- installed in Cabinet <cab>.//\
+ installed in Cabinet <cab>(p).//\
  Do you want to overlay the existing version?" \
       N,(0044) .
 @0043:ldv <ovr>h1=Y,<gen>h1=N .
@@ -547,21 +547,10 @@
 @0106:. tot,-3 '' 'Lines' '	',+ <tln>i12 .
 @.
 @     if <*deploy> eq 'Y' gto 0109 . ; .
-@     txt,"Software Modules",<msg1> .
-@     txt,"... Please Wait ...",<msg2> .
 @     brk,0,A .
  Loading <app> code modules, tables and other reports ...
 @     brk  txt,-0,2,99,<txth>,,,,,,s .
-@.
-@. @     txt,"",<win1>,15,13,08,37,lgra,<b> <txt1>i6 .
-@. @     fon,t,'Arial',08,pd .
-@. @     txt,"Completion Status",<win1>,14,14,01,18,bla/lgra,c <txt2>i6 .
-@. @     txt,"",<win1>,21,24,01,24,bla/lgra,c <txt3>i6 .
-@. @     fon,t .
-@. @     txt,"",<win1>,17,19,03,25,whi,<b> <txt4>i6 .
-@. @     txt,"",<win1>,17,19,03,25,whi,<b> <txt5>i6 .
-@. @     txt,"",<win1>,18,29,01,05,dblu/whi,cs <txt6>i6 .
-@     juv,r <cab> .
+@.@     juv,r <cab> .
 @.
 @0109:.
 @     lzr,-3 ,,<rlin>i4 .
@@ -571,7 +560,7 @@
 @. @     inc <qty>  inc,<rln> <xln>  juv,r <rpt>  ldv,l <rid>h5=<rpt><drw> .
 @     juv,r <rpt>  ldv,l <rid>h5=<rpt><drw> .
 @     ldv <retflag>h1=N .
-@     if <*deploy> eq 'Y' . ; txt,"Loading Report: <rid>",<txt3> .
+@. @     if <*deploy> eq 'Y' . ; txt,"Loading Report: <rid>",<txt3> .
 @     ldv,pu <report>s20=<rpt>(p)<tdrw>(p)<tcab>(p)'.'<ext>(p) .
 @     ldv <bin>h1=N,<retfmt>h1=N .
 @     if <ext> eq 'BMP','PCX','JPG','BIN','EXE','PNG'  ldv <bin>h1=Y ; .
@@ -704,6 +693,7 @@
 @.
 @0115:. -------------------- Update Run Registration ---------------------------
 @.
+@     lzr,-10,0150 .
 @     if <*deploy> eq 'y'  gto 0116 . ; .
 @     txt,"run script registration",<msg1> .
 @     txt,"... please wait ...",<msg2> .
@@ -758,8 +748,10 @@
 @. ------------------------- Install Complete -----------------------------
 @0150:.
 @.    #===   Build DEF Table   =================================================
+@     lzr,200,b,4,0155 .
 @     juv,d <cab> .
-@     if <cab> eq 100,56  gto lin+3 .
+@     if <cab> eq 100,56  gto lin+4 .
+@     ldv <t>i4=<cab>,<cab>i4=<t> .
 @     call,"BLD-DEFTABLE" 0001 (<cab>,' ','1','XALL','ALL') .
 @     juv,d <cab> .
 @.
@@ -772,7 +764,7 @@
 @     wrl,200,b,4,<fln>,y 'Version' 	,<ver> .
 @     ulk .
 @.
-@     ldv <stp>i1=8 .
+@0155:ldv <stp>i1=8 .
 @.
 @     if <*deploy> eq 'Y'  gto 0152 . ; .
 @     txt,"Installation Complete",<msg1> .
@@ -810,20 +802,14 @@
  skipped in the process.
 @     rdc,-8 1-80 <tocrslt>s .
 <tocrslt>
+@0153:lzr,-10,0154 .
+ The following runs have been globally registered for all users:
 
-
-@. @     ldv <run>h12  rdl,-4,6,0152 'Run' <run> .
-@. @.
-@. @     if <dpt> ne mstrd$,(lin+2) ; .
-@.  The following runs have been globally registered for all users:
-@. @     if <dpt> eq mstrd$,(lin+2) ; .
-@.  The following runs have been registered for all users in department <dpt>:
-@.  Run Name
-@.  --------
-@. @     rdc,-4,6 'Run' <v1>h .
-@.  <v1>
-@. @0152:.
-@0153:brk  rnm -8 .
+ Run Name
+ --------
+@     rdc,-10,6 'Run' <v1>h .
+ <v1>
+@0154:brk  rnm -8 .
 @.
 @     if <*deploy> eq 'Y'  gto 0199 . ; .
 @     if <run> eq '',(lin+3) ; .
